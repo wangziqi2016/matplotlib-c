@@ -13,7 +13,14 @@
 
 //* error handling
 
-
+// Error reporting and system call assertion
+#define SYSEXPECT(expr) do { if(!(expr)) { perror(__func__); exit(1); } } while(0)
+#define error_exit(fmt, ...) do { fprintf(stderr, "%s error: " fmt, __func__, ##__VA_ARGS__); exit(1); } while(0);
+#ifndef NDEBUG
+#define dbg_printf(fmt, ...) do { fprintf(stderr, fmt, ##__VA_ARGS__); } while(0);
+#else
+#define dbg_printf(fmt, ...) do {} while(0);
+#endif
 
 //* fp_* - String processing of floating point numbers
 
