@@ -24,6 +24,10 @@
 
 //* fp_* - String processing of floating point numbers
 
+// Initial size of the buffer - may be larger
+#define FP_BUF_SIZE 32
+#define FP_MAX_ITER 4
+
 char *fp_print(double num, int frac_count); // Print the fp number to a buffer
 
 #endif
