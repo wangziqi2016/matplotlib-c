@@ -22,6 +22,8 @@
 #define dbg_printf(fmt, ...) do {} while(0);
 #endif
 
+inline static int streq(const char *a, const char *b) { return strcmp(a, b) == 0; }
+
 //* fp_* - String processing of floating point numbers
 
 // Initial size of the buffer - may be larger
