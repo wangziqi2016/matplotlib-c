@@ -28,6 +28,7 @@
 #define FP_BUF_SIZE 32
 #define FP_MAX_ITER 4
 
+double fp_power10(int num); // Return power of 10
 char *fp_print(double num, int frac_count); // Print the fp number to a buffer
 
 #endif
