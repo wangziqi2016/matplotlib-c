@@ -1,6 +1,22 @@
 
 #include "matplotlib.h"
 
+/* Use the following as test function template
+void test_xxx() {
+  printf("========== test_xxx ==========\n");
+
+  printf("Pass\n");
+  return;
+}
+*/
+
+void test_fp_power10() {
+  printf("========== test_fp_print ==========\n");
+
+  printf("Pass\n");
+  return;
+}
+
 void test_fp_print() {
   printf("========== test_fp_print ==========\n");
   char *buf = NULL;
@@ -18,6 +34,7 @@ void test_fp_print() {
 
 int main() {
   printf("========== test-matplotlib ==========\n");
+  test_fp_power10();
   test_fp_print();
   printf("All test passed!\n");
   return 0;
