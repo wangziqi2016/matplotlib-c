@@ -4,7 +4,8 @@
 //* fp_*
 
 double fp_power10(int num) {
-  double ret = 1.0;
+  // If num == 0 if will return 1.0
+  double ret = 1.0f;
   if(num >= 0) {
     for(int i = 0;i < num;i++) {
       ret *= 10.0;
@@ -21,19 +22,29 @@ double fp_power10(int num) {
 // frac_count specifies the number of digits after the decimal point
 //   - If set to 0 then we print integer
 //   - How fp numbers are rounded is dependent on printf() implementation
-//   - Negative frac_count will remove numbers left to the decimal point
+//   - Negative frac_count will cause digits left to the decimal point to be zero
 char *fp_print(double num, int frac_count) {
   int buf_size = FP_BUF_SIZE;
   int count = 0;
   char *buf;
-  //if(frac_count < 0) 
+  int printf_ret;
+  // Append digit "0" to the string after printf
+  int append_zero_count = 0;
+  if(frac_count < 0) {
+    num /= fp_power10(-frac_count);
+    append_zero_count = -frac_count;
+    frac_count = 0;
+  }
+  assert(append_zero_count >= 0);
+  assert(append_zero_count == 0 || frac_count == 0);
   do {
     buf = (char *)malloc(buf_size);
     SYSEXPECT(buf != NULL);
-    int ret = snprintf(buf, buf_size, "%.*f", frac_count, num);
-    if(ret > 0 && ret < buf_size) {
+    printf_ret = snprintf(buf, buf_size, "%.*f", frac_count, num);
+    // Since we may append extra zeros after this, also count them into ret
+    if(printf_ret > 0 && (printf_ret + append_zero_count) < buf_size) {
       break;
-    } else if(ret < 0) {
+    } else if(printf_ret <= 0) {
       // Directly push binary into the stack
       error_exit("Encoding error occurred while printing floating point number 0x%lX\n", *(uint64_t *)&num);
     }
@@ -44,5 +55,7 @@ char *fp_print(double num, int frac_count) {
     count++;
   } while(count < FP_MAX_ITER);
   if(buf == NULL) error_exit("Internal error: maximum iteration count reached (%d)\n", count);
+  // Append zero to the end (there must be no decimal point)
+
   return buf;
 }
