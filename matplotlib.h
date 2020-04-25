@@ -8,12 +8,15 @@
 #include <math.h>
 #include <string.h>
 #include <stdint.h>
+#include <ctype.h>
+#include <error.h>
 
-//* fstr_* - String processing of floating point numbers
+//* error handling
 
-#define FSTR_CUT_AFTER_RADIX     0  // Leave certain number of digits after the radix point
-#define FSTR_CUT_SIG_DIGITS      1  // Significant digits
 
-char *fstr_cut(double num, int type, int arg); // Cutting the string in different ways
+
+//* fp_* - String processing of floating point numbers
+
+char *fp_print(double num, int frac_count); // Print the fp number to a buffer
 
 #endif
