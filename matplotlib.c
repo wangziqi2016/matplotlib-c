@@ -14,7 +14,7 @@ char *fp_print(double num, int frac_count) {
     buf = (char *)malloc(buf_size);
     SYSEXPECT(buf != NULL);
     int ret = snprintf(buf, buf_size, "%.*f", frac_count, num);
-    if(ret >= buf_size) {
+    if(ret > 0 && ret < buf_size) {
       break;
     } else if(ret < 0) {
       // Directly push binary into the stack
