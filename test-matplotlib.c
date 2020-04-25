@@ -23,13 +23,18 @@ void test_fp_print() {
   printf("========== test_fp_print ==========\n");
   char *buf = NULL;
   const double num = 12345.678912;
-  printf("Step: Test number %f using non-neg frac count\n", num);
+  printf("Step 1: Test number %f using non-neg frac count\n", num);
   for(int i = 0;i < 8;i++) {
     buf = fp_print(num, i);
     printf("frac_count = %d: \"%s\"\n", i, buf);
     free(buf);
   }
-  // TODO: NEGATIVE FRAC COUNT
+  printf("Step 2: Test number %f using negative frac count\n", num);
+  for(int i = -5;i < 0;i++) {
+    buf = fp_print(num, i);
+    printf("frac_count = %d: \"%s\"\n", i, buf);
+    free(buf);
+  }
   printf("Pass\n");
   return;
 }
