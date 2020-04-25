@@ -65,3 +65,24 @@ char *fp_print(double num, int frac_count) {
   }
   return buf;
 }
+
+// Remove trailing zeros after the decimal point
+//   - If no decimal point then directly exit
+//   - If all zeros after the decimal point, we also remove the point itself
+char *fp_rtrim(char *buf) {
+  char *decimal = strchr(buf, '.');
+  if(decimal == NULL) return buf; // No change
+  char *p = decimal + 1;
+  assert(*p != '\0'); // Can't be trailing decimal
+  char *q = buf + strlen(buf) - 1;
+  assert(q[1] == '\0');
+  // Find first non-zero from the end of the string
+  while(*q == '0') {
+    q--;
+    assert(q >= decimal);
+  }
+  // Overwrite decimal if all digits after it are zero; Otherwise do not overwrite
+  if(q != decimal) q++;
+  *q = '\0'; // Terminate the string here
+  return buf;
+}

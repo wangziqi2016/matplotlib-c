@@ -32,5 +32,6 @@ inline static int streq(const char *a, const char *b) { return strcmp(a, b) == 0
 
 double fp_power10(int num); // Return power of 10
 char *fp_print(double num, int frac_count); // Print the fp number to a buffer
+char *fp_rtrim(char *buf); // Remove trailing zeros after the decimal point
 
 #endif
