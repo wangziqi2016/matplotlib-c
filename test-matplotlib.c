@@ -11,8 +11,10 @@ void test_xxx() {
 */
 
 void test_fp_power10() {
-  printf("========== test_fp_print ==========\n");
-
+  printf("========== test_fp_power10 ==========\n");
+  for(int i = -5;i < 5;i++) {
+    printf("power = %d; num = %f\n", i, fp_power10(i));
+  }
   printf("Pass\n");
   return;
 }
