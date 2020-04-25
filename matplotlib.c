@@ -56,6 +56,9 @@ char *fp_print(double num, int frac_count) {
   } while(count < FP_MAX_ITER);
   if(buf == NULL) error_exit("Internal error: maximum iteration count reached (%d)\n", count);
   // Append zero to the end (there must be no decimal point)
-
+  assert(printf_ret + append_zero_count < buf_size);
+  for(int i = 0;i < append_zero_count;i++) {
+    strcat(buf, "0");
+  }
   return buf;
 }
