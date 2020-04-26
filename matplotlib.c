@@ -175,6 +175,7 @@ void buf_printf(buf_t *buf, const char *fmt, ...) {
   int expected2 = vsnprintf(temp2, expected + 1, fmt, args2);
   assert(expected2 == expected);
   buf_append(buf, temp2);
+  free(temp2);
   return;
 }
 
