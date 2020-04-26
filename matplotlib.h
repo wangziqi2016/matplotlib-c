@@ -50,6 +50,7 @@ void buf_free(buf_t *buf);
 inline static int buf_get_size(buf_t *buf) { return buf->size; }
 inline static int buf_get_capacity(buf_t *buf) { return buf->capacity; }
 inline static char *buf_c_str(buf_t *buf) { return buf->data; }
+inline static int buf_strlen(buf_t *buf) { return buf->size - 1; }
 
 void buf_realloc(buf_t *buf);
 
