@@ -36,10 +36,15 @@ char *fp_rtrim(char *buf); // Remove trailing zeros after the decimal point
 
 //* buf_* - String buffer
 
+#define BUF_INIT_SIZE 256
+
 typedef struct {
   char *data;
   int capacity; // Actual number of usable bytes
   int size;     // Number of used bytes
 } buf_t;
+
+buf_t *buf_init();
+void buf_free(buf_t *buf);
 
 #endif

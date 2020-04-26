@@ -86,3 +86,22 @@ char *fp_rtrim(char *buf) {
   *q = '\0'; // Terminate the string here
   return buf;
 }
+
+//* buf_t
+
+buf_t *buf_init() {
+  buf_t *buf = (buf_t *)malloc(sizeof(buf_t *));
+  SYSEXPECT(buf != NULL);
+  memset(buf, 0x00, sizeof(buf_t));
+  buf->capacity = BUF_INIT_SIZE;
+  buf->data = (char *)malloc(BUF_INIT_SIZE);
+  SYSEXPECT(buf->data != NULL);
+  memset(buf->data, 0x00, BUF_INIT_SIZE);
+  return buf;
+}
+
+void buf_free(buf_t *buf) {
+  free(buf->data);
+  free(buf);
+  return;
+}
