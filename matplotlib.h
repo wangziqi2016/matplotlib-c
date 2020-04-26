@@ -41,6 +41,7 @@ char *fp_rtrim(char *buf); // Remove trailing zeros after the decimal point
 #define COLOR_R(x) ((x >> 16) & 0xFF)
 #define COLOR_G(x) ((x >> 8) & 0xFF)
 #define COLOR_B(x) ((x >> 0) & 0xFF)
+#define COLOR_GEN(r, g, b) (((r & 0xFF) << 16) | ((g & 0xFF) << 8) | ((b & 0xFF) << 0))
 
 void color_str(uint32_t color, char *buf); // Returns RGB color code
 
