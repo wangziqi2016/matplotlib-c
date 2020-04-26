@@ -45,6 +45,7 @@ typedef struct {
   int size;     // Number of used bytes, including trailing zero
   int realloc_count; // Number of time it is realloc'ed
   int append_count;  // Number of time append is called
+  int reset_count;   // Number of time it is reset
 } buf_t;
 
 buf_t *buf_init();          // Default to BUF_INIT_SIZE
@@ -56,6 +57,7 @@ inline static int buf_get_capacity(buf_t *buf) { return buf->capacity; }
 inline static char *buf_c_str(buf_t *buf) { return buf->data; }
 inline static int buf_strlen(buf_t *buf) { return buf->size - 1; }
 
+void buf_reset(buf_t *buf);
 void buf_realloc(buf_t *buf, int target);
 void buf_append(buf_t *buf, const char *s);
 void buf_concat(buf_t *buf, buf_t *s);

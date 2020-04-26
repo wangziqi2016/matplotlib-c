@@ -114,6 +114,15 @@ void buf_free(buf_t *buf) {
   return;
 }
 
+// Clear all content, but do not realloc storage
+void buf_reset(buf_t *buf) {
+  assert(buf->capacity > 0);
+  buf->size = 1;
+  buf->data[0] = '\0';
+  buf->reset_count++;
+  return;
+}
+
 // Reallocate storage, doubling the buffer capacity
 // This call has no effect if target if smaller than current capacity
 void buf_realloc(buf_t *buf, int target) {
