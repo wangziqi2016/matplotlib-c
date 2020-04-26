@@ -142,6 +142,23 @@ void buf_concat(buf_t *buf, buf_t *s) {
   return;
 }
 
+void buf_printf(buf_t *buf, const char *fmt, ...) {
+  va_list(args);
+  va_start(args, fmt);
+  char temp[BUF_INIT_SIZE];
+  int expected = vsnprintf(temp, BUF_INIT_SIZE, fmt, args);
+  if(expected >= 0 && expected < BUF_INIT_SIZE) {
+    buf_append(buf, temp);
+    return;
+  }
+  // Start a new arg, since the previous one may have been destroyed by the printf
+  va_list(args2);
+  va_start(args2, fmt);
+  char *temp2 = (char *)malloc(expected + 1);
+  SYSEXPECT(temp2 != NULL);
+
+}
+
 void buf_print(buf_t *buf, int content) {
   printf("---------- buf_t ----------\n");
   printf("Size %d cap %d data 0x%p\n", buf->size, buf->capacity, buf->data);
