@@ -118,3 +118,19 @@ void buf_realloc(buf_t *buf) {
   memcpy(buf->data, old_data, buf->size);
   return;
 }
+
+// Append the string to the end of the buffer
+void buf_append(buf_t *buf, const char *s) {
+  int len = strlen(s);
+  // Loop until we reach the intended capacity
+  while(1) {
+    // This might be expensive when appending long str, but we optimize for short appends
+    if(buf->size + len > buf->capacity) {
+      buf_realloc(buf); 
+    }
+  }
+  // Start from the last char, copy includes the trailing zero
+  memcpy(buf->data + buf->size - 1, s, len + 1);
+  buf->size += len;
+  return;
+}

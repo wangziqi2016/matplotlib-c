@@ -53,5 +53,6 @@ inline static char *buf_c_str(buf_t *buf) { return buf->data; }
 inline static int buf_strlen(buf_t *buf) { return buf->size - 1; }
 
 void buf_realloc(buf_t *buf);
+void buf_append(buf_t *buf, const char *s);
 
 #endif
