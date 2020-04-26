@@ -156,7 +156,10 @@ void buf_printf(buf_t *buf, const char *fmt, ...) {
   va_start(args2, fmt);
   char *temp2 = (char *)malloc(expected + 1);
   SYSEXPECT(temp2 != NULL);
-
+  int expected2 = vsnprintf(temp2, expected + 1, fmt, args2);
+  assert(expected2 == expected);
+  buf_append(buf, temp2);
+  return;
 }
 
 void buf_print(buf_t *buf, int content) {
