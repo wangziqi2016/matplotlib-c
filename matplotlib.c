@@ -87,6 +87,14 @@ char *fp_rtrim(char *buf) {
   return buf;
 }
 
+//* color_*
+
+// This function is not re-entrant; Only one instance can be called before the next
+void color_str(uint32_t color, char *buf) {
+  sprintf(buf, "#%02X%02X%02X", COLOR_R(color), COLOR_G(color), COLOR_B(color));
+  return;
+}
+
 //* buf_t
 
 buf_t *buf_init_sz(int sz) {

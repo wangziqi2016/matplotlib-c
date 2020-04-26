@@ -35,6 +35,12 @@ double fp_power10(int num); // Return power of 10
 char *fp_print(double num, int frac_count); // Print the fp number to a buffer
 char *fp_rtrim(char *buf); // Remove trailing zeros after the decimal point
 
+//* color_* - Color processing
+
+
+
+void color_str(uint32_t color, char *buf); // Returns RGB color code
+
 //* buf_* - String buffer
 
 #define BUF_INIT_SIZE 256
@@ -62,5 +68,15 @@ void buf_printf(buf_t *buf, const char *fmt, ...);
 
 void buf_stat_print(buf_t *buf, int content);
 void buf_dump(buf_t *buf, const char *filename);
+
+//* bar_t - Bar object
+
+typedef struct {
+  double value;
+  double bottom;
+  double offset;  // Offset in the 
+  char hatch;
+  uint64_t color; // RGB color
+} bar_t;
 
 #endif
