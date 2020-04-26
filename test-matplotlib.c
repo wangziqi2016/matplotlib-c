@@ -58,11 +58,27 @@ void test_fp_print() {
   return;
 }
 
+void test_buf() {
+  printf("========== test_buf ==========\n");
+  printf("Step 1: Testing basic append and concat\n");
+  buf_t *buf = buf_init_sz(1); // Starting from 1 to test code path for realloc
+  buf_append(buf, "wangziqi");
+  buf_append(buf, "");
+  buf_append(buf, "2013");
+  buf_t *buf2 = buf_init(2);
+  buf_append(buf2, " This is a very long string that may require several loops for realloc\n");
+  buf_concat(buf, buf2); // buf2 is freed after this point
+  buf_print(buf, 1);
+  printf("Pass\n");
+  return;
+}
+
 int main() {
   printf("========== test-matplotlib ==========\n");
   test_fp_power10();
   test_fp_trim();
   test_fp_print();
+  test_buf();
   printf("All test passed!\n");
   return 0;
 }
