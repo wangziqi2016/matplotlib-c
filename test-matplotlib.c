@@ -1,6 +1,10 @@
 
 #include "matplotlib.h"
 
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
+
 /* Use the following as test function template
 void test_xxx() {
   printf("========== test_xxx ==========\n");
@@ -80,6 +84,16 @@ void test_buf() {
   buf_printf(buf, "%0*d", BUF_INIT_SIZE * 2 + 1, 0); // %0*d means left-fill with zeros
   buf_stat_print(buf, 1); // Expect (BUF_INIT_SIZE * 2 + 1) "0"
   assert(buf_strlen(buf) == (BUF_INIT_SIZE * 2 + 1));
+  printf("Step 4: Test dump\n");
+  const char *filename = "test_buf_dump.txt";
+  buf_dump(buf, filename);
+  struct stat stat;
+  lstat(filename, &stat);
+  printf("File info: size %d\n", (int)stat.st_size);
+  assert(stat.st_size == buf_strlen(buf));
+  int rm_ret = remove(filename);
+  assert(rm_ret == 0);
+  printf("Remove file \"%s\"\n", filename);
   buf_free(buf);
   printf("Pass\n");
   return;
