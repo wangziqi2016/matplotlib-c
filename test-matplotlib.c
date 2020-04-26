@@ -68,7 +68,10 @@ void test_buf() {
   buf_t *buf2 = buf_init(2);
   buf_append(buf2, " This is a very long string that may require several loops for realloc\n");
   buf_concat(buf, buf2); // buf2 is freed after this point
-  buf_print(buf, 1);
+  printf("  Size %d strlen %d\n", buf_get_size(buf), buf_strlen(buf)); // Test stat get function
+  buf_stat_print(buf, 1);
+  printf("Step 2: Test reset and printf\n");
+  
   buf_free(buf);
   printf("Pass\n");
   return;
