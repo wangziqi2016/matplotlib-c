@@ -72,6 +72,12 @@ void test_color() {
   color = COLOR_GEN(300, 300, 300); // Overflow, but should wrap back (0x2C)
   color_str(color, buf);
   printf("Color 0x%X Str \"%s\"\n", color, buf);
+  color = COLOR_GEN(0xAB, 0xCD, 0xEF); 
+  color_str(color, buf);
+  printf("Color 0x%X Str \"%s\"\n", color, buf);
+  assert(COLOR_R(color) == 0xAB);
+  assert(COLOR_G(color) == 0xCD);
+  assert(COLOR_B(color) == 0xEF);
   printf("Pass\n");
   return;
 }
