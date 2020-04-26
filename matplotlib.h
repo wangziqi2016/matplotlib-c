@@ -77,11 +77,12 @@ void buf_dump(buf_t *buf, const char *filename);
 //* bar_t - Bar object
 
 typedef struct {
-  double value;
-  double bottom;
-  double offset;  // Offset in the 
-  char hatch;
-  uint64_t color; // RGB color
+  double value;   // Height of the bar
+  double bottom;  // Non-zero means we draw stacked bar
+  double pos;     // Offset in the horizontal direction
+  char hatch;     // Hatch (filling pattern)
+  uint32_t color; // RGB color
+  char *text;     // Optional text (if NULL then use number)
 } bar_t;
 
 #endif
