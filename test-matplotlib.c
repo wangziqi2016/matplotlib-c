@@ -69,6 +69,7 @@ void test_buf() {
   buf_append(buf2, " This is a very long string that may require several loops for realloc\n");
   buf_concat(buf, buf2); // buf2 is freed after this point
   buf_print(buf, 1);
+  buf_free(buf);
   printf("Pass\n");
   return;
 }

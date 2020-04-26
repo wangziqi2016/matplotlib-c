@@ -101,7 +101,6 @@ buf_t *buf_init_sz(int sz) {
   buf->data = (char *)malloc(sz);
   SYSEXPECT(buf->data != NULL);
   memset(buf->data, 0x00, sz);
-  buf_free(buf);
   return buf;
 }
 
@@ -129,6 +128,7 @@ void buf_realloc(buf_t *buf, int target) {
   SYSEXPECT(buf->data != NULL);
   // This includes the trailing zero
   memcpy(buf->data, old_data, buf->size);
+  free(old_data);
   return;
 }
 
