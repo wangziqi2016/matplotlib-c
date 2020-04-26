@@ -47,4 +47,8 @@ typedef struct {
 buf_t *buf_init();
 void buf_free(buf_t *buf);
 
+inline static int buf_get_size(buf_t *buf) { return buf->size; }
+inline static int buf_get_capacity(buf_t *buf) { return buf->capacity; }
+inline static char *buf_c_str(buf_t *buf) { return buf->data; }
+
 #endif
