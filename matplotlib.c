@@ -119,7 +119,6 @@ void buf_reset(buf_t *buf) {
   assert(buf->capacity > 0);
   buf->size = 1;
   buf->data[0] = '\0';
-  buf->reset_count++;
   return;
 }
 
@@ -138,7 +137,6 @@ void buf_realloc(buf_t *buf, int target) {
   // This includes the trailing zero
   memcpy(buf->data, old_data, buf->size);
   free(old_data);
-  buf->realloc_count++;
   return;
 }
 
@@ -150,7 +148,6 @@ void buf_append(buf_t *buf, const char *s) {
   // Start from the last char, copy includes the trailing zero
   memcpy(buf->data + buf->size - 1, s, len + 1);
   buf->size += len;
-  buf->append_count++;
   return;
 }
 

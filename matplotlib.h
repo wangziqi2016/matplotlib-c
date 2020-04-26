@@ -43,9 +43,6 @@ typedef struct {
   char *data;
   int capacity; // Actual number of usable bytes
   int size;     // Number of used bytes, including trailing zero
-  int realloc_count; // Number of time it is realloc'ed
-  int append_count;  // Number of time append is called
-  int reset_count;   // Number of time it is reset
 } buf_t;
 
 buf_t *buf_init();          // Default to BUF_INIT_SIZE
