@@ -62,6 +62,20 @@ void test_fp_print() {
   return;
 }
 
+void test_color() {
+  printf("========== test_color ==========\n");
+  uint32_t color;
+  char buf[32];
+  color = COLOR_GEN(255, 255, 255);
+  color_str(color, buf);
+  printf("Color 0x%X Str \"%s\"\n", color, buf);
+  color = COLOR_GEN(300, 300, 300); // Overflow, but should wrap back (0x2C)
+  color_str(color, buf);
+  printf("Color 0x%X Str \"%s\"\n", color, buf);
+  printf("Pass\n");
+  return;
+}
+
 void test_buf() {
   printf("========== test_buf ==========\n");
   printf("Step 1: Testing basic append and concat\n");
@@ -104,6 +118,7 @@ int main() {
   test_fp_power10();
   test_fp_trim();
   test_fp_print();
+  test_color();
   test_buf();
   printf("All test passed!\n");
   return 0;
