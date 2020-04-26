@@ -108,9 +108,12 @@ void buf_free(buf_t *buf) {
 }
 
 // Reallocate storage, doubling the buffer capacity
+// This call has no effect if target if smaller than current capacity
 void buf_realloc(buf_t *buf, int target) {
   assert(buf->size <= buf->capacity);
-  assert(target > buf->capacity);
+  if(target <= buf->capacity) {
+    return;
+  }
   // Always allocate power of two
   while(buf->capacity < target) buf->capacity *= 2;
   void *old_data = buf->data;
@@ -124,16 +127,18 @@ void buf_realloc(buf_t *buf, int target) {
 // Append the string to the end of the buffer
 void buf_append(buf_t *buf, const char *s) {
   int len = strlen(s);
-  // Loop until we reach the intended capacity
-  while(1) {
-    // This might be expensive when appending long str, but we optimize for short appends
-    if(buf->size + len > buf->capacity) {
-      buf_realloc(buf); 
-    }
-  }
+  // This will likely not cause a realloc
+  buf_realloc(buf, buf->size + len); 
   // Start from the last char, copy includes the trailing zero
   memcpy(buf->data + buf->size - 1, s, len + 1);
   buf->size += len;
+  return;
+}
+
+// Concatenate the second arg after the first one and frees the second one
+void buf_concat(buf_t *buf, buf_t *s) {
+  buf_append(buf, s->data);
+  buf_free(s);
   return;
 }
 

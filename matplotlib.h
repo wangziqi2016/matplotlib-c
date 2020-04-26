@@ -54,6 +54,7 @@ inline static int buf_strlen(buf_t *buf) { return buf->size - 1; }
 
 void buf_realloc(buf_t *buf, int target);
 void buf_append(buf_t *buf, const char *s);
+void buf_concat(buf_t *buf, buf_t *s);
 
 void buf_print(buf_t *buf, int content);
 void buf_dump(buf_t *buf, const char *filename);
