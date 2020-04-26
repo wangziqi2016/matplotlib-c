@@ -37,7 +37,10 @@ char *fp_rtrim(char *buf); // Remove trailing zeros after the decimal point
 
 //* color_* - Color processing
 
-
+// Macros for extracting color component
+#define COLOR_R(x) ((x >> 16) & 0xFF)
+#define COLOR_G(x) ((x >> 8) & 0xFF)
+#define COLOR_B(x) ((x >> 0) & 0xFF)
 
 void color_str(uint32_t color, char *buf); // Returns RGB color code
 
