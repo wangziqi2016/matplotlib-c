@@ -143,3 +143,16 @@ void buf_print(buf_t *buf, int content) {
   }
   return;
 }
+
+void buf_dump(buf_t *buf, const char *filename) {
+  FILE *fp = fopen(filename, "w");
+  SYSEXPECT(fp != NULL);
+  // Do not write the trailing zero to the file
+  int ret = fwrite(buf->data, buf->size - 1, 1, fp);
+  if(ret != 1) {
+    printf("Error writing to the file %s\n", filename);
+    error_exit("Cannot write file\n");
+  }
+  fclose(fp);
+  return;
+}
