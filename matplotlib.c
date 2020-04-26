@@ -134,3 +134,12 @@ void buf_append(buf_t *buf, const char *s) {
   buf->size += len;
   return;
 }
+
+void buf_print(buf_t *buf, int content) {
+  printf("---------- buf_t ----------\n");
+  printf("Size %d cap %d data 0x%p\n", buf->size, buf->capacity, buf->data);
+  if(content == 1) {
+    printf("%s\n", buf->data);
+  }
+  return;
+}
