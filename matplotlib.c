@@ -108,9 +108,11 @@ void buf_free(buf_t *buf) {
 }
 
 // Reallocate storage, doubling the buffer capacity
-void buf_realloc(buf_t *buf) {
+void buf_realloc(buf_t *buf, int target) {
   assert(buf->size <= buf->capacity);
-  buf->capacity *= 2;
+  assert(target > buf->capacity);
+  // Always allocate power of two
+  while(buf->capacity < target) buf->capacity *= 2;
   void *old_data = buf->data;
   buf->data = (char *)malloc(buf->capacity);
   SYSEXPECT(buf->data != NULL);
