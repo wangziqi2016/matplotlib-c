@@ -89,16 +89,24 @@ char *fp_rtrim(char *buf) {
 
 //* buf_t
 
-buf_t *buf_init() {
-  buf_t *buf = (buf_t *)malloc(sizeof(buf_t *));
+buf_t *buf_init_sz(int sz) {
+  if(sz <= 0) {
+    error_exit("Initialized size must be non-negative (see %d)\n", sz);
+  }
+  buf_t *buf = (buf_t *)malloc(sizeof(buf_t));
   SYSEXPECT(buf != NULL);
   memset(buf, 0x00, sizeof(buf_t));
   buf->size = 1; // Note that this includes the trailing zero
-  buf->capacity = BUF_INIT_SIZE;
-  buf->data = (char *)malloc(BUF_INIT_SIZE);
+  buf->capacity = sz;
+  buf->data = (char *)malloc(sz);
   SYSEXPECT(buf->data != NULL);
-  memset(buf->data, 0x00, BUF_INIT_SIZE);
+  memset(buf->data, 0x00, sz);
+  buf_free(buf);
   return buf;
+}
+
+buf_t *buf_init() {
+  return buf_init_sz(BUF_INIT_SIZE);
 }
 
 void buf_free(buf_t *buf) {

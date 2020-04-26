@@ -45,7 +45,8 @@ typedef struct {
   int size;     // Number of used bytes, including trailing zero
 } buf_t;
 
-buf_t *buf_init();
+buf_t *buf_init();          // Default to BUF_INIT_SIZE
+buf_t *buf_init_sz(int sz); // Using any init size
 void buf_free(buf_t *buf);
 
 inline static int buf_get_size(buf_t *buf) { return buf->size; }
