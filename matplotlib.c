@@ -93,6 +93,7 @@ buf_t *buf_init() {
   buf_t *buf = (buf_t *)malloc(sizeof(buf_t *));
   SYSEXPECT(buf != NULL);
   memset(buf, 0x00, sizeof(buf_t));
+  buf->size = 1; // Note that this includes the trailing zero
   buf->capacity = BUF_INIT_SIZE;
   buf->data = (char *)malloc(BUF_INIT_SIZE);
   SYSEXPECT(buf->data != NULL);
@@ -103,5 +104,17 @@ buf_t *buf_init() {
 void buf_free(buf_t *buf) {
   free(buf->data);
   free(buf);
+  return;
+}
+
+// Reallocate storage, doubling the buffer capacity
+void buf_realloc(buf_t *buf) {
+  assert(buf->size <= buf->capacity);
+  buf->capacity *= 2;
+  void *old_data = buf->data;
+  buf->data = (char *)malloc(buf->capacity);
+  SYSEXPECT(buf->data != NULL);
+  // This includes the trailing zero
+  memcpy(buf->data, old_data, buf->size);
   return;
 }
