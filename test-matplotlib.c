@@ -71,7 +71,15 @@ void test_buf() {
   printf("  Size %d strlen %d\n", buf_get_size(buf), buf_strlen(buf)); // Test stat get function
   buf_stat_print(buf, 1);
   printf("Step 2: Test reset and printf\n");
-  
+  buf_reset(buf);
+  buf_stat_print(buf, 1);
+  buf_printf(buf, "  Size %d strlen %d\n", buf_get_size(buf), buf_strlen(buf));
+  buf_stat_print(buf, 1);
+  printf("Step 3: Test printf with super long string for the alternate code path\n");
+  buf_reset(buf);
+  buf_printf(buf, "%0*d", BUF_INIT_SIZE * 2 + 1, 0); // %0*d means left-fill with zeros
+  buf_stat_print(buf, 1); // Expect (BUF_INIT_SIZE * 2 + 1) "0"
+  assert(buf_strlen(buf) == (BUF_INIT_SIZE * 2 + 1));
   buf_free(buf);
   printf("Pass\n");
   return;
