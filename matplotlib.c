@@ -221,7 +221,7 @@ void buf_printf(buf_t *buf, const char *fmt, ...) {
   return;
 }
 
-void buf_stat_print(buf_t *buf, int content) {
+void buf_print(buf_t *buf, int content) {
   printf("---------- buf_t stat ----------\n");
   printf("Size %d cap %d data 0x%p\n", buf->size, buf->capacity, buf->data);
   if(content == 1) {

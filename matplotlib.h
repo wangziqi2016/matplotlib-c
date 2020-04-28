@@ -64,6 +64,8 @@ extern color_scheme_t color_schemes[];
 void color_str(uint32_t color, char *buf); // Returns RGB color code
 color_scheme_t *color_find_scheme(const char *name);  // Using string name to locate the color_scheme_t object
 
+void color_scheme_stat_print();
+
 //* buf_* - String buffer
 
 #define BUF_INIT_SIZE 256
@@ -89,7 +91,7 @@ void buf_append(buf_t *buf, const char *s);
 void buf_concat(buf_t *buf, buf_t *s);
 void buf_printf(buf_t *buf, const char *fmt, ...);
 
-void buf_stat_print(buf_t *buf, int content);
+void buf_print(buf_t *buf, int content);
 void buf_dump(buf_t *buf, const char *filename);
 
 //* bar_t - Bar object

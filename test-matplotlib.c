@@ -66,6 +66,7 @@ void test_color() {
   printf("========== test_color ==========\n");
   uint32_t color;
   char buf[32];
+  printf("Step 1: Test COLOR_GEN() and color_str()\n");
   color = COLOR_GEN(255, 255, 255);
   color_str(color, buf);
   printf("Color 0x%X Str \"%s\"\n", color, buf);
@@ -78,6 +79,12 @@ void test_color() {
   assert(COLOR_R(color) == 0xAB);
   assert(COLOR_G(color) == 0xCD);
   assert(COLOR_B(color) == 0xEF);
+  printf("Step 2: Test color_find_scheme()\n");
+  color_scheme_t *scheme = NULL;
+  scheme = color_find_scheme("red");
+  assert(scheme->base == color_scheme_red);
+  scheme = color_find_scheme("mixed");
+  assert(scheme->base == color_scheme_mixed);
   printf("Pass\n");
   return;
 }
@@ -93,16 +100,16 @@ void test_buf() {
   buf_append(buf2, " This is a very long string that may require several loops for realloc\n");
   buf_concat(buf, buf2); // buf2 is freed after this point
   printf("  Size %d strlen %d\n", buf_get_size(buf), buf_strlen(buf)); // Test stat get function
-  buf_stat_print(buf, 1);
+  buf_print(buf, 1);
   printf("Step 2: Test reset and printf\n");
   buf_reset(buf);
-  buf_stat_print(buf, 1);
+  buf_print(buf, 1);
   buf_printf(buf, "  Size %d strlen %d\n", buf_get_size(buf), buf_strlen(buf));
-  buf_stat_print(buf, 1);
+  buf_print(buf, 1);
   printf("Step 3: Test printf with super long string for the alternate code path\n");
   buf_reset(buf);
   buf_printf(buf, "%0*d", BUF_INIT_SIZE * 2 + 1, 0); // %0*d means left-fill with zeros
-  buf_stat_print(buf, 1); // Expect (BUF_INIT_SIZE * 2 + 1) "0"
+  buf_print(buf, 1); // Expect (BUF_INIT_SIZE * 2 + 1) "0"
   assert(buf_strlen(buf) == (BUF_INIT_SIZE * 2 + 1));
   printf("Step 4: Test dump\n");
   const char *filename = "test_buf_dump.txt";
