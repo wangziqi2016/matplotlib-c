@@ -119,6 +119,16 @@ void color_str(uint32_t color, char *buf) {
   return;
 }
 
+// Returns NULL if the name does not exist; Otherwise return the pointer to the scheme
+color_scheme_t *color_find_scheme(const char *name) {
+  for(int i = 0;i < (int)(sizeof(color_schemes) / sizeof(color_scheme_t));i++) {
+    if(streq(color_schemes[i].name, name) == 1) {
+      return color_schemes + i;
+    }
+  }
+  return NULL;
+}
+
 //* buf_t
 
 buf_t *buf_init_sz(int sz) {
