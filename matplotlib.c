@@ -129,6 +129,11 @@ color_scheme_t *color_find_scheme(const char *name) {
   return NULL;
 }
 
+void color_scheme_print(color_scheme_t *scheme) {
+  printf("Name %s count %d base 0x%p\n", scheme->name, scheme->item_count, scheme->base);
+  return;
+}
+
 //* buf_t
 
 buf_t *buf_init_sz(int sz) {

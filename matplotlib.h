@@ -64,7 +64,7 @@ extern color_scheme_t color_schemes[];
 void color_str(uint32_t color, char *buf); // Returns RGB color code
 color_scheme_t *color_find_scheme(const char *name);  // Using string name to locate the color_scheme_t object
 
-void color_scheme_stat_print();
+void color_scheme_print(color_scheme_t *scheme);
 
 //* buf_* - String buffer
 
