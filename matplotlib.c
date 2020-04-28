@@ -144,7 +144,11 @@ py_t *py_init() {
   return py;
 }
 
-
+void py_free(py_t *py) {
+  Py_Finalize();
+  free(py);
+  return;
+}
 
 //* buf_t
 
