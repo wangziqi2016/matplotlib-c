@@ -89,7 +89,7 @@ char *fp_rtrim(char *buf) {
 
 //* color_*
 
-uint32_t color_scheme_mixed[6] = {
+uint32_t color_scheme_mixed[] = {
   COLOR_GEN(0xff, 0x66, 0x00),
   COLOR_GEN(0x33, 0x66, 0x99),
   COLOR_GEN(0x02, 0x84, 0x82),
@@ -98,7 +98,7 @@ uint32_t color_scheme_mixed[6] = {
   COLOR_GEN(0x9c, 0x9f, 0x84),
 };
 
-uint32_t color_scheme_red[7] = {
+uint32_t color_scheme_red[] = {
   COLOR_GEN(0xfd, 0xd4, 0x9e),
   COLOR_GEN(0xfd, 0xbb, 0x84),
   COLOR_GEN(0xfc, 0x8d, 0x59),
@@ -106,6 +106,11 @@ uint32_t color_scheme_red[7] = {
   COLOR_GEN(0xd7, 0x30, 0x1f),
   COLOR_GEN(0xb3, 0x00, 0x00),
   COLOR_GEN(0x7f, 0x00, 0x00),
+};
+
+extern color_scheme_t color_schemes[] = {
+  COLOR_SCHEME_GEN("mixed", color_scheme_mixed),
+  COLOR_SCHEME_GEN("red", color_scheme_red),
 };
 
 // This function is not re-entrant; Only one instance can be called before the next
