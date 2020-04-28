@@ -44,6 +44,9 @@ char *fp_rtrim(char *buf); // Remove trailing zeros after the decimal point
 // Composing a color using RGB components
 #define COLOR_GEN(r, g, b) (((r & 0xFF) << 16) | ((g & 0xFF) << 8) | ((b & 0xFF) << 0))
 
+extern uint32_t color_scheme_mixed[];
+extern uint32_t color_scheme_red[];
+
 void color_str(uint32_t color, char *buf); // Returns RGB color code
 
 //* buf_* - String buffer
@@ -82,7 +85,10 @@ typedef struct {
   double pos;     // Offset in the horizontal direction
   char hatch;     // Hatch (filling pattern)
   uint32_t color; // RGB color
-  char *text;     // Optional text (if NULL then use number)
+  char *text;     // Optional text (if NULL then use value as text or do not care)
 } bar_t;
+
+bar_t *bar_init();
+void bar_free(bar_t *bar);
 
 #endif

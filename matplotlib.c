@@ -89,6 +89,16 @@ char *fp_rtrim(char *buf) {
 
 //* color_*
 
+uint32_t color_scheme_mixed[] = {
+  COLOR_GEN(0xff, 0x66, 0x00),
+  COLOR_GEN(0x33, 0x66, 0x99),
+  COLOR_GEN(0x02, 0x84, 0x82),
+  COLOR_GEN(0xcc, 0x99, 0x00),
+  COLOR_GEN(0xcc, 0xcc, 0xff),
+  COLOR_GEN(0x9c, 0x9f, 0x84),
+};
+uint32_t color_scheme_red[];
+
 // This function is not re-entrant; Only one instance can be called before the next
 void color_str(uint32_t color, char *buf) {
   sprintf(buf, "#%02X%02X%02X", COLOR_R(color), COLOR_G(color), COLOR_B(color));
@@ -206,5 +216,20 @@ void buf_dump(buf_t *buf, const char *filename) {
     error_exit("Cannot write file\n");
   }
   fclose(fp);
+  return;
+}
+
+//* bar_t
+
+bar_t *bar_init() {
+  bar_t *bar = (bar_t *)malloc(sizeof(bar_t));
+  SYSEXPECT(bar != NULL);
+  memset(bar, 0x00, sizeof(bar_t));
+  return bar;
+}
+
+void bar_free(bar_t *bar) {
+  if(bar->text != NULL) free(bar->text);
+  free(bar);
   return;
 }
