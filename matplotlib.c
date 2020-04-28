@@ -108,7 +108,7 @@ uint32_t color_scheme_red[] = {
   COLOR_GEN(0x7f, 0x00, 0x00),
 };
 
-extern color_scheme_t color_schemes[] = {
+color_scheme_t color_schemes[] = {
   COLOR_SCHEME_GEN("mixed", color_scheme_mixed),
   COLOR_SCHEME_GEN("red", color_scheme_red),
 };
@@ -133,6 +133,18 @@ void color_scheme_print(color_scheme_t *scheme) {
   printf("Name %s count %d base 0x%p\n", scheme->name, scheme->item_count, scheme->base);
   return;
 }
+
+//* py_t
+
+py_t *py_init() {
+  py_t *py = (py_t *)malloc(sizeof(py_t));
+  SYSEXPECT(py != NULL);
+  memset(py, 0x00, sizeof(py_t));
+  Py_Initialize();
+  return py;
+}
+
+
 
 //* buf_t
 
