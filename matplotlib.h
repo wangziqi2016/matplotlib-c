@@ -12,6 +12,8 @@
 #include <error.h>
 #include <stdarg.h>
 
+#include "Python.h"
+
 //* error handling
 
 // Error reporting and system call assertion
@@ -65,6 +67,15 @@ void color_str(uint32_t color, char *buf); // Returns RGB color code
 color_scheme_t *color_find_scheme(const char *name);  // Using string name to locate the color_scheme_t object
 
 void color_scheme_print(color_scheme_t *scheme);
+
+//* py_* - Python interpreter
+
+typedef struct {
+  uint64_t padding; // Avoid allocating 0 bytes (some malloc may not behave correctly)
+} py_t;
+
+py_t *py_init();
+void py_free(py_t *py);
 
 //* buf_* - String buffer
 
