@@ -91,6 +91,18 @@ void test_color() {
   return;
 }
 
+void test_py() {
+  printf("========== test_py ==========\n");
+  py_t *py = py_init();
+  // Print a simple string
+  py_run("print('Hello, Python!\\n')");
+  // Uncomment this to see an error
+  //py_run("asdf");
+  py_free(py);
+  printf("Pass\n");
+  return;
+}
+
 void test_buf() {
   printf("========== test_buf ==========\n");
   printf("Step 1: Testing basic append and concat\n");
@@ -134,6 +146,7 @@ int main() {
   test_fp_trim();
   test_fp_print();
   test_color();
+  test_py();
   test_buf();
   printf("All test passed!\n");
   return 0;
