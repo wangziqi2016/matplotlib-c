@@ -37,6 +37,9 @@ char *fp_rtrim(char *buf); // Remove trailing zeros after the decimal point
 
 //* color_* - Color processing
 
+// Size of the color object
+#define COLOR_SIZE sizeof(uint32_t)
+
 // Macros for extracting color components
 #define COLOR_R(x) ((x >> 16) & 0xFF)
 #define COLOR_G(x) ((x >> 8) & 0xFF)
@@ -46,6 +49,14 @@ char *fp_rtrim(char *buf); // Remove trailing zeros after the decimal point
 
 extern uint32_t color_scheme_mixed[];
 extern uint32_t color_scheme_red[];
+
+typedef struct {
+  const char *name;   // Name of the scheme
+  uint32_t *base;     // Points to the array
+  int item_count;     // Number of items in the base array
+  int offset;         // We reuse the base array with different offsets
+  
+} color_scheme_t;
 
 void color_str(uint32_t color, char *buf); // Returns RGB color code
 
