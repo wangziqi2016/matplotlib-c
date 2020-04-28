@@ -140,13 +140,18 @@ void test_buf() {
   return;
 }
 
-int main() {
+int main(int argc, char **argv) {
+  int valgrind_flag = 0;
+  for(int i = 1;i < argc;i++) {
+    if(streq(argv[i], "--valgrind") == 1) valgrind_flag = 1;
+  }
+  if(valgrind_flag == 1) printf("[main] Skipping some tests under Valgrind\n");
   printf("========== test-matplotlib ==========\n");
   test_fp_power10();
   test_fp_trim();
   test_fp_print();
   test_color();
-  test_py();
+  if(valgrind_flag == 0) test_py();
   test_buf();
   printf("All test passed!\n");
   return 0;
