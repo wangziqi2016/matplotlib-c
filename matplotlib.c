@@ -140,6 +140,8 @@ py_t *py_init() {
   py_t *py = (py_t *)malloc(sizeof(py_t));
   SYSEXPECT(py != NULL);
   memset(py, 0x00, sizeof(py_t));
+  // This is recommended by Python doc
+  Py_SetProgramName("matplotlib-c");
   Py_Initialize();
   return py;
 }
@@ -147,6 +149,14 @@ py_t *py_init() {
 void py_free(py_t *py) {
   Py_Finalize();
   free(py);
+  return;
+}
+
+void py_run(const char *s) {
+  int ret = PyRun_SimpleString(s);
+  if(ret != 0) {
+    error_exit("Python interpreter raises an exception. Exiting.\n");
+  }
   return;
 }
 
