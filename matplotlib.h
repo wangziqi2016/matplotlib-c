@@ -47,16 +47,19 @@ char *fp_rtrim(char *buf); // Remove trailing zeros after the decimal point
 // Composing a color using RGB components
 #define COLOR_GEN(r, g, b) (((r & 0xFF) << 16) | ((g & 0xFF) << 8) | ((b & 0xFF) << 0))
 
-extern uint32_t color_scheme_mixed[];
-extern uint32_t color_scheme_red[];
-
 typedef struct {
   const char *name;   // Name of the scheme
   uint32_t *base;     // Points to the array
   int item_count;     // Number of items in the base array
-  int offset;         // We reuse the base array with different offsets
-  
 } color_scheme_t;
+
+extern uint32_t color_scheme_mixed[];
+extern uint32_t color_scheme_red[];
+
+// This macro generates an entry in color_schemes
+#define COLOR_SCHEME_GEN(name, base) {name, base, sizeof(base) / COLOR_SIZE}
+
+extern color_scheme_t color_schemes[];
 
 void color_str(uint32_t color, char *buf); // Returns RGB color code
 
