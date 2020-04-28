@@ -83,8 +83,10 @@ void test_color() {
   color_scheme_t *scheme = NULL;
   scheme = color_find_scheme("red");
   assert(scheme->base == color_scheme_red);
+  color_scheme_print(scheme);
   scheme = color_find_scheme("mixed");
   assert(scheme->base == color_scheme_mixed);
+  color_scheme_print(scheme);
   printf("Pass\n");
   return;
 }
