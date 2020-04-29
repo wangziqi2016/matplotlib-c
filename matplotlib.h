@@ -92,12 +92,14 @@ void hatch_scheme_print(hatch_scheme_t *scheme);
 //* py_* - Python interpreter
 
 typedef struct {
-  uint64_t padding; // Avoid allocating 0 bytes (some malloc may not behave correctly)
+  uint64_t padding;  // Avoid allocating 0 bytes (some malloc may not behave correctly)
 } py_t;
 
 py_t *py_init();
 void py_free(py_t *py);
 void py_run(py_t *py, const char *s);
+
+int py_get_instance_count();
 
 //* buf_* - String buffer
 
@@ -181,6 +183,7 @@ bar_type_t *plot_find_bar_type(plot_t *plot, const char *label);
 
 void plot_create_fig(plot_t *plot, double width, double height);
 void plot_save_fig(plot_t *plot, const char *filename);
+void plot_save_legend(plot_ty *plot, const char *filename);
 
 void plot_draw_bar(plot_t *plot, bar_t *bar);
 
