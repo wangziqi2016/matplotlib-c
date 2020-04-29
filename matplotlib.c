@@ -288,3 +288,21 @@ void bar_free(bar_t *bar) {
   free(bar);
   return;
 }
+
+//* plot_t
+
+plot_t *plot_init() {
+  plot_t *plot = (plot_t *)malloc(sizeof(plot_t));
+  SYSEXPECT(plot != NULL);
+  memset(plot, 0x00, sizeof(plot_t));
+  // Initialize member variables
+  plot->py = py_init();
+  plot->buf = buf_init();
+  return plot;
+}
+
+void polt_free(plot_t *plot) {
+  buf_free(plot->buf);
+  py_free(plot->py);
+  return;
+}
