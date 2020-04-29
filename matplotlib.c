@@ -360,6 +360,9 @@ void polt_free(plot_t *plot) {
 
 // Adds bar type
 void plot_add_bar_type(plot_t *plot, const char *label, uint32_t color, char hatch) {
+  if(plot_find_bar_type(plot, label) != NULL) {
+    error_exit("The label \"%s\" already exists\n", label);
+  }
   bar_type_t *type = bar_type_init(label);
   type->color = color;
   type->hatch = hatch;
