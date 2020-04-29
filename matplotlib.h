@@ -109,12 +109,16 @@ void buf_dump(buf_t *buf, const char *filename);
 //* bar_t - Bar object
 
 typedef struct {
-  double value;   // Height of the bar
+  double height;  // Height of the bar
   double bottom;  // Non-zero means we draw stacked bar
   double pos;     // Offset in the horizontal direction
-  char hatch;     // Hatch (filling pattern)
+  double width;   // Width of the bar
+  char hatch;     // Hatch (filling pattern); '\0' means not present
   uint32_t color; // RGB color
   char *text;     // Optional text (if NULL then use value as text or do not care)
+  // TODO: ADD ERROR BAR, WIDTH AND COLOR
+  // TODO: LINE WIDTH, LINE PATTERN, LINE COLOR, etc. see 
+  // https://matplotlib.org/3.2.1/api/_as_gen/matplotlib.axes.Axes.bar.html
 } bar_t;
 
 bar_t *bar_init();
@@ -132,6 +136,7 @@ typedef struct {
 plot_t *plot_init();
 void polt_free(plot_t *plot);
 
-void plot_create_fig(double width, double height);
+void plot_create_fig(plot_t *plot, double width, double height);
+void plot_draw_bar(plot_t *plot, bar_t *bar);
 
 #endif

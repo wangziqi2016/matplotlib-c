@@ -333,3 +333,13 @@ void plot_create_fig(plot_t *plot, double width, double height) {
   buf_append(plot->buf, "ax = fig.add_subplot(111)\n\n");
   return;
 }
+
+// Only one new line is appended at the end of the draw
+void plot_draw_bar(plot_t *plot, bar_t *bar) {
+  // Firts two args are fixed
+  buf_append(plot->buf, "ax.bar(%f, %f\n", bar->pos, bar->height);
+  // Following args are optional
+  buf_append(plot->buf, "  , width=%f\n", bar->width);
+  if(bar->bottom != 0.0) buf_append(plot->buf, "  , bottom=%f\n", bar->bottom);
+  buf_append(plot->buf, ")\n");
+}
