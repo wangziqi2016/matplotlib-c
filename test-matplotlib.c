@@ -140,8 +140,8 @@ void test_buf() {
   buf_append_color(buf, COLOR_GEN(0x12, 0x34, 0x56));
   buf_append_color(buf, COLOR_GEN(0xff, 0xff, 0xff));
   buf_append_color(buf, COLOR_GEN(0x55, 0xaa, 0x55));
-  buf_printf(buf, 1);
-  assert(buf_strlen(buf) == COLOR_STR_SIZE * 3); // Three color strings
+  buf_print(buf, 1);
+  assert(buf_strlen(buf) == COLOR_STRLEN * 3); // Three color strings
   buf_free(buf);
   printf("Pass\n");
   return;
