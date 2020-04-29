@@ -147,6 +147,17 @@ void test_buf() {
   return;
 }
 
+void test_bar_type() {
+  printf("========== test_bar_type ==========\n");
+  plot_t *plot = plot_init();
+  plot_add_bar_type(plot, "type1", COLOR_GEN(0x12, 0x34, 0x56), 'x');
+  plot_add_bar_type(plot, "type2", COLOR_GEN(0xff, 0xff, 0xff), 'y');
+  plot_add_bar_type(plot, "type3", COLOR_GEN(0xab, 0xcd, 0xef), 'z');
+  plot_free(plot);
+  printf("Pass\n");
+  return;
+}
+
 int main(int argc, char **argv) {
   int valgrind_flag = 0;
   for(int i = 1;i < argc;i++) {
@@ -158,6 +169,7 @@ int main(int argc, char **argv) {
   test_fp_trim();
   test_fp_print();
   test_color();
+  test_bar_type();
   if(valgrind_flag == 0) test_py();
   test_buf();
   printf("All test passed!\n");
