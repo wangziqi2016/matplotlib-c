@@ -135,6 +135,13 @@ void test_buf() {
   int rm_ret = remove(filename);
   assert(rm_ret == 0);
   printf("Remove file \"%s\"\n", filename);
+  printf("Step 5: Test append color\n");
+  buf_reset(buf);
+  buf_append_color(buf, COLOR_GEN(0x12, 0x34, 0x56));
+  buf_append_color(buf, COLOR_GEN(0xff, 0xff, 0xff));
+  buf_append_color(buf, COLOR_GEN(0x55, 0xaa, 0x55));
+  buf_printf(buf, 1);
+  assert(buf_strlen(buf) == COLOR_STR_SIZE * 3); // Three color strings
   buf_free(buf);
   printf("Pass\n");
   return;
