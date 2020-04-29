@@ -113,10 +113,11 @@ void buf_dump(buf_t *buf, const char *filename);
 
 // These objects must be unique, i.e. one object for each label
 // Label defines how legend is drawn
-typedef struct {
+typedef struct bar_type_struct_t {
   const char *label; // Has ownership
   char hatch;        // Hatch (filling pattern); '\0' means not present
   uint32_t color;    // RGB color
+  struct bar_type_struct_t *next;
 } bar_type_t;
 
 bar_type_t *bar_type_init(const char *label);
@@ -147,6 +148,7 @@ extern const char *plot_preamble; // This is added to the buffer on plot init
 typedef struct {
   py_t *py;
   buf_t *buf;
+  bar_type_struct_t *bar_types; // Legend
 } plot_t;
 
 plot_t *plot_init();

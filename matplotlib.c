@@ -299,6 +299,7 @@ void bar_type_free(bar_type_t *type) {
   return;
 }
 
+// Bar type object is init'ed to NULL, but it must be set before being drawn
 bar_t *bar_init() {
   bar_t *bar = (bar_t *)malloc(sizeof(bar_t));
   SYSEXPECT(bar != NULL);
@@ -359,6 +360,7 @@ void plot_create_fig(plot_t *plot, double width, double height) {
 
 // Only one new line is appended at the end of the draw
 void plot_draw_bar(plot_t *plot, bar_t *bar) {
+  assert(bar->type != NULL);
   // Firts two args are fixed
   buf_printf(plot->buf, "ax.bar(%f, %f\n", bar->pos, bar->height);
   // Following args are optional
