@@ -161,18 +161,23 @@ void hatch_scheme_print(hatch_scheme_t *scheme) {
 
 //* py_t
 
+static int py_count = 0;
+
 py_t *py_init() {
   py_t *py = (py_t *)malloc(sizeof(py_t));
   SYSEXPECT(py != NULL);
   memset(py, 0x00, sizeof(py_t));
   // This is recommended by Python doc
   Py_SetProgramName("matplotlib-c");
-  Py_Initialize();
+  if(py_count == 0) Py_Initialize();
+  py_count++;
   return py;
 }
 
 void py_free(py_t *py) {
-  Py_Finalize();
+  // Only free when ref count is zero
+  py_count--;
+  if(py_count == 0) Py_Finalize();
   free(py);
   return;
 }
@@ -185,6 +190,8 @@ void py_run(py_t *py, const char *s) {
   (void)py;
   return;
 }
+
+int py_get_instance_count() { return py_count; }
 
 //* buf_t
 
@@ -425,8 +432,15 @@ void plot_save_fig(plot_t *plot, const char *filename) {
     error_exit("The figure has not been created yet\n");
   }
   buf_append(plot->buf, "plot.savefig(\"%s\", bbox_inches='tight')\n\n", filename);
-  py_run();
+  py_run(plot->py, buf_c_str(plot->buf));
   return;
+}
+
+// Saves a standalone legend file
+// This function can be called anywhere during the plotting procedure; We use the labels
+// stored in the 
+void plot_save_legend(plot_ty *plot, const char *filename) {
+
 }
 
 // Only one new line is appended at the end of the draw
@@ -448,7 +462,7 @@ void plot_draw_bar(plot_t *plot, bar_t *bar) {
     if(hatch == '\\') buf_printf(buf, "  , hatch='\\\\'\n");
     else buf_printf(buf, "  , hatch='%c'\n", hatch);
   }
-  // Print label if it has not been printed
+  // Add label if it has not been used for bars
   if(bar_get_type(bar)->used == 0) {
     bar_get_type(bar)->used = 1;
     buf_printf(buf, "  , label='%s'\n", bar_get_type(bar)->label);
