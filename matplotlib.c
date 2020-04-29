@@ -154,6 +154,11 @@ hatch_scheme_t *hatch_find_scheme(const char *name) {
   return NULL;
 }
 
+void hatch_scheme_print(hatch_scheme_t *scheme) {
+  printf("Name %s count %d base 0x%p\n", scheme->name, scheme->item_count, scheme->base);
+  return;
+}
+
 //* py_t
 
 py_t *py_init() {
