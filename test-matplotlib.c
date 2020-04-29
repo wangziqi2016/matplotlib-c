@@ -96,13 +96,14 @@ void test_py() {
   assert(py_get_instance_count() == 0);
   py_t *py = py_init();
   // Print a simple string
-  py_run(py, "print('Hello, Python!\\n')");
+  py_run(py, "print('Hello, Python!')"); // Python print() will append a new line automatically
   // Uncomment this to see an error
   //py_run(py, "asdf");
   assert(py_get_instance_count() == 1);
   // Test whether ref counter works correctly
   py_t *py2 = py_init();
   assert(py_get_instance_count() == 2);
+  py_run(py2, "import sys\nsys.stdout.write('Hello, Python again!\\n')");
   py_free(py2);
   assert(py_get_instance_count() == 1);
   py_free(py);
