@@ -140,6 +140,10 @@ char hatch_scheme_default[] = {
   '-', '+', 'x', '\\', '*', 'o', 'O', '.',
 };
 
+hatch_scheme_t hatch_schemes[] = {
+  HATCH_SCHEME_GEN("default", hatch_scheme_default),
+};
+
 //* py_t
 
 py_t *py_init() {
