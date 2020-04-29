@@ -122,7 +122,8 @@ typedef struct {
 bar_type_t *bar_type_init(const char *label);
 void bar_type_free(bar_type_t *type);
 
-//inline static 
+inline static uint32_t bar_get_color(bar_t *bar) { return bar->type->color; }
+inline static char bar_get_hatch(bar_t *bar) { return bar->type->hatch; }
 
 typedef struct {
   double height;    // Height of the bar
