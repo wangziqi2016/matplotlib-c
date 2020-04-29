@@ -86,6 +86,8 @@ extern char hatch_scheme_default[];
 
 extern hatch_scheme_t hatch_schemes[];
 
+hatch_scheme_t *hatch_find_scheme(const char *name);
+
 //* py_* - Python interpreter
 
 typedef struct {

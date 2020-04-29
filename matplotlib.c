@@ -144,6 +144,16 @@ hatch_scheme_t hatch_schemes[] = {
   HATCH_SCHEME_GEN("default", hatch_scheme_default),
 };
 
+// Returns NULL if not found
+hatch_scheme_t *hatch_find_scheme(const char *name) {
+  for(int i = 0;i < (int)(sizeof(hatch_schemes) / sizeof(hatch_scheme_t));i++) {
+    if(streq(hatch_schemes[i].name, name) == 1) {
+      return hatch_schemes + i;
+    }
+  }
+  return NULL;
+}
+
 //* py_t
 
 py_t *py_init() {
