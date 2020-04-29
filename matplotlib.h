@@ -122,8 +122,10 @@ void bar_free(bar_t *bar);
 
 //* plot_t - Plotting function
 
+extern const char *plot_preamble;
+
 typedef struct {
-  python_t *py;
+  py_t *py;
   buf_t *buf;
 } plot_t;
 
