@@ -252,6 +252,13 @@ void buf_printf(buf_t *buf, const char *fmt, ...) {
   return;
 }
 
+void buf_append_color(buf_t *buf, uint32_t color) {
+  char s[COLOR_STR_SIZE];
+  color_str(color, s);
+  buf_append(buf, s);
+  return;
+}
+
 void buf_print(buf_t *buf, int content) {
   printf("---------- buf_t stat ----------\n");
   printf("Size %d cap %d data 0x%p\n", buf->size, buf->capacity, buf->data);
