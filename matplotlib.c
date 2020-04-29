@@ -253,7 +253,7 @@ void buf_printf(buf_t *buf, const char *fmt, ...) {
 }
 
 void buf_append_color(buf_t *buf, uint32_t color) {
-  char s[COLOR_STR_SIZE];
+  char s[COLOR_STRLEN + 1];
   color_str(color, s);
   buf_append(buf, s);
   return;
@@ -344,9 +344,9 @@ void plot_create_fig(plot_t *plot, double width, double height) {
 // Only one new line is appended at the end of the draw
 void plot_draw_bar(plot_t *plot, bar_t *bar) {
   // Firts two args are fixed
-  buf_append(plot->buf, "ax.bar(%f, %f\n", bar->pos, bar->height);
+  buf_printf(plot->buf, "ax.bar(%f, %f\n", bar->pos, bar->height);
   // Following args are optional
-  buf_append(plot->buf, "  , width=%f\n", bar->width);
-  if(bar->bottom != 0.0) buf_append(plot->buf, "  , bottom=%f\n", bar->bottom);
-  buf_append(plot->buf, ")\n");
+  buf_printf(plot->buf, "  , width=%f\n", bar->width);
+  if(bar->bottom != 0.0) buf_printf(plot->buf, "  , bottom=%f\n", bar->bottom);
+  buf_printf(plot->buf, ")\n");
 }

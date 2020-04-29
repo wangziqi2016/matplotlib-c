@@ -41,8 +41,8 @@ char *fp_rtrim(char *buf); // Remove trailing zeros after the decimal point
 
 // Size of the color object
 #define COLOR_SIZE     sizeof(uint32_t)
-// Size of color string (incl. '\0'): # HH HH HH \0
-#define COLOR_STR_SIZE 8
+// Size of color string (excl. '\0'): # HH HH HH
+#define COLOR_STRLEN   7
 
 // Macros for extracting color components
 #define COLOR_R(x) ((x >> 16) & 0xFF)
