@@ -95,9 +95,9 @@ void test_py() {
   printf("========== test_py ==========\n");
   py_t *py = py_init();
   // Print a simple string
-  py_run("print('Hello, Python!\\n')");
+  py_run(py, "print('Hello, Python!\\n')");
   // Uncomment this to see an error
-  //py_run("asdf");
+  //py_run(py, "asdf");
   py_free(py);
   printf("Pass\n");
   return;

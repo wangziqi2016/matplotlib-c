@@ -177,11 +177,12 @@ void py_free(py_t *py) {
   return;
 }
 
-void py_run(const char *s) {
+void py_run(py_t *py, const char *s) {
   int ret = PyRun_SimpleString(s);
   if(ret != 0) {
     error_exit("Python interpreter raises an exception. Exiting.\n");
   }
+  (void)py;
   return;
 }
 
@@ -420,8 +421,11 @@ void plot_create_fig(plot_t *plot, double width, double height) {
 }
 
 void plot_save_fig(plot_t *plot, const char *filename) {
+  if(plot->fig_created == 0) {
+    error_exit("The figure has not been created yet\n");
+  }
   buf_append(plot->buf, "plot.savefig(\"%s\", bbox_inches='tight')\n\n", filename);
-
+  py_run();
   return;
 }
 

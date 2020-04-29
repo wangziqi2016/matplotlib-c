@@ -97,7 +97,7 @@ typedef struct {
 
 py_t *py_init();
 void py_free(py_t *py);
-void py_run(const char *s);
+void py_run(py_t *py, const char *s);
 
 //* buf_* - String buffer
 
