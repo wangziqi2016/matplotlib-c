@@ -409,9 +409,19 @@ bar_type_t *plot_find_bar_type(plot_t *plot, const char *label) {
 }
 
 void plot_create_fig(plot_t *plot, double width, double height) {
+  if(plot->fig_created == 1) {
+    error_exit("A figure has already been created on this plot\n");
+  }
   buf_printf(plot->buf, "fig = plot.figure(figsize=(%f, %f))\n", width, height);
   // "111" means the output consists of only one plot
   buf_append(plot->buf, "ax = fig.add_subplot(111)\n\n");
+  plot->fig_created = 1;
+  return;
+}
+
+void plot_save_fig(plot_t *plot, const char *filename) {
+  buf_append(plot->buf, "plot.savefig(\"%s\", bbox_inches='tight')\n\n", filename);
+
   return;
 }
 

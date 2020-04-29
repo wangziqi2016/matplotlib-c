@@ -170,6 +170,7 @@ typedef struct {
   py_t *py;
   buf_t *buf;
   struct bar_type_struct_t *bar_types; // Legend
+  int fig_created;                     // Only save figure if this is set
 } plot_t;
 
 plot_t *plot_init();
@@ -179,6 +180,8 @@ void plot_add_bar_type(plot_t *plot, const char *label, uint32_t color, char hat
 bar_type_t *plot_find_bar_type(plot_t *plot, const char *label);
 
 void plot_create_fig(plot_t *plot, double width, double height);
+void plot_save_fig(plot_t *plot, const char *filename);
+
 void plot_draw_bar(plot_t *plot, bar_t *bar);
 
 #endif
