@@ -84,6 +84,8 @@ typedef struct {
 
 extern char hatch_scheme_default[];
 
+extern hatch_scheme_t hatch_schemes[];
+
 //* py_* - Python interpreter
 
 typedef struct {

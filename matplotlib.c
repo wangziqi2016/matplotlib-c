@@ -134,6 +134,12 @@ void color_scheme_print(color_scheme_t *scheme) {
   return;
 }
 
+//* hatch_*
+
+char hatch_scheme_default[] = {
+  '-', '+', 'x', '\\', '*', 'o', 'O', '.',
+};
+
 //* py_t
 
 py_t *py_init() {
