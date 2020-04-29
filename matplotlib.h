@@ -114,7 +114,7 @@ void buf_dump(buf_t *buf, const char *filename);
 // These objects must be unique, i.e. one object for each label
 // Label defines how legend is drawn
 typedef struct bar_type_struct_t {
-  const char *label; // Has ownership
+  char *label;       // Has ownership
   char hatch;        // Hatch (filling pattern); '\0' means not present
   uint32_t color;    // RGB color
   struct bar_type_struct_t *next;
@@ -122,9 +122,6 @@ typedef struct bar_type_struct_t {
 
 bar_type_t *bar_type_init(const char *label);
 void bar_type_free(bar_type_t *type);
-
-inline static uint32_t bar_get_color(bar_t *bar) { return bar->type->color; }
-inline static char bar_get_hatch(bar_t *bar) { return bar->type->hatch; }
 
 typedef struct {
   double height;    // Height of the bar
@@ -141,6 +138,9 @@ typedef struct {
 bar_t *bar_init();
 void bar_free(bar_t *bar);
 
+inline static uint32_t bar_get_color(bar_t *bar) { return bar->type->color; }
+inline static char bar_get_hatch(bar_t *bar) { return bar->type->hatch; }
+
 //* plot_t - Plotting function
 
 extern const char *plot_preamble; // This is added to the buffer on plot init
@@ -148,11 +148,11 @@ extern const char *plot_preamble; // This is added to the buffer on plot init
 typedef struct {
   py_t *py;
   buf_t *buf;
-  bar_type_struct_t *bar_types; // Legend
+  struct bar_type_struct_t *bar_types; // Legend
 } plot_t;
 
 plot_t *plot_init();
-void polt_free(plot_t *plot);
+void plot_free(plot_t *plot);
 
 void plot_add_bar_type(plot_t *plot, const char *label, uint32_t color, char hatch);
 bar_type_t *plot_find_bar_type(plot_t *plot, const char *label);

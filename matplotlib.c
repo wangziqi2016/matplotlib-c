@@ -345,7 +345,7 @@ plot_t *plot_init() {
   return plot;
 }
 
-void polt_free(plot_t *plot) {
+void plot_free(plot_t *plot) {
   buf_free(plot->buf);
   py_free(plot->py);
   // Frees type array
@@ -378,6 +378,7 @@ bar_type_t *plot_find_bar_type(plot_t *plot, const char *label) {
     if(streq(curr->label, label) == 1) {
       return curr;
     }
+    curr = curr->next;
   }
   return NULL;
 }
@@ -404,8 +405,8 @@ void plot_draw_bar(plot_t *plot, bar_t *bar) {
   // Hatch (if not '\0')
   char hatch = bar_get_hatch(bar);
   if(hatch != '\0') {
-    if(hatch == '\\') buf_printf("  , hatch='\\\\'\n");
-    else buf_printf("  , hatch='%c'\n", hatch);
+    if(hatch == '\\') buf_printf(plot->buf, "  , hatch='\\\\'\n");
+    else buf_printf(plot->buf, "  , hatch='%c'\n", hatch);
   }
   // This concludes arg list of bar()
   buf_printf(plot->buf, ")\n");
