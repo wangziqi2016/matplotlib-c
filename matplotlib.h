@@ -166,6 +166,12 @@ inline static bar_type_t *bar_get_type(bar_t *bar) { return bar->type; }
 
 //* plot_t - Plotting function
 
+typedef struct {
+  // Legend parameters
+  int legend_vertical;  // By default draw horizontal legend
+  int legend_font_size; // Font size for text in the legend
+} plot_param_t;
+
 extern const char *plot_preamble; // This is added to the buffer on plot init
 
 typedef struct {
@@ -173,6 +179,7 @@ typedef struct {
   buf_t *buf;
   struct bar_type_struct_t *bar_types; // Legend
   int fig_created;                     // Only save figure if this is set
+  plot_param_t param;                  // Plotting parameters
 } plot_t;
 
 plot_t *plot_init();
