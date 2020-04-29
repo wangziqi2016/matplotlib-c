@@ -348,6 +348,11 @@ void bar_free(bar_t *bar) {
 
 //* plot_t
 
+plot_param_t default_param = {
+  0,        // legend_vertical
+  28,       // legend_font_size
+};
+
 // We use "plot" as the root name of the plot; "fig" as the name of the figure object
 const char *plot_preamble = \
   "import sys\n"
@@ -375,6 +380,8 @@ plot_t *plot_init() {
   plot->py = py_init();
   plot->buf = buf_init();
   buf_append(plot->buf, plot_preamble);
+  // Init param
+  memcpy(&plot->param, &default_param, sizeof(plot_param_t));
   return plot;
 }
 
@@ -438,9 +445,12 @@ void plot_save_fig(plot_t *plot, const char *filename) {
 
 // Saves a standalone legend file
 // This function can be called anywhere during the plotting procedure; We use the labels
-// stored in the 
+// stored in the plot
 void plot_save_legend(plot_t *plot, const char *filename) {
-
+  plot_t *legend = plot_init(); // Preamble is set after this
+  assert(legend->buf != NULL && legend->py != NULL);
+  plot_create_fig(legend, 0.001f, 0.001f);
+  return;
 }
 
 // Only one new line is appended at the end of the draw
