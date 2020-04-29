@@ -348,6 +348,13 @@ plot_t *plot_init() {
 void polt_free(plot_t *plot) {
   buf_free(plot->buf);
   py_free(plot->py);
+  // Frees type array
+  bar_type_t *curr = plot->bar_types;
+  while(curr) {
+    bar_type_t *next = curr->next;
+    bar_type_free(curr);
+    curr = next;
+  }
   return;
 }
 
