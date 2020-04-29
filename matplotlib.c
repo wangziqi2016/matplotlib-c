@@ -358,6 +358,16 @@ void polt_free(plot_t *plot) {
   return;
 }
 
+// Adds bar type
+void plot_add_bar_type(plot_t *plot, const char *label, uint32_t color, char hatch) {
+  bar_type_t *type = bar_type_init(label);
+  type->color = color;
+  type->hatch = hatch;
+  type->next = plot->bar_types;
+  plot->bar_types = type;
+  return;
+}
+
 void plot_create_fig(plot_t *plot, double width, double height) {
   buf_printf(plot->buf, "fig = plot.figure(figsize=(%f, %f))\n", width, height);
   // "111" means the output consists of only one plot
