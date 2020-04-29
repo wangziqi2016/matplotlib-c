@@ -120,4 +120,14 @@ typedef struct {
 bar_t *bar_init();
 void bar_free(bar_t *bar);
 
+//* plot_t - Plotting function
+
+typedef struct {
+  python_t *py;
+  buf_t *buf;
+} plot_t;
+
+plot_t *plot_init();
+void polt_free(plot_t *plot);
+
 #endif
