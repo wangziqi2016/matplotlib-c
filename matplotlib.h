@@ -122,7 +122,7 @@ void bar_free(bar_t *bar);
 
 //* plot_t - Plotting function
 
-extern const char *plot_preamble;
+extern const char *plot_preamble; // This is added to the buffer on plot init
 
 typedef struct {
   py_t *py;
@@ -131,5 +131,7 @@ typedef struct {
 
 plot_t *plot_init();
 void polt_free(plot_t *plot);
+
+void plot_create_fig(double width, double height);
 
 #endif

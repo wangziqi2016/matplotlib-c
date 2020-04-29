@@ -291,6 +291,7 @@ void bar_free(bar_t *bar) {
 
 //* plot_t
 
+// We use "plot" as the root name of the plot; "fig" as the name of the figure object
 const char *plot_preamble = \
   "import sys\n"
   "import matplotlib as mpl\n"
@@ -316,11 +317,19 @@ plot_t *plot_init() {
   // Initialize member variables
   plot->py = py_init();
   plot->buf = buf_init();
+  buf_append(plot->buf, plot_preamble);
   return plot;
 }
 
 void polt_free(plot_t *plot) {
   buf_free(plot->buf);
   py_free(plot->py);
+  return;
+}
+
+void plot_create_fig(plot_t *plot, double width, double height) {
+  buf_printf(plot->buf, "fig = plot.figure(figsize=(%f, %f))\n", width, height);
+  // "111" means the output consists of only one plot
+  buf_append(plot->buf, "ax = fig.add_subplot(111)\n\n");
   return;
 }
