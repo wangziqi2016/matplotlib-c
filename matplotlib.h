@@ -117,6 +117,7 @@ typedef struct bar_type_struct_t {
   char *label;       // Has ownership
   char hatch;        // Hatch (filling pattern); '\0' means not present
   uint32_t color;    // RGB color
+  int used;          // Whether it has been used in bar() method
   struct bar_type_struct_t *next;
 } bar_type_t;
 
@@ -140,6 +141,7 @@ void bar_free(bar_t *bar);
 
 inline static uint32_t bar_get_color(bar_t *bar) { return bar->type->color; }
 inline static char bar_get_hatch(bar_t *bar) { return bar->type->hatch; }
+inline static bar_type_t *bar_get_type(bar_t *bar) { return bar->type; }
 
 //* plot_t - Plotting function
 
