@@ -153,6 +153,13 @@ void test_bar_type() {
   plot_add_bar_type(plot, "type1", COLOR_GEN(0x12, 0x34, 0x56), 'x');
   plot_add_bar_type(plot, "type2", COLOR_GEN(0xff, 0xff, 0xff), 'y');
   plot_add_bar_type(plot, "type3", COLOR_GEN(0xab, 0xcd, 0xef), 'z');
+  // Uncomment this to test duplicated label
+  //plot_add_bar_type(plot, "type3", COLOR_GEN(0xab, 0xcd, 0xef), 'z');
+  bar_type_t *type;
+  type = plot_find_bar_type(plot, "type2");
+  assert(type->color == 0x00FFFFFF && type->hatch == 'y');
+  assert(streq(type->label, "type2") == 1);
+  printf("Label %s color 0x%08X hatch %c\n", type->label, type->color, type->hatch);
   plot_free(plot);
   printf("Pass\n");
   return;
