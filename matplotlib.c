@@ -115,6 +115,9 @@ color_scheme_t color_schemes[] = {
 
 // This function is re-entrant
 void color_str(uint32_t color, char *buf) {
+  if(color & 0xFF000000) {
+    error_exit("Color value 0x%08X has non-zero upper 8 bits\n", color);
+  }
   sprintf(buf, "#%02X%02X%02X", COLOR_R(color), COLOR_G(color), COLOR_B(color));
   return;
 }
