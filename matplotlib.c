@@ -113,7 +113,7 @@ color_scheme_t color_schemes[] = {
   COLOR_SCHEME_GEN("red", color_scheme_red),
 };
 
-// This function is not re-entrant; Only one instance can be called before the next
+// This function is re-entrant
 void color_str(uint32_t color, char *buf) {
   sprintf(buf, "#%02X%02X%02X", COLOR_R(color), COLOR_G(color), COLOR_B(color));
   return;
@@ -283,6 +283,22 @@ void buf_dump(buf_t *buf, const char *filename) {
 
 //* bar_t
 
+bar_type_t *bar_type_init(const char *label) {
+  bar_type_t *type = (bar_type_t *)malloc(sizeof(bar_type_t));
+  SYSEXPECT(type != NULL);
+  memset(type, 0x00, sizeof(bar_type_t));
+  type->label = (char *)malloc(strlen(label) + 1);
+  SYSEXPECT(type->label != NULL);
+  strcpy(type->label, label);
+  return type;
+}
+
+void bar_type_free(bar_type_t *type) {
+  free(type->label);
+  free(type);
+  return;
+}
+
 bar_t *bar_init() {
   bar_t *bar = (bar_t *)malloc(sizeof(bar_t));
   SYSEXPECT(bar != NULL);
@@ -348,5 +364,17 @@ void plot_draw_bar(plot_t *plot, bar_t *bar) {
   // Following args are optional
   buf_printf(plot->buf, "  , width=%f\n", bar->width);
   if(bar->bottom != 0.0) buf_printf(plot->buf, "  , bottom=%f\n", bar->bottom);
+  // Color of the bar
+  buf_printf(plot->buf, "  , color='");
+  buf_append_color(plot->buf, bar_get_color(bar));
+  buf_printf(plot->buf, "'\n");
+  // Hatch (if not '\0')
+  char hatch = bar_get_hatch(bar);
+  if(hatch != '\0') {
+    if(hatch == '\\') buf_printf("  , hatch='\\\\'\n");
+    else buf_printf("  , hatch='%c'\n", hatch);
+  }
+  // This concludes arg list of bar()
   buf_printf(plot->buf, ")\n");
+  return;
 }
