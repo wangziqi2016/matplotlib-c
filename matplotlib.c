@@ -431,7 +431,7 @@ void plot_save_fig(plot_t *plot, const char *filename) {
   if(plot->fig_created == 0) {
     error_exit("The figure has not been created yet\n");
   }
-  buf_append(plot->buf, "plot.savefig(\"%s\", bbox_inches='tight')\n\n", filename);
+  buf_printf(plot->buf, "plot.savefig(\"%s\", bbox_inches='tight')\n\n", filename);
   py_run(plot->py, buf_c_str(plot->buf));
   return;
 }
@@ -439,7 +439,7 @@ void plot_save_fig(plot_t *plot, const char *filename) {
 // Saves a standalone legend file
 // This function can be called anywhere during the plotting procedure; We use the labels
 // stored in the 
-void plot_save_legend(plot_ty *plot, const char *filename) {
+void plot_save_legend(plot_t *plot, const char *filename) {
 
 }
 
