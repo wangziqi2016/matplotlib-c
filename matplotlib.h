@@ -70,6 +70,20 @@ color_scheme_t *color_find_scheme(const char *name);  // Using string name to lo
 
 void color_scheme_print(color_scheme_t *scheme);
 
+//* hatch_*
+
+#define HATCH_SIZE   1
+
+typedef struct {
+  const char *name;
+  char *base;
+  int item_count;
+} hatch_scheme_t;
+
+#define HATCH_SCHEME_GEN(name, base) {name, base, sizeof(base) / HATCH_SIZE}
+
+extern char hatch_scheme_default[];
+
 //* py_* - Python interpreter
 
 typedef struct {
