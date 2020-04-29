@@ -40,7 +40,9 @@ char *fp_rtrim(char *buf); // Remove trailing zeros after the decimal point
 //* color_* - Color processing
 
 // Size of the color object
-#define COLOR_SIZE sizeof(uint32_t)
+#define COLOR_SIZE     sizeof(uint32_t)
+// Size of color string (incl. '\0'): # HH HH HH \0
+#define COLOR_STR_SIZE 8
 
 // Macros for extracting color components
 #define COLOR_R(x) ((x >> 16) & 0xFF)
@@ -102,6 +104,7 @@ void buf_realloc(buf_t *buf, int target);
 void buf_append(buf_t *buf, const char *s);
 void buf_concat(buf_t *buf, buf_t *s);
 void buf_printf(buf_t *buf, const char *fmt, ...);
+void buf_append_color(buf_t *buf, uint32_t color);
 
 void buf_print(buf_t *buf, int content);
 void buf_dump(buf_t *buf, const char *filename);
