@@ -111,14 +111,26 @@ void buf_dump(buf_t *buf, const char *filename);
 
 //* bar_t - Bar object
 
+// These objects must be unique, i.e. one object for each label
+// Label defines how legend is drawn
 typedef struct {
-  double height;  // Height of the bar
-  double bottom;  // Non-zero means we draw stacked bar
-  double pos;     // Offset in the horizontal direction
-  double width;   // Width of the bar
-  char hatch;     // Hatch (filling pattern); '\0' means not present
-  uint32_t color; // RGB color
-  char *text;     // Optional text (if NULL then use value as text or do not care)
+  const char *label; // Has ownership
+  char hatch;        // Hatch (filling pattern); '\0' means not present
+  uint32_t color;    // RGB color
+} bar_type_t;
+
+bar_type_t *bar_type_init(const char *label);
+void bar_type_free(bar_type_t *type);
+
+//inline static 
+
+typedef struct {
+  double height;    // Height of the bar
+  double bottom;    // Non-zero means we draw stacked bar
+  double pos;       // Offset in the horizontal direction
+  double width;     // Width of the bar
+  bar_type_t *type; // Used to draw legend
+  char *text;       // Optional text (has ownership if not NULL)
   // TODO: ADD ERROR BAR, WIDTH AND COLOR
   // TODO: LINE WIDTH, LINE PATTERN, LINE COLOR, etc. see 
   // https://matplotlib.org/3.2.1/api/_as_gen/matplotlib.axes.Axes.bar.html
