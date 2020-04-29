@@ -155,6 +155,8 @@ plot_t *plot_init();
 void polt_free(plot_t *plot);
 
 void plot_add_bar_type(plot_t *plot, const char *label, uint32_t color, char hatch);
+bar_type_t *plot_find_bar_type(plot_t *plot, const char *label);
+
 void plot_create_fig(plot_t *plot, double width, double height);
 void plot_draw_bar(plot_t *plot, bar_t *bar);
 

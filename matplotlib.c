@@ -368,6 +368,17 @@ void plot_add_bar_type(plot_t *plot, const char *label, uint32_t color, char hat
   return;
 }
 
+// Returns NULL if not found
+bar_type_t *plot_find_bar_type(plot_t *plot, const char *label) {
+  bar_type_t *curr = plot->bar_types;
+  while(curr) {
+    if(streq(curr->label, label) == 1) {
+      return curr;
+    }
+  }
+  return NULL;
+}
+
 void plot_create_fig(plot_t *plot, double width, double height) {
   buf_printf(plot->buf, "fig = plot.figure(figsize=(%f, %f))\n", width, height);
   // "111" means the output consists of only one plot
