@@ -393,22 +393,28 @@ void plot_create_fig(plot_t *plot, double width, double height) {
 // Only one new line is appended at the end of the draw
 void plot_draw_bar(plot_t *plot, bar_t *bar) {
   assert(bar->type != NULL);
+  buf_t *buf = plot->buf;
   // Firts two args are fixed
-  buf_printf(plot->buf, "ax.bar(%f, %f\n", bar->pos, bar->height);
+  buf_printf(buf, "ax.bar(%f, %f\n", bar->pos, bar->height);
   // Following args are optional
-  buf_printf(plot->buf, "  , width=%f\n", bar->width);
-  if(bar->bottom != 0.0) buf_printf(plot->buf, "  , bottom=%f\n", bar->bottom);
+  buf_printf(buf, "  , width=%f\n", bar->width);
+  if(bar->bottom != 0.0) buf_printf(buf, "  , bottom=%f\n", bar->bottom);
   // Color of the bar
-  buf_printf(plot->buf, "  , color='");
-  buf_append_color(plot->buf, bar_get_color(bar));
-  buf_printf(plot->buf, "'\n");
+  buf_printf(buf, "  , color='");
+  buf_append_color(buf, bar_get_color(bar));
+  buf_printf(buf, "'\n");
   // Hatch (if not '\0')
   char hatch = bar_get_hatch(bar);
   if(hatch != '\0') {
-    if(hatch == '\\') buf_printf(plot->buf, "  , hatch='\\\\'\n");
-    else buf_printf(plot->buf, "  , hatch='%c'\n", hatch);
+    if(hatch == '\\') buf_printf(buf, "  , hatch='\\\\'\n");
+    else buf_printf(buf, "  , hatch='%c'\n", hatch);
+  }
+  // Print label if it has not been printed
+  if(bar_get_type(bar)->used == 0) {
+    bar_get_type(bar)->used = 1;
+    buf_printf(buf, "  , label='%s'\n", bar_get_type(bar)->label);
   }
   // This concludes arg list of bar()
-  buf_printf(plot->buf, ")\n");
+  buf_printf(buf, ")\n");
   return;
 }
