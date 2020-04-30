@@ -12,7 +12,11 @@ parse_t *_parse_init(char *s) {
   return parse;
 }
 
-void parse_free(parse_t *parse);
+void parse_free(parse_t *parse) {
+  free(parse->s);
+  free(parse);
+  return;
+}
 
 //* fp_*
 
