@@ -185,6 +185,15 @@ void test_bar_type() {
   return;
 }
 
+void test_plot_legend() {
+  printf("========== test_plot_legend ==========\n");
+  plot_t *plot = plot_init();
+  
+  plot_free(plot);
+  printf("Pass\n");
+  return;
+}
+
 int main(int argc, char **argv) {
   int valgrind_flag = 0;
   for(int i = 1;i < argc;i++) {
