@@ -168,10 +168,12 @@ inline static void bar_set_type(bar_t *bar, bar_type_t *type) { bar->type = type
 
 //* plot_t - Plotting function
 
+// This object should not be freed; Always copy it over
 typedef struct {
   // Legend parameters
-  int legend_vertical;  // By default draw horizontal legend
-  int legend_font_size; // Font size for text in the legend
+  int legend_vertical;    // By default draw horizontal legend
+  int legend_font_size;   // Font size for text in the legend
+  const char *legend_pos; // Legend position; This string should never be freed
   // Tick
   int xtick_font_size;
   int ytick_font_size;
@@ -203,5 +205,6 @@ void plot_save_fig(plot_t *plot, const char *filename);
 void plot_save_legend(plot_t *plot, const char *filename);
 
 void plot_add_bar(plot_t *plot, bar_t *bar);
+void plot_add_legend(plot_t *plot);
 
 #endif

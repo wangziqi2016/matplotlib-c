@@ -366,6 +366,7 @@ void bar_free(bar_t *bar) {
 plot_param_t default_param = {
   0,        // legend_vertical
   28,       // legend_font_size
+  "best",   // Legend pos; Alternatives are: {lower, center, upper} x {left, center, right} or "center"
   24, 24,   // x/y tick font size
   28, 28,   // x/y title font size
 };
@@ -515,4 +516,9 @@ void plot_add_bar(plot_t *plot, bar_t *bar) {
   // This concludes arg list of bar()
   buf_printf(buf, ")\n");
   return;
+}
+
+// Uses legend font size, legend vertical, and legend position in the param object
+void plot_add_legend(plot_t *plot) {
+
 }
