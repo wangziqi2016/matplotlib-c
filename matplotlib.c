@@ -12,6 +12,13 @@ parse_t *_parse_init(char *s) {
   return parse;
 }
 
+parse_t *parse_init(const char *s) {
+  int len = strlen(s);
+  char *buf = (char *)malloc(len + 1);
+  memcpy(buf, s, len + 1);
+  return _parse_init(buf);
+}
+
 void parse_free(parse_t *parse) {
   free(parse->s);
   free(parse);
