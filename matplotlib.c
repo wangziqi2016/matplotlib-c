@@ -561,6 +561,13 @@ void plot_add_legend(plot_t *plot) {
   return;
 }
 
+// Adding X axis title
+void plot_add_x_title(plot_t *plot, const char *title) {
+  buf_printf(plot->buf, "ax.set_xlabel(\"%s\", fontsize=%lu, weight='bold')\n",
+             title, plot->param.xtitla_font_size);
+  return;
+}
+
 void plot_print(plot_t *plot) {
   buf_print(plot->buf, 1);
   bar_type_t *curr = plot->bar_types;

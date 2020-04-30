@@ -208,6 +208,7 @@ void plot_save_legend(plot_t *plot, const char *filename);
 
 void plot_add_bar(plot_t *plot, bar_t *bar);
 void plot_add_legend(plot_t *plot);
+void plot_add_x_title(plot_t *plot);
 
 void plot_print(plot_t *plot);
 
