@@ -535,8 +535,9 @@ void plot_add_legend(plot_t *plot) {
     }
   }
   buf_t *buf = plot->buf;
+  plot_param_t *param = &plot->param;
   // Adding legend statement
   buf_printf(buf, "ax.legend(loc=\"%s\", prop={'size':%d}, ncol=%d)\n\n",
-             param.legend_pos, param.legend_font_size, col_count);
+             param->legend_pos, param->legend_font_size, col_count);
   return;
 }
