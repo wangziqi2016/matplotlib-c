@@ -296,10 +296,11 @@ void buf_append_color(buf_t *buf, uint32_t color) {
 }
 
 void buf_print(buf_t *buf, int content) {
-  printf("---------- buf_t stat ----------\n");
-  printf("Size %d cap %d data 0x%p\n", buf->size, buf->capacity, buf->data);
+  printf("[buf_t] size %d cap %d data 0x%p\n", buf->size, buf->capacity, buf->data);
   if(content == 1) {
+    printf("---------- contents ----------\n");
     printf("%s\n", buf->data);
+    printf("------------ end -------------\n");
   }
   return;
 }
