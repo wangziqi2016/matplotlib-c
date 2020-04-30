@@ -27,6 +27,15 @@
 
 inline static int streq(const char *a, const char *b) { return strcmp(a, b) == 0; }
 
+//* parse_* - String processing
+
+typedef struct {
+  char *s;
+  char *curr;
+  int line;
+  int col;
+} parse_t;
+
 //* fp_* - String processing of floating point numbers
 
 // Initial size of the buffer - may be larger
