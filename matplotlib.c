@@ -471,15 +471,25 @@ void plot_save_legend(plot_t *plot, const char *filename) {
   if(curr == NULL) {
     error_exit("Current plot does not contain any bar type\n");
   }
+  int count = 0; // Number of rows if vertical legend
   while(curr) {
     bar_t *bar = bar_init();
+    bar_type_t *type = bar_type_dup(curr); // Make a dup
     bar_set_type(bar, curr);
+    bar->bottom = bar->height = bar->width = 0.0;
+    plot_add_bar(legend, bar);
+    assert(type->used == 1);
+    bar_type_free(type);
+    bar_free(bar);
+    count++;
+    curr = curr->next;
   }
+
   return;
 }
 
 // Only one new line is appended at the end of the draw
-void plot_draw_bar(plot_t *plot, bar_t *bar) {
+void plot_add_bar(plot_t *plot, bar_t *bar) {
   assert(bar->type != NULL);
   buf_t *buf = plot->buf;
   // Firts two args are fixed

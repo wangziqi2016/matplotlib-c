@@ -202,6 +202,6 @@ void plot_create_fig(plot_t *plot, double width, double height);
 void plot_save_fig(plot_t *plot, const char *filename);
 void plot_save_legend(plot_t *plot, const char *filename);
 
-void plot_draw_bar(plot_t *plot, bar_t *bar);
+void plot_add_bar(plot_t *plot, bar_t *bar);
 
 #endif
