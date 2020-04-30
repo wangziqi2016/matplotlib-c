@@ -472,20 +472,21 @@ void plot_save_legend(plot_t *plot, const char *filename) {
   if(curr == NULL) {
     error_exit("Current plot does not contain any bar type\n");
   }
-  int count = 0; // Number of rows if vertical legend
   while(curr) {
     bar_t *bar = bar_init();
-    bar_type_t *type = bar_type_dup(curr); // Make a dup
-    bar_set_type(bar, curr);
+    // The bar should not be drawn
     bar->bottom = bar->height = bar->width = 0.0;
+    // Also duplicate the bar type and associate it with the bar
+    plot_add_bar_type(legend, curr->label, curr->color, curr->hatch);
+    bar_set_type(bar, plot_find_bar_type(legend, curr->label));
     plot_add_bar(legend, bar);
-    assert(type->used == 1);
-    bar_type_free(type);
+    // No longer used
     bar_free(bar);
-    count++;
     curr = curr->next;
   }
-
+  plot_add_legend(legend);
+  plot_save_fig(legend, filename);
+  plot_free(legend);
   return;
 }
 
