@@ -194,7 +194,8 @@ void test_plot_legend() {
   plot_add_bar_type(plot, "Category 3", color_scheme_mixed[2], hatch_scheme_default[2]);
   plot_add_bar_type(plot, "Category 4", color_scheme_mixed[3], hatch_scheme_default[3]);
   plot_add_bar_type(plot, "Category 5", color_scheme_mixed[4], hatch_scheme_default[4]);
-  plot_print(plot);
+  // Note that this should print nothing about the legend, since we create another object
+  plot_print(plot); 
   plot_save_legend(plot, "test_legend.pdf");
   plot_free(plot);
   printf("Pass\n");

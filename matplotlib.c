@@ -423,7 +423,7 @@ void plot_free(plot_t *plot) {
   return;
 }
 
-// Adds bar type
+// Adds bar type; Note that types preserve the order they are inserted
 void plot_add_bar_type(plot_t *plot, const char *label, uint32_t color, char hatch) {
   if(plot_find_bar_type(plot, label) != NULL) {
     error_exit("The label \"%s\" already exists\n", label);
@@ -431,8 +431,18 @@ void plot_add_bar_type(plot_t *plot, const char *label, uint32_t color, char hat
   bar_type_t *type = bar_type_init(label);
   type->color = color;
   type->hatch = hatch;
-  type->next = plot->bar_types;
-  plot->bar_types = type;
+  type->next = NULL; // Always insert into the last one
+  if(plot->bar_types == NULL) {
+    plot->bar_types = type;
+  } else {
+    bar_type_t *curr = plot->bar_types;
+    assert(curr != NULL);
+    // Find the last element
+    while(curr->next != NULL) {
+      curr = curr->next;
+    }
+    curr->next = type;
+  }
   return;
 }
 
