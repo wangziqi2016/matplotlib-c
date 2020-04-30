@@ -188,7 +188,14 @@ void test_bar_type() {
 void test_plot_legend() {
   printf("========== test_plot_legend ==========\n");
   plot_t *plot = plot_init();
-  
+  // Adding bar types
+  plot_add_bar_type(plot, "Category 1", color_scheme_mixed[0], hatch_scheme_default[0]);
+  plot_add_bar_type(plot, "Category 2", color_scheme_mixed[1], hatch_scheme_default[1]);
+  plot_add_bar_type(plot, "Category 3", color_scheme_mixed[2], hatch_scheme_default[2]);
+  plot_add_bar_type(plot, "Category 4", color_scheme_mixed[3], hatch_scheme_default[3]);
+  plot_add_bar_type(plot, "Category 5", color_scheme_mixed[4], hatch_scheme_default[4]);
+  plot_print(plot);
+  plot_save_legend(plot, "test_legend.pdf");
   plot_free(plot);
   printf("Pass\n");
   return;
@@ -208,6 +215,7 @@ int main(int argc, char **argv) {
   test_bar_type();
   if(valgrind_flag == 0) test_py();
   test_buf();
+  test_plot_legend();
   printf("All test passed!\n");
   return 0;
 }
