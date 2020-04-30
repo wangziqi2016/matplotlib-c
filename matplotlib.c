@@ -335,6 +335,18 @@ void bar_type_free(bar_type_t *type) {
   return;
 }
 
+// Duplicate the type object; Deep copy, if there is internal structure
+// Except that "used" variable is set to zero
+bar_type_t *bar_type_dup(bar_type_t *type) {
+  // This will perform a copy of the label string
+  bar_type_t *new_type = bar_type_init(type->label);
+  new_type->color = type->color;
+  new_type->hatch = type->hatch;
+  new_type->used = 0;
+  new_type->next = NULL;
+  return new_type;
+}
+
 // Bar type object is init'ed to NULL, but it must be set before being drawn
 bar_t *bar_init() {
   bar_t *bar = (bar_t *)malloc(sizeof(bar_t));
@@ -455,6 +467,14 @@ void plot_save_legend(plot_t *plot, const char *filename) {
   plot_t *legend = plot_init(); // Preamble is set after this
   assert(legend->buf != NULL && legend->py != NULL);
   plot_create_fig(legend, 0.001f, 0.001f);
+  bar_type_t *curr = plot->bar_types;
+  if(curr == NULL) {
+    error_exit("Current plot does not contain any bar type\n");
+  }
+  while(curr) {
+    bar_t *bar = bar_init();
+    bar_set_type(bar, curr);
+  }
   return;
 }
 

@@ -144,6 +144,7 @@ typedef struct bar_type_struct_t {
 
 bar_type_t *bar_type_init(const char *label);
 void bar_type_free(bar_type_t *type);
+bar_type_t *bar_type_dup(bar_type_t *type);
 
 typedef struct {
   double height;    // Height of the bar
