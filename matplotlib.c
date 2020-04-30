@@ -52,8 +52,16 @@ void parse_free(parse_t *parse) {
 // Always call this for reading the string, since we update line and col here
 // Returns '\0' if the string is exhausted and do not change the pointer
 void parse_getchar(parse_t *parse) {
-  if(*parse->curr == '\0') return '\0';
-
+  char ch = *parse->curr;
+  if(ch != '\0') {
+    parse->curr++;
+    // Update line and column if we have seen a new line character
+    if(ch == '\n') {
+      parse->line++;
+      parse->col = 1;
+    }
+  }
+  return ch;
 }
 
 //* fp_*
