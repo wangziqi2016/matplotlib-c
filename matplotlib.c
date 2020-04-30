@@ -15,7 +15,30 @@ parse_t *_parse_init(char *s) {
 parse_t *parse_init(const char *s) {
   int len = strlen(s);
   char *buf = (char *)malloc(len + 1);
+  SYSEXPECT(buf != NULL);
   memcpy(buf, s, len + 1);
+  return _parse_init(buf);
+}
+
+parse_t *parse_init_file(const char *filename) {
+  FILE *fp = fopen(filename, "r");
+  SYSEXPECT(fp != NULL);
+  int seek_ret;
+  seek_ret = fseek(fp, 0, SEEK_END);
+  SYSEXPECT(seek_ret == 0);
+  int sz = ftell(fp);
+  SYSEXPECT(seek_ret != -1L);
+  seek_ret = fseek(fp, 0, SEEK_SET);
+  SYSEXPECT(seek_ret == 0);
+  char *buf = (char *)malloc(sz + 1);
+  SYSEXPECT(buf);
+  int read_ret = fread(buf, 1, sz, fp);
+  if(read_ret != sz) {
+    printf("fread() returns %d (expecting %d)\n", read_ret, sz);
+    error_exit("File read error \"%s\"\n", filename);
+  }
+  // Make it a string
+  buf[sz] = '\0'; 
   return _parse_init(buf);
 }
 
