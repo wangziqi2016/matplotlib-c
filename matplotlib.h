@@ -40,6 +40,9 @@ parse_t *_parse_init(char *s);      // This one does not alloc the string
 parse_t *parse_init(const char *s); // This one copies the string
 parse_t *parse_init_file(const char *filename); // This one reads a file
 void parse_free(parse_t *parse);
+// Read next char without advancing the read pointer
+inline static char parse_peek(parse_t *parse) { return parse->curr[0]; } 
+//void parse_
 
 //* fp_* - String processing of floating point numbers
 
