@@ -347,6 +347,12 @@ bar_type_t *bar_type_dup(bar_type_t *type) {
   return new_type;
 }
 
+void bar_type_print(bar_type_t *type) {
+  printf("[bar_type_t] label \"%s\" color 0x%08X hatch '%c' used %d\n",
+         type->label, type->color, type->hatch, type->used);
+  return;
+}
+
 // Bar type object is init'ed to NULL, but it must be set before being drawn
 bar_t *bar_init() {
   bar_t *bar = (bar_t *)malloc(sizeof(bar_t));
@@ -462,8 +468,8 @@ void plot_save_fig(plot_t *plot, const char *filename) {
 }
 
 // Saves a standalone legend file
-// This function can be called anywhere during the plotting procedure; We use the labels
-// stored in the plot
+// This function can be called anywhere during the plotting procedure. Legends drawn will be 
+// bar types stored in the plot object
 void plot_save_legend(plot_t *plot, const char *filename) {
   plot_t *legend = plot_init(); // Preamble is set after this
   assert(legend->buf != NULL && legend->py != NULL);
@@ -484,6 +490,7 @@ void plot_save_legend(plot_t *plot, const char *filename) {
     bar_free(bar);
     curr = curr->next;
   }
+  legend->param.legend_pos = "center"; // Hardcode lagend pos
   plot_add_legend(legend);
   plot_save_fig(legend, filename);
   plot_free(legend);
@@ -540,5 +547,10 @@ void plot_add_legend(plot_t *plot) {
   // Adding legend statement
   buf_printf(buf, "ax.legend(loc=\"%s\", prop={'size':%d}, ncol=%d)\n\n",
              param->legend_pos, param->legend_font_size, col_count);
+  return;
+}
+
+void plot_print(plot_t *plot) {
+  buf_print(plot->buf);
   return;
 }

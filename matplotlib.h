@@ -146,6 +146,8 @@ bar_type_t *bar_type_init(const char *label);
 void bar_type_free(bar_type_t *type);
 bar_type_t *bar_type_dup(bar_type_t *type);
 
+void bar_type_print(bar_type_t *type);
+
 typedef struct {
   double height;    // Height of the bar
   double bottom;    // Non-zero means we draw stacked bar
@@ -206,5 +208,7 @@ void plot_save_legend(plot_t *plot, const char *filename);
 
 void plot_add_bar(plot_t *plot, bar_t *bar);
 void plot_add_legend(plot_t *plot);
+
+void plot_print(plot_t *plot);
 
 #endif
