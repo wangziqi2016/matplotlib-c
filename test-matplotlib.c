@@ -166,9 +166,20 @@ void test_bar_type() {
   //plot_add_bar_type(plot, "type3", COLOR_GEN(0xab, 0xcd, 0xef), 'z');
   bar_type_t *type;
   type = plot_find_bar_type(plot, "type2");
+  printf("Type Label %s color 0x%08X hatch %c used %d\n", type->label, type->color, type->hatch, type->used);
   assert(type->color == 0x00FFFFFF && type->hatch == 'y');
   assert(streq(type->label, "type2") == 1);
-  printf("Label %s color 0x%08X hatch %c\n", type->label, type->color, type->hatch);
+  assert(type->used == 0);
+  type->used = 1;
+  // Test dup() function
+  bar_type_t *dup = bar_type_dup(type);
+  printf("Dup Label %s color 0x%08X hatch %c used %d\n", dup->label, dup->color, dup->hatch, dup->used);
+  assert(dup->color == 0x00FFFFFF && dup->hatch == 'y');
+  assert(streq(dup->label, "type2") == 1);
+  assert(dup->label != type->label); // Label must be anew
+  assert(dup->used == 0); // This should not be copied
+  bar_type_free(dup);
+  // Finish all tests
   plot_free(plot);
   printf("Pass\n");
   return;
