@@ -520,5 +520,23 @@ void plot_add_bar(plot_t *plot, bar_t *bar) {
 
 // Uses legend font size, legend vertical, and legend position in the param object
 void plot_add_legend(plot_t *plot) {
-
+  int col_count = 0;
+  // Compute col_count by counting bar types
+  if(plot->param.legend_vertical == 1) {
+    col_count = 1;
+  } else {
+    bar_type_t *curr = plot->bar_types;
+    if(curr == NULL) {
+      error_exit("Current plot does not contain any bar type\n");
+    }
+    while(curr) {
+      col_count++;
+      curr = curr->next;
+    }
+  }
+  buf_t *buf = plot->buf;
+  // Adding legend statement
+  buf_printf(buf, "ax.legend(loc=\"%s\", prop={'size':%d}, ncol=%d)\n\n",
+             param.legend_pos, param.legend_font_size, col_count);
+  return;
 }
