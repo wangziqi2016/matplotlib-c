@@ -354,6 +354,8 @@ void bar_free(bar_t *bar) {
 plot_param_t default_param = {
   0,        // legend_vertical
   28,       // legend_font_size
+  24, 24,   // x/y tick font size
+  28, 28,   // x/y title font size
 };
 
 // We use "plot" as the root name of the plot; "fig" as the name of the figure object

@@ -170,6 +170,12 @@ typedef struct {
   // Legend parameters
   int legend_vertical;  // By default draw horizontal legend
   int legend_font_size; // Font size for text in the legend
+  // Tick
+  int xtick_font_size;
+  int ytick_font_size;
+  // Title
+  int xtitla_font_size;
+  int ytitle_font_size;
 } plot_param_t;
 
 extern plot_param_t default_param; // Default param, will be copied over during init
