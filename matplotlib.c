@@ -564,7 +564,13 @@ void plot_add_legend(plot_t *plot) {
 // Adding X axis title
 void plot_add_x_title(plot_t *plot, const char *title) {
   buf_printf(plot->buf, "ax.set_xlabel(\"%s\", fontsize=%lu, weight='bold')\n",
-             title, plot->param.xtitla_font_size);
+             title, plot->param.xtitle_font_size);
+  return;
+}
+
+void plot_add_y_title(plot_t *plot, const char *title) {
+  buf_printf(plot->buf, "ax.set_ylabel(\"%s\", fontsize=%lu, weight='bold')\n",
+             title, plot->param.ytitle_font_size);
   return;
 }
 
