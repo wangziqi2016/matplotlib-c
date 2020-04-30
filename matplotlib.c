@@ -9,6 +9,7 @@ parse_t *_parse_init(char *s) {
   memset(parse, 0x00, sizeof(parse_t));
   parse->s = parse->curr = s;
   parse->line = parse->col = 1; // Line and col starts from 1
+  parse->size = strlen(s) + 1;  // Including terminating zero
   return parse;
 }
 
@@ -46,6 +47,13 @@ void parse_free(parse_t *parse) {
   free(parse->s);
   free(parse);
   return;
+}
+
+// Always call this for reading the string, since we update line and col here
+// Returns '\0' if the string is exhausted and do not change the pointer
+void parse_getchar(parse_t *parse) {
+  if(*parse->curr == '\0') return '\0';
+
 }
 
 //* fp_*
