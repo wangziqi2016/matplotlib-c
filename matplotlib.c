@@ -552,6 +552,11 @@ void plot_add_legend(plot_t *plot) {
 }
 
 void plot_print(plot_t *plot) {
-  buf_print(plot->buf);
+  buf_print(plot->buf, 1);
+  bar_type_t *curr = plot->bar_types;
+  while(curr) {
+    bar_type_print(curr);
+    curr = curr->next;
+  }
   return;
 }
