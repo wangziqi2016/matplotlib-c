@@ -180,7 +180,7 @@ typedef struct {
   int xtick_font_size;
   int ytick_font_size;
   // Title
-  int xtitla_font_size;
+  int xtitle_font_size;
   int ytitle_font_size;
 } plot_param_t;
 
