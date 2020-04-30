@@ -30,11 +30,16 @@ inline static int streq(const char *a, const char *b) { return strcmp(a, b) == 0
 //* parse_* - String processing
 
 typedef struct {
-  char *s;
-  char *curr;
+  char *s;         // Always point to the start of the string; Read-only; Parser owns the string
+  char *curr;      // Current reading location
   int line;
   int col;
 } parse_t;
+
+parse_t *_parse_init(char *s);      // This one does not alloc the string
+parse_t *parse_init(const char *s); // This one copies the string
+parse_t *parse_init_file(const char *filename); // This one reads a file
+void parse_free(parse_t *parse);
 
 //* fp_* - String processing of floating point numbers
 

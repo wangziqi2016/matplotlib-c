@@ -3,6 +3,17 @@
 
 //* parse_*
 
+parse_t *_parse_init(char *s) {
+  parse_t *parse = (parse_t *)malloc(sizeof(parse_t));
+  SYSEXPECT(parse != NULL);
+  memset(parse, 0x00, sizeof(parse_t));
+  parse->s = parse->curr = s;
+  parse->line = parse->col = 1; // Line and col starts from 1
+  return parse;
+}
+
+void parse_free(parse_t *parse);
+
 //* fp_*
 
 double fp_power10(int num) {
