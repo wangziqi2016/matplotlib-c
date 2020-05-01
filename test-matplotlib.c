@@ -156,6 +156,20 @@ void test_buf() {
   return;
 }
 
+void test_vec() {
+  printf("========== test_vec ==========\n");
+  vec_t *vec = vec_init();
+  for(int i = 0;i < 1000;i++) {
+    vec_append(vec, (void *)i);
+  }
+  for(int i = 999;i >= 0;i++) {
+    assert(vec_at(vec, i) == (void *)i);
+  }
+  vec_free(vec);
+  printf("Pass\n");
+  return;
+}
+
 void test_bar_type() {
   printf("========== test_bar_type ==========\n");
   plot_t *plot = plot_init();
@@ -304,6 +318,7 @@ int main(int argc, char **argv) {
   if(valgrind_flag == 0) test_bar_type();
   if(valgrind_flag == 0) test_py();
   test_buf();
+  test_vec();
   if(valgrind_flag == 0) test_plot_legend();
   test_parse_getchar();
   test_parse_until();
