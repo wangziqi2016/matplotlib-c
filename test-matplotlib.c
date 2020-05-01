@@ -202,6 +202,26 @@ void test_plot_legend() {
   return;
 }
 
+void test_parse_getchar() {
+  printf("========== test_parse_getchar ==========\n");
+  // Line 1, 3, 4 has contents; 6 lines in total
+  const char *s = "first line\n\nsecond line\nthird line\n\n\n";
+  parse_t *parse = parse_init(s);
+  buf_t *buf = buf_init();
+  char ch;
+  while((ch = parse_getchar(parse)) != '\0') {
+    buf_printf(buf, "%c", ch);
+  }
+  buf_print(buf);
+  assert(streq(buf_c_str(buf), s) == 1);
+  assert(parse_get_line(parse) == 6);
+  assert(parse_get_col(parse) == 0);
+  buf_free(buf);
+  parse_free(parse);
+  printf("Pass\n");
+  return;
+}
+
 int main(int argc, char **argv) {
   int valgrind_flag = 0;
   for(int i = 1;i < argc;i++) {
@@ -216,7 +236,8 @@ int main(int argc, char **argv) {
   test_bar_type();
   if(valgrind_flag == 0) test_py();
   test_buf();
-  test_plot_legend();
+  if(valgrind_flag == 0) test_plot_legend();
+  test_parse_getchar();
   printf("All test passed!\n");
   return 0;
 }
