@@ -663,7 +663,16 @@ char parse_getchar_nospace(parse_t *parse) {
   return parse_getchar(parse);
 }
 
-
+// end points to the next char that should not be included
+char *parse_copy(parse_t *parse, char *begin, char *end) {
+  int len = (int)(end - begin);
+  assert(len > 0);
+  char *buf = (char *)malloc(len + 1);
+  SYSEXPECT(buf != NULL);
+  memcpy(buf, begin, len);
+  buf[len] = '\0';
+  return buf;
+}
 
 char *parse_get_ident(parse_t *parse) {
   parse_skip_space(parse);
