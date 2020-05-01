@@ -212,7 +212,8 @@ extern const char *plot_preamble; // This is added to the buffer on plot init
 typedef struct {
   py_t *py;
   buf_t *buf;
-  struct bar_type_struct_t *bar_types; // Legend
+  vec_t *bar_types;                    // Bar types
+  //struct bar_type_struct_t *bar_types; // Legend
   int fig_created;                     // Only save figure if this is set
   plot_param_t param;                  // Plotting parameters
 } plot_t;

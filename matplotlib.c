@@ -454,12 +454,10 @@ void plot_free(plot_t *plot) {
   buf_free(plot->buf);
   py_free(plot->py);
   // Frees type array
-  bar_type_t *curr = plot->bar_types;
-  while(curr) {
-    bar_type_t *next = curr->next;
-    bar_type_free(curr);
-    curr = next;
+  for(int i = 0;i < vec_count(plot->bar_types);i++) {
+    bar_type_free((bar_type_t *)vec_at(plot->bar_types, i));
   }
+  vec_free(plot->bar_types);
   return;
 }
 
@@ -471,18 +469,7 @@ void plot_add_bar_type(plot_t *plot, const char *label, uint32_t color, char hat
   bar_type_t *type = bar_type_init(label);
   type->color = color;
   type->hatch = hatch;
-  type->next = NULL; // Always insert into the last one
-  if(plot->bar_types == NULL) {
-    plot->bar_types = type;
-  } else {
-    bar_type_t *curr = plot->bar_types;
-    assert(curr != NULL);
-    // Find the last element
-    while(curr->next != NULL) {
-      curr = curr->next;
-    }
-    curr->next = type;
-  }
+  vec_append(plot->bar_types, type);
   return;
 }
 
