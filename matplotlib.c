@@ -444,6 +444,7 @@ plot_t *plot_init() {
   // Initialize member variables
   plot->py = py_init();
   plot->buf = buf_init();
+  plot->bar_types = vec_init();
   buf_append(plot->buf, plot_preamble);
   // Init param
   memcpy(&plot->param, &default_param, sizeof(plot_param_t));
