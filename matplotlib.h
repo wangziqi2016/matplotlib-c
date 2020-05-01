@@ -235,6 +235,8 @@ inline static int parse_get_col(parse_t *parse) { return parse->col; }
 // Read next char without advancing the read pointer
 inline static char parse_peek(parse_t *parse) { return parse->curr[0]; } 
 char parse_getchar(parse_t *parse);
+void parse_skip_space(parse_t *parse);
+char *parse_until(parse_t *parse, char ch); // Reads until a certain char is met; Jumps over white space
 
 void parse_print(parse_t *parse);
 

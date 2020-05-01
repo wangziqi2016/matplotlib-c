@@ -649,6 +649,17 @@ char parse_getchar(parse_t *parse) {
   return ch;
 }
 
+void parse_skip_space(parse_t *parse) {
+  while(isspace(parse_peek(parse))) {
+    (void)parse_getchar(parse); // Skip current char
+  }
+  return;
+}
+
+char *parse_until(parse_t *parse, char ch) {
+
+}
+
 void parse_print(parse_t *parse) {
   printf("[parse_t] size %d line %d col %d offset %d s 0x%p\n", 
     parse->size, parse->line, parse->col, parse->curr - parse->s, parse->s);
