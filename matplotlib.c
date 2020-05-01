@@ -475,12 +475,11 @@ void plot_add_bar_type(plot_t *plot, const char *label, uint32_t color, char hat
 
 // Returns NULL if not found
 bar_type_t *plot_find_bar_type(plot_t *plot, const char *label) {
-  bar_type_t *curr = plot->bar_types;
-  while(curr) {
-    if(streq(curr->label, label) == 1) {
-      return curr;
+  for(int i = 0;i < vec_count(plot->bar_types);i++) {
+    bar_type_t *type = (bar_type_t *)vec_at(plot->bar_types, i);
+    if(streq(type->label, label) == 1) {
+      return type;
     }
-    curr = curr->next;
   }
   return NULL;
 }
