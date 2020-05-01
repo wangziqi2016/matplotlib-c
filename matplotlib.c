@@ -696,6 +696,12 @@ char parse_getchar_nospace(parse_t *parse) {
   return parse_getchar(parse);
 }
 
+// Only peeks, not removing the char from the stream
+char parse_peek_nospace(parse_t *parse) {
+  parse_skip_space(parse);
+  return parse_peek(parse);
+}
+
 // end points to the next char that should not be included
 char *parse_copy(parse_t *parse, char *begin, char *end) {
   (void)parse;
@@ -757,9 +763,9 @@ char *parse_until(parse_t *parse, char ch) {
 void parse_expect_char(parse_t *parse, char ch) {
   char c = parse_getchar_nospace(parse);
   if(c == '\0') {
-
-    error_exit("Expecting ch ")
-  }
+    parse_report_pos(parse);
+    error_exit("Expecting '%c', while seeing end of stream\n", ch);
+  } else if(c != ch)
 }
 
 // Reports current line and col followed by a new line; Used in error reporting
