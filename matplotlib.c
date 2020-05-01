@@ -598,10 +598,9 @@ void plot_add_y_title(plot_t *plot, const char *title) {
 
 void plot_print(plot_t *plot) {
   buf_print(plot->buf, 1);
-  bar_type_t *curr = plot->bar_types;
-  while(curr) {
-    bar_type_print(curr);
-    curr = curr->next;
+  for(int i = 0;i < vec_count(plot->bar_types);i++) {
+    bar_type_t *type = (bar_type_t *)vec_at(plot->bar_types, i);
+    bar_type_print(type);
   }
   return;
 }
