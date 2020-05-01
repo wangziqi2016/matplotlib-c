@@ -256,6 +256,40 @@ void test_parse_until() {
   return;
 }
 
+void test_parse_ident() {
+  printf("========== test_parse_ident ==========\n");
+  const char *s = "   ident1 \n ident 2 \n\n ;;;;; \n";
+  parse_t *parse = parse_init(s);
+  char *ret;
+  ret = parse_get_ident(parse);
+  printf("ret = \"%s\"\n", ret);
+  assert(streq(ret, "ident1") == 1);
+  free(ret);
+  ret = parse_get_ident(parse);
+  printf("ret = \"%s\"\n", ret);
+  assert(streq(ret, "ident") == 1);
+  free(ret);
+  ret = parse_get_ident(parse);
+  printf("ret = 0x%p\n", ret);
+  assert(ret == NULL);
+  // Skip "2"
+  assert(parse_peek(parse) == '2');
+  parse_getchar(parse);
+  ret = parse_get_ident(parse);
+  printf("ret = 0x%p\n", ret);
+  assert(ret == NULL);
+  assert(parse_peek(parse) == ';');
+  for(int i = 0;i < 5;i++) {
+    parse_getchar(parse); // Skip all five ';'
+  }
+  ret = parse_get_ident(parse);
+  printf("ret = 0x%p\n", ret);
+  assert(ret == NULL);
+  parse_free(parse);
+  printf("Pass\n");
+  return;
+}
+
 int main(int argc, char **argv) {
   int valgrind_flag = 0;
   for(int i = 1;i < argc;i++) {
@@ -273,6 +307,7 @@ int main(int argc, char **argv) {
   if(valgrind_flag == 0) test_plot_legend();
   test_parse_getchar();
   test_parse_until();
+  test_parse_ident();
   printf("All test passed!\n");
   return 0;
 }
