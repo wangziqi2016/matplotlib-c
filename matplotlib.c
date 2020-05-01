@@ -196,6 +196,21 @@ void py_run(py_t *py, const char *s) {
 
 int py_get_instance_count() { return py_count; }
 
+//* vec_t
+
+vec_t *vec_init() {
+  vec_t *vec = (vec_t *)malloc(sizeof(vec_t));
+  SYSEXPECT(vec != NULL);
+  memset(vec, 0x00, sizeof(vec_t));
+  vec->count = 0;
+  vec->capacity = VEC_INIT_COUNT;
+  vec->data = (void **)malloc(sizeof(void *) * VEC_INIT_COUNT);
+  SYSEXPECT(vec->data != NULL);
+  return vec;
+}
+
+void vec_free(vec_t *vec);
+
 //* buf_t
 
 buf_t *buf_init_sz(int sz) {
