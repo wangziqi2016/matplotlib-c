@@ -305,6 +305,26 @@ void test_parse_ident() {
   return;
 }
 
+void test_parse_expect() {
+  printf("========== test_parse_expect ==========\n");
+  const char *s = "   ; ident {} \n ,,, \n\n\n";
+  parse_t *parse = parse_init(s);
+  char *ret;
+  parse_expect_char(parse, ';');
+  ret = parse_get_ident(parse);
+  assert(streq(ret, "ident") == 1);
+  parse_expect_char(parse, '{');
+  parse_expect_char(parse, '}');
+  parse_expect_char(parse, ',');
+  parse_expect_char(parse, ',');
+  parse_expect_char(parse, ',');
+  // This will not work since we jump over white spaces
+  parse_expect_char(parse, '\n');
+  parse_free(parse);
+  printf("Pass\n");
+  return;
+}
+
 int main(int argc, char **argv) {
   int valgrind_flag = 0;
   for(int i = 1;i < argc;i++) {
@@ -324,6 +344,7 @@ int main(int argc, char **argv) {
   test_parse_getchar();
   test_parse_until();
   test_parse_ident();
+  test_parse_expect();
   printf("All test passed!\n");
   return 0;
 }

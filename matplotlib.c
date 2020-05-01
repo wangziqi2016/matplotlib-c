@@ -761,7 +761,8 @@ char *parse_until(parse_t *parse, char ch) {
 // Fetches the next non-space char in the stream; if this matches the given char then
 // discard it. Otherwise report error
 void parse_expect_char(parse_t *parse, char ch) {
-  char c = parse_peek_nospace(parse);
+  // We can use getchar here since it will be discarded anyway
+  char c = parse_getchar_nospace(parse);
   if(c == '\0') {
     parse_report_pos(parse);
     error_exit("Expecting '%c', while seeing end of stream\n", ch);
@@ -769,7 +770,6 @@ void parse_expect_char(parse_t *parse, char ch) {
     parse_report_pos(parse);
     error_exit("Expecting '%c', while seeing '%c'\n", ch, c);
   }
-  parse_getchar(parse); // Discard the character
   return;
 }
 
