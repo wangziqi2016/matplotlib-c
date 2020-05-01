@@ -215,6 +215,21 @@ void vec_free(vec_t *vec) {
   return;
 }
 
+void vec_append(vec_t *vec, void *p) {
+  assert(vec->count >= 0 && vec->count <= vec->capacity);
+  if(vec->count == vec->capacity) {
+    vec->capacity *= 2;
+    void **old = vec->data;
+    vec->data = (void **)malloc(sizeof(void *) * vec->capacity);
+    SYSEXPECT(vec->data != NULL);
+    memcpy(vec->data, old, sizeof(void *) * vec->count);
+    free(old);
+  }
+  assert(vec->count < vec->capacity);
+  vec->data[vec->count++] = p;
+  return;
+}
+
 //* buf_t
 
 buf_t *buf_init_sz(int sz) {

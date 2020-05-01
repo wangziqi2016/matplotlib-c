@@ -113,7 +113,8 @@ typedef struct {
 
 vec_t *vec_init();
 void vec_free(vec_t *vec);
-void vec_append();
+void vec_append(vec_t *vec, void *p);
+
 inline static void *vec_at(vec_t *vec, int index) { assert(index >= 0 && index < vec->count); return vec->data[index]; }
 inline static int vec_count(vec_t *vec) { return vec->count; }
 
