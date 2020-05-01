@@ -591,7 +591,8 @@ parse_t *_parse_init(char *s) {
   SYSEXPECT(parse != NULL);
   memset(parse, 0x00, sizeof(parse_t));
   parse->s = parse->curr = s;
-  parse->line = parse->col = 1; // Line and col starts from 1
+  parse->line = 1; // Line and col starts from 1
+  parse->col = 0;
   parse->size = strlen(s) + 1;  // Including terminating zero
   return parse;
 }
