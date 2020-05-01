@@ -664,6 +664,28 @@ char parse_getchar_nospace(parse_t *parse) {
 }
 
 
+
+char *parse_get_ident(parse_t *parse) {
+  parse_skip_space(parse);
+  char *begin = parse->curr;
+  if(*begin == '\0') return NULL; // If there is nothing to parse, return NULL
+  else if(!isalpha(*begin) && *begin != '_') return NULL;
+  // This loops stops at the first char not constituting an ident
+  while(1) {
+    char c = parse_peek(parse);
+    if(c == '\0') break;
+    if(!isalnum(c) && c != '_') break;
+    parse_getchar(parse);
+  }
+  int len; // String length, not including zero
+  if(*parse->curr == '\0') len = parse->curr - begin; // We are at the end
+  else len = parse->curr - begin; // We are right after the ident
+  char *buf = (char *)malloc(len + 1);
+  memcpy(buf, begin, len);
+  buf[len] = '\0'; // Last byte
+  return buf;
+}
+
 // Returns an allocated buffer containing the substring from the current position to the target ch, or '\0'
 // ch itself is discarded from both the buffer and the input stream
 // Caller should free the buffer
