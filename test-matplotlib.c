@@ -160,10 +160,11 @@ void test_vec() {
   printf("========== test_vec ==========\n");
   vec_t *vec = vec_init();
   for(int i = 0;i < 1000;i++) {
-    vec_append(vec, (void *)i);
+    vec_append(vec, (void *)(uint64_t)i);
   }
-  for(int i = 999;i >= 0;i++) {
-    assert(vec_at(vec, i) == (void *)i);
+  vec_print(vec);
+  for(int i = 999;i >= 0;i--) {
+    assert(vec_at(vec, i) == (void *)(uint64_t)i);
   }
   vec_free(vec);
   printf("Pass\n");
