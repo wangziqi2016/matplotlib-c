@@ -678,7 +678,9 @@ char *parse_get_ident(parse_t *parse) {
   parse_skip_space(parse);
   char *begin = parse->curr;
   if(*begin == '\0') return NULL; // If there is nothing to parse, return NULL
+  // Check first char - special case since we do not allow number
   else if(!isalpha(*begin) && *begin != '_') return NULL;
+  parse_getchar(parse);
   // This loops stops at the first char not constituting an ident
   while(1) {
     char c = parse_peek(parse);
@@ -686,13 +688,8 @@ char *parse_get_ident(parse_t *parse) {
     if(!isalnum(c) && c != '_') break;
     parse_getchar(parse);
   }
-  int len; // String length, not including zero
-  if(*parse->curr == '\0') len = parse->curr - begin; // We are at the end
-  else len = parse->curr - begin; // We are right after the ident
-  char *buf = (char *)malloc(len + 1);
-  memcpy(buf, begin, len);
-  buf[len] = '\0'; // Last byte
-  return buf;
+  // parse->curr always points to the next char that should not be included
+  return parse_copy(parse, begin, parse->curr);
 }
 
 // Returns an allocated buffer containing the substring from the current position to the target ch, or '\0'
@@ -708,12 +705,11 @@ char *parse_until(parse_t *parse, char ch) {
     if(c == ch || c == '\0') break;
   }
   int len; // String length, not including zero
-  if(*parse->curr == '\0') len = parse->curr - begin; // We are at the end
-  else len = parse->curr - begin - 1; // We are right after the target char
-  char *buf = (char *)malloc(len + 1);
-  memcpy(buf, begin, len);
-  buf[len] = '\0'; // Last byte
-  return buf;
+  if(*parse->curr == '\0') {
+    return parse_copy(parse, begin, parse->curr);
+  } else {
+    return parse_copy(parse, begin, parse->curr - 1); // Need "-1" since we do not include the target char
+  }
 }
 
 void parse_print(parse_t *parse) {

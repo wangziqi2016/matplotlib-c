@@ -230,6 +230,14 @@ void test_parse_getchar() {
   return;
 }
 
+void test_parse_until() {
+  printf("========== test_parse_until ==========\n");
+  const char *s = "first-line;\n\n    second-line   \n\n";
+  parse_t *parse = parse_init();
+  printf("Pass\n");
+  return;
+}
+
 int main(int argc, char **argv) {
   int valgrind_flag = 0;
   for(int i = 1;i < argc;i++) {
@@ -246,6 +254,7 @@ int main(int argc, char **argv) {
   test_buf();
   if(valgrind_flag == 0) test_plot_legend();
   test_parse_getchar();
+  test_parse_until();
   printf("All test passed!\n");
   return 0;
 }
