@@ -511,21 +511,21 @@ void plot_save_legend(plot_t *plot, const char *filename) {
   plot_t *legend = plot_init(); // Preamble is set after this
   assert(legend->buf != NULL && legend->py != NULL);
   plot_create_fig(legend, 0.001f, 0.001f);
-  bar_type_t *curr = plot->bar_types;
-  if(curr == NULL) {
+  int count = vec_count(plot->bar_types);
+  if(count == 0) {
     error_exit("Current plot does not contain any bar type\n");
   }
-  while(curr) {
+  for(int i = 0;i < count;i++) {
+    bar_type_t *type = vec_at(plot->bar_types, i);
     bar_t *bar = bar_init();
     // The bar should not be drawn
     bar->bottom = bar->height = bar->width = 0.0;
     // Also duplicate the bar type and associate it with the bar
-    plot_add_bar_type(legend, curr->label, curr->color, curr->hatch);
-    bar_set_type(bar, plot_find_bar_type(legend, curr->label));
+    plot_add_bar_type(legend, type->label, type->color, type->hatch);
+    bar_set_type(bar, plot_find_bar_type(legend, type->label));
     plot_add_bar(legend, bar);
     // No longer used
     bar_free(bar);
-    curr = curr->next;
   }
   legend->param.legend_pos = "center"; // Hardcode lagend pos
   plot_add_legend(legend);
