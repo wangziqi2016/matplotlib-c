@@ -649,12 +649,20 @@ char parse_getchar(parse_t *parse) {
   return ch;
 }
 
+// This function skips spaces from the current pos, and stops at the next non-space char
+// Could stop at '\0'
 void parse_skip_space(parse_t *parse) {
   while(isspace(parse_peek(parse))) {
     (void)parse_getchar(parse); // Skip current char
   }
   return;
 }
+
+char parse_getchar_nospace(parse_t *parse) {
+  parse_skip_space(parse);
+  return parse_getchar(parse);
+}
+
 
 // Returns an allocated buffer containing the substring from the current position to the target ch, or '\0'
 // ch itself is discarded from both the buffer and the input stream
@@ -679,6 +687,6 @@ char *parse_until(parse_t *parse, char ch) {
 
 void parse_print(parse_t *parse) {
   printf("[parse_t] size %d line %d col %d offset %d s 0x%p\n", 
-    parse->size, parse->line, parse->col, parse->curr - parse->s, parse->s);
+    parse->size, parse->line, parse->col, (int)(parse->curr - parse->s), parse->s);
   return;
 }
