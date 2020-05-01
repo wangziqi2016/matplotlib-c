@@ -383,7 +383,6 @@ bar_type_t *bar_type_dup(bar_type_t *type) {
   new_type->color = type->color;
   new_type->hatch = type->hatch;
   new_type->used = 0;
-  new_type->next = NULL;
   return new_type;
 }
 
@@ -680,6 +679,7 @@ void parse_skip_space(parse_t *parse) {
   return;
 }
 
+// Returns the next non-space char in the stream, or '\0' if reaches the end
 char parse_getchar_nospace(parse_t *parse) {
   parse_skip_space(parse);
   return parse_getchar(parse);
@@ -739,6 +739,22 @@ char *parse_until(parse_t *parse, char ch) {
     ret_end--;
   }
   return ret;
+}
+
+// Fetches the next non-space char in the stream; if this matches the given char then
+// discard it. Otherwise report error
+void parse_expect_char(parse_t *parse, char ch) {
+  char c = parse_getchar_nospace(parse);
+  if(c == '\0') {
+
+    error_exit("Expecting ch ")
+  }
+}
+
+// Reports current line and col followed by a new line; Used in error reporting
+void parse_report_pos(parse_t *parse) {
+  printf("File %s on line %d column %d: \n", parse->filename, parse->line, parse->col);
+  return;
 }
 
 void parse_print(parse_t *parse) {

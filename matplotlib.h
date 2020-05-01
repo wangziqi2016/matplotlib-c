@@ -262,6 +262,7 @@ char *parse_copy(parse_t *parse, char *begin, char *end); // Copy the string in 
 char *parse_get_ident(parse_t *parse);   // Get a C-style ident token from the stream
 char *parse_until(parse_t *parse, char ch); // Reads until a certain char is met; Trim left and right before return
 
+void parse_report_pos(parse_t *parse);
 void parse_print(parse_t *parse);
 
 #endif
