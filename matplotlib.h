@@ -27,25 +27,6 @@
 
 inline static int streq(const char *a, const char *b) { return strcmp(a, b) == 0; }
 
-//* parse_* - String processing
-
-typedef struct {
-  char *s;         // Always point to the start of the string; Read-only; Parser owns the string
-  char *curr;      // Current reading location
-  int size;        // Size of the string, including '\0'
-  int line;
-  int col;
-} parse_t;
-
-parse_t *_parse_init(char *s);      // This one does not alloc the string
-parse_t *parse_init(const char *s); // This one copies the string
-parse_t *parse_init_file(const char *filename); // This one reads a file
-void parse_free(parse_t *parse);
-
-// Read next char without advancing the read pointer
-inline static char parse_peek(parse_t *parse) { return parse->curr[0]; } 
-void parse_getchar(parse_t *parse);
-
 //* fp_* - String processing of floating point numbers
 
 // Initial size of the buffer - may be larger
@@ -231,5 +212,26 @@ void plot_add_x_title(plot_t *plot, const char *title);
 void plot_add_y_title(plot_t *plot, const char *title);
 
 void plot_print(plot_t *plot);
+
+//* parse_* - String processing
+
+typedef struct {
+  char *s;         // Always point to the start of the string; Read-only; Parser owns the string
+  char *curr;      // Current reading location
+  int size;        // Size of the string, including '\0'
+  int line;
+  int col;
+} parse_t;
+
+parse_t *_parse_init(char *s);      // This one does not alloc the string
+parse_t *parse_init(const char *s); // This one copies the string
+parse_t *parse_init_file(const char *filename); // This one reads a file
+void parse_free(parse_t *parse);
+
+// Read next char without advancing the read pointer
+inline static char parse_peek(parse_t *parse) { return parse->curr[0]; } 
+char parse_getchar(parse_t *parse);
+
+void parse_print(parse_t *parse);
 
 #endif
