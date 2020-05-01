@@ -242,6 +242,7 @@ void test_parse_until() {
   printf("ret = \"%s\"\n", ret);
   assert(streq(ret, "second-line   ") == 1);
   ret = parse_until(parse, ','); // Non-existing char before string end
+  printf("ret = 0x%p\n", ret);
   assert(ret == NULL);
   printf("Pass\n");
   return;

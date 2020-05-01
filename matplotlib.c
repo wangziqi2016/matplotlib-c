@@ -707,7 +707,16 @@ char *parse_until(parse_t *parse, char ch) {
   }
   // If we matched the target char, the actual substring should be one less
   char *end = (*parse->curr == '\0') ? (parse->curr) : (parse->curr - 1);
-  return parse_copy(parse, begin, end);
+  char *ret = parse_copy(parse, begin, end);
+  // Right trim
+  int len = end - begin;
+  assert(len > 0);
+  char *ret_end = ret + len - 1; // Last char
+  while(isspace(*ret_end)) {
+    *ret_end = '\0';
+    ret_end--;
+  }
+  return ret;
 }
 
 void parse_print(parse_t *parse) {

@@ -240,7 +240,7 @@ char parse_getchar_nospace(parse_t *parse); // Get next char that is not a space
 
 char *parse_copy(parse_t *parse, char *begin, char *end); // Copy the string in the range in malloc'ed memory
 char *parse_get_ident(parse_t *parse);   // Get a C-style ident token from the stream
-char *parse_until(parse_t *parse, char ch); // Reads until a certain char is met; Jumps over white space
+char *parse_until(parse_t *parse, char ch); // Reads until a certain char is met; Trim left and right before return
 
 void parse_print(parse_t *parse);
 
