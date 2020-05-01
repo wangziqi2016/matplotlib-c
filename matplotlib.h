@@ -118,6 +118,8 @@ void vec_append(vec_t *vec, void *p);
 inline static void *vec_at(vec_t *vec, int index) { assert(index >= 0 && index < vec->count); return vec->data[index]; }
 inline static int vec_count(vec_t *vec) { return vec->count; }
 
+void vec_print(vec_t *vec);
+
 //* buf_* - String buffer
 
 #define BUF_INIT_SIZE 256

@@ -230,6 +230,11 @@ void vec_append(vec_t *vec, void *p) {
   return;
 }
 
+void vec_print(vec_t *vec) {
+  printf("[vec_t] count %d cap %d data %p\n", vec->count, vec->capacity, vec->data);
+  return;
+}
+
 //* buf_t
 
 buf_t *buf_init_sz(int sz) {
