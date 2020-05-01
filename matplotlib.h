@@ -219,8 +219,8 @@ typedef struct {
   char *s;         // Always point to the start of the string; Read-only; Parser owns the string
   char *curr;      // Current reading location
   int size;        // Size of the string, including '\0'
-  int line;
-  int col;
+  int line;        // This is the line we are currently on
+  int col;         // This is the char we just read, starting from 1 (0 means no char in the line is read)
 } parse_t;
 
 parse_t *_parse_init(char *s);      // This one does not alloc the string

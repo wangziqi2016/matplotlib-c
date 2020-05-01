@@ -638,10 +638,11 @@ char parse_getchar(parse_t *parse) {
   char ch = *parse->curr;
   if(ch != '\0') {
     parse->curr++;
+    parse->col++;
     // Update line and column if we have seen a new line character
     if(ch == '\n') {
       parse->line++;
-      parse->col = 1;
+      parse->col = 0; // We always set col to zero before reading the first col
     }
   }
   return ch;
