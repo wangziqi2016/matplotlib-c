@@ -236,6 +236,7 @@ void plot_print(plot_t *plot);
 //* parse_* - String processing
 
 typedef struct {
+  const char *filename; // Has ownership; Undefined for string init
   char *s;         // Always point to the start of the string; Read-only; Parser owns the string
   char *curr;      // Current reading location
   int size;        // Size of the string, including '\0'

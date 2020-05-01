@@ -623,7 +623,12 @@ parse_t *parse_init(const char *s) {
   char *buf = (char *)malloc(len + 1);
   SYSEXPECT(buf != NULL);
   memcpy(buf, s, len + 1);
-  return _parse_init(buf);
+  parse_t *parse = _parse_init(buf);
+  char filename[] = "[debug]";
+  parse->filename = (char *)malloc(strlen(filename) + 1);
+  SYSEXPECT(parse->filename != NULL);
+  strcpy(parse->filename, filename);
+  return parse;
 }
 
 parse_t *parse_init_file(const char *filename) {
@@ -645,11 +650,17 @@ parse_t *parse_init_file(const char *filename) {
   }
   // Make it a string
   buf[sz] = '\0'; 
-  return _parse_init(buf);
+  // Init file name
+  parse_t *parse = _parse_init(buf);
+  parse->filename = (char *)malloc(strlen(filename) + 1);
+  SYSEXPECT(parse->filename != NULL);
+  strcpy(parse->filename, filename);
+  return parse;
 }
 
 void parse_free(parse_t *parse) {
   free(parse->s);
+  free(parse->filename);
   free(parse);
   return;
 }
