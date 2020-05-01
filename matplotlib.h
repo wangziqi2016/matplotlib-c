@@ -158,7 +158,6 @@ typedef struct bar_type_struct_t {
   char hatch;        // Hatch (filling pattern); '\0' means not present
   uint32_t color;    // RGB color
   int used;          // Whether it has been used in bar() method
-  struct bar_type_struct_t *next;
 } bar_type_t;
 
 bar_type_t *bar_type_init(const char *label);
@@ -212,8 +211,7 @@ extern const char *plot_preamble; // This is added to the buffer on plot init
 typedef struct {
   py_t *py;
   buf_t *buf;
-  vec_t *bar_types;                    // Bar types
-  //struct bar_type_struct_t *bar_types; // Legend
+  vec_t *bar_types;                    // Bar types used for legend
   int fig_created;                     // Only save figure if this is set
   plot_param_t param;                  // Plotting parameters
 } plot_t;
