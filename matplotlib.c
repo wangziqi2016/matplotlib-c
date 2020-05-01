@@ -376,6 +376,7 @@ plot_param_t default_param = {
   "best",   // Legend pos; Alternatives are: {lower, center, upper} x {left, center, right} or "center"
   24, 24,   // x/y tick font size
   28, 28,   // x/y title font size
+  26,       // bar text size
 };
 
 // We use "plot" as the root name of the plot; "fig" as the name of the figure object

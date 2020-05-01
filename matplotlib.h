@@ -182,6 +182,8 @@ typedef struct {
   // Title
   int xtitle_font_size;
   int ytitle_font_size;
+  // Bar text
+  int bar_text_font_size;
 } plot_param_t;
 
 extern plot_param_t default_param; // Default param, will be copied over during init
