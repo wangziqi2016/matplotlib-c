@@ -209,7 +209,11 @@ vec_t *vec_init() {
   return vec;
 }
 
-void vec_free(vec_t *vec);
+void vec_free(vec_t *vec) {
+  free(vec->data);
+  free(vec);
+  return;
+}
 
 //* buf_t
 
