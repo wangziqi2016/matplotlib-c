@@ -570,13 +570,9 @@ void plot_add_legend(plot_t *plot) {
   if(plot->param.legend_vertical == 1) {
     col_count = 1;
   } else {
-    bar_type_t *curr = plot->bar_types;
-    if(curr == NULL) {
+    col_count = vec_count(plot->bar_types);
+    if(col_count == 0) {
       error_exit("Current plot does not contain any bar type\n");
-    }
-    while(curr) {
-      col_count++;
-      curr = curr->next;
     }
   }
   buf_t *buf = plot->buf;
