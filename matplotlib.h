@@ -101,6 +101,18 @@ void py_run(py_t *py, const char *s);
 
 int py_get_instance_count();
 
+//* vec_t
+
+#define VEC_INIT_COUNT 16
+
+typedef struct {
+  void **data;
+  int count;
+  int capacity;
+} vec_t;
+
+
+
 //* buf_* - String buffer
 
 #define BUF_INIT_SIZE 256
