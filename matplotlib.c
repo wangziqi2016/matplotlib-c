@@ -665,6 +665,7 @@ char parse_getchar_nospace(parse_t *parse) {
 
 // end points to the next char that should not be included
 char *parse_copy(parse_t *parse, char *begin, char *end) {
+  (void)parse;
   int len = (int)(end - begin);
   assert(len > 0);
   char *buf = (char *)malloc(len + 1);
@@ -704,12 +705,9 @@ char *parse_until(parse_t *parse, char ch) {
     char c = parse_getchar(parse);
     if(c == ch || c == '\0') break;
   }
-  int len; // String length, not including zero
-  if(*parse->curr == '\0') {
-    return parse_copy(parse, begin, parse->curr);
-  } else {
-    return parse_copy(parse, begin, parse->curr - 1); // Need "-1" since we do not include the target char
-  }
+  // If we matched the target char, the actual substring should be one less
+  char *end = (*parse->curr == '\0') ? (parse->curr) : (parse->curr - 1);
+  return parse_copy(parse, begin, end);
 }
 
 void parse_print(parse_t *parse) {

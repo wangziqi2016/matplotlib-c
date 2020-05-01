@@ -232,8 +232,17 @@ void test_parse_getchar() {
 
 void test_parse_until() {
   printf("========== test_parse_until ==========\n");
-  const char *s = "first-line;\n\n    second-line   \n\n";
-  parse_t *parse = parse_init();
+  const char *s = "  first-line;\n\n    second-line   \n\n";
+  parse_t *parse = parse_init(s);
+  char *ret;
+  ret = parse_until(parse, ';');
+  printf("ret = \"%s\"\n", ret);
+  assert(streq(ret, "first-line") == 1);
+  ret = parse_until(parse, '\n');
+  printf("ret = \"%s\"\n", ret);
+  assert(streq(ret, "second-line   ") == 1);
+  ret = parse_until(parse, ','); // Non-existing char before string end
+  assert(ret == NULL);
   printf("Pass\n");
   return;
 }
