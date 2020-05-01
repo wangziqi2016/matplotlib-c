@@ -111,7 +111,11 @@ typedef struct {
   int capacity;
 } vec_t;
 
-
+vec_t *vec_init();
+void vec_free(vec_t *vec);
+void vec_append();
+void *vec_at();
+inline static int vec_count(vec_t *vec) { return vec->count; }
 
 //* buf_* - String buffer
 
