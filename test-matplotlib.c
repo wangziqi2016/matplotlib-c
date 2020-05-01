@@ -211,6 +211,10 @@ void test_parse_getchar() {
   char ch;
   while((ch = parse_getchar(parse)) != '\0') {
     buf_printf(buf, "%c", ch);
+    int line = parse_get_line(parse);
+    int col = parse_get_col(parse);
+    if(ch == '\n') printf("char \\n line %d col %d\n", line, col);
+    else printf("char %c line %d col %d\n", ch, line, col);
   }
   buf_print(buf);
   assert(streq(buf_c_str(buf), s) == 1);
