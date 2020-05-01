@@ -216,10 +216,14 @@ void test_parse_getchar() {
     if(ch == '\n') printf("char \\n line %d col %d\n", line, col);
     else printf("char %c line %d col %d\n", ch, line, col);
   }
-  buf_print(buf);
+  buf_print(buf, 1);
+  parse_print(parse);
   assert(streq(buf_c_str(buf), s) == 1);
-  assert(parse_get_line(parse) == 6);
+  assert(parse_get_line(parse) == 7);
   assert(parse_get_col(parse) == 0);
+  // Test whether getchar stops at the end
+  assert(parse_getchar(parse) == '\0');
+  assert(parse_getchar(parse) == '\0');
   buf_free(buf);
   parse_free(parse);
   printf("Pass\n");

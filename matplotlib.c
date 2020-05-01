@@ -651,6 +651,6 @@ char parse_getchar(parse_t *parse) {
 
 void parse_print(parse_t *parse) {
   printf("[parse_t] size %d line %d col %d offset %d s 0x%p\n", 
-    parse->size, patse->line, parse->col, parse->curr - parse->s, parse->s);
+    parse->size, parse->line, parse->col, parse->curr - parse->s, parse->s);
   return;
 }

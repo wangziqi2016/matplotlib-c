@@ -228,9 +228,9 @@ parse_t *parse_init(const char *s); // This one copies the string
 parse_t *parse_init_file(const char *filename); // This one reads a file
 void parse_free(parse_t *parse);
 
-inline static parse_get_size(parse_t *parse) { return parse->size; }
-inline static parse_get_line(parse_t *parse) { return parse->line; }
-inline static parse_get_col(parse_t *parse) { return parse->col; }
+inline static int parse_get_size(parse_t *parse) { return parse->size; }
+inline static int parse_get_line(parse_t *parse) { return parse->line; }
+inline static int parse_get_col(parse_t *parse) { return parse->col; }
 
 // Read next char without advancing the read pointer
 inline static char parse_peek(parse_t *parse) { return parse->curr[0]; } 
