@@ -656,8 +656,25 @@ void parse_skip_space(parse_t *parse) {
   return;
 }
 
+// Returns an allocated buffer containing the substring from the current position to the target ch, or '\0'
+// ch itself is discarded from both the buffer and the input stream
+// Caller should free the buffer
+// Returns NULL if there is nothing to parse
 char *parse_until(parse_t *parse, char ch) {
-
+  parse_skip_space(parse);
+  char *begin = parse->curr;
+  if(*begin == '\0') return NULL; // If there is nothing to parse, return NULL
+  while(1) {
+    char c = parse_getchar(parse);
+    if(c == ch || c == '\0') break;
+  }
+  int len; // String length, not including zero
+  if(*parse->curr == '\0') len = parse->curr - begin; // We are at the end
+  else len = parse->curr - begin - 1; // We are right after the target char
+  char *buf = (char *)malloc(len + 1);
+  memcpy(buf, begin, len);
+  buf[len] = '\0'; // Last byte
+  return buf;
 }
 
 void parse_print(parse_t *parse) {
