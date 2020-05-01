@@ -232,18 +232,26 @@ void test_parse_getchar() {
 
 void test_parse_until() {
   printf("========== test_parse_until ==========\n");
-  const char *s = "  first-line;\n\n    second-line   \n\n";
+  const char *s = "  first-line;\n\n    second-line   \n\n 3  .\n";
   parse_t *parse = parse_init(s);
   char *ret;
   ret = parse_until(parse, ';');
   printf("ret = \"%s\"\n", ret);
   assert(streq(ret, "first-line") == 1);
+  free(ret);
   ret = parse_until(parse, '\n');
   printf("ret = \"%s\"\n", ret);
-  assert(streq(ret, "second-line   ") == 1);
+  assert(streq(ret, "second-line") == 1);
+  free(ret);
+  ret = parse_until(parse, '.');
+  printf("ret = \"%s\"\n", ret);
+  assert(streq(ret, "3") == 1);
+  free(ret);
   ret = parse_until(parse, ','); // Non-existing char before string end
   printf("ret = 0x%p\n", ret);
   assert(ret == NULL);
+  free(ret);
+  parse_free(parse);
   printf("Pass\n");
   return;
 }
@@ -259,7 +267,7 @@ int main(int argc, char **argv) {
   test_fp_trim();
   test_fp_print();
   test_color();
-  test_bar_type();
+  if(valgrind_flag == 0) test_bar_type();
   if(valgrind_flag == 0) test_py();
   test_buf();
   if(valgrind_flag == 0) test_plot_legend();
