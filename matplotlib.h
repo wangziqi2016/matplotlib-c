@@ -186,42 +186,6 @@ inline static char bar_get_hatch(bar_t *bar) { return bar->type->hatch; }
 inline static bar_type_t *bar_get_type(bar_t *bar) { return bar->type; }
 inline static void bar_set_type(bar_t *bar, bar_type_t *type) { bar->type = type; }
 
-//* parse_* - String processing
-
-typedef struct parse_struct_t {
-  char *filename;  // Has ownership; Undefined for string init
-  char *s;         // Always point to the start of the string; Read-only; Parser owns the string
-  char *curr;      // Current reading location
-  int size;        // Size of the string, including '\0'
-  int line;        // This is the line we are currently on
-  int col;         // This is the char we just read, starting from 1 (0 means no char in the line is read)
-} parse_t;
-
-parse_t *_parse_init(char *s);      // This one does not alloc the string
-parse_t *parse_init(const char *s); // This one copies the string
-parse_t *parse_init_file(const char *filename); // This one reads a file
-void parse_free(parse_t *parse);
-
-inline static int parse_get_size(parse_t *parse) { return parse->size; }
-inline static int parse_get_line(parse_t *parse) { return parse->line; }
-inline static int parse_get_col(parse_t *parse) { return parse->col; }
-
-// Read next char without advancing the read pointer
-inline static char parse_peek(parse_t *parse) { return parse->curr[0]; } 
-char parse_getchar(parse_t *parse);
-void parse_skip_space(parse_t *parse);
-char parse_getchar_nospace(parse_t *parse); // Get next char that is not a space (could return '\0')
-char parse_peek_nospace(parse_t *parse);
-
-char *parse_copy(parse_t *parse, char *begin, char *end); // Copy the string in the range in malloc'ed memory
-char *parse_get_ident(parse_t *parse);   // Get a C-style ident token from the stream
-char *parse_get_str(parse_t *parse); // Get a string delimited by a pair of double quotation marks
-char *parse_until(parse_t *parse, char ch); // Reads until a certain char is met; Trim left and right before return
-void parse_expect_char(parse_t *parse, char ch); // Fetch a char and discard; Report error if mismatch
-
-void parse_report_pos(parse_t *parse);
-void parse_print(parse_t *parse);
-
 //* plot_t - Plotting function
 
 // This object should not be freed; Always copy it over
@@ -269,5 +233,45 @@ void plot_add_x_title(plot_t *plot, const char *title);
 void plot_add_y_title(plot_t *plot, const char *title);
 
 void plot_print(plot_t *plot);
+
+
+//* parse_* - String processing
+
+typedef struct parse_struct_t {
+  char *filename;  // Has ownership; Undefined for string init
+  char *s;         // Always point to the start of the string; Read-only; Parser owns the string
+  char *curr;      // Current reading location
+  int size;        // Size of the string, including '\0'
+  int line;        // This is the line we are currently on
+  int col;         // This is the char we just read, starting from 1 (0 means no char in the line is read)
+} parse_t;
+
+parse_t *_parse_init(char *s);      // This one does not alloc the string
+parse_t *parse_init(const char *s); // This one copies the string
+parse_t *parse_init_file(const char *filename); // This one reads a file
+void parse_free(parse_t *parse);
+
+inline static int parse_get_size(parse_t *parse) { return parse->size; }
+inline static int parse_get_line(parse_t *parse) { return parse->line; }
+inline static int parse_get_col(parse_t *parse) { return parse->col; }
+
+// Read next char without advancing the read pointer
+inline static char parse_peek(parse_t *parse) { return parse->curr[0]; } 
+char parse_getchar(parse_t *parse);
+void parse_skip_space(parse_t *parse);
+char parse_getchar_nospace(parse_t *parse); // Get next char that is not a space (could return '\0')
+char parse_peek_nospace(parse_t *parse);
+
+char *parse_copy(parse_t *parse, char *begin, char *end); // Copy the string in the range in malloc'ed memory
+char *parse_get_ident(parse_t *parse);   // Get a C-style ident token from the stream
+char *parse_get_str(parse_t *parse); // Get a string delimited by a pair of double quotation marks
+char *parse_until(parse_t *parse, char ch); // Reads until a certain char is met; Trim left and right before return
+double parse_get_double(parse_t *parse); // Reads a double from the stream
+void parse_expect_char(parse_t *parse, char ch); // Fetch a char and discard; Report error if mismatch
+
+void parse_top(parse_t *parse, plot_t *plot); // Parse a script and call plot functions to complete the graph
+
+void parse_report_pos(parse_t *parse);
+void parse_print(parse_t *parse);
 
 #endif
