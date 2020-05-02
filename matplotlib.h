@@ -282,6 +282,7 @@ void parse_expect_char_opt(parse_t *parse, char ch); // Read an optional char an
 
 void parse_top(parse_t *parse, plot_t *plot); // Parse a script and call plot functions to complete the graph
 void parse_top_property(parse_t *parse, plot_t *plot);
+void parse_top_func(parse_t *parse, plot_t *plot);
 
 void parse_report_pos(parse_t *parse);
 void parse_print(parse_t *parse);

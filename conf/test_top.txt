@@ -19,4 +19,4 @@
 # .unknown-property = "whatever"
 
 # Prints the plot configuration
-!print-plot
+!plot-print

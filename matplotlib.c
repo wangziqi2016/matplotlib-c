@@ -901,6 +901,9 @@ void parse_top(parse_t *parse, plot_t *plot) {
       case '.': { // Properties
         parse_top_property(parse, plot);
       } break;
+      case '!': {
+        parse_top_func(parse, plot);
+      } break;
       case '\0': {
         goto func_ret; // This is actually the best way
       } break;
@@ -941,6 +944,24 @@ void parse_top_property(parse_t *parse, plot_t *plot) {
   } else {
     parse_report_pos(parse);
     error_exit("Unknown top-level property: \"%s\"\n", name);
+  }
+  free(name);
+  return;
+}
+
+void parse_top_func(parse_t *parse, plot_t *plot) {
+  char *name = parse_get_ident(parse);
+  if(name == NULL) {
+    parse_report_pos(parse);
+    error_exit("Expecting a function name after top-level '!'\n");
+  } else if(streq(name, "plot-print") == 1) {
+    parse_expect_char(parse, '=');
+    
+    parse_expect_char_opt(parse, ';');
+  } 
+  } else {
+    parse_report_pos(parse);
+    error_exit("Unknown top-level function: \"%s\"\n", name);
   }
   free(name);
   return;
