@@ -608,7 +608,7 @@ void plot_add_y_title(plot_t *plot, const char *title) {
   return;
 }
 
-void plot_print(plot_t *plot) {
+void plot_print(plot_t *plot, int print_buf) {
   if(plot->xtitle != NULL) printf("[plot] xtitle %s\n", plot->xtitle);
   if(plot->ytitle != NULL) printf("[plot] ytitle %s\n", plot->ytitle);
   if(plot->save_filename != NULL) printf("[plot] save_filename %s\n", plot->save_filename);
@@ -617,7 +617,7 @@ void plot_print(plot_t *plot) {
     bar_type_t *type = (bar_type_t *)vec_at(plot->bar_types, i);
     bar_type_print(type);
   }
-  buf_print(plot->buf, 1);
+  if(print_buf) buf_print(plot->buf, 1);
   return;
 }
 
