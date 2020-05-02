@@ -342,6 +342,12 @@ void test_parse_str() {
   printf("ret = \"%s\"\n", ret);
   assert(streq(ret, " This is\\nnew line") == 1);
   free(ret);
+  // Uncomment this to test error - no quotation mark
+  //ret = parse_get_str(parse);
+  // Uncomment the following to test error - unclosed string
+  //const char *s2 = " \"    This is an unclosed string. \\n ";
+  //parse_t *parse2 = parse_init(s2);
+  //ret = parse_get_str(parse2);
   // Finish test
   parse_free(parse);
   printf("Pass\n");
