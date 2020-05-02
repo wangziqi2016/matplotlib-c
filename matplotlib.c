@@ -618,6 +618,8 @@ void plot_print(plot_t *plot, int print_buf) {
   if(plot->ytitle != NULL) printf("[plot] ytitle %s\n", plot->ytitle);
   if(plot->save_filename != NULL) printf("[plot] save_filename %s\n", plot->save_filename);
   if(plot->legend_filename != NULL) printf("[plot] legend_filename %s\n", plot->legend_filename);
+  printf("[plot] x title font size %d y font size %d\n", 
+    plot->param.xtitle_font_size, plot->param.ytitle_font_size);
   for(int i = 0;i < vec_count(plot->bar_types);i++) {
     bar_type_t *type = (bar_type_t *)vec_at(plot->bar_types, i);
     bar_type_print(type);
@@ -949,6 +951,10 @@ void parse_top_property(parse_t *parse, plot_t *plot) {
   } else if(streq(name, "xtitle_font_size") == 1) {
     parse_expect_char(parse, '=');
     plot->param.xtick_font_size = (int)parse_get_int64(parse);
+    parse_expect_char(parse, ';');
+  } else if(streq(name, "ytitle_font_size") == 1) {
+    parse_expect_char(parse, '=');
+    plot->param.ytick_font_size = (int)parse_get_int64(parse);
     parse_expect_char(parse, ';');
   }
   else {

@@ -18,7 +18,11 @@
 # Uncomment this to reveal error
 # .unknown_property = "whatever";
 
+# Functions are invoked using '!' followed by the function name
+# Arguments follow the function name, which is separated by spaces
+# Interpreter will report error if argument does not match prototype
+
 # Prints the plot configuration
-!plot_print;
-!plot_print 1; # Optional argument for whether to print buffer content
-!version_print;
+!plot_print;    # Function with no argument
+!plot_print 1;  # One optional argument for whether to print buffer content
+!version_print; # This function takes no argument
