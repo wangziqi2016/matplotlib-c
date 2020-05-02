@@ -758,6 +758,13 @@ char *parse_until(parse_t *parse, char ch) {
   return ret;
 }
 
+// buf should be at least 5 chars in size (0xHH\0)
+static void parse_print_char(parse_t *parse, char ch, char *buf) {
+  if(isprint(ch)) sprintf(buf, "'%c'", ch);
+  else sprintf(buf, "0x%02X", ch);
+  return;
+}
+
 // Fetches the next non-space char in the stream; if this matches the given char then
 // discard it. Otherwise report error
 void parse_expect_char(parse_t *parse, char ch) {
@@ -765,10 +772,10 @@ void parse_expect_char(parse_t *parse, char ch) {
   char c = parse_getchar_nospace(parse);
   if(c == '\0') {
     parse_report_pos(parse);
-    error_exit("Expecting '%c', while seeing end of stream\n", ch);
+    error_exit("Expecting 0x%02X, while seeing end of stream\n", ch);
   } else if(c != ch) {
     parse_report_pos(parse);
-    error_exit("Expecting '%c', while seeing '%c'\n", ch, c);
+    error_exit("Expecting 0x%02X, while seeing '%c'\n", (int)ch, c);
   }
   return;
 }
