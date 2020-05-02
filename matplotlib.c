@@ -567,6 +567,14 @@ void plot_set_legend_pos(plot_t *plot, const char *pos) {
   return;
 }
 
+void plot_set_legend_rows(plot_t *plot, int rows) {
+  if(rows <= 0 && rows != -1) {
+    error_exit("Legend rows must be > 0 or -1 for vertical legend (sees %d)\n", rows);
+  }
+  plot->param.legend_rows = rows;
+  return;
+}
+
 // Only one new line is appended at the end of the draw
 void plot_add_bar(plot_t *plot, bar_t *bar) {
   assert(bar->type != NULL);
@@ -605,7 +613,8 @@ void plot_add_legend(plot_t *plot) {
     error_exit("Current plot does not contain any bar type\n");
   }
   int legend_rows = plot->param.legend_rows;
-  if(legend_rows == 1) {
+  assert(legend_rows > 0 || legend_row == -1)
+  if(legend_rows == -1) { // Special case: -1 means vertical
     col_count = type_count;
   } else {
     if(type_count % legend_rows == 0) {
