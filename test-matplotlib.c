@@ -360,7 +360,8 @@ void test_parse_double() {
   const char *s = " 123.4567 0.0 123 .2 xyzw";
   parse_t *parse = parse_init(s);
   // Note: If there is f suffix then it is float; Otherwise it is double
-  printf("sizeof f suffix: %d; no suffix: %d\n", (int)sizeof(123.0f), (int)sizeof(123.0));
+  printf("sizeof f suffix: %d; no suffix: %d; l suffix: %d\n", 
+    (int)sizeof(123.0f), (int)sizeof(123.0), (int)sizeof(123.0l));
   double ret;
   ret = parse_get_double(parse);
   printf("ret = %f\n", ret);
@@ -376,6 +377,28 @@ void test_parse_double() {
   assert(ret == 0.2);
   // Uncomment the following to reveal error
   //ret = parse_get_double(parse);
+  // Finish test
+  parse_free(parse);
+  printf("Pass\n");
+  return;
+}
+
+void test_parse_int() {
+  printf("========== test_parse_double ==========\n");
+  const char *s = " 123 4567 0 .2 xyzw";
+  parse_t *parse = parse_init(s);
+  int64_t ret;
+  ret = parse_get_int64(parse);
+  printf("ret = %ld\n", ret);
+  assert(ret == 123l);
+  ret = parse_get_int64(parse);
+  printf("ret = %ld\n", ret);
+  assert(ret == 4567l);
+  ret = parse_get_int64(parse);
+  printf("ret = %ld\n", ret);
+  assert(ret == 0l);
+  // Uncomment the following to reveal error
+  //ret = parse_get_int64(parse);
   // Finish test
   parse_free(parse);
   printf("Pass\n");
@@ -404,6 +427,7 @@ int main(int argc, char **argv) {
   test_parse_expect();
   test_parse_str();
   test_parse_double();
+  test_parse_int();
   printf("All test passed!\n");
   return 0;
 }
