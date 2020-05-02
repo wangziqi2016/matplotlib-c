@@ -946,7 +946,12 @@ void parse_top_property(parse_t *parse, plot_t *plot) {
     parse_expect_char(parse, '=');
     plot->legend_filename = parse_get_str(parse);
     parse_expect_char(parse, ';');
-  } else {
+  } else if(streq(name, "xtitle_font_size") == 1) {
+    parse_expect_char(parse, '=');
+    plot->param.xtick_font_size = (int)parse_get_int64(parse);
+    parse_expect_char(parse, ';');
+  }
+  else {
     parse_report_pos(parse);
     error_exit("Unknown top-level property: \"%s\"\n", name);
   }
