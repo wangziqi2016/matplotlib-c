@@ -634,6 +634,7 @@ void plot_print(plot_t *plot, int print_buf) {
     plot->param.xtitle_font_size, plot->param.ytitle_font_size);
   printf("[plot] x tick font size %d y font size %d\n",
     plot->param.xtick_font_size, plot->param.ytick_font_size);
+  printf("[plot] legend pos \"%s\"\n", plot->param.legend_pos);
   for(int i = 0;i < vec_count(plot->bar_types);i++) {
     bar_type_t *type = (bar_type_t *)vec_at(plot->bar_types, i);
     bar_type_print(type);
@@ -956,10 +957,20 @@ void parse_top_property(parse_t *parse, plot_t *plot) {
     parse_expect_char(parse, ';');
   } else if(streq(name, "save_filename") == 1) {
     parse_expect_char(parse, '=');
+    if(plot->save_filename != NULL) {
+      printf("WARNING: The property \"save_filename\" already exists, value \"%s\"\n", 
+        plot->save_filename);
+      free(plot->save_filename);
+    }
     plot->save_filename = parse_get_str(parse);
     parse_expect_char(parse, ';');
   } else if(streq(name, "legend_filename") == 1) {
     parse_expect_char(parse, '=');
+    if(plot->legend_filename != NULL) {
+      printf("WARNING: The property \"legend_filename\" already exists, value \"%s\"\n", 
+        plot->legend_filename);
+      free(plot->legend_filename);
+    }
     plot->legend_filename = parse_get_str(parse);
     parse_expect_char(parse, ';');
   } else if(streq(name, "xtitle_font_size") == 1) {
