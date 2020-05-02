@@ -921,15 +921,19 @@ void parse_top_property(parse_t *parse, plot_t *plot) {
   } else if(streq(name, "xtitle") == 1) {
     parse_expect_char(parse, '=');
     plot->xtitle = parse_get_str(parse);
+    parse_expect_char_opt(parse, ';');
   } else if(streq(name, "ytitle") == 1) {
     parse_expect_char(parse, '=');
     plot->ytitle = parse_get_str(parse);
+    parse_expect_char_opt(parse, ';');
   } else if(streq(name, "save-filename") == 1) {
     parse_expect_char(parse, '=');
     plot->save_filename = parse_get_str(parse);
+    parse_expect_char_opt(parse, ';');
   } else if(streq(name, "legend-filename") == 1) {
     parse_expect_char(parse, '=');
     plot->legend_filename = parse_get_str(parse);
+    parse_expect_char_opt(parse, ';');
   } else {
     parse_report_pos(parse);
     error_exit("Unknown top-level property: \"%s\"\n", name);
