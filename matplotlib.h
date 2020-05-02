@@ -262,6 +262,7 @@ char parse_peek_nospace(parse_t *parse);
 
 char *parse_copy(parse_t *parse, char *begin, char *end); // Copy the string in the range in malloc'ed memory
 char *parse_get_ident(parse_t *parse);   // Get a C-style ident token from the stream
+char *parse_get_str(parse_t *parse); // Get a string delimited by a pair of double quotation marks
 char *parse_until(parse_t *parse, char ch); // Reads until a certain char is met; Trim left and right before return
 void parse_expect_char(parse_t *parse, char ch); // Fetch a char and discard; Report error if mismatch
 

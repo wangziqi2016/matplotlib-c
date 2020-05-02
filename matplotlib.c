@@ -732,6 +732,36 @@ char *parse_get_ident(parse_t *parse) {
   return parse_copy(parse, begin, parse->curr);
 }
 
+// Escape \" is not considered as a quotation mark
+// This function reports error if any of the quotation marks are missing
+char *parse_get_str(parse_t *parse) {
+  parse_skip_space(parse);
+  parse_expect_char(parse, '\"'); // Discards it if found; Report error if not
+  // Guaranteed not the first char in the stream (we can look back by one)
+  char *begin = parse->curr;
+  char *end = NULL;
+  while(1) {
+    char ch = parse_peek(parse);
+    if(ch == '\0') {
+      parse_report_pos(parse);
+      error_exit("Unexpected end of stream when reading a string\n");
+    } else if(ch == '\\') {
+      parse_getchar(parse);
+      // Only process escaped here; Other cases are left to the next iter loop
+      if(parse_peek(parse) == '\"') {
+        parse_getchar(parse);
+      }
+    } else if(ch == '\"') {
+      end = parse->curr;
+      parse_getchar(parse);
+      break;
+    } else {
+      parse_getchar(parse);
+    }
+  }
+  return parse_copy(parse, begin, end);
+}
+
 // Returns an allocated buffer containing the substring from the current position to the target ch, or '\0'
 // ch itself is discarded from both the buffer and the input stream
 // Caller should free the buffer
