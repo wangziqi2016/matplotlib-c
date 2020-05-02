@@ -867,6 +867,27 @@ void parse_expect_char(parse_t *parse, char ch) {
 
 // Top-level parsing function
 void parse_top(parse_t *parse, plot_t *plot) {
+  char ch;
+  while(1) {
+    ch = parse_getchar_nospace(parse);
+    switch(ch) {
+      case '+': { // Entities
+
+      } break; 
+      case '.': { // Properties
+        parse_top_property(parse, plot);
+      } break;
+      default: {
+        char buf[8];
+        parse_print_char(parse, ch, buf);
+        error_exit("Unknown top-level directive: %s\n", buf);
+      } break;
+    }
+  }
+  return;
+}
+
+void parse_top_property(parse_t *parse, plot_t *plot) {
 
 }
 

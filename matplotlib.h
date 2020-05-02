@@ -214,9 +214,11 @@ typedef struct {
   py_t *py;
   buf_t *buf;
   vec_t *bar_types;                    // Bar types used for legend
+  struct parse_struct_t *parse;        // Script parser
   int fig_created;                     // Only save figure if this is set
   plot_param_t param;                  // Plotting parameters
-  struct parse_struct_t *parse;        // Script parser
+  char *xtitle;                        // X title; Specified at top level
+  char *ytitle;                        // Y title; Specified at top level
 } plot_t;
 
 plot_t *plot_init();
