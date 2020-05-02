@@ -956,6 +956,14 @@ void parse_top_property(parse_t *parse, plot_t *plot) {
     parse_expect_char(parse, '=');
     plot->param.ytick_font_size = (int)parse_get_int64(parse);
     parse_expect_char(parse, ';');
+  } else if(streq(name, "xtick_font_size") == 1) {
+    parse_expect_char(parse, '=');
+    plot->param.xtick_font_size = (int)parse_get_int64(parse);
+    parse_expect_char(parse, ';');
+  } else if(streq(name, "ytick_font_size") == 1) {
+    parse_expect_char(parse, '=');
+    plot->param.ytick_font_size = (int)parse_get_int64(parse);
+    parse_expect_char(parse, ';');
   }
   else {
     parse_report_pos(parse);
