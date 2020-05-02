@@ -544,7 +544,7 @@ void plot_save_legend(plot_t *plot, const char *filename) {
     // No longer used
     bar_free(bar);
   }
-  legend->param.legend_pos = "center"; // Hardcode lagend pos
+  plot_set_legend_pos(legend, "center");  // Hardcode lagend pos
   plot_add_legend(legend);
   plot_save_fig(legend, filename);
   plot_free(legend);
@@ -552,6 +552,7 @@ void plot_save_legend(plot_t *plot, const char *filename) {
 }
 
 // Sets legend pos by copying the string to the param struct
+// The given string should not be longer than the storage size
 void plot_set_legend_pos(plot_t *plot, const char *pos) {
   int len = strlen(pos);
   if(len > PLOT_LEGEND_POS_MAX_SIZE - 1) {
@@ -976,6 +977,12 @@ void parse_top_property(parse_t *parse, plot_t *plot) {
   } else if(streq(name, "ytick_font_size") == 1) {
     parse_expect_char(parse, '=');
     plot->param.ytick_font_size = (int)parse_get_int64(parse);
+    parse_expect_char(parse, ';');
+  } else if(streq(name, "legend_pos") == 1) {
+    parse_expect_char(parse, '=');
+    char *pos = parse_get_str(parse);
+    plot_set_legend_pos(plot, pos); // Copies the string (report error if too long)
+    free(pos); // We already copied the pos string into param
     parse_expect_char(parse, ';');
   }
   else {
