@@ -433,6 +433,15 @@ void test_parse_skip_space() {
   return;
 }
 
+void test_parse_top() {
+  printf("========== test_parse_top ==========\n");
+  plot_t *plot = plot_init();
+  plot_open("./conf/test_top.txt");
+  parse_top(plot->parse, plot);
+  printf("Pass\n");
+  return;
+}
+
 int main(int argc, char **argv) {
   int valgrind_flag = 0;
   for(int i = 1;i < argc;i++) {
@@ -457,6 +466,7 @@ int main(int argc, char **argv) {
   test_parse_double();
   test_parse_int();
   test_parse_skip_space();
+  test_parse_top();
   printf("All test passed!\n");
   return 0;
 }
