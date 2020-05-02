@@ -812,7 +812,7 @@ int64_t parse_get_int64(parse_t *parse) {
   parse_skip_space(parse);
   char *begin = parse->curr;
   char *end = NULL;
-  int64_t ret = strtol(begin, &end);
+  int64_t ret = strtol(begin, &end, 10);
   if(end == begin) {
     parse_report_pos(parse);
     error_exit("No valid conversion could be made to form a int64_t\n");
