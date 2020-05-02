@@ -405,6 +405,17 @@ void test_parse_int() {
   return;
 }
 
+void test_parse_skip_space() {
+  printf("========== test_parse_skip_space ==========\n");
+  const char *s = "#Comment 1\n#Comment 2\n    # Comment 3";
+  parse_t *parse = parse_init(s);
+  parse_skip_space(parse);
+  assert(parse_peek(parse) == '\0');
+  parse_free(parse);
+  printf("Pass\n");
+  return;
+}
+
 int main(int argc, char **argv) {
   int valgrind_flag = 0;
   for(int i = 1;i < argc;i++) {
@@ -428,6 +439,7 @@ int main(int argc, char **argv) {
   test_parse_str();
   test_parse_double();
   test_parse_int();
+  test_parse_skip_space();
   printf("All test passed!\n");
   return 0;
 }
