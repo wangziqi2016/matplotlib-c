@@ -551,6 +551,17 @@ void plot_save_legend(plot_t *plot, const char *filename) {
   return;
 }
 
+// Sets legend pos by copying the string to the param struct
+void plot_set_legend_pos(plot_t *plot, const char *pos) {
+  int len = strlen(pos);
+  if(len > PLOT_LEGEND_POS_MAX_SIZE - 1) {
+    error_exit("Legend pos must be a string shorter than %d bytes (sees %d)\n", 
+      PLOT_LEGEND_POS_MAX_SIZE, len);
+  }
+  strcpy(plot->param.legend_pos, pos);
+  return;
+}
+
 // Only one new line is appended at the end of the draw
 void plot_add_bar(plot_t *plot, bar_t *bar) {
   assert(bar->type != NULL);

@@ -188,14 +188,17 @@ inline static void bar_set_type(bar_t *bar, bar_type_t *type) { bar->type = type
 
 //* plot_t - Plotting function
 
+// Maximum size of legend pos (including trailing zero)
+#define PLOT_LEGEND_POS_MAX_SIZE  16
+
 struct parse_struct_t;
 
 // This object should not be freed; Always copy it over
 typedef struct {
   // Legend parameters
-  int legend_vertical;    // By default draw horizontal legend
-  int legend_font_size;   // Font size for text in the legend
-  const char *legend_pos; // Legend position; This string should never be freed
+  int legend_vertical;       // By default draw horizontal legend
+  int legend_font_size;      // Font size for text in the legend
+  char legend_pos[PLOT_LEGEND_POS_MAX_SIZE]; // Legend position; This string should never be freed
   // Tick
   int xtick_font_size;
   int ytick_font_size;
@@ -236,6 +239,8 @@ bar_type_t *plot_find_bar_type(plot_t *plot, const char *label);
 void plot_create_fig(plot_t *plot, double width, double height);
 void plot_save_fig(plot_t *plot, const char *filename);
 void plot_save_legend(plot_t *plot, const char *filename);
+
+void plot_set_legend_pos(plot_t *plot, const char *pos);
 
 void plot_add_bar(plot_t *plot, bar_t *bar);
 void plot_add_legend(plot_t *plot);
