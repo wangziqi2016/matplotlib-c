@@ -355,6 +355,31 @@ void test_parse_str() {
   return;
 }
 
+void test_parse_double() {
+  printf("========== test_parse_double ==========\n");
+  const char *s = " 123.4567 0.0 123 .2 xyzw";
+  parse_t *parse = parse_init(s);
+  double ret;
+  ret = parse_get_double(parse);
+  printf("ret = %f\n", ret);
+  assert(ret == 123.4567f);
+  ret = parse_get_double(parse);
+  printf("ret = %f\n", ret);
+  assert(ret == 0.0f);
+  ret = parse_get_double(parse);
+  printf("ret = %f\n", ret);
+  assert(ret == 123f);
+  ret = parse_get_double(parse);
+  printf("ret = %f\n", ret);
+  assert(ret == 0.2f);
+  // Uncomment the following to reveal error
+  ret = parse_get_double(parse);
+  // Finish test
+  parse_free(parse);
+  printf("Pass\n");
+  return;
+}
+
 int main(int argc, char **argv) {
   int valgrind_flag = 0;
   for(int i = 1;i < argc;i++) {
@@ -376,6 +401,7 @@ int main(int argc, char **argv) {
   test_parse_ident();
   test_parse_expect();
   test_parse_str();
+  test_parse_double();
   printf("All test passed!\n");
   return 0;
 }
