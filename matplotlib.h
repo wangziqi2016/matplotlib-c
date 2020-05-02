@@ -188,6 +188,8 @@ inline static void bar_set_type(bar_t *bar, bar_type_t *type) { bar->type = type
 
 //* plot_t - Plotting function
 
+struct parse_struct_t;
+
 // This object should not be freed; Always copy it over
 typedef struct {
   // Legend parameters
@@ -214,7 +216,7 @@ typedef struct {
   vec_t *bar_types;                    // Bar types used for legend
   int fig_created;                     // Only save figure if this is set
   plot_param_t param;                  // Plotting parameters
-  parse_t *parse;                      // Script parser
+  struct parse_struct_t *parse;        // Script parser
 } plot_t;
 
 plot_t *plot_init();
