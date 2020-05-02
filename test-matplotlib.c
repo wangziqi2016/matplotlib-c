@@ -359,21 +359,23 @@ void test_parse_double() {
   printf("========== test_parse_double ==========\n");
   const char *s = " 123.4567 0.0 123 .2 xyzw";
   parse_t *parse = parse_init(s);
+  // Note: If there is f suffix then it is float; Otherwise it is double
+  printf("sizeof f suffix: %d; no suffix: %d\n", (int)sizeof(123.0f), (int)sizeof(123.0));
   double ret;
   ret = parse_get_double(parse);
   printf("ret = %f\n", ret);
-  assert(ret == 123.4567f);
+  assert(ret == 123.4567);
   ret = parse_get_double(parse);
   printf("ret = %f\n", ret);
   assert(ret == 0.0f);
   ret = parse_get_double(parse);
   printf("ret = %f\n", ret);
-  assert(ret == 123f);
+  assert(ret == 123.0);
   ret = parse_get_double(parse);
   printf("ret = %f\n", ret);
-  assert(ret == 0.2f);
+  assert(ret == 0.2);
   // Uncomment the following to reveal error
-  ret = parse_get_double(parse);
+  //ret = parse_get_double(parse);
   // Finish test
   parse_free(parse);
   printf("Pass\n");
