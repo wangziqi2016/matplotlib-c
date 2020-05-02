@@ -954,7 +954,7 @@ void parse_top_property(parse_t *parse, plot_t *plot) {
   return;
 }
 
-inline static int parse_top_func_more_arg(parse_t *parse) {
+inline static int parse_is_more_arg(parse_t *parse) {
   return parse_peek_nospace(parse) != ';';
 }
 
@@ -966,12 +966,12 @@ void parse_top_func(parse_t *parse, plot_t *plot) {
   } else if(streq(name, "plot_print") == 1) {
     int print_buf = 0;
     // Read arguments
-    if(parse_top_func_more_arg(parse)) {
+    if(parse_is_more_arg(parse)) {
       print_buf = (int)parse_get_int64(parse);
       if(print_buf != 0) print_buf = 1;
     }
     plot_print(plot, print_buf);
-    if(parse_top_func_more_arg(parse)) {
+    if(parse_is_more_arg(parse)) {
       parse_report_pos(parse);
       error_exit("Function \"plot_print\" only takes 1 argument\n");
     }
@@ -979,7 +979,7 @@ void parse_top_func(parse_t *parse, plot_t *plot) {
   } else if(streq(name, "version_print") == 1) {
     printf("matplotlib C language script interpreter, version 1.0\n");
     printf("https://github.com/wangziqi2016/matplotlib-c\n");
-    if(parse_top_func_more_arg(parse) == 1) {
+    if(parse_is_more_arg(parse) == 1) {
       error_exit("Function \"version_print\" takes no argument\n");
     }
     parse_expect_char(parse, ';');
