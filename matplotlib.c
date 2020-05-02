@@ -611,7 +611,7 @@ void plot_add_legend(plot_t *plot) {
     if(type_count % legend_rows == 0) {
       col_count = type_count / legend_rows;
     } else {
-      col_count = (type_count + type_count % legend_rows) / legend_rows;
+      col_count = (type_count + (legend_rows - type_count % legend_rows)) / legend_rows;
     }
   }
   buf_t *buf = plot->buf;
