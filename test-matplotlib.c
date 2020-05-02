@@ -318,9 +318,15 @@ void test_parse_expect() {
   parse_expect_char(parse, '}');
   parse_expect_char(parse, ',');
   parse_expect_char(parse, ',');
-  parse_expect_char(parse, ',');
+  // This should work
+  parse_expect_char_opt(parse, '\n');
+  parse_expect_char_opt(parse, ',');
   // This will not work since we jump over white spaces
   //parse_expect_char(parse, '\n');
+  // These two, however, works since the char is optional
+  parse_expect_char_opt(parse, '\n');
+  parse_expect_char_opt(parse, '\0');
+  assert(parse_peek(parse) == '\0');
   parse_free(parse);
   printf("Pass\n");
   return;
