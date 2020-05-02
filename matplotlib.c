@@ -406,205 +406,6 @@ void bar_free(bar_t *bar) {
   return;
 }
 
-//* plot_t
-
-plot_param_t default_param = {
-  0,        // legend_vertical
-  28,       // legend_font_size
-  "best",   // Legend pos; Alternatives are: {lower, center, upper} x {left, center, right} or "center"
-  24, 24,   // x/y tick font size
-  28, 28,   // x/y title font size
-  26,       // bar text size
-};
-
-// We use "plot" as the root name of the plot; "fig" as the name of the figure object
-const char *plot_preamble = \
-  "import sys\n"
-  "import matplotlib as mpl\n"
-  "import matplotlib.pyplot as plot\n"
-  "import matplotlib.ticker as ticker\n"
-  "\n"
-  "mpl.rcParams['ps.useafm'] = True\n"
-  "mpl.rcParams['pdf.use14corefonts'] = True\n"
-  "mpl.rcParams['text.usetex'] = True\n"
-  "mpl.rcParams['text.latex.preamble'] = [\n"
-  "  r'\\usepackage{siunitx}',\n"
-  "  r'\\sisetup{detect-all}',\n"
-  "  r'\\usepackage{helvet}',\n"
-  "  r'\\usepackage{sansmath}',\n"
-  "  r'\\sansmath'\n"
-  "]\n"
-  "\n";
-
-plot_t *plot_init() {
-  plot_t *plot = (plot_t *)malloc(sizeof(plot_t));
-  SYSEXPECT(plot != NULL);
-  memset(plot, 0x00, sizeof(plot_t));
-  // Initialize member variables
-  plot->py = py_init();
-  plot->buf = buf_init();
-  plot->bar_types = vec_init();
-  buf_append(plot->buf, plot_preamble);
-  // Init param
-  memcpy(&plot->param, &default_param, sizeof(plot_param_t));
-  return plot;
-}
-
-void plot_free(plot_t *plot) {
-  buf_free(plot->buf);
-  py_free(plot->py);
-  // Frees type array
-  for(int i = 0;i < vec_count(plot->bar_types);i++) {
-    bar_type_free((bar_type_t *)vec_at(plot->bar_types, i));
-  }
-  vec_free(plot->bar_types);
-  return;
-}
-
-// Adds bar type; Note that types preserve the order they are inserted
-void plot_add_bar_type(plot_t *plot, const char *label, uint32_t color, char hatch) {
-  if(plot_find_bar_type(plot, label) != NULL) {
-    error_exit("The label \"%s\" already exists\n", label);
-  }
-  bar_type_t *type = bar_type_init(label);
-  type->color = color;
-  type->hatch = hatch;
-  vec_append(plot->bar_types, type);
-  return;
-}
-
-// Returns NULL if not found
-bar_type_t *plot_find_bar_type(plot_t *plot, const char *label) {
-  for(int i = 0;i < vec_count(plot->bar_types);i++) {
-    bar_type_t *type = (bar_type_t *)vec_at(plot->bar_types, i);
-    if(streq(type->label, label) == 1) {
-      return type;
-    }
-  }
-  return NULL;
-}
-
-void plot_create_fig(plot_t *plot, double width, double height) {
-  if(plot->fig_created == 1) {
-    error_exit("A figure has already been created on this plot\n");
-  }
-  buf_printf(plot->buf, "fig = plot.figure(figsize=(%f, %f))\n", width, height);
-  // "111" means the output consists of only one plot
-  buf_append(plot->buf, "ax = fig.add_subplot(111)\n\n");
-  plot->fig_created = 1;
-  return;
-}
-
-void plot_save_fig(plot_t *plot, const char *filename) {
-  if(plot->fig_created == 0) {
-    error_exit("The figure has not been created yet\n");
-  }
-  buf_printf(plot->buf, "plot.savefig(\"%s\", bbox_inches='tight')\n\n", filename);
-  py_run(plot->py, buf_c_str(plot->buf));
-  return;
-}
-
-// Saves a standalone legend file
-// This function can be called anywhere during the plotting procedure. Legends drawn will be 
-// bar types stored in the plot object
-void plot_save_legend(plot_t *plot, const char *filename) {
-  plot_t *legend = plot_init(); // Preamble is set after this
-  assert(legend->buf != NULL && legend->py != NULL);
-  plot_create_fig(legend, 0.001f, 0.001f);
-  int count = vec_count(plot->bar_types);
-  if(count == 0) {
-    error_exit("Current plot does not contain any bar type\n");
-  }
-  for(int i = 0;i < count;i++) {
-    bar_type_t *type = vec_at(plot->bar_types, i);
-    bar_t *bar = bar_init();
-    // The bar should not be drawn
-    bar->bottom = bar->height = bar->width = 0.0;
-    // Also duplicate the bar type and associate it with the bar
-    plot_add_bar_type(legend, type->label, type->color, type->hatch);
-    bar_set_type(bar, plot_find_bar_type(legend, type->label));
-    plot_add_bar(legend, bar);
-    // No longer used
-    bar_free(bar);
-  }
-  legend->param.legend_pos = "center"; // Hardcode lagend pos
-  plot_add_legend(legend);
-  plot_save_fig(legend, filename);
-  plot_free(legend);
-  return;
-}
-
-// Only one new line is appended at the end of the draw
-void plot_add_bar(plot_t *plot, bar_t *bar) {
-  assert(bar->type != NULL);
-  buf_t *buf = plot->buf;
-  // Firts two args are fixed
-  buf_printf(buf, "ax.bar(%f, %f\n", bar->pos, bar->height);
-  // Following args are optional
-  buf_printf(buf, "  , width=%f\n", bar->width);
-  if(bar->bottom != 0.0) buf_printf(buf, "  , bottom=%f\n", bar->bottom);
-  // Color of the bar
-  buf_printf(buf, "  , color='");
-  buf_append_color(buf, bar_get_color(bar));
-  buf_printf(buf, "'\n");
-  // Hatch (if not '\0')
-  char hatch = bar_get_hatch(bar);
-  if(hatch != '\0') {
-    if(hatch == '\\') buf_printf(buf, "  , hatch='\\\\'\n");
-    else buf_printf(buf, "  , hatch='%c'\n", hatch);
-  }
-  // Add label if it has not been used for bars
-  if(bar_get_type(bar)->used == 0) {
-    bar_get_type(bar)->used = 1;
-    buf_printf(buf, "  , label='%s'\n", bar_get_type(bar)->label);
-  }
-  // This concludes arg list of bar()
-  buf_printf(buf, ")\n");
-  return;
-}
-
-// Uses legend font size, legend vertical, and legend position in the param object
-void plot_add_legend(plot_t *plot) {
-  int col_count = 0;
-  // Compute col_count by counting bar types
-  if(plot->param.legend_vertical == 1) {
-    col_count = 1;
-  } else {
-    col_count = vec_count(plot->bar_types);
-    if(col_count == 0) {
-      error_exit("Current plot does not contain any bar type\n");
-    }
-  }
-  buf_t *buf = plot->buf;
-  plot_param_t *param = &plot->param;
-  // Adding legend statement
-  buf_printf(buf, "ax.legend(loc=\"%s\", prop={'size':%d}, ncol=%d)\n\n",
-             param->legend_pos, param->legend_font_size, col_count);
-  return;
-}
-
-// Adding X axis title
-void plot_add_x_title(plot_t *plot, const char *title) {
-  buf_printf(plot->buf, "ax.set_xlabel(\"%s\", fontsize=%lu, weight='bold')\n",
-             title, plot->param.xtitle_font_size);
-  return;
-}
-
-void plot_add_y_title(plot_t *plot, const char *title) {
-  buf_printf(plot->buf, "ax.set_ylabel(\"%s\", fontsize=%lu, weight='bold')\n",
-             title, plot->param.ytitle_font_size);
-  return;
-}
-
-void plot_print(plot_t *plot) {
-  buf_print(plot->buf, 1);
-  for(int i = 0;i < vec_count(plot->bar_types);i++) {
-    bar_type_t *type = (bar_type_t *)vec_at(plot->bar_types, i);
-    bar_type_print(type);
-  }
-  return;
-}
-
 //* parse_*
 
 parse_t *_parse_init(char *s) {
@@ -824,3 +625,203 @@ void parse_print(parse_t *parse) {
     parse->size, parse->line, parse->col, (int)(parse->curr - parse->s), parse->s);
   return;
 }
+
+//* plot_t
+
+plot_param_t default_param = {
+  0,        // legend_vertical
+  28,       // legend_font_size
+  "best",   // Legend pos; Alternatives are: {lower, center, upper} x {left, center, right} or "center"
+  24, 24,   // x/y tick font size
+  28, 28,   // x/y title font size
+  26,       // bar text size
+};
+
+// We use "plot" as the root name of the plot; "fig" as the name of the figure object
+const char *plot_preamble = \
+  "import sys\n"
+  "import matplotlib as mpl\n"
+  "import matplotlib.pyplot as plot\n"
+  "import matplotlib.ticker as ticker\n"
+  "\n"
+  "mpl.rcParams['ps.useafm'] = True\n"
+  "mpl.rcParams['pdf.use14corefonts'] = True\n"
+  "mpl.rcParams['text.usetex'] = True\n"
+  "mpl.rcParams['text.latex.preamble'] = [\n"
+  "  r'\\usepackage{siunitx}',\n"
+  "  r'\\sisetup{detect-all}',\n"
+  "  r'\\usepackage{helvet}',\n"
+  "  r'\\usepackage{sansmath}',\n"
+  "  r'\\sansmath'\n"
+  "]\n"
+  "\n";
+
+plot_t *plot_init() {
+  plot_t *plot = (plot_t *)malloc(sizeof(plot_t));
+  SYSEXPECT(plot != NULL);
+  memset(plot, 0x00, sizeof(plot_t));
+  // Initialize member variables
+  plot->py = py_init();
+  plot->buf = buf_init();
+  plot->bar_types = vec_init();
+  buf_append(plot->buf, plot_preamble);
+  // Init param
+  memcpy(&plot->param, &default_param, sizeof(plot_param_t));
+  return plot;
+}
+
+void plot_free(plot_t *plot) {
+  buf_free(plot->buf);
+  py_free(plot->py);
+  // Frees type array
+  for(int i = 0;i < vec_count(plot->bar_types);i++) {
+    bar_type_free((bar_type_t *)vec_at(plot->bar_types, i));
+  }
+  vec_free(plot->bar_types);
+  return;
+}
+
+// Adds bar type; Note that types preserve the order they are inserted
+void plot_add_bar_type(plot_t *plot, const char *label, uint32_t color, char hatch) {
+  if(plot_find_bar_type(plot, label) != NULL) {
+    error_exit("The label \"%s\" already exists\n", label);
+  }
+  bar_type_t *type = bar_type_init(label);
+  type->color = color;
+  type->hatch = hatch;
+  vec_append(plot->bar_types, type);
+  return;
+}
+
+// Returns NULL if not found
+bar_type_t *plot_find_bar_type(plot_t *plot, const char *label) {
+  for(int i = 0;i < vec_count(plot->bar_types);i++) {
+    bar_type_t *type = (bar_type_t *)vec_at(plot->bar_types, i);
+    if(streq(type->label, label) == 1) {
+      return type;
+    }
+  }
+  return NULL;
+}
+
+void plot_create_fig(plot_t *plot, double width, double height) {
+  if(plot->fig_created == 1) {
+    error_exit("A figure has already been created on this plot\n");
+  }
+  buf_printf(plot->buf, "fig = plot.figure(figsize=(%f, %f))\n", width, height);
+  // "111" means the output consists of only one plot
+  buf_append(plot->buf, "ax = fig.add_subplot(111)\n\n");
+  plot->fig_created = 1;
+  return;
+}
+
+void plot_save_fig(plot_t *plot, const char *filename) {
+  if(plot->fig_created == 0) {
+    error_exit("The figure has not been created yet\n");
+  }
+  buf_printf(plot->buf, "plot.savefig(\"%s\", bbox_inches='tight')\n\n", filename);
+  py_run(plot->py, buf_c_str(plot->buf));
+  return;
+}
+
+// Saves a standalone legend file
+// This function can be called anywhere during the plotting procedure. Legends drawn will be 
+// bar types stored in the plot object
+void plot_save_legend(plot_t *plot, const char *filename) {
+  plot_t *legend = plot_init(); // Preamble is set after this
+  assert(legend->buf != NULL && legend->py != NULL);
+  plot_create_fig(legend, 0.001f, 0.001f);
+  int count = vec_count(plot->bar_types);
+  if(count == 0) {
+    error_exit("Current plot does not contain any bar type\n");
+  }
+  for(int i = 0;i < count;i++) {
+    bar_type_t *type = vec_at(plot->bar_types, i);
+    bar_t *bar = bar_init();
+    // The bar should not be drawn
+    bar->bottom = bar->height = bar->width = 0.0;
+    // Also duplicate the bar type and associate it with the bar
+    plot_add_bar_type(legend, type->label, type->color, type->hatch);
+    bar_set_type(bar, plot_find_bar_type(legend, type->label));
+    plot_add_bar(legend, bar);
+    // No longer used
+    bar_free(bar);
+  }
+  legend->param.legend_pos = "center"; // Hardcode lagend pos
+  plot_add_legend(legend);
+  plot_save_fig(legend, filename);
+  plot_free(legend);
+  return;
+}
+
+// Only one new line is appended at the end of the draw
+void plot_add_bar(plot_t *plot, bar_t *bar) {
+  assert(bar->type != NULL);
+  buf_t *buf = plot->buf;
+  // Firts two args are fixed
+  buf_printf(buf, "ax.bar(%f, %f\n", bar->pos, bar->height);
+  // Following args are optional
+  buf_printf(buf, "  , width=%f\n", bar->width);
+  if(bar->bottom != 0.0) buf_printf(buf, "  , bottom=%f\n", bar->bottom);
+  // Color of the bar
+  buf_printf(buf, "  , color='");
+  buf_append_color(buf, bar_get_color(bar));
+  buf_printf(buf, "'\n");
+  // Hatch (if not '\0')
+  char hatch = bar_get_hatch(bar);
+  if(hatch != '\0') {
+    if(hatch == '\\') buf_printf(buf, "  , hatch='\\\\'\n");
+    else buf_printf(buf, "  , hatch='%c'\n", hatch);
+  }
+  // Add label if it has not been used for bars
+  if(bar_get_type(bar)->used == 0) {
+    bar_get_type(bar)->used = 1;
+    buf_printf(buf, "  , label='%s'\n", bar_get_type(bar)->label);
+  }
+  // This concludes arg list of bar()
+  buf_printf(buf, ")\n");
+  return;
+}
+
+// Uses legend font size, legend vertical, and legend position in the param object
+void plot_add_legend(plot_t *plot) {
+  int col_count = 0;
+  // Compute col_count by counting bar types
+  if(plot->param.legend_vertical == 1) {
+    col_count = 1;
+  } else {
+    col_count = vec_count(plot->bar_types);
+    if(col_count == 0) {
+      error_exit("Current plot does not contain any bar type\n");
+    }
+  }
+  buf_t *buf = plot->buf;
+  plot_param_t *param = &plot->param;
+  // Adding legend statement
+  buf_printf(buf, "ax.legend(loc=\"%s\", prop={'size':%d}, ncol=%d)\n\n",
+             param->legend_pos, param->legend_font_size, col_count);
+  return;
+}
+
+// Adding X axis title
+void plot_add_x_title(plot_t *plot, const char *title) {
+  buf_printf(plot->buf, "ax.set_xlabel(\"%s\", fontsize=%lu, weight='bold')\n",
+             title, plot->param.xtitle_font_size);
+  return;
+}
+
+void plot_add_y_title(plot_t *plot, const char *title) {
+  buf_printf(plot->buf, "ax.set_ylabel(\"%s\", fontsize=%lu, weight='bold')\n",
+             title, plot->param.ytitle_font_size);
+  return;
+}
+
+void plot_print(plot_t *plot) {
+  buf_print(plot->buf, 1);
+  for(int i = 0;i < vec_count(plot->bar_types);i++) {
+    bar_type_t *type = (bar_type_t *)vec_at(plot->bar_types, i);
+    bar_type_print(type);
+  }
+  return;
+}
+

@@ -186,56 +186,9 @@ inline static char bar_get_hatch(bar_t *bar) { return bar->type->hatch; }
 inline static bar_type_t *bar_get_type(bar_t *bar) { return bar->type; }
 inline static void bar_set_type(bar_t *bar, bar_type_t *type) { bar->type = type; }
 
-//* plot_t - Plotting function
-
-// This object should not be freed; Always copy it over
-typedef struct {
-  // Legend parameters
-  int legend_vertical;    // By default draw horizontal legend
-  int legend_font_size;   // Font size for text in the legend
-  const char *legend_pos; // Legend position; This string should never be freed
-  // Tick
-  int xtick_font_size;
-  int ytick_font_size;
-  // Title
-  int xtitle_font_size;
-  int ytitle_font_size;
-  // Bar text
-  int bar_text_font_size;
-} plot_param_t;
-
-extern plot_param_t default_param; // Default param, will be copied over during init
-
-extern const char *plot_preamble; // This is added to the buffer on plot init
-
-typedef struct {
-  py_t *py;
-  buf_t *buf;
-  vec_t *bar_types;                    // Bar types used for legend
-  int fig_created;                     // Only save figure if this is set
-  plot_param_t param;                  // Plotting parameters
-} plot_t;
-
-plot_t *plot_init();
-void plot_free(plot_t *plot);
-
-void plot_add_bar_type(plot_t *plot, const char *label, uint32_t color, char hatch);
-bar_type_t *plot_find_bar_type(plot_t *plot, const char *label);
-
-void plot_create_fig(plot_t *plot, double width, double height);
-void plot_save_fig(plot_t *plot, const char *filename);
-void plot_save_legend(plot_t *plot, const char *filename);
-
-void plot_add_bar(plot_t *plot, bar_t *bar);
-void plot_add_legend(plot_t *plot);
-void plot_add_x_title(plot_t *plot, const char *title);
-void plot_add_y_title(plot_t *plot, const char *title);
-
-void plot_print(plot_t *plot);
-
 //* parse_* - String processing
 
-typedef struct {
+typedef struct parse_struct_t {
   char *filename;  // Has ownership; Undefined for string init
   char *s;         // Always point to the start of the string; Read-only; Parser owns the string
   char *curr;      // Current reading location
@@ -268,5 +221,53 @@ void parse_expect_char(parse_t *parse, char ch); // Fetch a char and discard; Re
 
 void parse_report_pos(parse_t *parse);
 void parse_print(parse_t *parse);
+
+//* plot_t - Plotting function
+
+// This object should not be freed; Always copy it over
+typedef struct {
+  // Legend parameters
+  int legend_vertical;    // By default draw horizontal legend
+  int legend_font_size;   // Font size for text in the legend
+  const char *legend_pos; // Legend position; This string should never be freed
+  // Tick
+  int xtick_font_size;
+  int ytick_font_size;
+  // Title
+  int xtitle_font_size;
+  int ytitle_font_size;
+  // Bar text
+  int bar_text_font_size;
+} plot_param_t;
+
+extern plot_param_t default_param; // Default param, will be copied over during init
+
+extern const char *plot_preamble; // This is added to the buffer on plot init
+
+typedef struct {
+  py_t *py;
+  buf_t *buf;
+  vec_t *bar_types;                    // Bar types used for legend
+  int fig_created;                     // Only save figure if this is set
+  plot_param_t param;                  // Plotting parameters
+  parse_t *parse;                      // Script parser
+} plot_t;
+
+plot_t *plot_init();
+void plot_free(plot_t *plot);
+
+void plot_add_bar_type(plot_t *plot, const char *label, uint32_t color, char hatch);
+bar_type_t *plot_find_bar_type(plot_t *plot, const char *label);
+
+void plot_create_fig(plot_t *plot, double width, double height);
+void plot_save_fig(plot_t *plot, const char *filename);
+void plot_save_legend(plot_t *plot, const char *filename);
+
+void plot_add_bar(plot_t *plot, bar_t *bar);
+void plot_add_legend(plot_t *plot);
+void plot_add_x_title(plot_t *plot, const char *title);
+void plot_add_y_title(plot_t *plot, const char *title);
+
+void plot_print(plot_t *plot);
 
 #endif
