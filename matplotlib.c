@@ -589,6 +589,26 @@ char *parse_until(parse_t *parse, char ch) {
   return ret;
 }
 
+double parse_get_double(parse_t *parse) {
+  parse_skip_space(parse);
+  char *begin = parse->curr;
+  char *end = NULL;
+  double ret = strtod(begin, &end);
+  if(end == begin) {
+    parse_report_pos(parse);
+    error_exit("No valid conversion could be made to form a double\n");
+  } else if(errno == ERANGE) {
+    parse_report_pos(parse);
+    error_exit("Double value out of range\n");
+  }
+  // Skip these characters
+  while(parse->curr != end) {
+    assert(parse->curr < end);
+    parse_getchar(parse);
+  }
+  return ret;
+}
+
 // buf should be at least 5 chars in size (\xHH\0)
 static void parse_print_char(parse_t *parse, char ch, char *buf) {
   (void)parse;
