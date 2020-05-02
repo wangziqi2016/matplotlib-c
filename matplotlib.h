@@ -241,7 +241,6 @@ void plot_add_y_title(plot_t *plot, const char *title);
 
 void plot_print(plot_t *plot);
 
-
 //* parse_* - String processing
 
 typedef struct parse_struct_t {
@@ -278,6 +277,7 @@ int64_t parse_get_int64(parse_t *parse); // Reads a long int from the stream
 void parse_expect_char(parse_t *parse, char ch); // Fetch a char and discard; Report error if mismatch
 
 void parse_top(parse_t *parse, plot_t *plot); // Parse a script and call plot functions to complete the graph
+void parse_top_property(parse_t *parse, plot_t *plot);
 
 void parse_report_pos(parse_t *parse);
 void parse_print(parse_t *parse);
