@@ -836,10 +836,11 @@ void parse_expect_char(parse_t *parse, char ch) {
 // Reports current line and col followed by the current line; Used in error reporting
 void parse_report_pos(parse_t *parse) {
   printf("File %s on line %d column %d: \n", parse->filename, parse->line, parse->col);
-  printf("  ... ");
+  printf("  ...\"");
   char *p = parse->curr;
   while(*p != '\n' && *p != '\0') putchar(*p++);
-  putchar('\n');
+  if(*p == '\0') printf("[EOF]");
+  printf("\"\n");
   return;
 }
 
