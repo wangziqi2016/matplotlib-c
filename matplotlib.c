@@ -954,6 +954,8 @@ void parse_top_property(parse_t *parse, plot_t *plot) {
   return;
 }
 
+// This function will return 1 and stop the parser at the next arg, if there is one
+// Otherwise, it returns 0 and stops at the next token
 inline static int parse_is_more_arg(parse_t *parse) {
   return parse_peek_nospace(parse) != ';';
 }
@@ -973,7 +975,7 @@ void parse_top_func(parse_t *parse, plot_t *plot) {
     plot_print(plot, print_buf);
     if(parse_is_more_arg(parse)) {
       parse_report_pos(parse);
-      error_exit("Function \"plot_print\" only takes 1 argument\n");
+      error_exit("Function \"plot_print\" only takes 1 optional argument\n");
     }
     parse_expect_char(parse, ';');
   } else if(streq(name, "version_print") == 1) {
