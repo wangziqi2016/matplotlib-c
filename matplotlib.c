@@ -758,10 +758,11 @@ char *parse_until(parse_t *parse, char ch) {
   return ret;
 }
 
-// buf should be at least 5 chars in size (0xHH\0)
+// buf should be at least 5 chars in size (\xHH\0)
 static void parse_print_char(parse_t *parse, char ch, char *buf) {
+  (void)parse;
   if(isprint(ch)) sprintf(buf, "'%c'", ch);
-  else sprintf(buf, "0x%02X", ch);
+  else sprintf(buf, "\\x%02X", ch);
   return;
 }
 
@@ -772,10 +773,12 @@ void parse_expect_char(parse_t *parse, char ch) {
   char c = parse_getchar_nospace(parse);
   if(c == '\0') {
     parse_report_pos(parse);
-    error_exit("Expecting 0x%02X, while seeing end of stream\n", ch);
+    char buf[6]; parse_print_char(parse, ch, buf);
+    error_exit("Expecting %s, while seeing end of stream\n", buf);
   } else if(c != ch) {
     parse_report_pos(parse);
-    error_exit("Expecting 0x%02X, while seeing '%c'\n", (int)ch, c);
+    char buf[6]; parse_print_char(parse, ch, buf);
+    error_exit("Expecting %s, while seeing '%c'\n", buf, c);
   }
   return;
 }
