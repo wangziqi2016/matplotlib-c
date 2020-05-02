@@ -238,6 +238,7 @@ bar_type_t *plot_find_bar_type(plot_t *plot, const char *label);
 
 void plot_create_fig(plot_t *plot, double width, double height);
 void plot_save_fig(plot_t *plot, const char *filename);
+void plot_copy_param(plot_t *plot, plot_param_t *param);
 void plot_save_legend(plot_t *plot, const char *filename);
 
 void plot_set_legend_rows(plot_t *plot, int rows);

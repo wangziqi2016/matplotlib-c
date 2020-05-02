@@ -419,10 +419,10 @@ plot_param_t default_param = {
 
 void plot_param_print(plot_param_t *param) {
   printf("[param legend] font size %d rows %d pos %s\n", 
-    param->legend_font_size, param->legend_pos, param->legend_rows);
+    param->legend_font_size, param->legend_rows, param->legend_pos);
   printf("[param title] x font %d y font %d\n", 
     param->xtitle_font_size, param->ytitle_font_size);
-  printf("[param tick] x font y font %d\n", 
+  printf("[param tick] x font %d y font %d\n", 
     param->xtick_font_size, param->ytick_font_size);
   printf("[param bar_text] font %d\n", param->bar_text_font_size);
   return;
@@ -470,7 +470,7 @@ void plot_free(plot_t *plot) {
   }
   vec_free(plot->bar_types);
   // Note that parse can be NULL if it is not initialized
-  if(parse != NULL) parse_free(plot->parse);
+  if(plot->parse != NULL) parse_free(plot->parse);
   if(plot->xtitle) free(plot->xtitle);
   if(plot->ytitle) free(plot->ytitle);
   if(plot->save_filename) free(plot->save_filename);
@@ -530,6 +530,12 @@ void plot_save_fig(plot_t *plot, const char *filename) {
   }
   buf_printf(plot->buf, "plot.savefig(\"%s\", bbox_inches='tight')\n\n", filename);
   py_run(plot->py, buf_c_str(plot->buf));
+  return;
+}
+
+// Copies a param object over
+void plot_copy_param(plot_t *plot, plot_param_t *param) {
+  memcpy(&plot->param, param, sizeof(plot_param_t));
   return;
 }
 
@@ -659,7 +665,7 @@ void plot_print(plot_t *plot, int print_buf) {
   if(plot->save_filename != NULL) printf("[plot] save_filename %s\n", plot->save_filename);
   if(plot->legend_filename != NULL) printf("[plot] legend_filename %s\n", plot->legend_filename);
   // Print param
-  plot_param_print(plot->param);
+  plot_param_print(&plot->param);
   // Print bar types
   for(int i = 0;i < vec_count(plot->bar_types);i++) {
     bar_type_t *type = (bar_type_t *)vec_at(plot->bar_types, i);
