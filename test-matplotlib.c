@@ -313,6 +313,7 @@ void test_parse_expect() {
   parse_expect_char(parse, ';');
   ret = parse_get_ident(parse);
   assert(streq(ret, "ident") == 1);
+  free(ret);
   parse_expect_char(parse, '{');
   parse_expect_char(parse, '}');
   parse_expect_char(parse, ',');
