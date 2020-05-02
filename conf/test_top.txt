@@ -5,18 +5,18 @@
 
 # Using '#' to start a line comment. 
 # Line comments can be used at the beginning of a line, or after an existing line
-# There is no need to add a semicolon after each line, but we safely ignore them
+# Each line should end with a semicolon (';')
 
 # Properties are specified using '.'
 
 .xtitle = "This is x title";   # With semicolon
-.ytitle = "This is y title"    # Without semicolon
+.ytitle = "This is y title";
 .save_filename = "figure1.pdf" # Can even be in the next line
                               ;
 # .legend_filename = "legend.pdf" # This property is optional
 
 # Uncomment this to reveal error
-# .unknown-property = "whatever"
+# .unknown-property = "whatever";
 
 # Prints the plot configuration
-#!plot_print
+#!plot_print;

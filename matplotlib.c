@@ -933,19 +933,19 @@ void parse_top_property(parse_t *parse, plot_t *plot) {
   } else if(streq(name, "xtitle") == 1) {
     parse_expect_char(parse, '=');
     plot->xtitle = parse_get_str(parse);
-    parse_expect_char_opt(parse, ';');
+    parse_expect_char(parse, ';');
   } else if(streq(name, "ytitle") == 1) {
     parse_expect_char(parse, '=');
     plot->ytitle = parse_get_str(parse);
-    parse_expect_char_opt(parse, ';');
+    parse_expect_char(parse, ';');
   } else if(streq(name, "save_filename") == 1) {
     parse_expect_char(parse, '=');
     plot->save_filename = parse_get_str(parse);
-    parse_expect_char_opt(parse, ';');
+    parse_expect_char(parse, ';');
   } else if(streq(name, "legend_filename") == 1) {
     parse_expect_char(parse, '=');
     plot->legend_filename = parse_get_str(parse);
-    parse_expect_char_opt(parse, ';');
+    parse_expect_char(parse, ';');
   } else {
     parse_report_pos(parse);
     error_exit("Unknown top-level property: \"%s\"\n", name);
@@ -956,13 +956,24 @@ void parse_top_property(parse_t *parse, plot_t *plot) {
 
 void parse_top_func(parse_t *parse, plot_t *plot) {
   char *name = parse_get_ident(parse);
+  int line = parse->line; // Use this to determine whether we are still on the same line
   if(name == NULL) {
     parse_report_pos(parse);
     error_exit("Expecting a function name after top-level '!'\n");
-  } else if(streq(name, "plot-print") == 1) {
-    parse_expect_char(parse, '=');
-    
-    parse_expect_char_opt(parse, ';');
+  } else if(streq(name, "plot_print") == 1) {
+    int print_buf = 0;
+    // Read arguments
+    char next = parse_peek_nospace(parse);
+    if(next != ';') {
+      print_buf = (int)parse_get_int64(parse);
+      if(print_buf != 0) print_buf = 1;
+    }
+    next = parse_peek_nospace(parse);
+    if(next != ';') {
+      parse_report_pos(parse);
+      error_exit("Function only takes 1 argument\n", name);
+    }
+    parse_expect_char(parse, ';');
   } else {
     parse_report_pos(parse);
     error_exit("Unknown top-level function: \"%s\"\n", name);
