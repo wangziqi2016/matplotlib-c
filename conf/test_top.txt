@@ -13,7 +13,10 @@
 .ytitle = "This is y title";
 .save_filename = "figure1.pdf" # Can even be in the next line
                               ;
-# .legend_filename = "legend.pdf" # This property is optional
+# .legend_filename = "legend.pdf"; # This property is optional
+
+.legend_pos = "top right"; # Specifies legend pos
+# .legend_pos = "This is a loooooooooooooong string"; # Should not be too long
 
 # Uncomment this to reveal error
 # .unknown_property = "whatever";
@@ -23,6 +26,6 @@
 # Interpreter will report error if argument does not match prototype
 
 # Prints the plot configuration
-!plot_print;    # Function with no argument
 !plot_print 1;  # One optional argument for whether to print buffer content
+!plot_print;    # Function with no argument
 !version_print; # This function takes no argument
