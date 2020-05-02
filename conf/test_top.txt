@@ -16,7 +16,9 @@
 # .legend_filename = "legend.pdf" # This property is optional
 
 # Uncomment this to reveal error
-# .unknown-property = "whatever";
+# .unknown_property = "whatever";
 
 # Prints the plot configuration
-#!plot_print;
+!plot_print;
+!plot_print 1; # Optional argument for whether to print buffer content
+!version_print;
