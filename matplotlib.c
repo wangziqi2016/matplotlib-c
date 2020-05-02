@@ -933,11 +933,11 @@ void parse_top_property(parse_t *parse, plot_t *plot) {
     parse_expect_char(parse, '=');
     plot->ytitle = parse_get_str(parse);
     parse_expect_char_opt(parse, ';');
-  } else if(streq(name, "save-filename") == 1) {
+  } else if(streq(name, "save_filename") == 1) {
     parse_expect_char(parse, '=');
     plot->save_filename = parse_get_str(parse);
     parse_expect_char_opt(parse, ';');
-  } else if(streq(name, "legend-filename") == 1) {
+  } else if(streq(name, "legend_filename") == 1) {
     parse_expect_char(parse, '=');
     plot->legend_filename = parse_get_str(parse);
     parse_expect_char_opt(parse, ';');
@@ -958,7 +958,6 @@ void parse_top_func(parse_t *parse, plot_t *plot) {
     parse_expect_char(parse, '=');
     
     parse_expect_char_opt(parse, ';');
-  } 
   } else {
     parse_report_pos(parse);
     error_exit("Unknown top-level function: \"%s\"\n", name);

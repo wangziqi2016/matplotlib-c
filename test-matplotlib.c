@@ -436,7 +436,7 @@ void test_parse_skip_space() {
 void test_parse_top() {
   printf("========== test_parse_top ==========\n");
   plot_t *plot = plot_init();
-  plot_open("./conf/test_top.txt");
+  plot_open(plot, "./conf/test_top.txt");
   parse_top(plot->parse, plot);
   printf("Pass\n");
   return;

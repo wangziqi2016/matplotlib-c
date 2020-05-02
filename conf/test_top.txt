@@ -11,12 +11,12 @@
 
 .xtitle = "This is x title";   # With semicolon
 .ytitle = "This is y title"    # Without semicolon
-.save-filename = "figure1.pdf" # Can even be in the next line
+.save_filename = "figure1.pdf" # Can even be in the next line
                               ;
-# .legend-filename = "legend.pdf" # This property is optional
+# .legend_filename = "legend.pdf" # This property is optional
 
 # Uncomment this to reveal error
 # .unknown-property = "whatever"
 
 # Prints the plot configuration
-!plot-print
+#!plot_print
