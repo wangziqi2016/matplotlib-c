@@ -278,6 +278,7 @@ char *parse_until(parse_t *parse, char ch); // Reads until a certain char is met
 double parse_get_double(parse_t *parse); // Reads a double from the stream
 int64_t parse_get_int64(parse_t *parse); // Reads a long int from the stream
 void parse_expect_char(parse_t *parse, char ch); // Fetch a char and discard; Report error if mismatch
+void parse_expect_char_opt(parse_t *parse, char ch); // Read an optional char and discard; No error if not found
 
 void parse_top(parse_t *parse, plot_t *plot); // Parse a script and call plot functions to complete the graph
 void parse_top_property(parse_t *parse, plot_t *plot);

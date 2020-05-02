@@ -878,6 +878,13 @@ void parse_expect_char(parse_t *parse, char ch) {
   return;
 }
 
+// Same as above, except that we do not read from stream and report error if mismatch
+void parse_expect_char_opt(parse_t *parse, char ch) {
+  char c = parse_peek_nospace(parse);
+  if(c == ch) parse_getchar(parse); // Advance read pointer
+  return;
+}
+
 // Top-level parsing function
 void parse_top(parse_t *parse, plot_t *plot) {
   char ch;
