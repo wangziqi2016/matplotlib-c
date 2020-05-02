@@ -319,7 +319,30 @@ void test_parse_expect() {
   parse_expect_char(parse, ',');
   parse_expect_char(parse, ',');
   // This will not work since we jump over white spaces
-  parse_expect_char(parse, '\n');
+  //parse_expect_char(parse, '\n');
+  parse_free(parse);
+  printf("Pass\n");
+  return;
+}
+
+void test_parse_str() {
+  printf("========== test_parse_str ==========\n");
+  const char *s = " \"This is a string\"  \"This is \\\"string\\\"\"  \" This is\\nnew line\"";
+  parse_t *parse = parse_init(s);
+  char *ret;
+  ret = parse_get_str(parse);
+  printf("ret = \"%s\"\n", ret);
+  assert(streq(ret, "This is a string") == 1);
+  free(ret);
+  ret = parse_get_str(parse);
+  printf("ret = \"%s\"\n", ret);
+  assert(streq(ret, "This is \\\"string\\\"") == 1);
+  free(ret);
+  ret = parse_get_str(parse);
+  printf("ret = \"%s\"\n", ret);
+  assert(streq(ret, " This is\\nnew line") == 1);
+  free(ret);
+  // Finish test
   parse_free(parse);
   printf("Pass\n");
   return;
@@ -345,6 +368,7 @@ int main(int argc, char **argv) {
   test_parse_until();
   test_parse_ident();
   test_parse_expect();
+  test_parse_str();
   printf("All test passed!\n");
   return 0;
 }
