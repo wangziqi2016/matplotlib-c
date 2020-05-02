@@ -620,6 +620,8 @@ void plot_print(plot_t *plot, int print_buf) {
   if(plot->legend_filename != NULL) printf("[plot] legend_filename %s\n", plot->legend_filename);
   printf("[plot] x title font size %d y font size %d\n", 
     plot->param.xtitle_font_size, plot->param.ytitle_font_size);
+  printf("[plot] x tick font size %d y font size %d\n",
+    plot->param.xtick_font_size, plot->param.ytick_font_size);
   for(int i = 0;i < vec_count(plot->bar_types);i++) {
     bar_type_t *type = (bar_type_t *)vec_at(plot->bar_types, i);
     bar_type_print(type);
