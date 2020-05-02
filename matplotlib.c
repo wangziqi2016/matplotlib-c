@@ -461,6 +461,18 @@ void plot_free(plot_t *plot) {
   return;
 }
 
+// Open a script file for parsing
+void plot_open(plot_t *plot, const char *filename) {
+  plot->parse = parse_init_file(filename);
+  return;
+}
+
+// The string will be copied into the parser
+void plot_open_str(plot_t *plot, const char *s) {
+  plot->parse = parse_init(s);
+  return;
+}
+
 // Adds bar type; Note that types preserve the order they are inserted
 void plot_add_bar_type(plot_t *plot, const char *label, uint32_t color, char hatch) {
   if(plot_find_bar_type(plot, label) != NULL) {
@@ -851,6 +863,11 @@ void parse_expect_char(parse_t *parse, char ch) {
     error_exit("Expecting %s, while seeing '%c'\n", buf, c);
   }
   return;
+}
+
+// Top-level parsing function
+void parse_top(parse_t *parse, plot_t *plot) {
+
 }
 
 // Reports current line and col followed by the current line; Used in error reporting
