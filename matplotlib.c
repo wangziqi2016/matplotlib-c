@@ -609,11 +609,15 @@ void plot_add_y_title(plot_t *plot, const char *title) {
 }
 
 void plot_print(plot_t *plot) {
-  buf_print(plot->buf, 1);
+  if(plot->xtitle != NULL) printf("[plot] xtitle %s\n", plot->xtitle);
+  if(plot->ytitle != NULL) printf("[plot] ytitle %s\n", plot->ytitle);
+  if(plot->save_filename != NULL) printf("[plot] save_filename %s\n", plot->save_filename);
+  if(plot->legend_filename != NULL) printf("[plot] legend_filename %s\n", plot->legend_filename);
   for(int i = 0;i < vec_count(plot->bar_types);i++) {
     bar_type_t *type = (bar_type_t *)vec_at(plot->bar_types, i);
     bar_type_print(type);
   }
+  buf_print(plot->buf, 1);
   return;
 }
 
