@@ -695,9 +695,19 @@ char parse_getchar(parse_t *parse) {
 
 // This function skips spaces from the current pos, and stops at the next non-space char
 // Could stop at '\0'
+// Also jumps over line comments
 void parse_skip_space(parse_t *parse) {
-  while(isspace(parse_peek(parse))) {
-    (void)parse_getchar(parse); // Skip current char
+  while(1) {
+    while(isspace(parse_peek(parse))) {
+      parse_getchar(parse); // Skip current char
+    }
+    // Stray '#' always means line comment
+    if(parse_peek(parse) == '#') {
+      // Skip the current line, could also reach end of stream
+      while(parse_peek(parse) != '\n' && parse_peek(parse) != '\0') {
+        parse_getchar(parse);
+      }
+    }
   }
   return;
 }
