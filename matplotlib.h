@@ -196,7 +196,7 @@ struct parse_struct_t;
 // This object should not be freed; Always copy it over
 typedef struct {
   // Legend parameters
-  int legend_vertical;       // By default draw horizontal legend
+  int legend_rows;           // By default draw horizontal legend
   int legend_font_size;      // Font size for text in the legend
   char legend_pos[PLOT_LEGEND_POS_MAX_SIZE]; // Legend position; This string should never be freed
   // Tick

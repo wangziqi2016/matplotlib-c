@@ -409,13 +409,17 @@ void bar_free(bar_t *bar) {
 //* plot_t
 
 plot_param_t default_param = {
-  0,        // legend_vertical
+  1,        // legend_rows
   28,       // legend_font_size
   "best",   // Legend pos; Alternatives are: {lower, center, upper} x {left, center, right} or "center"
   24, 24,   // x/y tick font size
   28, 28,   // x/y title font size
   26,       // bar text size
 };
+
+void plot_param_print(plot_param_t *param) {
+
+}
 
 // We use "plot" as the root name of the plot; "fig" as the name of the figure object
 const char *plot_preamble = \
@@ -595,13 +599,19 @@ void plot_add_bar(plot_t *plot, bar_t *bar) {
 // Uses legend font size, legend vertical, and legend position in the param object
 void plot_add_legend(plot_t *plot) {
   int col_count = 0;
-  // Compute col_count by counting bar types
-  if(plot->param.legend_vertical == 1) {
-    col_count = 1;
+  // Total number of elements in the legend
+  int type_count = vec_count(plot->bar_types);
+  if(type_count == 0) {
+    error_exit("Current plot does not contain any bar type\n");
+  }
+  int legend_rows = plot->param.legend_rows;
+  if(legend_rows == 1) {
+    col_count = type_count;
   } else {
-    col_count = vec_count(plot->bar_types);
-    if(col_count == 0) {
-      error_exit("Current plot does not contain any bar type\n");
+    if(type_count % legend_rows == 0) {
+      col_count = type_count / legend_rows;
+    } else {
+      col_count = (type_count + type_count % legend_rows) / legend_rows;
     }
   }
   buf_t *buf = plot->buf;
