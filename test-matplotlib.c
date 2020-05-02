@@ -409,6 +409,17 @@ void test_parse_skip_space() {
   printf("========== test_parse_skip_space ==========\n");
   const char *s = "#Comment 1\n#Comment 2\n    # Comment 3";
   parse_t *parse = parse_init(s);
+  char *ret;
+  parse_skip_space(parse);
+  assert(parse_peek(parse) == '\0');
+  parse_free(parse);
+  // Second case
+  s = "#Comment 1\n #comment2 \n  ident1  #Comment 2\n    # Comment 3";
+  parse = parse_init(s);
+  parse_skip_space(parse);
+  ret = parse_get_ident(parse);
+  printf("ret = \"%s\"\n", ret);
+  assert(streq(ret, "ident1") == 1);
   parse_skip_space(parse);
   assert(parse_peek(parse) == '\0');
   parse_free(parse);

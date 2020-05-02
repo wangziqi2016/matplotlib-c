@@ -707,6 +707,8 @@ void parse_skip_space(parse_t *parse) {
       while(parse_peek(parse) != '\n' && parse_peek(parse) != '\0') {
         parse_getchar(parse);
       }
+    } else {
+      break;
     }
   }
   return;
