@@ -653,20 +653,20 @@ void plot_add_y_title(plot_t *plot, const char *title) {
 }
 
 void plot_print(plot_t *plot, int print_buf) {
+  // Print plot properties
   if(plot->xtitle != NULL) printf("[plot] xtitle %s\n", plot->xtitle);
   if(plot->ytitle != NULL) printf("[plot] ytitle %s\n", plot->ytitle);
   if(plot->save_filename != NULL) printf("[plot] save_filename %s\n", plot->save_filename);
   if(plot->legend_filename != NULL) printf("[plot] legend_filename %s\n", plot->legend_filename);
-  printf("[plot] x title font size %d y font size %d\n", 
-    plot->param.xtitle_font_size, plot->param.ytitle_font_size);
-  printf("[plot] x tick font size %d y font size %d\n",
-    plot->param.xtick_font_size, plot->param.ytick_font_size);
-  printf("[plot] legend pos \"%s\"\n", plot->param.legend_pos);
+  // Print param
+  plot_param_print(plot->param);
+  // Print bar types
   for(int i = 0;i < vec_count(plot->bar_types);i++) {
     bar_type_t *type = (bar_type_t *)vec_at(plot->bar_types, i);
     bar_type_print(type);
   }
-  if(print_buf) buf_print(plot->buf, 1);
+  // Optionally print buffer content
+  buf_print(plot->buf, print_buf);
   return;
 }
 
