@@ -790,6 +790,7 @@ char *parse_get_str(parse_t *parse) {
 // ch itself is discarded from both the buffer and the input stream
 // Caller should free the buffer
 // Returns NULL if there is nothing to parse
+// NOTE: This function does not work well with line comments
 char *parse_until(parse_t *parse, char ch) {
   parse_skip_space(parse);
   char *begin = parse->curr;
@@ -889,20 +890,28 @@ void parse_top(parse_t *parse, plot_t *plot) {
       case '.': { // Properties
         parse_top_property(parse, plot);
       } break;
+      case '\0': {
+        goto func_ret; // This is actually the best way
+      } break;
       default: {
+        parse_report_pos(parse);
         char buf[8];
         parse_print_char(parse, ch, buf);
         error_exit("Unknown top-level directive: %s\n", buf);
       } break;
     }
   }
+func_ret:
   return;
 }
 
 // The "." has been removed from the stream
 void parse_top_property(parse_t *parse, plot_t *plot) {
   char *name = parse_get_ident(parse);
-  if(streq(name, "xtitle") == 1) {
+  if(name == NULL) {
+    parse_report_pos(parse);
+    error_exit("Expecting a property name after top-level '.'\n");
+  } else if(streq(name, "xtitle") == 1) {
     parse_expect_char(parse, '=');
     plot->xtitle = parse_get_str(parse);
   } else if(streq(name, "ytitle") == 1) {
@@ -915,6 +924,7 @@ void parse_top_property(parse_t *parse, plot_t *plot) {
     parse_expect_char(parse, '=');
     plot->legend_filename = parse_get_str(parse);
   } else {
+    parse_report_pos(parse);
     error_exit("Unknown top-level property: \"%s\"\n", name);
   }
   free(name);
