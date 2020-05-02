@@ -418,7 +418,14 @@ plot_param_t default_param = {
 };
 
 void plot_param_print(plot_param_t *param) {
-
+  printf("[param legend] font size %d rows %d pos %s\n", 
+    param->legend_font_size, param->legend_pos, param->legend_rows);
+  printf("[param title] x font %d y font %d\n", 
+    param->xtitle_font_size, param->ytitle_font_size);
+  printf("[param tick] x font y font %d\n", 
+    param->xtick_font_size, param->ytick_font_size);
+  printf("[param bar_text] font %d\n", param->bar_text_font_size);
+  return;
 }
 
 // We use "plot" as the root name of the plot; "fig" as the name of the figure object
@@ -462,7 +469,8 @@ void plot_free(plot_t *plot) {
     bar_type_free((bar_type_t *)vec_at(plot->bar_types, i));
   }
   vec_free(plot->bar_types);
-  parse_free(plot->parse);
+  // Note that parse can be NULL if it is not initialized
+  if(parse != NULL) parse_free(plot->parse);
   if(plot->xtitle) free(plot->xtitle);
   if(plot->ytitle) free(plot->ytitle);
   if(plot->save_filename) free(plot->save_filename);
