@@ -458,6 +458,11 @@ void plot_free(plot_t *plot) {
     bar_type_free((bar_type_t *)vec_at(plot->bar_types, i));
   }
   vec_free(plot->bar_types);
+  parse_free(plot->parse);
+  if(plot->xtitle) free(plot->xtitle);
+  if(plot->ytitle) free(plot->ytitle);
+  if(plot->save_filename) free(plot->save_filename);
+  if(plot->legend_filename) free(plot->legend_filename);
   return;
 }
 
