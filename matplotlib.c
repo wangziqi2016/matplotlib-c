@@ -613,7 +613,7 @@ void plot_add_legend(plot_t *plot) {
     error_exit("Current plot does not contain any bar type\n");
   }
   int legend_rows = plot->param.legend_rows;
-  assert(legend_rows > 0 || legend_row == -1)
+  assert(legend_rows > 0 || legend_rows == -1);
   if(legend_rows == -1) { // Special case: -1 means vertical
     col_count = type_count;
   } else {
