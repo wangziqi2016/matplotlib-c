@@ -1115,13 +1115,6 @@ inline static int parse_has_more_arg(parse_t *parse) {
   return parse_peek_nospace(parse) != ';';
 }
 
-parse_jmp_entry_t top_funcs[] = {
-  {"plot_print", parse_cb_plot_print},
-  {"version_print", parse_cb_version_print},
-  {"save_fig", parse_cb_save_fig},
-  {"save_legend", parse_cb_save_legend},
-};
-
 static void parse_cb_plot_print(plot_t *plot, struct parse_struct_t *parse) {
   int print_buf = 0;
   // Read arguments
@@ -1138,6 +1131,51 @@ static void parse_cb_plot_print(plot_t *plot, struct parse_struct_t *parse) {
   return;
 }
 
+static void parse_cb_version_print(plot_t *plot, struct parse_struct_t *parse) {
+  (void)plot;
+  printf("[version] matplotlib C language wrapper and script interpreter, version %s.%s\n", 
+    MAJOR_VERSION, MINOR_VERSION);
+  printf("[version] https://github.com/wangziqi2016/matplotlib-c\n");
+  if(parse_has_more_arg(parse) == 1) {
+    error_exit("Function \"version_print\" takes no argument\n");
+  }
+  parse_expect_char(parse, ';');
+  return;
+}
+
+static void parse_cb_save_fig(plot_t *plot, struct parse_struct_t *parse) {
+  char *filename = NULL; // Given in arg list
+  if(parse_has_more_arg(parse) == 1) {
+    filename = parse_get_str(parse);
+    if(plot->save_filename != NULL) {
+      printf("Overriding existing save filename: \"%s\"\n", plot->save_filename);
+    }
+    plot_save_fig(plot, filename);
+    free(filename);
+  } else {
+    if(plot->save_filename == NULL) {
+      error_exit("Need a file name to save the figure (either as property or argument)\n");
+    }
+    plot_save_fig(plot, plot->save_filename);
+  }
+  if(parse_has_more_arg(parse) == 1) {
+    error_exit("Function \"save_fig\" takes 1 optional argument\n");
+  }
+  parse_expect_char(parse, ';');
+  return;
+}
+
+static void parse_cb_save_legend(plot_t *plot, struct parse_struct_t *parse) {
+
+}
+
+parse_jmp_entry_t top_funcs[] = {
+  {"plot_print", parse_cb_plot_print},
+  {"version_print", parse_cb_version_print},
+  {"save_fig", parse_cb_save_fig},
+  {"save_legend", parse_cb_save_legend},
+};
+
 void parse_top_func(parse_t *parse, plot_t *plot) {
   char *name = parse_get_ident(parse);
   if(name == NULL) {
@@ -1146,32 +1184,9 @@ void parse_top_func(parse_t *parse, plot_t *plot) {
   } else if(streq(name, "plot_print") == 1) {
     parse_cb_plot_print(plot, parse);
   } else if(streq(name, "version_print") == 1) {
-    printf("[version] matplotlib C language wrapper and script interpreter, version %s.%s\n", 
-      MAJOR_VERSION, MINOR_VERSION);
-    printf("[version] https://github.com/wangziqi2016/matplotlib-c\n");
-    if(parse_has_more_arg(parse) == 1) {
-      error_exit("Function \"version_print\" takes no argument\n");
-    }
-    parse_expect_char(parse, ';');
+    parse_cb_version_print(plot, parse);
   } else if(streq(name, "save_fig") == 1) {
-    char *filename = NULL; // Given in arg list
-    if(parse_has_more_arg(parse) == 1) {
-      filename = parse_get_str(parse);
-      if(plot->save_filename != NULL) {
-        printf("Overriding existing save filename: \"%s\"\n", plot->save_filename);
-      }
-      plot_save_fig(plot, filename);
-      free(filename);
-    } else {
-      if(plot->save_filename == NULL) {
-        error_exit("Need a file name to save the figure (either as property or argument)\n");
-      }
-      plot_save_fig(plot, plot->save_filename);
-    }
-    if(parse_has_more_arg(parse) == 1) {
-      error_exit("Function \"save_fig\" takes 1 optional argument\n");
-    }
-    parse_expect_char(parse, ';');
+    parse_cb_save_fig(plot, parse);
   }
   else {
     parse_report_pos(parse);
