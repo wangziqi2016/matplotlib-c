@@ -475,6 +475,20 @@ void test_parse_color() {
   return;
 }
 
+void test_parse_sort() {
+  printf("========== test_parse_sort ==========\n");
+  parse_t *parse = parse_init("");
+  for(int i = 0;i < top_funcs_item_count;i++) {
+    printf("name %s ptr 0x%p\n", top_funcs[i].name, top_funcs[i].cb);
+    if(i != 0) {
+      assert(strcmp(top_funcs[i - 1].name, top_funcs[i].name) < 0);
+    }
+  }
+  parse_free(parse);
+  printf("Pass\n");
+  return;
+}
+
 void test_parse_top() {
   printf("========== test_parse_top ==========\n");
   plot_t *plot = plot_init();
@@ -509,6 +523,7 @@ int main(int argc, char **argv) {
   test_parse_int();
   test_parse_skip_space();
   test_parse_color();
+  test_parse_sort();
   test_parse_top();
   printf("All test passed!\n");
   return 0;
