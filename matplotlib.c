@@ -1122,24 +1122,29 @@ parse_jmp_entry_t top_funcs[] = {
   {"save_legend", parse_cb_save_legend},
 };
 
+static void parse_cb_plot_print(plot_t *plot, struct parse_struct_t *parse) {
+  int print_buf = 0;
+  // Read arguments
+  if(parse_has_more_arg(parse)) {
+    print_buf = (int)parse_get_int64_range(parse, 0, 1); // [0, 1] binary
+    if(print_buf != 0) print_buf = 1;
+  }
+  plot_print(plot, print_buf);
+  if(parse_has_more_arg(parse)) {
+    parse_report_pos(parse);
+    error_exit("Function \"plot_print\" only takes 1 optional argument\n");
+  }
+  parse_expect_char(parse, ';');
+  return;
+}
+
 void parse_top_func(parse_t *parse, plot_t *plot) {
   char *name = parse_get_ident(parse);
   if(name == NULL) {
     parse_report_pos(parse);
     error_exit("Expecting a function name after top-level '!'\n");
   } else if(streq(name, "plot_print") == 1) {
-    int print_buf = 0;
-    // Read arguments
-    if(parse_has_more_arg(parse)) {
-      print_buf = (int)parse_get_int64_range(parse, 0, 1); // [0, 1] binary
-      if(print_buf != 0) print_buf = 1;
-    }
-    plot_print(plot, print_buf);
-    if(parse_has_more_arg(parse)) {
-      parse_report_pos(parse);
-      error_exit("Function \"plot_print\" only takes 1 optional argument\n");
-    }
-    parse_expect_char(parse, ';');
+    parse_cb_plot_print(plot, parse);
   } else if(streq(name, "version_print") == 1) {
     printf("[version] matplotlib C language wrapper and script interpreter, version %s.%s\n", 
       MAJOR_VERSION, MINOR_VERSION);
