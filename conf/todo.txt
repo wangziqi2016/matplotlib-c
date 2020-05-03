@@ -1,4 +1,15 @@
 
-Adding print function for plot param
+X Adding print function for plot param
 
-Adding string jump table
+X Change legend vertical to legend rows
+X  - Add test to three cases: -1, +inf, in-between
+X - Add set legend_rows
+
+X Adding color decoder from string to uint32_t
+
+X Adding string jump table
+
+Adding bar group, bar type and bars 
+
+Adding top level properties
+
