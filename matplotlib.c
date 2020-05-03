@@ -1115,6 +1115,13 @@ inline static int parse_has_more_arg(parse_t *parse) {
   return parse_peek_nospace(parse) != ';';
 }
 
+parse_jmp_entry_t top_funcs[] = {
+  {"plot_print", parse_cb_plot_print},
+  {"version_print", parse_cb_version_print},
+  {"save_fig", parse_cb_save_fig},
+  {"save_legend", parse_cb_save_legend},
+};
+
 void parse_top_func(parse_t *parse, plot_t *plot) {
   char *name = parse_get_ident(parse);
   if(name == NULL) {
