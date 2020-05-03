@@ -1084,6 +1084,7 @@ func_ret:
 }
 
 // The "." has been removed from the stream
+// We do not use jump table for this function, since most of the handlers are small and straightforward
 void parse_top_property(parse_t *parse, plot_t *plot) {
   char *name = parse_get_ident(parse);
   if(name == NULL) {
@@ -1092,11 +1093,9 @@ void parse_top_property(parse_t *parse, plot_t *plot) {
   } else if(streq(name, "xtitle") == 1) {
     parse_expect_char(parse, '=');
     plot->xtitle = parse_get_str(parse);
-    parse_expect_char(parse, ';');
   } else if(streq(name, "ytitle") == 1) {
     parse_expect_char(parse, '=');
     plot->ytitle = parse_get_str(parse);
-    parse_expect_char(parse, ';');
   } else if(streq(name, "fig_filename") == 1) {
     parse_expect_char(parse, '=');
     if(plot->fig_filename != NULL) {
@@ -1105,7 +1104,6 @@ void parse_top_property(parse_t *parse, plot_t *plot) {
       free(plot->fig_filename);
     }
     plot->fig_filename = parse_get_str(parse);
-    parse_expect_char(parse, ';');
   } else if(streq(name, "legend_filename") == 1) {
     parse_expect_char(parse, '=');
     if(plot->legend_filename != NULL) {
@@ -1114,38 +1112,33 @@ void parse_top_property(parse_t *parse, plot_t *plot) {
       free(plot->legend_filename);
     }
     plot->legend_filename = parse_get_str(parse);
-    parse_expect_char(parse, ';');
   } else if(streq(name, "xtitle_font_size") == 1) {
     parse_expect_char(parse, '=');
     plot->param.xtick_font_size = (int)parse_get_int64_range(parse, 1, PARSE_INT64_MAX);
-    parse_expect_char(parse, ';');
   } else if(streq(name, "ytitle_font_size") == 1) {
     parse_expect_char(parse, '=');
     plot->param.ytick_font_size = (int)parse_get_int64_range(parse, 1, PARSE_INT64_MAX);
-    parse_expect_char(parse, ';');
   } else if(streq(name, "xtick_font_size") == 1) {
     parse_expect_char(parse, '=');
     plot->param.xtick_font_size = (int)parse_get_int64_range(parse, 1, PARSE_INT64_MAX);
-    parse_expect_char(parse, ';');
   } else if(streq(name, "ytick_font_size") == 1) {
     parse_expect_char(parse, '=');
     plot->param.ytick_font_size = (int)parse_get_int64_range(parse, 1, PARSE_INT64_MAX);
-    parse_expect_char(parse, ';');
   } else if(streq(name, "legend_pos") == 1) {
     parse_expect_char(parse, '=');
     char *pos = parse_get_str(parse);
     plot_set_legend_pos(plot, pos); // Copies the string (report error if too long)
     free(pos); // We already copied the pos string into param
-    parse_expect_char(parse, ';');
   } else if(streq(name, "legend_font_size") == 1) {
     parse_expect_char(parse, '=');
     plot->param.legend_font_size = parse_get_int64_range(parse, 0, PARSE_INT64_MAX);
-    parse_expect_char(parse, ';');
   } 
   else {
     parse_report_pos(parse);
     error_exit("Unknown top-level property: \"%s\"\n", name);
   }
+  // This is common for all properties
+  parse_expect_char(parse, ';');
   free(name);
   return;
 }
