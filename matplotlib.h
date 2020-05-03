@@ -262,7 +262,7 @@ typedef void (*parse_cb_t)(plot_t *plot, struct parse_struct_t *parse);
 
 typedef struct {
   const char *name;      // Keyword
-  parse_cb_t *cb;        // Call back function
+  parse_cb_t cb;         // Call back function
 } parse_jmp_entry_t;
 
 extern parse_jmp_entry_t top_funcs[];

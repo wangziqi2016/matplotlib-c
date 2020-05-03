@@ -1115,7 +1115,7 @@ inline static int parse_has_more_arg(parse_t *parse) {
   return parse_peek_nospace(parse) != ';';
 }
 
-static void parse_cb_plot_print(plot_t *plot, struct parse_struct_t *parse) {
+static void parse_cb_plot_print(plot_t *plot, parse_t *parse) {
   int print_buf = 0;
   // Read arguments
   if(parse_has_more_arg(parse)) {
@@ -1131,7 +1131,7 @@ static void parse_cb_plot_print(plot_t *plot, struct parse_struct_t *parse) {
   return;
 }
 
-static void parse_cb_version_print(plot_t *plot, struct parse_struct_t *parse) {
+static void parse_cb_version_print(plot_t *plot, parse_t *parse) {
   (void)plot;
   printf("[version] matplotlib C language wrapper and script interpreter, version %s.%s\n", 
     MAJOR_VERSION, MINOR_VERSION);
@@ -1143,7 +1143,7 @@ static void parse_cb_version_print(plot_t *plot, struct parse_struct_t *parse) {
   return;
 }
 
-static void parse_cb_save_fig(plot_t *plot, struct parse_struct_t *parse) {
+static void parse_cb_save_fig(plot_t *plot, parse_t *parse) {
   char *filename = NULL; // Given in arg list
   if(parse_has_more_arg(parse) == 1) {
     filename = parse_get_str(parse);
@@ -1165,7 +1165,7 @@ static void parse_cb_save_fig(plot_t *plot, struct parse_struct_t *parse) {
   return;
 }
 
-static void parse_cb_save_legend(plot_t *plot, struct parse_struct_t *parse) {
+static void parse_cb_save_legend(plot_t *plot, parse_t *parse) {
 
 }
 
@@ -1175,6 +1175,24 @@ parse_jmp_entry_t top_funcs[] = {
   {"save_fig", parse_cb_save_fig},
   {"save_legend", parse_cb_save_legend},
 };
+
+// Sort top_funcs by keys
+void parse_sort_top_funcs(parse_t *parse) {
+  int count = sizeof(top_funcs) / sizeof(parse_jmp_entry_t);
+  for(int i = 0;i < count;i++) {
+    for(int curr = 0;curr < count - 1;curr++) {
+      int cmp = strcmp(top_funcs[curr].name, top_funcs[curr + 1].name);
+      if(cmp == 0) {
+        error_exit("Two functions have the same name: %s\n", top_funcs[curr].name);
+      } else if(cmp > 0) {
+        parse_jmp_entry_t t = top_funcs[curr + 1];
+        top_funcs[curr + 1] = top_funcs[curr];
+        top_funcs[curr] = t;
+      }
+    }
+  }
+  return;
+}
 
 void parse_top_func(parse_t *parse, plot_t *plot) {
   char *name = parse_get_ident(parse);
