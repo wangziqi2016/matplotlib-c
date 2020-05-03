@@ -9,6 +9,8 @@ X Adding color decoder from string to uint32_t
 
 X Adding string jump table
 
+Adding reset and reset all
+
 Adding bar group, bar type and bars 
 
 Adding top level properties

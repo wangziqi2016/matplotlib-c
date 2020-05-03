@@ -1216,6 +1216,7 @@ void parse_cb_param_print(parse_t *parse, plot_t *plot) {
 
 void parse_cb_save_fig(parse_t *parse, plot_t *plot) {
   printf("Save fig called!\n");
+  parse_expect_char(parse, ';');
   return;
   char *filename = NULL; // Given in arg list
   if(parse_has_more_arg(parse) == 1) {
@@ -1240,6 +1241,7 @@ void parse_cb_save_fig(parse_t *parse, plot_t *plot) {
 
 void parse_cb_save_legend(parse_t *parse, plot_t *plot) {
   printf("Save legend called!\n");
+  parse_expect_char(parse, ';');
   return;
   char *filename = NULL;
   if(parse_has_more_arg(parse) == 1) {

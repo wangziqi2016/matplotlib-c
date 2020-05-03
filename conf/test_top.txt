@@ -18,6 +18,11 @@
 .legend_pos = "top right"; # Specifies legend pos
 # .legend_pos = "This is a loooooooooooooong string"; # Should not be too long
 
+.width = 16.0;
+.height = 8.0;
+# Uncomment to reveal error
+#.height = -0.00001;
+
 # Uncomment this to reveal error
 # .unknown_property = "whatever";
 
@@ -30,9 +35,15 @@
 !plot_print;    # Function with no argument
 !version_print; # This function takes no argument
 
+!param_print;
+
 # Uncomment the following to reveal error
 # !unknown_func
 
-!save_legend
-!save_fig
+# !create_fig 123 456;
+# !create_fig 123;
+# !create_fig;
+
+!save_legend;
+!save_fig;
 
