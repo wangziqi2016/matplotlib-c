@@ -318,11 +318,14 @@ void parse_top_property(parse_t *parse, plot_t *plot);
 // Top function parsing and table
 extern parse_cb_entry_t parse_cb_top_funcs[];
 extern const int parse_cb_top_funcs_count;
+
 void parse_cb_plot_print(parse_t *parse, plot_t *plot);
 void parse_cb_version_print(parse_t *parse, plot_t *plot);
 void parse_cb_param_print(parse_t *parse, plot_t *plot);
 void parse_cb_save_fig(parse_t *parse, plot_t *plot);
 void parse_cb_save_legend(parse_t *parse, plot_t *plot);
+void parse_cb_create_fig(parse_t *parse, plot_t *plot);
+
 void parse_top_func(parse_t *parse, plot_t *plot);
 
 void parse_report_pos(parse_t *parse);

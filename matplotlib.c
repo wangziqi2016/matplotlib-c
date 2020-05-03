@@ -958,7 +958,7 @@ double parse_get_double_range(parse_t *parse, double lower, double upper) {
   double ret = parse_get_double(parse);
   if(ret < lower || ret > upper) {
     parse_report_pos(parse);
-    error_exit("Double must be within range [%f, %f] (sees %f)\n",
+    error_exit("Double must be within range [%g, %g] (sees %g)\n",
       lower, upper, ret);
   }
   return ret;
@@ -1141,9 +1141,9 @@ void parse_top_property(parse_t *parse, plot_t *plot) {
   } else if(streq(name, "legend_font_size") == 1) {
     plot->param.legend_font_size = parse_get_int64_range(parse, 0, PARSE_INT64_MAX);
   } else if(streq(name, "width") == 1) {
-    plot->param.width = parse_get_double_range(parse, 0.0);
+    plot->param.width = parse_get_double_range(parse, 0.0, PARSE_DOUBLE_MAX);
   } else if(streq(name, "height") == 1) {
-    plot->param.height = parse_get_double_range(parse, 0.0);
+    plot->param.height = parse_get_double_range(parse, 0.0, PARSE_DOUBLE_MAX);
   }
   else {
     parse_report_pos(parse);
@@ -1267,7 +1267,7 @@ void parse_cb_save_legend(parse_t *parse, plot_t *plot) {
 // If only one is given then it defaults to width
 void parse_cb_create_fig(parse_t *parse, plot_t *plot) {
   if(parse_has_more_arg(parse) == 1) {
-    plot->param.width
+    //plot->param.width
   }
   parse_expect_char(parse, ';');
   return;
