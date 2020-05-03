@@ -592,7 +592,7 @@ void plot_save_legend(plot_t *plot, const char *filename) {
   plot_copy_param(legend, &plot->param); // Copy legend configuration to the new legend plot
   legend->param.width = legend->param.height = 0.001; // Super small graph
   assert(legend->buf != NULL && legend->py != NULL);
-  plot_create_fig(legend);
+  plot_create_fig(legend, legend->param.width, legend->param.height);
   int count = vec_count(plot->bar_types);
   if(count == 0) {
     error_exit("Current plot does not contain any bar type\n");
@@ -1266,9 +1266,22 @@ void parse_cb_save_legend(parse_t *parse, plot_t *plot) {
 // This function has two optional arguments: width height
 // If only one is given then it defaults to width
 void parse_cb_create_fig(parse_t *parse, plot_t *plot) {
+  double width = plot->param.width;
+  double height = plot->param.height;
   if(parse_has_more_arg(parse) == 1) {
-    //plot->param.width
+    double new_width = parse_get_double_range(parse, 0.0, PARSE_DOUBLE_MAX);
+    printf("Overriding param width %g with %g\n", width, new_width);
+    width = new_width;
+  } 
+  if(parse_has_more_arg(parse) == 1) {
+    double new_height = parse_get_double_range(parse, 0.0, PARSE_DOUBLE_MAX);
+    printf("Overriding param height %g with %g\n", height, new_height);
+    height = new_height;
   }
+  if(parse_has_more_arg(parse) == 1) {
+    error_exit("Function \"create_fig\" takes 1 or 2 optional arguments\n")
+  }
+  plot_create_fig(plot, width, height);
   parse_expect_char(parse, ';');
   return;
 }
