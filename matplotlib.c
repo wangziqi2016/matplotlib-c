@@ -130,13 +130,17 @@ uint32_t color_decode(const char *s) {
     char ch = *s++;
     uint32_t hex;
     if((ch >= '0' && ch <= '9')) {
-
+      hex = (uint32_t)(ch - '0');
     } else if(ch >= 'a' && ch <= 'f') {
-
+      hex = (uint32_t)(ch - 'a' + 10);
     } else if(ch >= 'A' && ch <= 'F') {
-
+      hex = (uint32_t)(ch - 'A' + 10);
     } else {
-      error_exit("Invalid color code: \"%s\" offset %d not valid hex digit\n", s, i);
+      const char *rgb;
+      if(i <= 1) rgb = "Red";
+      else if(i <= 3) rgb = "Green";
+      else rgb = "Blue";
+      error_exit("Invalid color code: \"%s\"; Component \"%s\" contains invalid digit\n", s, rgb);
     }
     assert((hex & 0xff) == 0);
     ret |= (hex << shift);
