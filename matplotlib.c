@@ -555,6 +555,7 @@ bar_type_t *plot_find_bar_type(plot_t *plot, const char *label) {
   return NULL;
 }
 
+// This function uses param object's width and height
 void plot_create_fig(plot_t *plot) {
   if(plot->fig_created == 1) {
     error_exit("A figure has already been created on this plot\n");
@@ -1093,14 +1094,13 @@ void parse_top_property(parse_t *parse, plot_t *plot) {
   if(name == NULL) {
     parse_report_pos(parse);
     error_exit("Expecting a property name after top-level '.'\n");
-  } else if(streq(name, "xtitle") == 1) {
-    parse_expect_char(parse, '=');
+  }
+  parse_expect_char(parse, '=');
+  if(streq(name, "xtitle") == 1) {
     plot->xtitle = parse_get_str(parse);
   } else if(streq(name, "ytitle") == 1) {
-    parse_expect_char(parse, '=');
     plot->ytitle = parse_get_str(parse);
   } else if(streq(name, "fig_filename") == 1) {
-    parse_expect_char(parse, '=');
     if(plot->fig_filename != NULL) {
       printf("WARNING: The property \"fig_filename\" already exists, value \"%s\"\n", 
         plot->fig_filename);
@@ -1108,7 +1108,6 @@ void parse_top_property(parse_t *parse, plot_t *plot) {
     }
     plot->fig_filename = parse_get_str(parse);
   } else if(streq(name, "legend_filename") == 1) {
-    parse_expect_char(parse, '=');
     if(plot->legend_filename != NULL) {
       printf("WARNING: The property \"legend_filename\" already exists, value \"%s\"\n", 
         plot->legend_filename);
@@ -1116,28 +1115,20 @@ void parse_top_property(parse_t *parse, plot_t *plot) {
     }
     plot->legend_filename = parse_get_str(parse);
   } else if(streq(name, "xtitle_font_size") == 1) {
-    parse_expect_char(parse, '=');
     plot->param.xtick_font_size = (int)parse_get_int64_range(parse, 1, PARSE_INT64_MAX);
   } else if(streq(name, "ytitle_font_size") == 1) {
-    parse_expect_char(parse, '=');
     plot->param.ytick_font_size = (int)parse_get_int64_range(parse, 1, PARSE_INT64_MAX);
   } else if(streq(name, "xtick_font_size") == 1) {
-    parse_expect_char(parse, '=');
     plot->param.xtick_font_size = (int)parse_get_int64_range(parse, 1, PARSE_INT64_MAX);
   } else if(streq(name, "ytick_font_size") == 1) {
-    parse_expect_char(parse, '=');
     plot->param.ytick_font_size = (int)parse_get_int64_range(parse, 1, PARSE_INT64_MAX);
   } else if(streq(name, "legend_pos") == 1) {
-    parse_expect_char(parse, '=');
     char *pos = parse_get_str(parse);
     plot_set_legend_pos(plot, pos); // Copies the string (report error if too long)
     free(pos); // We already copied the pos string into param
   } else if(streq(name, "legend_font_size") == 1) {
-    parse_expect_char(parse, '=');
     plot->param.legend_font_size = parse_get_int64_range(parse, 0, PARSE_INT64_MAX);
-  } else if(streq(name, "width") == 1) {
-    //plot->param.width
-  }
+  } 
   else {
     parse_report_pos(parse);
     error_exit("Unknown top-level property: \"%s\"\n", name);
