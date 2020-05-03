@@ -557,12 +557,11 @@ bar_type_t *plot_find_bar_type(plot_t *plot, const char *label) {
 }
 
 // This function uses param object's width and height
-void plot_create_fig(plot_t *plot) {
+void plot_create_fig(plot_t *plot, double width, double height) {
   if(plot->fig_created == 1) {
     error_exit("A figure has already been created on this plot\n");
   }
-  buf_printf(plot->buf, "fig = plot.figure(figsize=(%f, %f))\n", 
-    plot->param.width, plot->param.height);
+  buf_printf(plot->buf, "fig = plot.figure(figsize=(%f, %f))\n", width, height);
   // "111" means the output consists of only one plot
   buf_append(plot->buf, "ax = fig.add_subplot(111)\n\n");
   plot->fig_created = 1;
