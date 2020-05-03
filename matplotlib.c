@@ -514,7 +514,7 @@ void plot_free(plot_t *plot) {
   if(plot->parse != NULL) parse_free(plot->parse);
   if(plot->xtitle) free(plot->xtitle);
   if(plot->ytitle) free(plot->ytitle);
-  if(plot->save_filename) free(plot->save_filename);
+  if(plot->fig_filename) free(plot->fig_filename);
   if(plot->legend_filename) free(plot->legend_filename);
   return;
 }
@@ -704,7 +704,7 @@ void plot_print(plot_t *plot, int print_buf) {
   // Print plot properties
   if(plot->xtitle != NULL) printf("[plot] xtitle %s\n", plot->xtitle);
   if(plot->ytitle != NULL) printf("[plot] ytitle %s\n", plot->ytitle);
-  if(plot->save_filename != NULL) printf("[plot] save_filename %s\n", plot->save_filename);
+  if(plot->fig_filename != NULL) printf("[plot] fig_filename %s\n", plot->fig_filename);
   if(plot->legend_filename != NULL) printf("[plot] legend_filename %s\n", plot->legend_filename);
   // Print param
   plot_param_print(&plot->param);
@@ -1097,14 +1097,14 @@ void parse_top_property(parse_t *parse, plot_t *plot) {
     parse_expect_char(parse, '=');
     plot->ytitle = parse_get_str(parse);
     parse_expect_char(parse, ';');
-  } else if(streq(name, "save_filename") == 1) {
+  } else if(streq(name, "fig_filename") == 1) {
     parse_expect_char(parse, '=');
-    if(plot->save_filename != NULL) {
-      printf("WARNING: The property \"save_filename\" already exists, value \"%s\"\n", 
-        plot->save_filename);
-      free(plot->save_filename);
+    if(plot->fig_filename != NULL) {
+      printf("WARNING: The property \"fig_filename\" already exists, value \"%s\"\n", 
+        plot->fig_filename);
+      free(plot->fig_filename);
     }
-    plot->save_filename = parse_get_str(parse);
+    plot->fig_filename = parse_get_str(parse);
     parse_expect_char(parse, ';');
   } else if(streq(name, "legend_filename") == 1) {
     parse_expect_char(parse, '=');
@@ -1198,16 +1198,16 @@ void parse_cb_save_fig(parse_t *parse, plot_t *plot) {
   char *filename = NULL; // Given in arg list
   if(parse_has_more_arg(parse) == 1) {
     filename = parse_get_str(parse);
-    if(plot->save_filename != NULL) {
-      printf("Overriding existing save fig filename: \"%s\"\n", plot->save_filename);
+    if(plot->fig_filename != NULL) {
+      printf("Overriding existing save fig filename: \"%s\"\n", plot->fig_filename);
     }
     plot_save_fig(plot, filename);
     free(filename);
   } else {
-    if(plot->save_filename == NULL) {
+    if(plot->fig_filename == NULL) {
       error_exit("Need a file name to save the figure (either as property or argument)\n");
     }
-    plot_save_fig(plot, plot->save_filename);
+    plot_save_fig(plot, plot->fig_filename);
   }
   if(parse_has_more_arg(parse) == 1) {
     error_exit("Function \"save_fig\" takes 1 optional argument\n");
@@ -1217,7 +1217,7 @@ void parse_cb_save_fig(parse_t *parse, plot_t *plot) {
 }
 
 void parse_cb_save_legend(parse_t *parse, plot_t *plot) {
-  printf("Save fig called!\n");
+  printf("Save legend called!\n");
   return;
   char *filename = NULL;
   if(parse_has_more_arg(parse) == 1) {

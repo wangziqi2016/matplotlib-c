@@ -228,7 +228,7 @@ typedef struct {
   // The following are parsed from the script file
   char *xtitle;                        // X title; Specified at top level
   char *ytitle;                        // Y title; Specified at top level
-  char *save_filename;                 // File name to save the figure
+  char *fig_filename;                  // File name to save the figure
   char *legend_filename;               // File name to save legend, if there is one (optional)
 } plot_t;
 
