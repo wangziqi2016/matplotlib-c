@@ -461,7 +461,7 @@ plot_param_t default_param = {
 
 void plot_param_print(plot_param_t *param) {
   printf("[param] width %f height %f\n", param->width, param->height);
-  printf("[param legend] font size %d rows %d pos %s\n", 
+  printf("[param legend] font size %d rows %d pos \"%s\"\n", 
     param->legend_font_size, param->legend_rows, param->legend_pos);
   printf("[param title] x font %d y font %d\n", 
     param->xtitle_font_size, param->ytitle_font_size);
@@ -1157,8 +1157,14 @@ const int parse_cb_top_funcs_count = sizeof(parse_cb_top_funcs) / sizeof(parse_c
 
 // This function will return 1 and stop the parser at the next arg, if there is one
 // Otherwise, it returns 0 and stops at the next token
-inline static int parse_has_more_arg(parse_t *parse) {
-  return parse_peek_nospace(parse) != ';';
+static int parse_has_more_arg(parse_t *parse) {
+  int line = parse->line;
+  char ch = parse_peek_nospace(parse);
+  if(line != parse->line) {
+    parse_report_pos(parse);
+    error_exit("Did you miss a semicolon after function call?\n");
+  }
+  return ch != ';';
 }
 
 void parse_cb_plot_print(parse_t *parse, plot_t *plot) {
@@ -1192,6 +1198,10 @@ void parse_cb_version_print(parse_t *parse, plot_t *plot) {
 void parse_cb_param_print(parse_t *parse, plot_t *plot) {
   (void)parse;
   plot_param_print(&plot->param);
+  if(parse_has_more_arg(parse) == 1) {
+    error_exit("Function \"param_print\" takes no argument\n");
+  }
+  parse_expect_char(parse, ';');
   return;
 }
 
