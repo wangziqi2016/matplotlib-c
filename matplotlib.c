@@ -122,6 +122,29 @@ void color_str(uint32_t color, char *buf) {
   return;
 }
 
+// Returns 0xFFFFFFFF to indicate failure
+uint32_t color_decode(const char *s) {
+  uint32_t ret = 0u;
+  int shift = 24;
+  for(int i = 0;i < 6;i++) {
+    char ch = *s++;
+    uint32_t hex;
+    if((ch >= '0' && ch <= '9')) {
+
+    } else if(ch >= 'a' && ch <= 'f') {
+
+    } else if(ch >= 'A' && ch <= 'F') {
+
+    } else {
+      error_exit("Invalid color code: \"%s\" offset %d not valid hex digit\n", s, i);
+    }
+    assert((hex & 0xff) == 0);
+    ret |= (hex << shift);
+    shift -= 4;
+  }
+  return ret;
+}
+
 // Returns NULL if the name does not exist; Otherwise return the pointer to the scheme
 color_scheme_t *color_find_scheme(const char *name) {
   for(int i = 0;i < (int)(sizeof(color_schemes) / sizeof(color_scheme_t));i++) {
