@@ -1201,20 +1201,16 @@ void parse_sort_cb(parse_t *parse, parse_cb_entry_t *table, int count) {
   return;
 }
 
-void parse_top_func(parse_t *parse, plot_t *plot) {
-  char *name = parse_get_ident(parse);
-  if(name == NULL) {
-    parse_report_pos(parse);
-    error_exit("Expecting a function name after top-level '!'\n");
-  } 
+// Finds a call back given a name using binary search
+parse_cb_t parse_find_cb(parse_t *parse, parse_cb_entry_t *table, int count, const char *name) {
   parse_cb_t cb = NULL;
   // [begin, end)
-  int begin = 0, end = parse_cb_top_funcs_count;
+  int begin = 0, end = count;
   while(begin < end) {
     int mid = (begin + end) / 2;
-    int cmp = strcmp(name, parse_cb_top_funcs[mid].name);
+    int cmp = strcmp(name, table[mid].name);
     if(cmp == 0) {
-      cb = parse_cb_top_funcs[mid].cb;
+      cb = table[mid].cb;
       break;
     } else if(cmp < 0) {
       end = mid;
@@ -1222,6 +1218,16 @@ void parse_top_func(parse_t *parse, plot_t *plot) {
       begin = mid + 1;
     }
   }
+  return cb;
+}
+
+void parse_top_func(parse_t *parse, plot_t *plot) {
+  char *name = parse_get_ident(parse);
+  if(name == NULL) {
+    parse_report_pos(parse);
+    error_exit("Expecting a function name after top-level '!'\n");
+  } 
+  parse_cb_t cb = parse_find_cb(parse, parse_cb_top_funcs, parse_cb_top_funcs_count, name);
   if(cb == NULL) {
     parse_report_pos(parse);
     error_exit("Unknown top-level function: \"%s\"\n", name);
