@@ -1141,11 +1141,9 @@ void parse_top_property(parse_t *parse, plot_t *plot) {
   } else if(streq(name, "legend_font_size") == 1) {
     plot->param.legend_font_size = parse_get_int64_range(parse, 0, PARSE_INT64_MAX);
   } else if(streq(name, "width") == 1) {
-    plot->param.width = parse_get_double(parse);
-    if(plot->param.width < 0.0) error_exit("Figure width must be positive (sees %f)\n", plot->param.width);
+    plot->param.width = parse_get_double_range(parse, 0.0);
   } else if(streq(name, "height") == 1) {
-    plot->param.height = parse_get_double(parse);
-    if(plot->param.height < 0.0) error_exit("Figure height must be positive (sees %f)\n", plot->param.height);
+    plot->param.height = parse_get_double_range(parse, 0.0);
   }
   else {
     parse_report_pos(parse);
