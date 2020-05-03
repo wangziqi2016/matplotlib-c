@@ -1014,6 +1014,45 @@ void parse_expect_char_opt(parse_t *parse, char ch) {
   return;
 }
 
+// Sort a given table
+void parse_sort_cb(parse_t *parse, parse_cb_entry_t *table, int count) {
+  (void)parse;
+  for(int i = 0;i < count;i++) {
+    for(int curr = 0;curr < count - 1;curr++) {
+      int cmp = strcmp(table[curr].name, table[curr + 1].name);
+      if(cmp == 0) {
+        error_exit("Two functions have the same name: %s\n", table[curr].name);
+      } else if(cmp > 0) {
+        parse_cb_entry_t t = table[curr + 1];
+        table[curr + 1] = table[curr];
+        table[curr] = t;
+      }
+    }
+  }
+  return;
+}
+
+// Finds a call back given a name using binary search
+parse_cb_t parse_find_cb(parse_t *parse, parse_cb_entry_t *table, int count, const char *name) {
+  (void)parse;
+  parse_cb_t cb = NULL;
+  // [begin, end)
+  int begin = 0, end = count;
+  while(begin < end) {
+    int mid = (begin + end) / 2;
+    int cmp = strcmp(name, table[mid].name);
+    if(cmp == 0) {
+      cb = table[mid].cb;
+      break;
+    } else if(cmp < 0) {
+      end = mid;
+    } else {
+      begin = mid + 1;
+    }
+  }
+  return cb;
+}
+
 // Top-level parsing function
 void parse_top(parse_t *parse, plot_t *plot) {
   char ch;
@@ -1111,13 +1150,21 @@ void parse_top_property(parse_t *parse, plot_t *plot) {
   return;
 }
 
+parse_cb_entry_t parse_cb_top_funcs[] = {
+  {"plot_print", parse_cb_plot_print},
+  {"version_print", parse_cb_version_print},
+  {"save_fig", parse_cb_save_fig},
+  {"save_legend", parse_cb_save_legend},
+};
+const int parse_cb_top_funcs_count = sizeof(parse_cb_top_funcs) / sizeof(parse_cb_entry_t);
+
 // This function will return 1 and stop the parser at the next arg, if there is one
 // Otherwise, it returns 0 and stops at the next token
 inline static int parse_has_more_arg(parse_t *parse) {
   return parse_peek_nospace(parse) != ';';
 }
 
-static void parse_cb_plot_print(parse_t *parse, plot_t *plot) {
+void parse_cb_plot_print(parse_t *parse, plot_t *plot) {
   int print_buf = 0;
   // Read arguments
   if(parse_has_more_arg(parse)) {
@@ -1133,7 +1180,7 @@ static void parse_cb_plot_print(parse_t *parse, plot_t *plot) {
   return;
 }
 
-static void parse_cb_version_print(parse_t *parse, plot_t *plot) {
+void parse_cb_version_print(parse_t *parse, plot_t *plot) {
   (void)plot;
   printf("[version] matplotlib C language wrapper and script interpreter, version %s.%s\n", 
     MAJOR_VERSION, MINOR_VERSION);
@@ -1145,7 +1192,7 @@ static void parse_cb_version_print(parse_t *parse, plot_t *plot) {
   return;
 }
 
-static void parse_cb_save_fig(parse_t *parse, plot_t *plot) {
+void parse_cb_save_fig(parse_t *parse, plot_t *plot) {
   printf("Save fig called!\n");
   return;
   char *filename = NULL; // Given in arg list
@@ -1169,56 +1216,10 @@ static void parse_cb_save_fig(parse_t *parse, plot_t *plot) {
   return;
 }
 
-static void parse_cb_save_legend(parse_t *parse, plot_t *plot) {
+void parse_cb_save_legend(parse_t *parse, plot_t *plot) {
   (void)plot; (void)parse;
   printf("Save legend called!\n");
   return;
-}
-
-parse_cb_entry_t parse_cb_top_funcs[] = {
-  {"plot_print", parse_cb_plot_print},
-  {"version_print", parse_cb_version_print},
-  {"save_fig", parse_cb_save_fig},
-  {"save_legend", parse_cb_save_legend},
-};
-const int parse_cb_top_funcs_count = sizeof(parse_cb_top_funcs) / sizeof(parse_cb_entry_t);
-
-// Sort a given table
-void parse_sort_cb(parse_t *parse, parse_cb_entry_t *table, int count) {
-  (void)parse;
-  for(int i = 0;i < count;i++) {
-    for(int curr = 0;curr < count - 1;curr++) {
-      int cmp = strcmp(table[curr].name, table[curr + 1].name);
-      if(cmp == 0) {
-        error_exit("Two functions have the same name: %s\n", table[curr].name);
-      } else if(cmp > 0) {
-        parse_cb_entry_t t = table[curr + 1];
-        table[curr + 1] = table[curr];
-        table[curr] = t;
-      }
-    }
-  }
-  return;
-}
-
-// Finds a call back given a name using binary search
-parse_cb_t parse_find_cb(parse_t *parse, parse_cb_entry_t *table, int count, const char *name) {
-  parse_cb_t cb = NULL;
-  // [begin, end)
-  int begin = 0, end = count;
-  while(begin < end) {
-    int mid = (begin + end) / 2;
-    int cmp = strcmp(name, table[mid].name);
-    if(cmp == 0) {
-      cb = table[mid].cb;
-      break;
-    } else if(cmp < 0) {
-      end = mid;
-    } else {
-      begin = mid + 1;
-    }
-  }
-  return cb;
 }
 
 void parse_top_func(parse_t *parse, plot_t *plot) {
