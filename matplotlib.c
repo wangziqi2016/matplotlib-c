@@ -1169,6 +1169,7 @@ parse_cb_entry_t parse_cb_top_funcs[] = {
   {"save_legend", parse_cb_save_legend},
   {"create_fig", parse_cb_create_fig},
   {"set_hatch_scheme", parse_cb_set_hatch_scheme},
+  {"set_color_scheme", parse_cb_set_color_scheme},
 };
 const int parse_cb_top_funcs_count = sizeof(parse_cb_top_funcs) / sizeof(parse_cb_entry_t);
 
@@ -1311,6 +1312,27 @@ void parse_cb_set_hatch_scheme(parse_t *parse, plot_t *plot) {
   }
   if(parse_has_more_arg(parse) == 1) {
     error_exit("Function \"set_hatch_scheme\" takes 1 or 2 arguments\n");
+  }
+  parse_expect_char(parse, ';');
+  return;
+}
+
+void parse_cb_set_color_scheme(parse_t *parse, plot_t *plot) {
+  if(parse_has_more_arg(parse) == 0) {
+    error_exit("Function \"set_color_scheme\" takes at least 1 argument\n");
+  }
+  char *scheme_name = parse_get_str(parse);
+  plot->color_scheme = color_find_scheme(scheme_name);
+  if(plot->color_scheme == NULL) {
+    error_exit("Color scheme name \"%s\" does not exist\n", scheme_name);
+  }
+  free(scheme_name);
+  // Read hatch offset
+  if(parse_has_more_arg(parse) == 1) {
+    plot->color_offset = parse_get_int64_range(parse, 0, plot->color_scheme->item_count - 1);
+  }
+  if(parse_has_more_arg(parse) == 1) {
+    error_exit("Function \"set_color_scheme\" takes 1 or 2 arguments\n");
   }
   parse_expect_char(parse, ';');
   return;

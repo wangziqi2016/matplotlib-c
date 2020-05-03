@@ -330,6 +330,7 @@ void parse_cb_save_fig(parse_t *parse, plot_t *plot);
 void parse_cb_save_legend(parse_t *parse, plot_t *plot);
 void parse_cb_create_fig(parse_t *parse, plot_t *plot);
 void parse_cb_set_hatch_scheme(parse_t *parse, plot_t *plot);
+void parse_cb_set_color_scheme(parse_t *parse, plot_t *plot);
 
 void parse_top_func(parse_t *parse, plot_t *plot);
 
