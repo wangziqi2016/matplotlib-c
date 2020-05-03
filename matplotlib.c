@@ -1163,6 +1163,7 @@ parse_cb_entry_t parse_cb_top_funcs[] = {
   {"save_fig", parse_cb_save_fig},
   {"save_legend", parse_cb_save_legend},
   {"create_fig", parse_cb_create_fig},
+  {"set_hatch_scheme", parse_cb_set_hatch_scheme},
 };
 const int parse_cb_top_funcs_count = sizeof(parse_cb_top_funcs) / sizeof(parse_cb_entry_t);
 
@@ -1282,10 +1283,30 @@ void parse_cb_create_fig(parse_t *parse, plot_t *plot) {
     height = new_height;
   }
   if(parse_has_more_arg(parse) == 1) {
-    error_exit("Function \"create_fig\" takes 1 or 2 optional arguments\n")
+    error_exit("Function \"create_fig\" takes 1 or 2 optional arguments\n");
   }
   plot_create_fig(plot, width, height);
   parse_expect_char(parse, ';');
+  return;
+}
+
+void parse_cb_set_hatch_scheme(parse_t *parse, plot_t *plot) {
+  if(parse_has_more_arg(parse) == 0) {
+    error_exit("Function \"set_hatch_scheme\" takes at least 1 argument\n");
+  }
+  const char *scheme_name = parse_get_str(parse);
+  plot->hatch_scheme = hatch_find_scheme(scheme_name);
+  if(plot->hatch_scheme == NULL) {
+    error_exit("Hatch scheme name \"%s\" does not exist\n", scheme_name);
+  }
+  free(scheme_name);
+  // Read hatch offset
+  if(parse_has_more_arg(parse) == 1) {
+    plot->hatch_offset = parse_get_int64_range(parse, 0, plot->hatch_scheme->item_count - 1);
+  }
+  if(parse_has_more_arg(parse) == 1) {
+    error_exit("Function \"set_hatch_scheme\" takes 1 or 2 arguments\n");
+  }
   return;
 }
 
