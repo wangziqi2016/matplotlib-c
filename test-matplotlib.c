@@ -443,6 +443,25 @@ void test_parse_skip_space() {
   return;
 }
 
+void test_parse_color() {
+  printf("========== test_parse_color ==========\n");
+  const char *s = "\"#AabBCC\" \"#55aa55\" \"#000000\"";
+  parse_t *parse = parse_init(s);
+  uint32_t ret;
+  ret = parse_get_color(parse);
+  printf("ret = 0x%06X\n", ret);
+  assert(ret == 0xaabbcc);
+  ret = parse_get_color(parse);
+  printf("ret = 0x%06X\n", ret);
+  assert(ret == 0x55aa55);
+  ret = parse_get_color(parse);
+  printf("ret = 0x%06X\n", ret);
+  assert(ret == 0x000000);
+  parse_free(parse);
+  printf("Pass\n");
+  return;
+}
+
 void test_parse_top() {
   printf("========== test_parse_top ==========\n");
   plot_t *plot = plot_init();
@@ -476,6 +495,7 @@ int main(int argc, char **argv) {
   test_parse_double();
   test_parse_int();
   test_parse_skip_space();
+  test_parse_color();
   test_parse_top();
   printf("All test passed!\n");
   return 0;
