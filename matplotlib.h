@@ -14,6 +14,10 @@
 
 #include "Python.h"
 
+// Version strings
+#define MAJOR_VERSION "1"
+#define MINOR_VERSION "0"
+
 //* error handling
 
 // Error reporting and system call assertion

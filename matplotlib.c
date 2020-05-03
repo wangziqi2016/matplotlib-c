@@ -1100,7 +1100,7 @@ void parse_top_property(parse_t *parse, plot_t *plot) {
     parse_expect_char(parse, '=');
     plot->param.legend_font_size = parse_get_int64_range(parse, 0, PARSE_INT64_MAX);
     parse_expect_char(parse, ';');
-  }
+  } 
   else {
     parse_report_pos(parse);
     error_exit("Unknown top-level property: \"%s\"\n", name);
@@ -1111,7 +1111,7 @@ void parse_top_property(parse_t *parse, plot_t *plot) {
 
 // This function will return 1 and stop the parser at the next arg, if there is one
 // Otherwise, it returns 0 and stops at the next token
-inline static int parse_is_more_arg(parse_t *parse) {
+inline static int parse_has_more_arg(parse_t *parse) {
   return parse_peek_nospace(parse) != ';';
 }
 
@@ -1123,24 +1123,45 @@ void parse_top_func(parse_t *parse, plot_t *plot) {
   } else if(streq(name, "plot_print") == 1) {
     int print_buf = 0;
     // Read arguments
-    if(parse_is_more_arg(parse)) {
+    if(parse_has_more_arg(parse)) {
       print_buf = (int)parse_get_int64_range(parse, 0, 1); // [0, 1] binary
       if(print_buf != 0) print_buf = 1;
     }
     plot_print(plot, print_buf);
-    if(parse_is_more_arg(parse)) {
+    if(parse_has_more_arg(parse)) {
       parse_report_pos(parse);
       error_exit("Function \"plot_print\" only takes 1 optional argument\n");
     }
     parse_expect_char(parse, ';');
   } else if(streq(name, "version_print") == 1) {
-    printf("matplotlib C language script interpreter, version 1.0\n");
-    printf("https://github.com/wangziqi2016/matplotlib-c\n");
-    if(parse_is_more_arg(parse) == 1) {
+    printf("[version] matplotlib C language wrapper and script interpreter, version %s.%s\n", 
+      MAJOR_VERSION, MINOR_VERSION);
+    printf("[version] https://github.com/wangziqi2016/matplotlib-c\n");
+    if(parse_has_more_arg(parse) == 1) {
       error_exit("Function \"version_print\" takes no argument\n");
     }
     parse_expect_char(parse, ';');
-  } else {
+  } else if(streq(name, "save_fig") == 1) {
+    char *filename = NULL; // Given in arg list
+    if(parse_has_more_arg(parse) == 1) {
+      filename = parse_get_str(parse);
+      if(plot->save_filename != NULL) {
+        printf("Overriding existing save filename: \"%s\"\n", plot->save_filename);
+      }
+      plot_save_fig(plot, filename);
+      free(filename);
+    } else {
+      if(plot->save_filename == NULL) {
+        error_exit("Need a file name to save the figure (either as property or argument)\n");
+      }
+      plot_save_fig(plot, plot->save_filename);
+    }
+    if(parse_has_more_arg(parse) == 1) {
+      error_exit("Function \"save_fig\" takes 1 optional argument\n");
+    }
+    parse_expect_char(parse, ';');
+  }
+  else {
     parse_report_pos(parse);
     error_exit("Unknown top-level function: \"%s\"\n", name);
   }
