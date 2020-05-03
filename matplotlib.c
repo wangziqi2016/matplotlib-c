@@ -1045,8 +1045,7 @@ void parse_top_property(parse_t *parse, plot_t *plot) {
     parse_expect_char(parse, ';');
   } else if(streq(name, "legend_font_size") == 1) {
     parse_expect_char(parse, '=');
-    plot_set_legend_pos(plot, pos); // Copies the string (report error if too long)
-    free(pos); // We already copied the pos string into param
+    plot->param.legend_font_size = parse_get_int64_range(parse, 0, PARSE_INT64_MAX);
     parse_expect_char(parse, ';');
   }
   else {
