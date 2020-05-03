@@ -729,7 +729,7 @@ parse_t *_parse_init(char *s) {
   parse->col = 0;
   parse->size = strlen(s) + 1;  // Including terminating zero
   // Sort top-level function table
-  parse_sort_top_funcs(parse);
+  parse_sort_cb(parse, parse_cb_top_funcs, parse_cb_top_funcs_count);
   return parse;
 }
 
@@ -1175,27 +1175,26 @@ static void parse_cb_save_legend(parse_t *parse, plot_t *plot) {
   return;
 }
 
-parse_jmp_entry_t top_funcs[] = {
+parse_cb_entry_t parse_cb_top_funcs[] = {
   {"plot_print", parse_cb_plot_print},
   {"version_print", parse_cb_version_print},
   {"save_fig", parse_cb_save_fig},
   {"save_legend", parse_cb_save_legend},
 };
-const int top_funcs_item_count = sizeof(top_funcs) / sizeof(parse_jmp_entry_t);
+const int parse_cb_top_funcs_count = sizeof(parse_cb_top_funcs) / sizeof(parse_cb_entry_t);
 
-// Sort top_funcs by keys using bubble sort
-void parse_sort_top_funcs(parse_t *parse) {
+// Sort a given table
+void parse_sort_cb(parse_t *parse, parse_cb_entry_t *table, int count) {
   (void)parse;
-  int count = top_funcs_item_count;
   for(int i = 0;i < count;i++) {
     for(int curr = 0;curr < count - 1;curr++) {
-      int cmp = strcmp(top_funcs[curr].name, top_funcs[curr + 1].name);
+      int cmp = strcmp(table[curr].name, table[curr + 1].name);
       if(cmp == 0) {
-        error_exit("Two functions have the same name: %s\n", top_funcs[curr].name);
+        error_exit("Two functions have the same name: %s\n", table[curr].name);
       } else if(cmp > 0) {
-        parse_jmp_entry_t t = top_funcs[curr + 1];
-        top_funcs[curr + 1] = top_funcs[curr];
-        top_funcs[curr] = t;
+        parse_cb_entry_t t = table[curr + 1];
+        table[curr + 1] = table[curr];
+        table[curr] = t;
       }
     }
   }
@@ -1210,12 +1209,12 @@ void parse_top_func(parse_t *parse, plot_t *plot) {
   } 
   parse_cb_t cb = NULL;
   // [begin, end)
-  int begin = 0, end = top_funcs_item_count;
+  int begin = 0, end = parse_cb_top_funcs_count;
   while(begin < end) {
     int mid = (begin + end) / 2;
-    int cmp = strcmp(name, top_funcs[mid].name);
+    int cmp = strcmp(name, parse_cb_top_funcs[mid].name);
     if(cmp == 0) {
-      cb = top_funcs[mid].cb;
+      cb = parse_cb_top_funcs[mid].cb;
       break;
     } else if(cmp < 0) {
       end = mid;

@@ -263,10 +263,10 @@ typedef void (*parse_cb_t)(struct parse_struct_t *parse, plot_t *plot);
 typedef struct {
   const char *name;      // Keyword
   parse_cb_t cb;         // Call back function
-} parse_jmp_entry_t;
+} parse_cb_entry_t;
 
-extern parse_jmp_entry_t top_funcs[];
-extern const int top_funcs_item_count;
+extern parse_cb_entry_t parse_cb_top_funcs[];
+extern const int parse_cb_top_funcs_count;
 
 #define PARSE_INT64_MAX (0x7FFFFFFFFFFFFFFFL)
 #define PARSE_INT64_MIN (0x8000000000000000L)
@@ -306,6 +306,8 @@ int64_t parse_get_int64(parse_t *parse); // Reads a long int from the stream
 int64_t parse_get_int64_range(parse_t *parse, int64_t lower, int64_t upper); // Adds range check
 void parse_expect_char(parse_t *parse, char ch); // Fetch a char and discard; Report error if mismatch
 void parse_expect_char_opt(parse_t *parse, char ch); // Read an optional char and discard; No error if not found
+
+void parse_sort_cb(parse_t *parse, parse_cb_entry_t *table, int count);
 
 void parse_top(parse_t *parse, plot_t *plot); // Parse a script and call plot functions to complete the graph
 void parse_top_property(parse_t *parse, plot_t *plot);
