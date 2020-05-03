@@ -285,6 +285,7 @@ char parse_peek_nospace(parse_t *parse);
 char *parse_copy(parse_t *parse, char *begin, char *end); // Copy the string in the range in malloc'ed memory
 char *parse_get_ident(parse_t *parse);   // Get a C-style ident token from the stream
 char *parse_get_str(parse_t *parse); // Get a string delimited by a pair of double quotation marks
+uint32_t parse_get_color(parse_t *parse); // Parse a string as color code
 char *parse_until(parse_t *parse, char ch); // Reads until a certain char is met; Trim left and right before return
 double parse_get_double(parse_t *parse); // Reads a double from the stream
 int64_t parse_get_int64(parse_t *parse); // Reads a long int from the stream

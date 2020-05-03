@@ -123,6 +123,7 @@ void color_str(uint32_t color, char *buf) {
 }
 
 // Returns 0xFFFFFFFF to indicate failure
+// This function does not report error; Instead, it prints error message, and caller should handle it
 uint32_t color_decode(const char *s) {
   if(*s++ != '#') {
     printf("Color code must begin with '#'\n");
@@ -884,6 +885,18 @@ char *parse_get_str(parse_t *parse) {
     }
   }
   return parse_copy(parse, begin, end);
+}
+
+uint32_t parse_get_color(parse_t *parse) {
+  char *s = parse_get_str(parse);
+  // This function prints error message, but we handle error by checking return value
+  uint32_t ret = color_decode(s);
+  free(s);
+  if(ret == -1u) {
+    parse_report_pos(parse);
+    error_exit("Error decoding color\n");
+  }
+  return ret;
 }
 
 // Returns an allocated buffer containing the substring from the current position to the target ch, or '\0'
