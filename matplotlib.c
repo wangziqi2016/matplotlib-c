@@ -1273,10 +1273,18 @@ void parse_top_func(parse_t *parse, plot_t *plot) {
 // Reports current line and col followed by the current line; Used in error reporting
 void parse_report_pos(parse_t *parse) {
   printf("File %s on line %d column %d: \n", parse->filename, parse->line, parse->col);
-  printf("  ...\"");
+  printf("  \"");
   char *p = parse->curr;
-  while(*p != '\n' && *p != '\0') putchar(*p++);
-  if(*p == '\0') printf("[EOF]");
+  // Rewind to beginning of line or beginning of stream, whichever comes first
+  while(p != parse->s && p[-1] != '\n') p--;
+  do {
+    if(isprint(*p)) putchar(*p);
+    else if(*p == '\n') printf("\\n");
+    else if(*p == '\r') printf("\\r");
+    else if(*p == '\0') printf("\\0");
+    else printf("\\x%02X", (int)*p);
+    p++;
+  } while(*p != '\n' && *p != '\0');
   printf("\"\n");
   return;
 }
