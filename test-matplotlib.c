@@ -212,7 +212,7 @@ void test_plot_legend() {
   // Note that this should print nothing about the legend, since we create another object
   plot_print(plot, 1); 
   // Uncomment the following to reveal error
-  plot_set_legend_rows(plot, -2);
+  //plot_set_legend_rows(plot, -2);
   plot_set_legend_rows(plot, 1);
   plot_save_legend(plot, "test_legend_1.pdf");
   plot_set_legend_rows(plot, 100);
@@ -398,7 +398,7 @@ void test_parse_double() {
 
 void test_parse_int() {
   printf("========== test_parse_double ==========\n");
-  const char *s = " 123 4567 0 .2 xyzw";
+  const char *s = " 123 4567 0 123 .2 xyzw";
   parse_t *parse = parse_init(s);
   int64_t ret;
   ret = parse_get_int64(parse);
@@ -410,6 +410,9 @@ void test_parse_int() {
   ret = parse_get_int64(parse);
   printf("ret = %ld\n", ret);
   assert(ret == 0l);
+  // Uncomment the following and comment out the next line to reveal range error
+  //ret = parse_get_int64_range(parse, 100, 122);
+  ret = parse_get_int64_range(parse, 100, 123);
   // Uncomment the following to reveal error
   //ret = parse_get_int64(parse);
   // Finish test

@@ -1023,19 +1023,19 @@ void parse_top_property(parse_t *parse, plot_t *plot) {
     parse_expect_char(parse, ';');
   } else if(streq(name, "xtitle_font_size") == 1) {
     parse_expect_char(parse, '=');
-    plot->param.xtick_font_size = (int)parse_get_int64(parse);
+    plot->param.xtick_font_size = (int)parse_get_int64_range(parse, 1, PARSE_INT64_MAX);
     parse_expect_char(parse, ';');
   } else if(streq(name, "ytitle_font_size") == 1) {
     parse_expect_char(parse, '=');
-    plot->param.ytick_font_size = (int)parse_get_int64(parse);
+    plot->param.ytick_font_size = (int)parse_get_int64_range(parse, 1, PARSE_INT64_MAX);
     parse_expect_char(parse, ';');
   } else if(streq(name, "xtick_font_size") == 1) {
     parse_expect_char(parse, '=');
-    plot->param.xtick_font_size = (int)parse_get_int64(parse);
+    plot->param.xtick_font_size = (int)parse_get_int64_range(parse, 1, PARSE_INT64_MAX);
     parse_expect_char(parse, ';');
   } else if(streq(name, "ytick_font_size") == 1) {
     parse_expect_char(parse, '=');
-    plot->param.ytick_font_size = (int)parse_get_int64(parse);
+    plot->param.ytick_font_size = (int)parse_get_int64_range(parse, 1, PARSE_INT64_MAX);
     parse_expect_char(parse, ';');
   } else if(streq(name, "legend_pos") == 1) {
     parse_expect_char(parse, '=');
@@ -1071,7 +1071,7 @@ void parse_top_func(parse_t *parse, plot_t *plot) {
     int print_buf = 0;
     // Read arguments
     if(parse_is_more_arg(parse)) {
-      print_buf = (int)parse_get_int64(parse);
+      print_buf = (int)parse_get_int64_range(parse, 0, 1); // [0, 1] binary
       if(print_buf != 0) print_buf = 1;
     }
     plot_print(plot, print_buf);
