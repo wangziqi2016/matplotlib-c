@@ -1172,7 +1172,7 @@ const int parse_cb_top_funcs_count = sizeof(parse_cb_top_funcs) / sizeof(parse_c
 static int parse_has_more_arg(parse_t *parse) {
   int line = parse->line;
   char ch = parse_peek_nospace(parse);
-  if(line != parse->line) {
+  if(line != parse->line || *parse->curr == '\0') {
     parse_report_pos(parse);
     error_exit("Did you miss a semicolon after function call?\n");
   }
@@ -1294,7 +1294,7 @@ void parse_cb_set_hatch_scheme(parse_t *parse, plot_t *plot) {
   if(parse_has_more_arg(parse) == 0) {
     error_exit("Function \"set_hatch_scheme\" takes at least 1 argument\n");
   }
-  const char *scheme_name = parse_get_str(parse);
+  char *scheme_name = parse_get_str(parse);
   plot->hatch_scheme = hatch_find_scheme(scheme_name);
   if(plot->hatch_scheme == NULL) {
     error_exit("Hatch scheme name \"%s\" does not exist\n", scheme_name);
@@ -1307,6 +1307,7 @@ void parse_cb_set_hatch_scheme(parse_t *parse, plot_t *plot) {
   if(parse_has_more_arg(parse) == 1) {
     error_exit("Function \"set_hatch_scheme\" takes 1 or 2 arguments\n");
   }
+  parse_expect_char(parse, ';');
   return;
 }
 
