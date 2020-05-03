@@ -258,7 +258,7 @@ void plot_print(plot_t *plot, int print_buf);
 
 //* parse_* - String processing
 
-typedef void (*parse_cb_t)(plot_t *plot, struct parse_struct_t *parse);
+typedef void (*parse_cb_t)(struct parse_struct_t *parse, plot_t *plot);
 
 typedef struct {
   const char *name;      // Keyword

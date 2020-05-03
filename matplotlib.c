@@ -1117,7 +1117,7 @@ inline static int parse_has_more_arg(parse_t *parse) {
   return parse_peek_nospace(parse) != ';';
 }
 
-static void parse_cb_plot_print(plot_t *plot, parse_t *parse) {
+static void parse_cb_plot_print(parse_t *parse, plot_t *plot) {
   int print_buf = 0;
   // Read arguments
   if(parse_has_more_arg(parse)) {
@@ -1133,7 +1133,7 @@ static void parse_cb_plot_print(plot_t *plot, parse_t *parse) {
   return;
 }
 
-static void parse_cb_version_print(plot_t *plot, parse_t *parse) {
+static void parse_cb_version_print(parse_t *parse, plot_t *plot) {
   (void)plot;
   printf("[version] matplotlib C language wrapper and script interpreter, version %s.%s\n", 
     MAJOR_VERSION, MINOR_VERSION);
@@ -1145,7 +1145,9 @@ static void parse_cb_version_print(plot_t *plot, parse_t *parse) {
   return;
 }
 
-static void parse_cb_save_fig(plot_t *plot, parse_t *parse) {
+static void parse_cb_save_fig(parse_t *parse, plot_t *plot) {
+  printf("Save fig called!\n");
+  return;
   char *filename = NULL; // Given in arg list
   if(parse_has_more_arg(parse) == 1) {
     filename = parse_get_str(parse);
@@ -1167,8 +1169,10 @@ static void parse_cb_save_fig(plot_t *plot, parse_t *parse) {
   return;
 }
 
-static void parse_cb_save_legend(plot_t *plot, parse_t *parse) {
-
+static void parse_cb_save_legend(parse_t *parse, plot_t *plot) {
+  (void)plot; (void)parse;
+  printf("Save legend called!\n");
+  return;
 }
 
 parse_jmp_entry_t top_funcs[] = {
@@ -1209,9 +1213,9 @@ void parse_top_func(parse_t *parse, plot_t *plot) {
   int begin = 0, end = top_funcs_item_count;
   while(begin < end) {
     int mid = (begin + end) / 2;
-    int cmp = strcmp(name, top_funcs_item_count[mid].name);
+    int cmp = strcmp(name, top_funcs[mid].name);
     if(cmp == 0) {
-      cb = top_funcs_item_count[mid].cb;
+      cb = top_funcs[mid].cb;
       break;
     } else if(cmp < 0) {
       end = mid;
