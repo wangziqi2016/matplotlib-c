@@ -458,6 +458,19 @@ void test_parse_color() {
   printf("ret = 0x%06X\n", ret);
   assert(ret == 0x000000);
   parse_free(parse);
+  // Error case; Uncomment each for errors
+  //parse = parse_init("\"55aa55\""); // Missing #
+  //ret = parse_get_color(parse);
+  //parse_free(parse);
+  //parse = parse_init("\"#aabbxy\""); // Illegal digit
+  //ret = parse_get_color(parse);
+  //parse_free(parse);
+  //parse = parse_init("\"#aabbccdd\""); // Too long
+  //ret = parse_get_color(parse);
+  //parse_free(parse);
+  //parse = parse_init("\"#aabbc\""); // Too short
+  //ret = parse_get_color(parse);
+  //parse_free(parse);
   printf("Pass\n");
   return;
 }
