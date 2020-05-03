@@ -1128,7 +1128,13 @@ void parse_top_property(parse_t *parse, plot_t *plot) {
     free(pos); // We already copied the pos string into param
   } else if(streq(name, "legend_font_size") == 1) {
     plot->param.legend_font_size = parse_get_int64_range(parse, 0, PARSE_INT64_MAX);
-  } 
+  } else if(streq(name, "width") == 1) {
+    plot->param.width = parse_get_double(parse);
+    if(plot->param.width < 0.0) error_exit("Figure width must be positive (sees %f)\n", plot->param.width);
+  } else if(streq(name, "height") == 1) {
+    plot->param.height = parse_get_double(parse);
+    if(plot->param.height < 0.0) error_exit("Figure height must be positive (sees %f)\n", plot->param.height);
+  }
   else {
     parse_report_pos(parse);
     error_exit("Unknown top-level property: \"%s\"\n", name);
