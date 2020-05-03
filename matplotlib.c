@@ -460,6 +460,7 @@ plot_param_t default_param = {
 };
 
 void plot_param_print(plot_param_t *param) {
+  printf("[param] width %f height %f\n", param->width, param->height);
   printf("[param legend] font size %d rows %d pos %s\n", 
     param->legend_font_size, param->legend_rows, param->legend_pos);
   printf("[param title] x font %d y font %d\n", 
@@ -1148,6 +1149,7 @@ void parse_top_property(parse_t *parse, plot_t *plot) {
 parse_cb_entry_t parse_cb_top_funcs[] = {
   {"plot_print", parse_cb_plot_print},
   {"version_print", parse_cb_version_print},
+  {"param_print", parse_cb_param_print},
   {"save_fig", parse_cb_save_fig},
   {"save_legend", parse_cb_save_legend},
 };
@@ -1184,6 +1186,12 @@ void parse_cb_version_print(parse_t *parse, plot_t *plot) {
     error_exit("Function \"version_print\" takes no argument\n");
   }
   parse_expect_char(parse, ';');
+  return;
+}
+
+void parse_cb_param_print(parse_t *parse, plot_t *plot) {
+  (void)parse;
+  plot_param_print(&plot->param);
   return;
 }
 
