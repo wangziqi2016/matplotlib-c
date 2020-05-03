@@ -1203,16 +1203,27 @@ void parse_top_func(parse_t *parse, plot_t *plot) {
   if(name == NULL) {
     parse_report_pos(parse);
     error_exit("Expecting a function name after top-level '!'\n");
-  } else if(streq(name, "plot_print") == 1) {
-    parse_cb_plot_print(plot, parse);
-  } else if(streq(name, "version_print") == 1) {
-    parse_cb_version_print(plot, parse);
-  } else if(streq(name, "save_fig") == 1) {
-    parse_cb_save_fig(plot, parse);
+  } 
+  parse_cb_t cb = NULL;
+  // [begin, end)
+  int begin = 0, end = top_funcs_item_count;
+  while(begin < end) {
+    int mid = (begin + end) / 2;
+    int cmp = strcmp(name, top_funcs_item_count[mid].name);
+    if(cmp == 0) {
+      cb = top_funcs_item_count[mid].cb;
+      break;
+    } else if(cmp < 0) {
+      end = mid;
+    } else {
+      begin = mid + 1;
+    }
   }
-  else {
+  if(cb == NULL) {
     parse_report_pos(parse);
     error_exit("Unknown top-level function: \"%s\"\n", name);
+  } else {
+    cb(parse, plot);
   }
   free(name);
   return;
