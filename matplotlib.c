@@ -544,6 +544,7 @@ void plot_copy_param(plot_t *plot, plot_param_t *param) {
 // bar types stored in the plot object
 void plot_save_legend(plot_t *plot, const char *filename) {
   plot_t *legend = plot_init(); // Preamble is set after this
+  plot_copy_param(legend, &plot->param); // Copy legend configuration to the new legend plot
   assert(legend->buf != NULL && legend->py != NULL);
   plot_create_fig(legend, 0.001f, 0.001f);
   int count = vec_count(plot->bar_types);
@@ -912,6 +913,18 @@ int64_t parse_get_int64(parse_t *parse) {
   return ret;
 }
 
+// Both lower and upper are inclusive, i.e. [lower, upper]
+int64_t parse_get_int64_range(parse_t *parse, int64_t lower, int64_t upper) {
+  assert(lower <= upper);
+  int64_t ret = parse_get_int64(parse);
+  if(ret < lower || ret > upper) {
+    parse_report_pos(parse);
+    error_exit("Integer must be within range [%ld, %ld] (sees %ld)\n",
+      lower, upper, ret);
+  }
+  return ret;
+}
+
 // buf should be at least 5 chars in size (\xHH\0)
 static void parse_print_char(parse_t *parse, char ch, char *buf) {
   (void)parse;
@@ -928,10 +941,12 @@ void parse_expect_char(parse_t *parse, char ch) {
   if(c == '\0') {
     parse_report_pos(parse);
     char buf[6]; parse_print_char(parse, ch, buf);
+    if(ch == ';') printf("Did you forget the trailing ';'?\n");
     error_exit("Expecting %s, while seeing end of stream\n", buf);
   } else if(c != ch) {
     parse_report_pos(parse);
     char buf[6]; parse_print_char(parse, ch, buf);
+    if(ch == ';') printf("Did you forget the trailing ';'?\n");
     error_exit("Expecting %s, while seeing '%c'\n", buf, c);
   }
   return;
@@ -1025,6 +1040,11 @@ void parse_top_property(parse_t *parse, plot_t *plot) {
   } else if(streq(name, "legend_pos") == 1) {
     parse_expect_char(parse, '=');
     char *pos = parse_get_str(parse);
+    plot_set_legend_pos(plot, pos); // Copies the string (report error if too long)
+    free(pos); // We already copied the pos string into param
+    parse_expect_char(parse, ';');
+  } else if(streq(name, "legend_font_size") == 1) {
+    parse_expect_char(parse, '=');
     plot_set_legend_pos(plot, pos); // Copies the string (report error if too long)
     free(pos); // We already copied the pos string into param
     parse_expect_char(parse, ';');

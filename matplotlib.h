@@ -284,6 +284,7 @@ char *parse_get_str(parse_t *parse); // Get a string delimited by a pair of doub
 char *parse_until(parse_t *parse, char ch); // Reads until a certain char is met; Trim left and right before return
 double parse_get_double(parse_t *parse); // Reads a double from the stream
 int64_t parse_get_int64(parse_t *parse); // Reads a long int from the stream
+int64_t parse_get_int64_range(parse_t *parse, int lower, int upper); // Adds range check
 void parse_expect_char(parse_t *parse, char ch); // Fetch a char and discard; Report error if mismatch
 void parse_expect_char_opt(parse_t *parse, char ch); // Read an optional char and discard; No error if not found
 
