@@ -258,6 +258,15 @@ void plot_print(plot_t *plot, int print_buf);
 
 //* parse_* - String processing
 
+typedef void (*parse_cb_t)(plot_t *plot, struct parse_struct_t *parse);
+
+typedef struct {
+  const char *name;      // Keyword
+  parse_cb_t *cb;        // Call back function
+} parse_jmp_entry_t;
+
+extern parse_jmp_entry_t top_funcs[];
+
 #define PARSE_INT64_MAX (0x7FFFFFFFFFFFFFFFL)
 #define PARSE_INT64_MIN (0x8000000000000000L)
 
