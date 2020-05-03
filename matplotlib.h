@@ -265,9 +265,6 @@ typedef struct {
   parse_cb_t cb;         // Call back function
 } parse_cb_entry_t;
 
-extern parse_cb_entry_t parse_cb_top_funcs[];
-extern const int parse_cb_top_funcs_count;
-
 #define PARSE_INT64_MAX (0x7FFFFFFFFFFFFFFFL)
 #define PARSE_INT64_MIN (0x8000000000000000L)
 
@@ -308,11 +305,18 @@ void parse_expect_char(parse_t *parse, char ch); // Fetch a char and discard; Re
 void parse_expect_char_opt(parse_t *parse, char ch); // Read an optional char and discard; No error if not found
 
 void parse_sort_cb(parse_t *parse, parse_cb_entry_t *table, int count);
-void parse_find_cb(parse_t *parse, parse_cb_entry_t *table, int count, const char *name);
+parse_cb_t parse_find_cb(parse_t *parse, parse_cb_entry_t *table, int count, const char *name);
 
 void parse_top(parse_t *parse, plot_t *plot); // Parse a script and call plot functions to complete the graph
 void parse_top_property(parse_t *parse, plot_t *plot);
-void parse_sort_top_funcs(parse_t *parse);
+
+// Top function parsing and table
+extern parse_cb_entry_t parse_cb_top_funcs[];
+extern const int parse_cb_top_funcs_count;
+void parse_cb_plot_print(parse_t *parse, plot_t *plot);
+void parse_cb_version_print(parse_t *parse, plot_t *plot);
+void parse_cb_save_fig(parse_t *parse, plot_t *plot);
+void parse_cb_save_legend(parse_t *parse, plot_t *plot);
 void parse_top_func(parse_t *parse, plot_t *plot);
 
 void parse_report_pos(parse_t *parse);
