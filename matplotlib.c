@@ -1199,7 +1199,7 @@ void parse_cb_save_fig(parse_t *parse, plot_t *plot) {
   if(parse_has_more_arg(parse) == 1) {
     filename = parse_get_str(parse);
     if(plot->save_filename != NULL) {
-      printf("Overriding existing save filename: \"%s\"\n", plot->save_filename);
+      printf("Overriding existing save fig filename: \"%s\"\n", plot->save_filename);
     }
     plot_save_fig(plot, filename);
     free(filename);
@@ -1217,8 +1217,26 @@ void parse_cb_save_fig(parse_t *parse, plot_t *plot) {
 }
 
 void parse_cb_save_legend(parse_t *parse, plot_t *plot) {
-  (void)plot; (void)parse;
-  printf("Save legend called!\n");
+  printf("Save fig called!\n");
+  return;
+  char *filename = NULL;
+  if(parse_has_more_arg(parse) == 1) {
+    filename = parse_get_str(parse);
+    if(plot->legend_filename != NULL) {
+      printf("Overriding existing save legend filename: \"%s\"\n", plot->legend_filename);
+    }
+    plot_save_legend(plot, filename);
+    free(filename);
+  } else {
+    if(plot->legend_filename == NULL) {
+      error_exit("Need a file name to save the legend (either as property or argument)\n");
+    }
+    plot_save_legend(plot, plot->legend_filename);
+  }
+  if(parse_has_more_arg(parse) == 1) {
+    error_exit("Function \"save_legend\" takes 1 optional argument\n");
+  }
+  parse_expect_char(parse, ';');
   return;
 }
 
