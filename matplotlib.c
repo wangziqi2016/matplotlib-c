@@ -728,6 +728,8 @@ parse_t *_parse_init(char *s) {
   parse->line = 1; // Line and col starts from 1
   parse->col = 0;
   parse->size = strlen(s) + 1;  // Including terminating zero
+  // Sort top-level function table
+  parse_sort_top_funcs(parse);
   return parse;
 }
 
@@ -1175,10 +1177,12 @@ parse_jmp_entry_t top_funcs[] = {
   {"save_fig", parse_cb_save_fig},
   {"save_legend", parse_cb_save_legend},
 };
+const int top_funcs_item_count = sizeof(top_funcs) / sizeof(parse_jmp_entry_t);
 
-// Sort top_funcs by keys
+// Sort top_funcs by keys using bubble sort
 void parse_sort_top_funcs(parse_t *parse) {
-  int count = sizeof(top_funcs) / sizeof(parse_jmp_entry_t);
+  (void)parse;
+  int count = top_funcs_item_count;
   for(int i = 0;i < count;i++) {
     for(int curr = 0;curr < count - 1;curr++) {
       int cmp = strcmp(top_funcs[curr].name, top_funcs[curr + 1].name);

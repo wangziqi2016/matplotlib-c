@@ -266,6 +266,7 @@ typedef struct {
 } parse_jmp_entry_t;
 
 extern parse_jmp_entry_t top_funcs[];
+extern const int top_funcs_item_count;
 
 #define PARSE_INT64_MAX (0x7FFFFFFFFFFFFFFFL)
 #define PARSE_INT64_MIN (0x8000000000000000L)
@@ -308,6 +309,7 @@ void parse_expect_char_opt(parse_t *parse, char ch); // Read an optional char an
 
 void parse_top(parse_t *parse, plot_t *plot); // Parse a script and call plot functions to complete the graph
 void parse_top_property(parse_t *parse, plot_t *plot);
+void parse_sort_top_funcs(parse_t *parse);
 void parse_top_func(parse_t *parse, plot_t *plot);
 
 void parse_report_pos(parse_t *parse);
