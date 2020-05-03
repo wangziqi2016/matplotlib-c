@@ -180,8 +180,10 @@ void color_scheme_print(color_scheme_t *scheme) {
 
 //* hatch_*
 
+// This is a full list of charracter hatches supported by matplotlib
 char hatch_scheme_default[] = {
-  '-', '+', 'x', '\\', '*', 'o', 'O', '.',
+  '-', '+', 'x', '\\', '*', 'o', 'O', '.', ',', 'v', '^', '<', '>', '1', '2', '3', '4', '8',
+  's', 'p', 'P', 'h', 'H', 'X', 'd', 'D', '|', '_',
 };
 
 hatch_scheme_t hatch_schemes[] = {

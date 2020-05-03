@@ -233,6 +233,10 @@ typedef struct {
   char *ytitle;                        // Y title; Specified at top level
   char *fig_filename;                  // File name to save the figure
   char *legend_filename;               // File name to save legend, if there is one (optional)
+  const hatch_scheme_t *hatch_scheme;  // Hatch scheme
+  int hatch_offset;                    // Offset in the array
+  const color_scheme_t *color_scheme;  // Color scheme
+  int color_offset;                    // Offset in the array
 } plot_t;
 
 plot_t *plot_init();
