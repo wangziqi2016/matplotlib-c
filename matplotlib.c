@@ -450,12 +450,13 @@ void bar_free(bar_t *bar) {
 //* plot_t
 
 plot_param_t default_param = {
-  1,        // legend_rows
-  28,       // legend_font_size
-  "best",   // Legend pos; Alternatives are: {lower, center, upper} x {left, center, right} or "center"
-  24, 24,   // x/y tick font size
-  28, 28,   // x/y title font size
-  26,       // bar text size
+  12.0, 6.0, // Width and Height
+  1,         // legend_rows
+  28,        // legend_font_size
+  "best",    // Legend pos; Alternatives are: {lower, center, upper} x {left, center, right} or "center"
+  24, 24,    // x/y tick font size
+  28, 28,    // x/y title font size
+  26,        // bar text size
 };
 
 void plot_param_print(plot_param_t *param) {
@@ -554,11 +555,12 @@ bar_type_t *plot_find_bar_type(plot_t *plot, const char *label) {
   return NULL;
 }
 
-void plot_create_fig(plot_t *plot, double width, double height) {
+void plot_create_fig(plot_t *plot) {
   if(plot->fig_created == 1) {
     error_exit("A figure has already been created on this plot\n");
   }
-  buf_printf(plot->buf, "fig = plot.figure(figsize=(%f, %f))\n", width, height);
+  buf_printf(plot->buf, "fig = plot.figure(figsize=(%f, %f))\n", 
+    plot->param.width, plot->param.height);
   // "111" means the output consists of only one plot
   buf_append(plot->buf, "ax = fig.add_subplot(111)\n\n");
   plot->fig_created = 1;
@@ -586,8 +588,9 @@ void plot_copy_param(plot_t *plot, plot_param_t *param) {
 void plot_save_legend(plot_t *plot, const char *filename) {
   plot_t *legend = plot_init(); // Preamble is set after this
   plot_copy_param(legend, &plot->param); // Copy legend configuration to the new legend plot
+  legend->param.width = legend->param.height = 0.001; // Super small graph
   assert(legend->buf != NULL && legend->py != NULL);
-  plot_create_fig(legend, 0.001f, 0.001f);
+  plot_create_fig(legend);
   int count = vec_count(plot->bar_types);
   if(count == 0) {
     error_exit("Current plot does not contain any bar type\n");
@@ -1132,7 +1135,9 @@ void parse_top_property(parse_t *parse, plot_t *plot) {
   } else if(streq(name, "legend_font_size") == 1) {
     parse_expect_char(parse, '=');
     plot->param.legend_font_size = parse_get_int64_range(parse, 0, PARSE_INT64_MAX);
-  } 
+  } else if(streq(name, "width") == 1) {
+    //plot->param.width
+  }
   else {
     parse_report_pos(parse);
     error_exit("Unknown top-level property: \"%s\"\n", name);
