@@ -953,6 +953,17 @@ double parse_get_double(parse_t *parse) {
   return ret;
 }
 
+double parse_get_double_range(parse_t *parse, double lower, double upper) {
+  assert(lower <= upper);
+  double ret = parse_get_double(parse);
+  if(ret < lower || ret > upper) {
+    parse_report_pos(parse);
+    error_exit("Double must be within range [%f, %f] (sees %f)\n",
+      lower, upper, ret);
+  }
+  return ret;
+}
+
 int64_t parse_get_int64(parse_t *parse) {
   parse_skip_space(parse);
   char *begin = parse->curr;
@@ -1152,6 +1163,7 @@ parse_cb_entry_t parse_cb_top_funcs[] = {
   {"param_print", parse_cb_param_print},
   {"save_fig", parse_cb_save_fig},
   {"save_legend", parse_cb_save_legend},
+  {"create_fig", parse_cb_create_fig},
 };
 const int parse_cb_top_funcs_count = sizeof(parse_cb_top_funcs) / sizeof(parse_cb_entry_t);
 
@@ -1248,6 +1260,16 @@ void parse_cb_save_legend(parse_t *parse, plot_t *plot) {
   }
   if(parse_has_more_arg(parse) == 1) {
     error_exit("Function \"save_legend\" takes 1 optional argument\n");
+  }
+  parse_expect_char(parse, ';');
+  return;
+}
+
+// This function has two optional arguments: width height
+// If only one is given then it defaults to width
+void parse_cb_create_fig(parse_t *parse, plot_t *plot) {
+  if(parse_has_more_arg(parse) == 1) {
+    plot->param.width
   }
   parse_expect_char(parse, ';');
   return;

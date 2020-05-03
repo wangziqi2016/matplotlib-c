@@ -11,6 +11,7 @@
 #include <ctype.h>
 #include <error.h>
 #include <stdarg.h>
+#include <float.h>
 
 #include "Python.h"
 
@@ -267,8 +268,9 @@ typedef struct {
   parse_cb_t cb;         // Call back function
 } parse_cb_entry_t;
 
-#define PARSE_INT64_MAX (0x7FFFFFFFFFFFFFFFL)
-#define PARSE_INT64_MIN (0x8000000000000000L)
+#define PARSE_INT64_MAX  (0x7FFFFFFFFFFFFFFFL)
+#define PARSE_INT64_MIN  (0x8000000000000000L)
+#define PARSE_DOUBLE_MAX (DBL_MAX)
 
 typedef struct parse_struct_t {
   char *filename;  // Has ownership; Undefined for string init
@@ -301,6 +303,7 @@ char *parse_get_str(parse_t *parse); // Get a string delimited by a pair of doub
 uint32_t parse_get_color(parse_t *parse); // Parse a string as color code
 char *parse_until(parse_t *parse, char ch); // Reads until a certain char is met; Trim left and right before return
 double parse_get_double(parse_t *parse); // Reads a double from the stream
+double parse_get_double_range(parse_t *parse, double lower, double upper); // Reads a double from the stream
 int64_t parse_get_int64(parse_t *parse); // Reads a long int from the stream
 int64_t parse_get_int64_range(parse_t *parse, int64_t lower, int64_t upper); // Adds range check
 void parse_expect_char(parse_t *parse, char ch); // Fetch a char and discard; Report error if mismatch
