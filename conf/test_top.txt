@@ -48,3 +48,5 @@
 !save_fig;
 
 !set_hatch_scheme "default" 27;
+
+!plot_print 0;

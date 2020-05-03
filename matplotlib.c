@@ -712,6 +712,11 @@ void plot_print(plot_t *plot, int print_buf) {
   if(plot->ytitle != NULL) printf("[plot] ytitle %s\n", plot->ytitle);
   if(plot->fig_filename != NULL) printf("[plot] fig_filename %s\n", plot->fig_filename);
   if(plot->legend_filename != NULL) printf("[plot] legend_filename %s\n", plot->legend_filename);
+  if(plot->hatch_scheme != NULL) {
+    printf("[plot] hatch name \"%s\" count %d offset %d (usable %d)\n", 
+      plot->hatch_scheme->name, plot->hatch_scheme->item_count, plot->hatch_offset,
+      plot->hatch_scheme->item_count - plot->hatch_offset);
+  }
   // Print param
   plot_param_print(&plot->param);
   // Print bar types
