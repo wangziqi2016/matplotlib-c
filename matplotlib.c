@@ -130,7 +130,7 @@ uint32_t color_decode(const char *s) {
     return -1u;
   }
   uint32_t ret = 0u;
-  int shift = 24;
+  int shift = 20;
   for(int i = 0;i < 6;i++) {
     char ch = *s++;
     if(ch == '\0') {
@@ -152,7 +152,7 @@ uint32_t color_decode(const char *s) {
       printf("Invalid color code: \"%s\"; Component \"%s\" contains invalid digit\n", s, rgb);
       return -1u;
     }
-    assert((hex & 0xff) == 0);
+    assert((hex & ~0xffu) == 0);
     ret |= (hex << shift);
     shift -= 4;
   }
