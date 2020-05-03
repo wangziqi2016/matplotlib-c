@@ -124,10 +124,18 @@ void color_str(uint32_t color, char *buf) {
 
 // Returns 0xFFFFFFFF to indicate failure
 uint32_t color_decode(const char *s) {
+  if(*s++ != '#') {
+    printf("Color code must begin with '#'\n");
+    return -1u;
+  }
   uint32_t ret = 0u;
   int shift = 24;
   for(int i = 0;i < 6;i++) {
     char ch = *s++;
+    if(ch == '\0') {
+      printf("Unexpected end of color code\n");
+      return -1u;
+    }
     uint32_t hex;
     if((ch >= '0' && ch <= '9')) {
       hex = (uint32_t)(ch - '0');
@@ -140,11 +148,16 @@ uint32_t color_decode(const char *s) {
       if(i <= 1) rgb = "Red";
       else if(i <= 3) rgb = "Green";
       else rgb = "Blue";
-      error_exit("Invalid color code: \"%s\"; Component \"%s\" contains invalid digit\n", s, rgb);
+      printf("Invalid color code: \"%s\"; Component \"%s\" contains invalid digit\n", s, rgb);
+      return -1u;
     }
     assert((hex & 0xff) == 0);
     ret |= (hex << shift);
     shift -= 4;
+  }
+  if(*s != '\0') {
+    printf("Unexpected character after color code\n");
+    return -1u;
   }
   return ret;
 }
