@@ -135,11 +135,15 @@ color_scheme_t color_schemes[] = {
 };
 
 // This function is re-entrant
-void color_str(uint32_t color, char *buf) {
+void _color_str(uint32_t color, char *buf, int for_latex) {
   if(color & 0xFF000000) {
     error_exit("Color value 0x%08X has non-zero upper 8 bits\n", color);
   }
-  sprintf(buf, "#%02X%02X%02X", COLOR_R(color), COLOR_G(color), COLOR_B(color));
+  if(for_latex == 1) {
+    sprintf(buf, "\\#%02X%02X%02X", COLOR_R(color), COLOR_G(color), COLOR_B(color));
+  } else {
+    sprintf(buf, "#%02X%02X%02X", COLOR_R(color), COLOR_G(color), COLOR_B(color));
+  }
   return;
 }
 
@@ -725,10 +729,13 @@ void plot_save_color_test(plot_t *plot, const char *filename) {
     plot_add_bar_type(test, label_buf, param->color_scheme->base[i], '\0');
     bar_t *bar = bar_init();
     bar->pos = bar_pos;
-    
     bar->width = bar_width;
     bar->height = bar_height;
     bar_set_type(bar, plot_find_bar_type(test, label_buf));
+    // Print color code
+    char color_buf[16];
+    color_str(bar_get_type(bar)->color, color_buf);
+    bar_set_text(bar, color_buf);
     plot_add_bar(test, bar);
     char xtick_text[16];
     snprintf(xtick_text, 16, "[%d]", i);
@@ -738,8 +745,6 @@ void plot_save_color_test(plot_t *plot, const char *filename) {
   }
   plot_add_x_title(test, "Color Scheme Test");
   plot_save_fig(test, filename);
-  // TODO: ADD TEXT (COLOR CODE)
-  // TODO: ADD TICK (Index)
   plot_free(test);
   return;
 }
@@ -796,7 +801,7 @@ void plot_add_bar(plot_t *plot, bar_t *bar) {
   int bar_text_free = 0;
   if(bar_text == NULL) {
     // Round the height
-    bar_text = fp_print(param->bar_text_decimals);
+    bar_text = fp_print(bar->height, param->bar_text_decimals);
     bar_text_free = 1;
     if(param->bar_text_rtrim == 1) {
       fp_rtrim(bar_text);
