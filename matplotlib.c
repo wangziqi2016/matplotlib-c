@@ -658,10 +658,18 @@ void plot_save_color_test(plot_t *plot, const char *filename) {
   plot_create_fig(test, test->param.width, test->param.height);
   plot_param_t *param = &plot->param;
   char label_buf[16];
+  int usable = param->color_scheme->item_count - param->color_offset;
+  double bar_width = param->width / (double)usable;
+  double bar_height = param->height;
+  double bar_pos = 0.0;
   for(int i = param->color_offset;i < param->color_scheme->item_count;i++) {
     sprintf(label_buf, "color %d", i);
     plot_add_bar_type(test, label_buf, param->color_scheme->base[i], '\0');
     bar_t *bar = bar_init();
+    bar->pos = bar_pos;
+    bar_pos += bar_width;
+    bar->width = bar_width;
+    bar->height = bar_height;
     bar_set_type(bar, plot_find_bar_type(test, label_buf));
     plot_add_bar(test, bar);
     bar_free(bar);
