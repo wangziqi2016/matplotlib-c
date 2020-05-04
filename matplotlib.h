@@ -72,7 +72,10 @@ extern uint32_t color_scheme_grey[];
 
 extern color_scheme_t color_schemes[];
 
-void color_str(uint32_t color, char *buf); // Returns RGB color code
+void _color_str(uint32_t color, char *buf, int for_latex); // Returns RGB color code
+inline static void color_str(uint32_t color, char *buf) { _color_str(color, buf, 0); }
+inline static void color_str_latex(uint32_t color, char *buf) { _color_str(color, buf, 1); }
+
 uint32_t color_decode(const char *s); // Decode string representation of color
 color_scheme_t *color_find_scheme(const char *name);  // Using string name to locate the color_scheme_t object
 
