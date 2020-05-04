@@ -633,6 +633,7 @@ void plot_save_fig(plot_t *plot, const char *filename) {
   buf_printf(buf, "  plot.xticks(cmatplotlib_xticks, cmatplotlib_xtick_labels");
   buf_printf(buf, ", fontsize=%d", param->xtick_font_size);
   if(param->xtick_rotation != 0) {
+    //printf("rotation %d\n", param->xtick_rotation);
     buf_printf(buf, ", rotation=%d", param->xtick_rotation);
   }
   buf_printf(buf, ")\n");
@@ -693,8 +694,8 @@ void plot_save_color_test(plot_t *plot, const char *filename) {
   // Use current plot's configuration
   plot_copy_param(test, &plot->param);
   plot_create_fig(test, test->param.width, test->param.height);
-  plot_param_t *param = &plot->param;
-  param->xtick_rotation = 45;
+  plot_param_t *param = &test->param;
+  param->xtick_rotation = 45; // Rotate 45 degree
   char label_buf[16];
   int usable = param->color_scheme->item_count - param->color_offset;
   double bar_width = param->width / (double)usable;
