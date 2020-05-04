@@ -768,7 +768,7 @@ void plot_save_hatch_test(plot_t *plot, const char *filename) {
   for(int i = param->color_offset;i < param->hatch_scheme->item_count;i++) {
     snprintf(label_buf, 16, "hatch %d", i);
     char hatch = param->hatch_scheme->base[i];
-    plot_add_bar_type(test, label_buf, "#FFFFFF", hatch);
+    plot_add_bar_type(test, label_buf, 0xFFFFFF, hatch);
     bar_t *bar = bar_init();
     bar->pos = bar_pos;
     bar->width = bar_width;
@@ -1543,7 +1543,17 @@ void parse_cb_set_color_scheme(parse_t *parse, plot_t *plot) {
 }
 
 void parse_cb_test_hatch(parse_t *parse, plot_t *plot) {
-  (void)parse; (void)plot;
+  if(parse_has_more_arg(parse) == 0) {
+    error_exit("Function \"test_hatch\" takes 1 argument\n");
+  }
+  char *filename = parse_get_str(parse);
+  plot_save_hatch_test(plot, filename);
+  free(filename);
+  if(parse_has_more_arg(parse) == 1) {
+    error_exit("Function \"test_hatch\" only takes 1 argument\n");
+  }
+  parse_expect_char(parse, ';');
+  return;
 }
 
 void parse_cb_test_color(parse_t *parse, plot_t *plot) {
