@@ -775,8 +775,11 @@ void plot_save_hatch_test(plot_t *plot, const char *filename) {
     bar->height = bar_height;
     bar_set_type(bar, plot_find_bar_type(test, label_buf));
     // Print color code
-    char hatch_buf[16];
-    if(hatch == '\\') snprintf(hatch_buf, 16, "\\\\");
+    char hatch_buf[32];
+    // In python this will be "\\..." and actual binary seen by latex is "\..."
+    if(hatch == '\\') snprintf(hatch_buf, sizeof(hatch_buf), "\\\\textbackslash");
+    else if(hatch == '^') snprintf(hatch_buf, sizeof(hatch_buf), "\\\\textasciicircum"); 
+    else if(hatch == '_') snprintf(hatch_buf, sizeof(hatch_buf), "\\\\_"); 
     else snprintf(hatch_buf, 16, "%c", hatch);
     bar_set_text(bar, hatch_buf);
     plot_add_bar(test, bar);
