@@ -776,7 +776,8 @@ void plot_save_hatch_test(plot_t *plot, const char *filename) {
     bar_set_type(bar, plot_find_bar_type(test, label_buf));
     // Print color code
     char hatch_buf[16];
-    snprintf(hatch_buf, 16, "%c", hatch);
+    if(hatch == '\\') snprintf(hatch_buf, 16, "\\\\");
+    else snprintf(hatch_buf, 16, "%c", hatch);
     bar_set_text(bar, hatch_buf);
     plot_add_bar(test, bar);
     char xtick_text[16];
@@ -1547,6 +1548,7 @@ void parse_cb_test_hatch(parse_t *parse, plot_t *plot) {
     error_exit("Function \"test_hatch\" takes 1 argument\n");
   }
   char *filename = parse_get_str(parse);
+  printf("Saving hatch test file to \"%s\"\n", filename);
   plot_save_hatch_test(plot, filename);
   free(filename);
   if(parse_has_more_arg(parse) == 1) {
@@ -1561,6 +1563,7 @@ void parse_cb_test_color(parse_t *parse, plot_t *plot) {
     error_exit("Function \"test_color\" takes 1 argument\n");
   }
   char *filename = parse_get_str(parse);
+  printf("Saving color test file to \"%s\"\n", filename);
   plot_save_color_test(plot, filename);
   free(filename);
   if(parse_has_more_arg(parse) == 1) {
