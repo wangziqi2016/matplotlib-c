@@ -507,7 +507,8 @@ plot_param_t default_param = {
   24, 0,     // x tick font size, rotation
   24, 0,     // y tick font size, rotation
   28, 28,    // x/y title font size
-  26, 0,     // bar text size, rotation      
+  26, 0,     // bar text size, rotation
+  2, 1,      // bar text decimals, rtrim
   NULL, 0,   // Hatch scheme/offset
   NULL, 0,   // Color scheme/offset
 };
@@ -522,7 +523,9 @@ void plot_param_print(plot_param_t *param) {
     param->xtick_font_size, param->xtick_rotation);
   printf("[param ytick] font %d rot %d\n", 
     param->ytick_font_size, param->ytick_rotation);
-  printf("[param bar_text] font %d\n", param->bar_text_font_size);
+  printf("[param bar_text] font %d rotation %d\n", param->bar_text_font_size, param->bar_text_rotation);
+  printf("[param bar_text] decimals %d rtrim %d\n", 
+    param->bar_text_decimals, param->bar_text_rtrim);
   if(param->hatch_scheme != NULL) {
     printf("[param hatch] name \"%s\" count %d offset %d (usable %d)\n", 
       param->hatch_scheme->name, param->hatch_scheme->item_count, param->hatch_offset,
@@ -787,6 +790,11 @@ void plot_add_bar(plot_t *plot, bar_t *bar) {
   }
   // This concludes arg list of bar()
   buf_printf(buf, ")\n");
+  // Then draw bar text
+  char *bar_text = bar->text;
+  if(bar_text == NULL) {
+    // Round the height and print 
+  }
   return;
 }
 

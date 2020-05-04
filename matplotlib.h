@@ -196,7 +196,7 @@ inline static void bar_set_type(bar_t *bar, bar_type_t *type) { bar->type = type
 
 void bar_set_text(bar_t *bar, const char *text);
 
-void bar_print(bat_t *bar);
+void bar_print(bar_t *bar);
 
 //* plot_t - Plotting function
 
@@ -224,6 +224,8 @@ typedef struct {
   // Bar text
   int bar_text_font_size;
   int bar_text_rotation;
+  int bar_text_decimals;      // Number of decimals after decimal point when printing the bar text
+  int bar_text_rtrim;         // Whether trim zeros after the number
   // Hatch and color
   const hatch_scheme_t *hatch_scheme;  // Hatch scheme
   int hatch_offset;                    // Offset in the array
