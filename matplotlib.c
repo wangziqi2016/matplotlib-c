@@ -490,6 +490,13 @@ void bar_set_text(bar_t *bar, const char *text) {
   return;
 }
 
+void bar_print(bar_t *bar) {
+  printf("[bar_t] height %f width %f pos %f bottom %f text \"%s\" label \"%s\"\n",
+    bar->height, bar->width, bar->pos, bar->bottom, bar->text,
+    bar->type ? bar->type->label : "");
+  return;
+}
+
 //* plot_t
 
 plot_param_t default_param = {

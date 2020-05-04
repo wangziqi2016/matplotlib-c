@@ -196,6 +196,8 @@ inline static void bar_set_type(bar_t *bar, bar_type_t *type) { bar->type = type
 
 void bar_set_text(bar_t *bar, const char *text);
 
+void bar_print(bat_t *bar);
+
 //* plot_t - Plotting function
 
 // Maximum size of legend pos (including trailing zero)
