@@ -229,7 +229,7 @@ void test_plot_color_test() {
   plot_t *plot = plot_init();
   plot->param.color_scheme = color_find_scheme("mixed");
   plot->param.color_offset = 0;
-  plot_save_color_test("test_color_1.pdf");
+  plot_save_color_test(plot, "test_color_1.pdf");
   plot_free(plot);
   printf("Pass\n");
   return;

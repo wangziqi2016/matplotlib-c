@@ -655,7 +655,7 @@ void plot_save_color_test(plot_t *plot, const char *filename) {
   plot_t *test = plot_init();
   // Use current plot's configuration
   plot_copy_param(test, &plot->param);
-  plot_create_fig(legend, test->param.width, test->param.height);
+  plot_create_fig(test, test->param.width, test->param.height);
   plot_param_t *param = &plot->param;
   char label_buf[16];
   for(int i = param->color_offset;i < param->color_scheme->item_count;i++) {
