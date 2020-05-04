@@ -674,18 +674,22 @@ void plot_save_color_test(plot_t *plot, const char *filename) {
   double bar_height = param->height;
   double bar_pos = 0.0;
   for(int i = param->color_offset;i < param->color_scheme->item_count;i++) {
-    sprintf(label_buf, "color %d", i);
+    snprintf(label_buf, 16, "color %d", i);
     plot_add_bar_type(test, label_buf, param->color_scheme->base[i], '\0');
     bar_t *bar = bar_init();
     bar->pos = bar_pos;
-    bar_pos += bar_width;
+    
     bar->width = bar_width;
     bar->height = bar_height;
     bar_set_type(bar, plot_find_bar_type(test, label_buf));
     plot_add_bar(test, bar);
+    char xtick_text[16];
+    snprintf(xtick_text, 16, "[%d]", i);
+    plot_add_xtick(test, bar_pos + 0.5 * bar_width, xtick_text);
     bar_free(bar);
+    bar_pos += bar_width;
   }
-  plot_add_x_title(test, "Color Scheme");
+  plot_add_x_title(test, "Color Scheme Test");
   plot_save_fig(test, filename);
   // TODO: ADD TEXT (COLOR CODE)
   // TODO: ADD TICK (Index)
@@ -742,6 +746,7 @@ void plot_add_bar(plot_t *plot, bar_t *bar) {
   return;
 }
 
+// Pos is always aligned to the center of the text
 void plot_add_xtick(plot_t *plot, double pos, const char *text) {
   buf_t *buf = plot->buf;
   buf_printf(buf, "ax.set_xtick([%f])\n", pos);
