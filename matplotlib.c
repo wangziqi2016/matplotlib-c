@@ -534,7 +534,12 @@ const char *plot_preamble = \
   "  r'\\usepackage{sansmath}',\n"
   "  r'\\sansmath'\n"
   "]\n"
-  "\n";
+  "\n"
+  // The following are used to draw x/y ticks
+  "cmatplotlib_xticks = []\n"
+  "cmatplotlib_xtick_labels = []\n"
+  "cmatplotlib_yticks = []\n"
+  "cmatplotlib_ytick_labels = []\n\n";
 
 plot_t *plot_init() {
   plot_t *plot = (plot_t *)malloc(sizeof(plot_t));
@@ -618,6 +623,17 @@ void plot_save_fig(plot_t *plot, const char *filename) {
   if(plot->fig_created == 0) {
     error_exit("The figure has not been created yet\n");
   }
+  buf_t *buf = plot->buf;
+  // Set x tick and y tick
+  buf_printf(buf, "if len(cmatplotlib_xticks) != 0:\n");
+  buf_printf(buf, "  ax.set_xticks(cmatplotlib_xticks)\n");
+  buf_printf(buf, "  ax.set_xticklabels(cmatplotlib_xtick_labels, {'fontsize': %d})\n\n", 
+    plot->param.xtick_font_size);
+  buf_printf(buf, "if len(cmatplotlib_yticks) != 0:\n");
+  buf_printf(buf, "  ax.set_yticks(cmatplotlib_yticks)\n");
+  buf_printf(buf, "  ax.set_yticklabels(cmatplotlib_ytick_labels, {'fontsize': %d})\n\n", 
+    plot->param.ytick_font_size);
+
   buf_printf(plot->buf, "plot.savefig(\"%s\", bbox_inches='tight')\n\n", filename);
   py_run(plot->py, buf_c_str(plot->buf));
   return;
@@ -749,8 +765,8 @@ void plot_add_bar(plot_t *plot, bar_t *bar) {
 // Pos is always aligned to the center of the text
 void plot_add_xtick(plot_t *plot, double pos, const char *text) {
   buf_t *buf = plot->buf;
-  buf_printf(buf, "ax.set_xtick([%f])\n", pos);
-  buf_printf(buf, "ax.set_xticklabels(['%s'], {'fontsize': %d})\n", text, plot->param.xtick_font_size);
+  buf_printf(buf, "cmatplotlib_xticks.append(%f)\n", pos);
+  buf_printf(buf, "cmatplotlib_xticklabels.append('%s')\n", text);
   return;
 }
 
