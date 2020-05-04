@@ -1331,6 +1331,8 @@ parse_cb_entry_t parse_cb_top_funcs[] = {
   {"create_fig", parse_cb_create_fig},
   {"set_hatch_scheme", parse_cb_set_hatch_scheme},
   {"set_color_scheme", parse_cb_set_color_scheme},
+  {"test_hatch", parse_cb_test_hatch},
+  {"test_color", parse_cb_test_color},
 };
 const int parse_cb_top_funcs_count = sizeof(parse_cb_top_funcs) / sizeof(parse_cb_entry_t);
 
@@ -1494,6 +1496,23 @@ void parse_cb_set_color_scheme(parse_t *parse, plot_t *plot) {
   }
   if(parse_has_more_arg(parse) == 1) {
     error_exit("Function \"set_color_scheme\" takes 1 or 2 arguments\n");
+  }
+  parse_expect_char(parse, ';');
+  return;
+}
+
+void parse_cb_test_hatch(parse_t *parse, plot_t *plot) {
+  (void)parse; (void)plot;
+}
+void parse_cb_test_color(parse_t *parse, plot_t *plot) {
+  if(parse_has_more_arg(parse) == 0) {
+    error_exit("Function \"test_color\" takes 1 argument\n");
+  }
+  char *filename = parse_get_str(parse);
+  plot_save_color_test(plot, filename);
+  free(filename);
+  if(parse_has_more_arg(parse) == 1) {
+    error_exit("Function \"test_color\" only takes 1 argument\n");
   }
   parse_expect_char(parse, ';');
   return;
