@@ -768,6 +768,7 @@ void plot_set_legend_rows(plot_t *plot, int rows) {
 void plot_add_bar(plot_t *plot, bar_t *bar) {
   assert(bar->type != NULL);
   buf_t *buf = plot->buf;
+  plot_param_t *param = &plot->param;
   // Firts two args are fixed
   buf_printf(buf, "ax.bar(%f, %f\n", bar->pos, bar->height);
   // Following args are optional
@@ -792,9 +793,20 @@ void plot_add_bar(plot_t *plot, bar_t *bar) {
   buf_printf(buf, ")\n");
   // Then draw bar text
   char *bar_text = bar->text;
+  int bar_text_free = 0;
   if(bar_text == NULL) {
-    // Round the height and print 
+    // Round the height
+    bar_text = fp_print(param->bar_text_decimals);
+    bar_text_free = 1;
+    if(param->bar_text_rtrim == 1) {
+      fp_rtrim(bar_text);
+    }
   }
+  // TODO: ADJUST FOR ERROR BAR
+  buf_printf(buf, "ax.text(%f, %f, '%s'", bar->pos + bar->width / 2.0, bar->height, bar_text);
+  buf_printf(buf, "  , ha='center', va='bottom', rotation=%d, fontsize=%d)\n",
+    param->bar_text_rotation, param->bar_text_font_size);
+  if(bar_text_free == 1) free(bar_text);
   return;
 }
 
