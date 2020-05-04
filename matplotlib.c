@@ -627,15 +627,22 @@ void plot_save_fig(plot_t *plot, const char *filename) {
     error_exit("The figure has not been created yet\n");
   }
   buf_t *buf = plot->buf;
+  plot_param_t *param = &plot->param;
   // Set x tick and y tick
   buf_printf(buf, "if len(cmatplotlib_xticks) != 0:\n");
-  buf_printf(buf, "  ax.set_xticks(cmatplotlib_xticks)\n");
-  buf_printf(buf, "  ax.set_xticklabels(cmatplotlib_xtick_labels, {'fontsize': %d})\n\n", 
-    plot->param.xtick_font_size);
+  buf_printf(buf, "  plot.xticks(cmatplotlib_xticks, cmatplotlib_xtick_labels");
+  buf_printf(buf, ", fontsize=%d", param->xtick_font_size);
+  if(param->xtick_rotation != 0) {
+    buf_printf(buf, ", rotation=%d", param->xtick_rotation);
+  }
+  buf_printf(buf, ")\n");
   buf_printf(buf, "if len(cmatplotlib_yticks) != 0:\n");
-  buf_printf(buf, "  ax.set_yticks(cmatplotlib_yticks)\n");
-  buf_printf(buf, "  ax.set_yticklabels(cmatplotlib_ytick_labels, {'fontsize': %d})\n\n", 
-    plot->param.ytick_font_size);
+  buf_printf(buf, "  plot.yticks(cmatplotlib_yticks, cmatplotlib_ytick_labels");
+  buf_printf(buf, ", fontsize=%d", param->ytick_font_size);
+  if(param->xtick_rotation != 0) {
+    buf_printf(buf, ", rotation=%d", param->ytick_rotation);
+  }
+  buf_printf(buf, ")\n");
 
   buf_printf(plot->buf, "plot.savefig(\"%s\", bbox_inches='tight')\n\n", filename);
   py_run(plot->py, buf_c_str(plot->buf));
@@ -687,6 +694,7 @@ void plot_save_color_test(plot_t *plot, const char *filename) {
   plot_copy_param(test, &plot->param);
   plot_create_fig(test, test->param.width, test->param.height);
   plot_param_t *param = &plot->param;
+  param->xtick_rotation = 45;
   char label_buf[16];
   int usable = param->color_scheme->item_count - param->color_offset;
   double bar_width = param->width / (double)usable;
