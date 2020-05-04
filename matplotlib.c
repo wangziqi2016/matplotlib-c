@@ -229,6 +229,7 @@ void hatch_scheme_print(hatch_scheme_t *scheme) {
 //* py_t
 
 static int py_count = 0;
+static int inited = 0;
 
 py_t *py_init() {
   py_t *py = (py_t *)malloc(sizeof(py_t));
@@ -236,15 +237,25 @@ py_t *py_init() {
   memset(py, 0x00, sizeof(py_t));
   // This is recommended by Python doc
   Py_SetProgramName("matplotlib-c");
-  if(py_count == 0) Py_Initialize();
+  // Always only init/fin python lib once during the program's lifetime
+  // Some modules do not clean up properly and will crash otherwise
+  if(inited == 0) {
+    inited = 1;
+    Py_Initialize();
+    atexit(Py_Finalize);
+  }
+  //if(py_count == 0) Py_Initialize();
   py_count++;
   return py;
 }
 
 void py_free(py_t *py) {
   // Only free when ref count is zero
+  assert(py_count != 0);
   py_count--;
-  if(py_count == 0) Py_Finalize();
+  // Don't init/fin multiple times!
+  // This will cause numpy to crash
+  //if(py_count == 0) Py_Finalize();
   free(py);
   return;
 }
@@ -674,8 +685,10 @@ void plot_save_color_test(plot_t *plot, const char *filename) {
     plot_add_bar(test, bar);
     bar_free(bar);
   }
+  plot_add_x_title(test, "Color Scheme");
   plot_save_fig(test, filename);
-  // TODO: ADD TEXT (COLOR CODE / INDEX)
+  // TODO: ADD TEXT (COLOR CODE)
+  // TODO: ADD TICK (Index)
   plot_free(test);
   return;
 }
