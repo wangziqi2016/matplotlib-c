@@ -255,6 +255,7 @@ void plot_create_fig(plot_t *plot, double width, double height);
 void plot_save_fig(plot_t *plot, const char *filename);
 void plot_copy_param(plot_t *plot, plot_param_t *param);
 void plot_save_legend(plot_t *plot, const char *filename);
+void plot_save_color_test(plot_t *plot, const char *filename);
 
 void plot_set_legend_rows(plot_t *plot, int rows);
 void plot_set_legend_pos(plot_t *plot, const char *pos);

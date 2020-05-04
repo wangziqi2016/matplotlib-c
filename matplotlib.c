@@ -494,12 +494,12 @@ void plot_param_print(plot_param_t *param) {
     param->xtick_font_size, param->ytick_font_size);
   printf("[param bar_text] font %d\n", param->bar_text_font_size);
   if(param->hatch_scheme != NULL) {
-    printf("[plot hatch] name \"%s\" count %d offset %d (usable %d)\n", 
+    printf("[param hatch] name \"%s\" count %d offset %d (usable %d)\n", 
       param->hatch_scheme->name, param->hatch_scheme->item_count, param->hatch_offset,
       param->hatch_scheme->item_count - param->hatch_offset);
   }
   if(param->color_scheme != NULL) {
-    printf("[plot color] name \"%s\" count %d offset %d (usable %d)\n", 
+    printf("[param color] name \"%s\" count %d offset %d (usable %d)\n", 
       param->color_scheme->name, param->color_scheme->item_count, param->color_offset,
       param->color_scheme->item_count - param->color_offset);
   }
@@ -647,6 +647,28 @@ void plot_save_legend(plot_t *plot, const char *filename) {
   plot_add_legend(legend);
   plot_save_fig(legend, filename);
   plot_free(legend);
+  return;
+}
+
+// This functions draws a color test bar graph
+void plot_save_color_test(plot_t *plot, const char *filename) {
+  plot_t *test = plot_init();
+  // Use current plot's configuration
+  plot_copy_param(test, &plot->param);
+  plot_create_fig(legend, test->param.width, test->param.height);
+  plot_param_t *param = &plot->param;
+  char label_buf[16];
+  for(int i = param->color_offset;i < param->color_scheme->item_count;i++) {
+    sprintf(label_buf, "color %d", i);
+    plot_add_bar_type(test, label_buf, param->color_scheme->base[i], '\0');
+    bar_t *bar = bar_init();
+    bar_set_type(bar, plot_find_bar_type(test, label_buf));
+    plot_add_bar(test, bar);
+    bar_free(bar);
+  }
+  plot_save_fig(test, filename);
+  // TODO: ADD TEXT (COLOR CODE / INDEX)
+  plot_free(test);
   return;
 }
 
