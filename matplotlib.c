@@ -1551,12 +1551,12 @@ void parse_cb_test_hatch(parse_t *parse, plot_t *plot) {
     error_exit("Function \"test_hatch\" takes 1 argument\n");
   }
   char *filename = parse_get_str(parse);
-  printf("Saving hatch test file to \"%s\"\n", filename);
-  plot_save_hatch_test(plot, filename);
-  free(filename);
   if(parse_has_more_arg(parse) == 1) {
     error_exit("Function \"test_hatch\" only takes 1 argument\n");
   }
+  printf("Saving hatch test file to \"%s\"\n", filename);
+  plot_save_hatch_test(plot, filename);
+  free(filename);
   parse_expect_char(parse, ';');
   return;
 }
@@ -1566,12 +1566,12 @@ void parse_cb_test_color(parse_t *parse, plot_t *plot) {
     error_exit("Function \"test_color\" takes 1 argument\n");
   }
   char *filename = parse_get_str(parse);
-  printf("Saving color test file to \"%s\"\n", filename);
-  plot_save_color_test(plot, filename);
-  free(filename);
   if(parse_has_more_arg(parse) == 1) {
     error_exit("Function \"test_color\" only takes 1 argument\n");
   }
+  printf("Saving color test file to \"%s\"\n", filename);
+  plot_save_color_test(plot, filename);
+  free(filename);
   parse_expect_char(parse, ';');
   return;
 }
