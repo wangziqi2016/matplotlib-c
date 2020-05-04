@@ -770,6 +770,14 @@ void plot_add_xtick(plot_t *plot, double pos, const char *text) {
   return;
 }
 
+// Pos is always aligned to the center of the text
+void plot_add_ytick(plot_t *plot, double pos, const char *text) {
+  buf_t *buf = plot->buf;
+  buf_printf(buf, "cmatplotlib_yticks.append(%f)\n", pos);
+  buf_printf(buf, "cmatplotlib_ytick_labels.append('%s')\n", text);
+  return;
+}
+
 // Uses legend font size, legend vertical, and legend position in the param object
 void plot_add_legend(plot_t *plot) {
   int col_count = 0;

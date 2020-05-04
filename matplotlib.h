@@ -262,6 +262,7 @@ void plot_set_legend_pos(plot_t *plot, const char *pos);
 
 void plot_add_bar(plot_t *plot, bar_t *bar);
 void plot_add_xtick(plot_t *plot, double pos, const char *text);
+void plot_add_ytick(plot_t *plot, double pos, const char *text);
 void plot_add_legend(plot_t *plot);
 void plot_add_x_title(plot_t *plot, const char *title);
 void plot_add_y_title(plot_t *plot, const char *title);
