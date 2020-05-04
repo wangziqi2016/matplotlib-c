@@ -493,7 +493,16 @@ void plot_param_print(plot_param_t *param) {
   printf("[param tick] x font %d y font %d\n", 
     param->xtick_font_size, param->ytick_font_size);
   printf("[param bar_text] font %d\n", param->bar_text_font_size);
-  
+  if(param->hatch_scheme != NULL) {
+    printf("[plot hatch] name \"%s\" count %d offset %d (usable %d)\n", 
+      param->hatch_scheme->name, param->hatch_scheme->item_count, param->hatch_offset,
+      param->hatch_scheme->item_count - param->hatch_offset);
+  }
+  if(param->color_scheme != NULL) {
+    printf("[plot color] name \"%s\" count %d offset %d (usable %d)\n", 
+      param->color_scheme->name, param->color_scheme->item_count, param->color_offset,
+      param->color_scheme->item_count - param->color_offset);
+  }
   return;
 }
 
