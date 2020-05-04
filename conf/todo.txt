@@ -9,7 +9,15 @@ X Adding color decoder from string to uint32_t
 
 X Adding string jump table
 
+X Adding tick and text and use color test as a way of testing
+
+Adding automated way of setting params (jump table or offset table)
+
+Adding color scheme overflow handling
+
 Adding reset and reset all
+
+Adding README to the repo
 
 Adding bar group, bar type and bars 
 

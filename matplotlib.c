@@ -511,7 +511,7 @@ plot_param_t default_param = {
   24, 0,     // x tick font size, rotation
   24, 0,     // y tick font size, rotation
   28, 28,    // x/y title font size
-  26, 0,     // bar text size, rotation
+  26, 90,    // bar text size, rotation
   2, 1,      // bar text decimals, rtrim
   NULL, 0,   // Hatch scheme/offset
   NULL, 0,   // Color scheme/offset
@@ -719,6 +719,7 @@ void plot_save_color_test(plot_t *plot, const char *filename) {
   plot_create_fig(test, test->param.width, test->param.height);
   plot_param_t *param = &test->param;
   param->xtick_rotation = 45; // Rotate 45 degree
+  param->bar_text_rotation = 90; // Rotate 90 degree
   char label_buf[16];
   int usable = param->color_scheme->item_count - param->color_offset;
   double bar_width = param->width / (double)usable;
@@ -734,7 +735,7 @@ void plot_save_color_test(plot_t *plot, const char *filename) {
     bar_set_type(bar, plot_find_bar_type(test, label_buf));
     // Print color code
     char color_buf[16];
-    color_str(bar_get_type(bar)->color, color_buf);
+    color_str_latex(bar_get_type(bar)->color, color_buf);
     bar_set_text(bar, color_buf);
     plot_add_bar(test, bar);
     char xtick_text[16];
