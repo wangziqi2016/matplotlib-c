@@ -766,7 +766,7 @@ void plot_add_bar(plot_t *plot, bar_t *bar) {
 void plot_add_xtick(plot_t *plot, double pos, const char *text) {
   buf_t *buf = plot->buf;
   buf_printf(buf, "cmatplotlib_xticks.append(%f)\n", pos);
-  buf_printf(buf, "cmatplotlib_xticklabels.append('%s')\n", text);
+  buf_printf(buf, "cmatplotlib_xtick_labels.append('%s')\n", text);
   return;
 }
 
