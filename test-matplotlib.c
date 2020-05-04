@@ -224,6 +224,17 @@ void test_plot_legend() {
   return;
 }
 
+void test_plot_color_test() {
+  printf("========== test_plot_color_test ==========\n");
+  plot_t *plot = plot_init();
+  plot->param.color_scheme = color_find_scheme("mixed");
+  plot->param.color_offset = 0;
+  plot_save_color_test("test_color_1.pdf");
+  plot_free(plot);
+  printf("Pass\n");
+  return;
+}
+
 void test_parse_getchar() {
   printf("========== test_parse_getchar ==========\n");
   // Line 1, 3, 4 has contents; 6 lines in total
@@ -514,6 +525,7 @@ int main(int argc, char **argv) {
   test_buf();
   test_vec();
   if(valgrind_flag == 0) test_plot_legend();
+  if(valgrind_flag == 0) test_plot_color_test();
   test_parse_getchar();
   test_parse_until();
   test_parse_ident();
