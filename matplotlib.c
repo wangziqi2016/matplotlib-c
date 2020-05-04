@@ -742,6 +742,13 @@ void plot_add_bar(plot_t *plot, bar_t *bar) {
   return;
 }
 
+void plot_add_xtick(plot_t *plot, double pos, const char *text) {
+  buf_t *buf = plot->buf;
+  buf_printf(buf, "ax.set_xtick([%f])\n", pos);
+  buf_printf(buf, "ax.set_xticklabels(['%s'], {'fontsize': %d})\n", text, plot->param.xtick_font_size);
+  return;
+}
+
 // Uses legend font size, legend vertical, and legend position in the param object
 void plot_add_legend(plot_t *plot) {
   int col_count = 0;

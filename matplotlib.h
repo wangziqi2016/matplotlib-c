@@ -177,9 +177,9 @@ void bar_type_print(bar_type_t *type);
 typedef struct {
   double height;    // Height of the bar
   double bottom;    // Non-zero means we draw stacked bar
-  double pos;       // Offset in the horizontal direction
+  double pos;       // Offset in the horizontal direction (aligned to the left edge)
   double width;     // Width of the bar
-  bar_type_t *type; // Used to draw legend
+  bar_type_t *type; // Used to draw legend; has no ownership
   char *text;       // Optional text (has ownership if not NULL)
   // TODO: ADD ERROR BAR, WIDTH AND COLOR
   // TODO: LINE WIDTH, LINE PATTERN, LINE COLOR, etc. see 
@@ -261,6 +261,7 @@ void plot_set_legend_rows(plot_t *plot, int rows);
 void plot_set_legend_pos(plot_t *plot, const char *pos);
 
 void plot_add_bar(plot_t *plot, bar_t *bar);
+void plot_add_xtick(plot_t *plot, double pos, const char *text);
 void plot_add_legend(plot_t *plot);
 void plot_add_x_title(plot_t *plot, const char *title);
 void plot_add_y_title(plot_t *plot, const char *title);
