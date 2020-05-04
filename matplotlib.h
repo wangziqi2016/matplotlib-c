@@ -64,6 +64,7 @@ typedef struct {
 
 extern uint32_t color_scheme_mixed[];
 extern uint32_t color_scheme_red[];
+extern uint32_t color_scheme_blue[];
 extern uint32_t color_scheme_grey[];
 
 // This macro generates an entry in color_schemes
@@ -216,6 +217,11 @@ typedef struct {
   int ytitle_font_size;
   // Bar text
   int bar_text_font_size;
+  // Hatch and color
+  const hatch_scheme_t *hatch_scheme;  // Hatch scheme
+  int hatch_offset;                    // Offset in the array
+  const color_scheme_t *color_scheme;  // Color scheme
+  int color_offset;                    // Offset in the array
 } plot_param_t;
 
 extern plot_param_t default_param; // Default param, will be copied over during init
@@ -234,10 +240,6 @@ typedef struct {
   char *ytitle;                        // Y title; Specified at top level
   char *fig_filename;                  // File name to save the figure
   char *legend_filename;               // File name to save legend, if there is one (optional)
-  const hatch_scheme_t *hatch_scheme;  // Hatch scheme
-  int hatch_offset;                    // Offset in the array
-  const color_scheme_t *color_scheme;  // Color scheme
-  int color_offset;                    // Offset in the array
 } plot_t;
 
 plot_t *plot_init();

@@ -108,6 +108,14 @@ uint32_t color_scheme_red[] = {
   COLOR_GEN(0x7f, 0x00, 0x00),
 };
 
+uint32_t color_scheme_blue[] = {
+  COLOR_GEN(0x0a, 0x11, 0x72),
+  COLOR_GEN(0x13, 0x38, 0xbe),
+  COLOR_GEN(0x04, 0x92, 0xc2),
+  COLOR_GEN(0x63, 0xc5, 0xda),
+  COLOR_GEN(0x82, 0xee, 0xfd),
+};
+
 uint32_t color_scheme_grey[] = {
   COLOR_GEN(0xee, 0xee, 0xee),
   COLOR_GEN(0xcc, 0xcc, 0xcc),
@@ -122,6 +130,7 @@ uint32_t color_scheme_grey[] = {
 color_scheme_t color_schemes[] = {
   COLOR_SCHEME_GEN("mixed", color_scheme_mixed),
   COLOR_SCHEME_GEN("red", color_scheme_red),
+  COLOR_SCHEME_GEN("blue", color_scheme_blue),
   COLOR_SCHEME_GEN("grey", color_scheme_grey),
 };
 
@@ -471,6 +480,8 @@ plot_param_t default_param = {
   24, 24,    // x/y tick font size
   28, 28,    // x/y title font size
   26,        // bar text size
+  NULL, 0,   // Hatch scheme/offset
+  NULL, 0,   // Color scheme/offset
 };
 
 void plot_param_print(plot_param_t *param) {
@@ -482,6 +493,7 @@ void plot_param_print(plot_param_t *param) {
   printf("[param tick] x font %d y font %d\n", 
     param->xtick_font_size, param->ytick_font_size);
   printf("[param bar_text] font %d\n", param->bar_text_font_size);
+  
   return;
 }
 
@@ -724,16 +736,6 @@ void plot_print(plot_t *plot, int print_buf) {
   if(plot->ytitle != NULL) printf("[plot] ytitle %s\n", plot->ytitle);
   if(plot->fig_filename != NULL) printf("[plot] fig_filename %s\n", plot->fig_filename);
   if(plot->legend_filename != NULL) printf("[plot] legend_filename %s\n", plot->legend_filename);
-  if(plot->hatch_scheme != NULL) {
-    printf("[plot] hatch name \"%s\" count %d offset %d (usable %d)\n", 
-      plot->hatch_scheme->name, plot->hatch_scheme->item_count, plot->hatch_offset,
-      plot->hatch_scheme->item_count - plot->hatch_offset);
-  }
-  if(plot->color_scheme != NULL) {
-    printf("[plot] hatch name \"%s\" count %d offset %d (usable %d)\n", 
-      plot->color_scheme->name, plot->color_scheme->item_count, plot->color_offset,
-      plot->color_scheme->item_count - plot->color_offset);
-  }
   // Print param
   plot_param_print(&plot->param);
   // Print bar types
@@ -1318,14 +1320,14 @@ void parse_cb_set_hatch_scheme(parse_t *parse, plot_t *plot) {
     error_exit("Function \"set_hatch_scheme\" takes at least 1 argument\n");
   }
   char *scheme_name = parse_get_str(parse);
-  plot->hatch_scheme = hatch_find_scheme(scheme_name);
-  if(plot->hatch_scheme == NULL) {
+  plot->param.hatch_scheme = hatch_find_scheme(scheme_name);
+  if(plot->param.hatch_scheme == NULL) {
     error_exit("Hatch scheme name \"%s\" does not exist\n", scheme_name);
   }
   free(scheme_name);
   // Read hatch offset
   if(parse_has_more_arg(parse) == 1) {
-    plot->hatch_offset = parse_get_int64_range(parse, 0, plot->hatch_scheme->item_count - 1);
+    plot->param.hatch_offset = parse_get_int64_range(parse, 0, plot->param.hatch_scheme->item_count - 1);
   }
   if(parse_has_more_arg(parse) == 1) {
     error_exit("Function \"set_hatch_scheme\" takes 1 or 2 arguments\n");
@@ -1339,14 +1341,14 @@ void parse_cb_set_color_scheme(parse_t *parse, plot_t *plot) {
     error_exit("Function \"set_color_scheme\" takes at least 1 argument\n");
   }
   char *scheme_name = parse_get_str(parse);
-  plot->color_scheme = color_find_scheme(scheme_name);
-  if(plot->color_scheme == NULL) {
+  plot->param.color_scheme = color_find_scheme(scheme_name);
+  if(plot->param.color_scheme == NULL) {
     error_exit("Color scheme name \"%s\" does not exist\n", scheme_name);
   }
   free(scheme_name);
   // Read hatch offset
   if(parse_has_more_arg(parse) == 1) {
-    plot->color_offset = parse_get_int64_range(parse, 0, plot->color_scheme->item_count - 1);
+    plot->param.color_offset = parse_get_int64_range(parse, 0, plot->param.color_scheme->item_count - 1);
   }
   if(parse_has_more_arg(parse) == 1) {
     error_exit("Function \"set_color_scheme\" takes 1 or 2 arguments\n");
