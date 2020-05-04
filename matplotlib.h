@@ -211,7 +211,9 @@ typedef struct {
   char legend_pos[PLOT_LEGEND_POS_MAX_SIZE]; // Legend position; This string should never be freed
   // Tick
   int xtick_font_size;
+  int xtick_rotation;
   int ytick_font_size;
+  int ytick_rotation;
   // Title
   int xtitle_font_size;
   int ytitle_font_size;

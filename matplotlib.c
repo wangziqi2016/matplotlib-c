@@ -488,7 +488,8 @@ plot_param_t default_param = {
   1,         // legend_rows
   28,        // legend_font_size
   "best",    // Legend pos; Alternatives are: {lower, center, upper} x {left, center, right} or "center"
-  24, 24,    // x/y tick font size
+  24, 0,     // x tick font size, rotation
+  24, 0,     // y tick font size, rotation
   28, 28,    // x/y title font size
   26,        // bar text size
   NULL, 0,   // Hatch scheme/offset
@@ -501,8 +502,10 @@ void plot_param_print(plot_param_t *param) {
     param->legend_font_size, param->legend_rows, param->legend_pos);
   printf("[param title] x font %d y font %d\n", 
     param->xtitle_font_size, param->ytitle_font_size);
-  printf("[param tick] x font %d y font %d\n", 
-    param->xtick_font_size, param->ytick_font_size);
+  printf("[param xtick] font %d rot %d\n", 
+    param->xtick_font_size, param->xtick_rotation);
+  printf("[param ytick] font %d rot %d\n", 
+    param->ytick_font_size, param->ytick_rotation);
   printf("[param bar_text] font %d\n", param->bar_text_font_size);
   if(param->hatch_scheme != NULL) {
     printf("[param hatch] name \"%s\" count %d offset %d (usable %d)\n", 
