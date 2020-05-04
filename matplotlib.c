@@ -500,7 +500,7 @@ plot_param_t default_param = {
   24, 0,     // x tick font size, rotation
   24, 0,     // y tick font size, rotation
   28, 28,    // x/y title font size
-  26,        // bar text size
+  26, 0,     // bar text size, rotation      
   NULL, 0,   // Hatch scheme/offset
   NULL, 0,   // Color scheme/offset
 };

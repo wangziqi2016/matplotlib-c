@@ -221,6 +221,7 @@ typedef struct {
   int ytitle_font_size;
   // Bar text
   int bar_text_font_size;
+  int bar_text_rotation;
   // Hatch and color
   const hatch_scheme_t *hatch_scheme;  // Hatch scheme
   int hatch_offset;                    // Offset in the array
