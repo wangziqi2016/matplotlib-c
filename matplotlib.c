@@ -108,9 +108,21 @@ uint32_t color_scheme_red[] = {
   COLOR_GEN(0x7f, 0x00, 0x00),
 };
 
+uint32_t color_scheme_grey[] = {
+  COLOR_GEN(0xee, 0xee, 0xee),
+  COLOR_GEN(0xcc, 0xcc, 0xcc),
+  COLOR_GEN(0xaa, 0xaa, 0xaa),
+  COLOR_GEN(0x88, 0x88, 0x88),
+  COLOR_GEN(0x66, 0x66, 0x66),
+  COLOR_GEN(0x44, 0x44, 0x44),
+  COLOR_GEN(0x22, 0x22, 0x22),
+  COLOR_GEN(0x00, 0x00, 0x00),
+};
+
 color_scheme_t color_schemes[] = {
   COLOR_SCHEME_GEN("mixed", color_scheme_mixed),
   COLOR_SCHEME_GEN("red", color_scheme_red),
+  COLOR_SCHEME_GEN("grey", color_scheme_grey),
 };
 
 // This function is re-entrant
@@ -716,6 +728,11 @@ void plot_print(plot_t *plot, int print_buf) {
     printf("[plot] hatch name \"%s\" count %d offset %d (usable %d)\n", 
       plot->hatch_scheme->name, plot->hatch_scheme->item_count, plot->hatch_offset,
       plot->hatch_scheme->item_count - plot->hatch_offset);
+  }
+  if(plot->color_scheme != NULL) {
+    printf("[plot] hatch name \"%s\" count %d offset %d (usable %d)\n", 
+      plot->color_scheme->name, plot->color_scheme->item_count, plot->color_offset,
+      plot->color_scheme->item_count - plot->color_offset);
   }
   // Print param
   plot_param_print(&plot->param);

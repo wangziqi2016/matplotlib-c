@@ -48,5 +48,6 @@
 !save_fig;
 
 !set_hatch_scheme "default" 27;
+!set_color_scheme "mixed" 4;
 
 !plot_print 0;

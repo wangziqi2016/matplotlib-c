@@ -64,6 +64,7 @@ typedef struct {
 
 extern uint32_t color_scheme_mixed[];
 extern uint32_t color_scheme_red[];
+extern uint32_t color_scheme_grey[];
 
 // This macro generates an entry in color_schemes
 #define COLOR_SCHEME_GEN(name, base) {name, base, sizeof(base) / COLOR_SIZE}
@@ -323,6 +324,7 @@ void parse_top_property(parse_t *parse, plot_t *plot);
 extern parse_cb_entry_t parse_cb_top_funcs[];
 extern const int parse_cb_top_funcs_count;
 
+// Call backs for top-level functions
 void parse_cb_plot_print(parse_t *parse, plot_t *plot);
 void parse_cb_version_print(parse_t *parse, plot_t *plot);
 void parse_cb_param_print(parse_t *parse, plot_t *plot);
