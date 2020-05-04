@@ -750,6 +750,47 @@ void plot_save_color_test(plot_t *plot, const char *filename) {
   return;
 }
 
+void plot_save_hatch_test(plot_t *plot, const char *filename) {
+  plot_t *test = plot_init();
+  // Use current plot's configuration
+  plot_copy_param(test, &plot->param);
+  plot_param_t *param = &test->param;
+  param->xtick_rotation = 45; // Rotate 45 degree
+  param->bar_text_rotation = 90; // Rotate 90 degree
+  char label_buf[16];
+  int usable = param->hatch_scheme->item_count - param->color_offset;
+  double bar_width = 2.0; // To show the hatch we need fixed width bar
+  param->width = usable * bar_width; // Graph width is extended as there are more hatches
+  double bar_height = param->height;
+  double bar_pos = 0.0;
+  // Must do it here since we adjusted the width
+  plot_create_fig(test, param->width, param->height);
+  for(int i = param->color_offset;i < param->hatch_scheme->item_count;i++) {
+    snprintf(label_buf, 16, "hatch %d", i);
+    char hatch = param->hatch_scheme->base[i];
+    plot_add_bar_type(test, label_buf, "#FFFFFF", hatch);
+    bar_t *bar = bar_init();
+    bar->pos = bar_pos;
+    bar->width = bar_width;
+    bar->height = bar_height;
+    bar_set_type(bar, plot_find_bar_type(test, label_buf));
+    // Print color code
+    char hatch_buf[16];
+    snprintf(hatch_buf, 16, "%c", hatch);
+    bar_set_text(bar, hatch_buf);
+    plot_add_bar(test, bar);
+    char xtick_text[16];
+    snprintf(xtick_text, 16, "[%d]", i);
+    plot_add_xtick(test, bar_pos + 0.5 * bar_width, xtick_text);
+    bar_free(bar);
+    bar_pos += bar_width;
+  }
+  plot_add_x_title(test, "Hatch Scheme Test");
+  plot_save_fig(test, filename);
+  plot_free(test);
+  return;
+}
+
 // Sets legend pos by copying the string to the param struct
 // The given string should not be longer than the storage size
 void plot_set_legend_pos(plot_t *plot, const char *pos) {
@@ -1504,6 +1545,7 @@ void parse_cb_set_color_scheme(parse_t *parse, plot_t *plot) {
 void parse_cb_test_hatch(parse_t *parse, plot_t *plot) {
   (void)parse; (void)plot;
 }
+
 void parse_cb_test_color(parse_t *parse, plot_t *plot) {
   if(parse_has_more_arg(parse) == 0) {
     error_exit("Function \"test_color\" takes 1 argument\n");
