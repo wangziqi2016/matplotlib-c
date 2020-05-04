@@ -194,6 +194,8 @@ inline static char bar_get_hatch(bar_t *bar) { return bar->type->hatch; }
 inline static bar_type_t *bar_get_type(bar_t *bar) { return bar->type; }
 inline static void bar_set_type(bar_t *bar, bar_type_t *type) { bar->type = type; }
 
+void bar_set_text(bar_t *bar, const char *text);
+
 //* plot_t - Plotting function
 
 // Maximum size of legend pos (including trailing zero)

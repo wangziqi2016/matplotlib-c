@@ -481,6 +481,15 @@ void bar_free(bar_t *bar) {
   return;
 }
 
+// Copies the text into a separate buffer and frees the previous one, if any
+void bar_set_text(bar_t *bar, const char *text) {
+  if(bar->text != NULL) free(bar->text);
+  bar->text = (char *)malloc(strlen(text) + 1);
+  SYSEXPECT(bar->text != NULL);
+  strcpy(bar->text, text);
+  return;
+}
+
 //* plot_t
 
 plot_param_t default_param = {
