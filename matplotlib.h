@@ -290,7 +290,21 @@ void plot_print(plot_t *plot, int print_buf);
 
 typedef void (*parse_cb_t)(struct parse_struct_t *parse, plot_t *plot);
 
-#define PARSE_TOP_PROP_WIDTH    0
+#define PARSE_WIDTH                  0
+#define PARSE_HEIGHT                 1
+#define PARSE_LEGEND_ROWS            2
+#define PARSE_LEGEND_FONT_SIZE       3
+#define PARSE_LEGEND_POS             4
+#define PARSE_PARSE_XTICK_FONT_SIZE  5
+#define PARSE_PARSE_XTICK_ROTATION   6
+#define PARSE_PARSE_YTICK_FONT_SIZE  7
+#define PARSE_PARSE_YTICK_ROTATION   8
+#define PARSE_PARSE_XTITLE_FONT_SIZE 9
+#define PARSE_PARSE_YTITLE_FONT_SIZE 10
+#define PARSE_BAR_TEXT_FONT_SIZE     11
+#define PARSE_BAR_TEXT_ROTATION      12
+#define PARSE_BAR_TEXT_DECIMALS      13
+#define PARSE_BAR_TEXT_RTRIM         14
 
 typedef struct {
   const char *name;      // Keyword
