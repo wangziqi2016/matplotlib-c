@@ -1473,9 +1473,27 @@ parse_cb_entry_t parse_cb_top_funcs[] = {
 };
 const int parse_cb_top_funcs_count = sizeof(parse_cb_top_funcs) / sizeof(parse_cb_entry_t);
 
+void parse_top_func(parse_t *parse, plot_t *plot) {
+  char *name = parse_get_ident(parse);
+  if(name == NULL) {
+    parse_report_pos(parse);
+    error_exit("Expecting a function name after top-level '!'\n");
+  } 
+  parse_cb_entry_t cb_entry = parse_find_cb_entry(parse, parse_cb_top_funcs, parse_cb_top_funcs_count, name);
+  if(cb_entry.name == NULL) {
+    parse_report_pos(parse);
+    error_exit("Unknown top-level function: \"%s\"\n", name);
+  } else {
+    cb_entry.cb(parse, plot);
+    parse_expect_char(parse, ';');
+  }
+  free(name);
+  return;
+}
+
 // This function will return 1 and stop the parser at the next arg, if there is one
 // Otherwise, it returns 0 and stops at the next token
-static int parse_has_more_arg(parse_t *parse) {
+int parse_has_more_arg(parse_t *parse) {
   int line = parse->line;
   char ch = parse_peek_nospace(parse);
   if(line != parse->line || *parse->curr == '\0') {
@@ -1653,24 +1671,6 @@ void parse_cb_test_color(parse_t *parse, plot_t *plot) {
   printf("Saving color test file to \"%s\"\n", filename);
   plot_save_color_test(plot, filename);
   free(filename);
-  return;
-}
-
-void parse_top_func(parse_t *parse, plot_t *plot) {
-  char *name = parse_get_ident(parse);
-  if(name == NULL) {
-    parse_report_pos(parse);
-    error_exit("Expecting a function name after top-level '!'\n");
-  } 
-  parse_cb_entry_t cb_entry = parse_find_cb_entry(parse, parse_cb_top_funcs, parse_cb_top_funcs_count, name);
-  if(cb_entry.name == NULL) {
-    parse_report_pos(parse);
-    error_exit("Unknown top-level function: \"%s\"\n", name);
-  } else {
-    cb_entry.cb(parse, plot);
-    parse_expect_char(parse, ';');
-  }
-  free(name);
   return;
 }
 
