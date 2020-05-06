@@ -364,6 +364,13 @@ int64_t parse_get_int64_range(parse_t *parse, int64_t lower, int64_t upper); // 
 void parse_expect_char(parse_t *parse, char ch); // Fetch a char and discard; Report error if mismatch
 void parse_expect_char_opt(parse_t *parse, char ch); // Read an optional char and discard; No error if not found
 
+#define PARSE_ARG_NONE   0
+#define PARSE_ARG_STR    1
+#define PARSE_ARG_NUM    2
+#define PARSE_ARG_IDENT  3
+
+int parse_has_more_arg(parse_t *parse); // Argument handling
+
 void parse_sort_cb(parse_t *parse, parse_cb_entry_t *table, int count);
 parse_cb_entry_t parse_find_cb_entry(parse_t *parse, parse_cb_entry_t *table, int count, const char *name);
 
@@ -388,8 +395,7 @@ extern parse_cb_entry_t parse_cb_top_funcs[];
 extern const int parse_cb_top_funcs_count;
 
 // Top func parse functions
-void parse_top_func(parse_t *parse, plot_t *plot);
-int parse_has_more_arg(parse_t *parse);
+void parse_top_func(parse_t *parse, plot_t *plot)
 void parse_cb_plot_print(parse_t *parse, plot_t *plot);
 void parse_cb_version_print(parse_t *parse, plot_t *plot);
 void parse_cb_param_print(parse_t *parse, plot_t *plot);
