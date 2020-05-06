@@ -702,6 +702,8 @@ plot_param_t default_param = {
   2, 1,      // bar text decimals, rtrim
   NULL, 0,   // Hatch scheme/offset
   NULL, 0,   // Color scheme/offset
+  INFINITY, INFINITY, // xlimits
+  INFINITY, INFINITY, // ylimits
 };
 
 void plot_param_print(plot_param_t *param) {

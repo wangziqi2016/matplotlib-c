@@ -13,6 +13,7 @@
 #include <stdarg.h>
 #include <float.h>  // double max
 #include <stddef.h> // offsetof()
+#include <math.h>   // INFINITY
 
 #include "Python.h"
 
@@ -250,6 +251,11 @@ typedef struct {
   int hatch_offset;              // Offset in the array
   color_scheme_t *color_scheme;  // Color scheme
   int color_offset;              // Offset in the array
+  // Limits
+  double xlim_left;
+  double xlim_right;
+  double ylim_top;
+  double ylim_bottom;
 } plot_param_t;
 
 extern plot_param_t default_param; // Default param, will be copied over during init
