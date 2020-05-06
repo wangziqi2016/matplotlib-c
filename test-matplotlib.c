@@ -504,6 +504,13 @@ void test_parse_sort() {
       assert(strcmp(parse_cb_top_props[i - 1].name, parse_cb_top_props[i].name) < 0);
     }
   }
+  printf("Top entities table:\n");
+  for(int i = 0;i < parse_cb_top_entities_count;i++) {
+    printf("  name %s code 0x%p\n", parse_cb_top_entities[i].name, parse_cb_top_entities[i].cb);
+    if(i != 0) {
+      assert(strcmp(parse_cb_top_entities[i - 1].name, parse_cb_top_entities[i].name) < 0);
+    }
+  }
   parse_free(parse);
   printf("Pass\n");
   return;

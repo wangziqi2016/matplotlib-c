@@ -945,6 +945,8 @@ parse_t *_parse_init(char *s) {
   parse_sort_cb(parse, parse_cb_top_funcs, parse_cb_top_funcs_count);
   // Sort top-level properties
   parse_sort_cb(parse, parse_cb_top_props, parse_cb_top_props_count);
+  // Sort top-level entities
+  parse_sort_cb(parse, parse_cb_top_entities, parse_cb_top_entities_count);
   return parse;
 }
 
@@ -1312,23 +1314,23 @@ func_ret:
 }
 
 parse_cb_entry_t parse_cb_top_entities[] = {
-  PARSE_GEN_CB{"bar_type", parse_cb_bar_type},
-  PARSE_GEN_CB{"bar_group", parse_cb_bar_group},
+  PARSE_GEN_CB("bar_type", parse_cb_bar_type),
+  PARSE_GEN_CB("bar_group", parse_cb_bar_group),
 };
-const int parse_cb_top_entities_count = sizeof(parse_cb_top_entities) / sizeof(parse_cb_top_entities);
+const int parse_cb_top_entities_count = sizeof(parse_cb_top_entities) / sizeof(parse_cb_entry_t);
 
 void parse_top_entity(parse_t *parse, plot_t *plot) {
-  void(parse); (void)plot;
+  (void)parse; (void)plot;
   return;
 }
 
 void parse_cb_bar_type(parse_t *parse, plot_t *plot) {
-  void(parse); (void)plot;
+  (void)parse; (void)plot;
   return;
 }
 
 void parse_cb_bar_group(parse_t *parse, plot_t *plot) {
-  void(parse); (void)plot;
+  (void)parse; (void)plot;
   return;
 }
 
