@@ -57,3 +57,6 @@
 !test_hatch "test_hatch_1.pdf";
 
 !plot_print 0;
+
++bar_type;
++bar_group;

@@ -1320,17 +1320,33 @@ parse_cb_entry_t parse_cb_top_entities[] = {
 const int parse_cb_top_entities_count = sizeof(parse_cb_top_entities) / sizeof(parse_cb_entry_t);
 
 void parse_top_entity(parse_t *parse, plot_t *plot) {
-  (void)parse; (void)plot;
+  char *name = parse_get_ident(parse);
+  if(name == NULL) {
+    parse_report_pos(parse);
+    error_exit("Expecting a entity name after top-level '+'\n");
+  }
+  // Table lookup
+  parse_cb_entry_t cb_entry = parse_find_cb_entry(parse, parse_cb_top_entities, parse_cb_top_entities_count, name);
+  if(cb_entry.name == NULL) {
+    parse_report_pos(parse);
+    error_exit("Unknown top-level entity: \"%s\"\n", name);
+  } else {
+    cb_entry.cb(parse, plot);
+  }
+  free(name);
+  parse_expect_char(parse, ';');
   return;
 }
 
 void parse_cb_bar_type(parse_t *parse, plot_t *plot) {
   (void)parse; (void)plot;
+  printf("entity bar type\n");
   return;
 }
 
 void parse_cb_bar_group(parse_t *parse, plot_t *plot) {
   (void)parse; (void)plot;
+  printf("entity bar group\n");
   return;
 }
 
