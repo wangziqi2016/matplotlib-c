@@ -134,6 +134,22 @@ color_scheme_t color_schemes[] = {
   COLOR_SCHEME_GEN("grey", color_scheme_grey),
 };
 
+color_scheme_t *color_scheme_init(const char *name, uint32_t *base, int item_count) {
+  color_scheme_t *scheme = (color_scheme_t *)malloc(sizeof(color_scheme_t));
+  SYSEXPECT(scheme != NULL);
+  memset(scheme, 0x00, sizeof(color_scheme_t));
+  int len = strlen(name);
+  scheme->name = (char *)malloc(len + 1);
+  SYSEXPECT(scheme->name != NULL);
+  strcpy(scheme->name, name);
+  scheme->base = (uint32_t *)malloc(sizeof(uint32_t) * item_count);
+  SYSEXPECT(scheme->base != NULL);
+  memcpy(scheme->base, base, sizeof(uint32_t) * item_count);
+  return scheme;
+}
+
+void color_scheme_free();
+
 // This function is re-entrant
 void _color_str(uint32_t color, char *buf, int for_latex) {
   if(color & 0xFF000000) {
@@ -1267,9 +1283,10 @@ int parse_next_arg(parse_t *parse) {
     error_exit("Did you miss a semicolon after function call?\n");
   }
   if(ch == ';') return 0;
-  if(ch == '\"') return PARSE_ARG_STR;
-  if(ch == '_' || isalpha(ch)) return PARSE_ARG_IDENT;
-  if(ch == '.' || isdigit(ch)) return PARSE_ARG_NUM; // hex 0xfff dec .decimal oct 0777
+  else if(ch == '\"') return PARSE_ARG_STR;
+  else if(ch == '_' || isalpha(ch)) return PARSE_ARG_IDENT;
+  else if(ch == '.' || isdigit(ch)) return PARSE_ARG_NUM; // hex 0xfff dec .decimal oct 0777
+  else if(ch == '@') return PARSE_ARG_FILE;
   char buf[16];
   parse_print_char(parse, ch, buf);
   error_exit("Unknown argument character: %s\n", buf);

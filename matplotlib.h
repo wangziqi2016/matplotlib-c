@@ -63,6 +63,10 @@ typedef struct {
   int item_count;     // Number of items in the base array
 } color_scheme_t;
 
+// Init or copy-init depending on scheme
+color_scheme_t *color_scheme_init(const char *name, uint32_t *base, int item_count);
+void color_scheme_free();
+
 extern uint32_t color_scheme_mixed[];
 extern uint32_t color_scheme_red[];
 extern uint32_t color_scheme_blue[];
