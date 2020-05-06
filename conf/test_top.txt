@@ -48,6 +48,9 @@
 !save_fig;
 
 !set_hatch_scheme "default" 27;
-!set_color_scheme "mixed" 4;
+!set_color_scheme "red" 0;
+
+!test_color "test_color_2.pdf";
+!test_hatch "test_hatch_1.pdf";
 
 !plot_print 0;
