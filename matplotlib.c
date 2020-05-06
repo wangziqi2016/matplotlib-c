@@ -222,6 +222,7 @@ void color_scheme_free(color_scheme_t *scheme) {
 }
 
 // This function is re-entrant
+// Users should call color_str() / color_str_latex()
 void _color_str(uint32_t color, char *buf, int for_latex) {
   if(color & 0xFF000000) {
     error_exit("Color value 0x%08X has non-zero upper 8 bits\n", color);
@@ -341,8 +342,11 @@ hatch_scheme_t *hatch_find_scheme(const char *name) {
   return NULL;
 }
 
-void hatch_scheme_print(hatch_scheme_t *scheme) {
+void hatch_scheme_print(hatch_scheme_t *scheme, int print_content) {
   printf("Name %s count %d base 0x%p\n", scheme->name, scheme->item_count, scheme->base);
+  for(int i = 0;i < scheme->item_count;i++) {
+    printf("  Index %d hatch '%c'\n", i, scheme->base[i]);
+  }
   return;
 }
 
