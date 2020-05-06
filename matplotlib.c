@@ -145,12 +145,29 @@ color_scheme_t *color_scheme_init(const char *name, uint32_t *base, int item_cou
   scheme->base = (uint32_t *)malloc(COLOR_SIZE * item_count);
   SYSEXPECT(scheme->base != NULL);
   memcpy(scheme->base, base, COLOR_SIZE * item_count);
+  scheme->item_count = item_count;
   return scheme;
 }
 
 // This function does not terminate program on error; It returns NULL and caller should handle error
 color_scheme_t *color_scheme_init_file(const char *filename) {
   FILE *fp = fopen(filename, "r");
+  if(fp == NULL) {
+    printf("Could not open file \"%s\" for read\n", filename);
+    return NULL;
+  }
+  // We use the file name as scheme name
+  // Use item_count as capacity when reading from file
+  color_scheme_t *scheme = (color_scheme_t *)malloc(sizeof(color_scheme_t));
+  SYSEXPECT(scheme != NULL);
+  memset(scheme, 0x00, sizeof(color_scheme_t));
+  int len = strlen(filename);
+  scheme->name = (char *)malloc(len + 1);
+  SYSEXPECT(scheme->name != NULL);
+  strcpy(scheme->name, filename);
+  scheme->base = (uint32_t *)malloc(COLOR_SIZE * COLOR_INIT_FILE_COUNT);
+  SYSEXPECT(scheme->base != NULL);
+  fclose(fp);
   return NULL;
 }
 
@@ -243,6 +260,7 @@ hatch_scheme_t *hatch_scheme_init(const char *name, uint32_t *base, int item_cou
   scheme->base = (char *)malloc(HATCH_SIZE * item_count);
   SYSEXPECT(scheme->base != NULL);
   memcpy(scheme->base, base, HATCH_SIZE * item_count);
+  scheme->item_count = item_count;
   return scheme;
 }
 

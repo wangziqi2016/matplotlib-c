@@ -46,9 +46,11 @@ char *fp_rtrim(char *buf); // Remove trailing zeros after the decimal point
 //* color_* - Color processing
 
 // Size of the color object
-#define COLOR_SIZE     sizeof(uint32_t)
+#define COLOR_SIZE        sizeof(uint32_t)
 // Size of color string (excl. '\0'): # HH HH HH
-#define COLOR_STRLEN   7
+#define COLOR_STRLEN      7
+// Number of elements we allocate when reading from file
+#define COLOR_INIT_FILE_COUNT  16
 
 // Macros for extracting color components
 #define COLOR_R(x) ((x >> 16) & 0xFF)
