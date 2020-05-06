@@ -356,7 +356,7 @@ void parse_expect_char(parse_t *parse, char ch); // Fetch a char and discard; Re
 void parse_expect_char_opt(parse_t *parse, char ch); // Read an optional char and discard; No error if not found
 
 void parse_sort_cb(parse_t *parse, parse_cb_entry_t *table, int count);
-parse_cb_t parse_find_cb(parse_t *parse, parse_cb_entry_t *table, int count, const char *name);
+parse_cb_entry_t parse_find_cb_entry(parse_t *parse, parse_cb_entry_t *table, int count, const char *name);
 
 void parse_top(parse_t *parse, plot_t *plot); // Parse a script and call plot functions to complete the graph
 void parse_top_property(parse_t *parse, plot_t *plot);

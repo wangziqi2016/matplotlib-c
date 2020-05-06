@@ -1263,9 +1263,11 @@ void parse_sort_cb(parse_t *parse, parse_cb_entry_t *table, int count) {
 }
 
 // Finds a call back given a name using binary search
+// If not found the returned cb_entry_t object has name field set to NULL
 parse_cb_entry_t parse_find_cb_entry(parse_t *parse, parse_cb_entry_t *table, int count, const char *name) {
   (void)parse;
   parse_cb_entry_t cb_entry;
+  memset(&cb_entry, 0x00, sizeof(parse_cb_entry_t));
   // [begin, end)
   int begin = 0, end = count;
   while(begin < end) {
@@ -1348,11 +1350,13 @@ void parse_top_property(parse_t *parse, plot_t *plot) {
   parse_expect_char(parse, '=');
 
   // Table lookup
-  parse_cb_t cb = parse_find_cb(parse, parse_cb_top_props, parse_cb_top_props_count, name);
+  int prop = parse_find_cb_entry(parse, parse_cb_top_props, parse_cb_top_props_count, name).prop;
   if(cb == NULL) {
     parse_report_pos(parse);
     error_exit("Unknown top-level property: \"%s\"\n", name);
   } 
+
+  switch()
 
   if(streq(name, "xtitle") == 1) {
     plot->xtitle = parse_get_str(parse);
@@ -1621,12 +1625,12 @@ void parse_top_func(parse_t *parse, plot_t *plot) {
     parse_report_pos(parse);
     error_exit("Expecting a function name after top-level '!'\n");
   } 
-  parse_cb_t cb = parse_find_cb(parse, parse_cb_top_funcs, parse_cb_top_funcs_count, name);
-  if(cb == NULL) {
+  parse_cb_t cb_entry = parse_find_cb_entry(parse, parse_cb_top_funcs, parse_cb_top_funcs_count, name);
+  if(cb_entry.name == NULL) {
     parse_report_pos(parse);
     error_exit("Unknown top-level function: \"%s\"\n", name);
   } else {
-    cb(parse, plot);
+    cb_entry.cb(parse, plot);
   }
   free(name);
   return;
