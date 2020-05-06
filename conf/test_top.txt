@@ -35,8 +35,6 @@
 !plot_print;    # Function with no argument
 !version_print; # This function takes no argument
 
-!param_print;
-
 # Uncomment the following to reveal error
 # !unknown_func
 
@@ -61,6 +59,8 @@
 .xlim_left = 12.34;
 .xlim_right = 56.78;
 .ylim_top = 10.12;
+
+!param_print;
 
 +bar_type;
 +bar_group;

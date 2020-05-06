@@ -1708,16 +1708,16 @@ void parse_top_property(parse_t *parse, plot_t *plot) {
       plot->param.bar_text_rtrim = (int)parse_get_int64_range(parse, 0, 1);
     } break;
     case PARSE_XLIM_LEFT: {
-      plot->param.xlim_left = (int)parse_get_double_range(parse, PARSE_DOUBLE_MIN, PARSE_DOUBLE_MAX);
+      plot->param.xlim_left = parse_get_double_range(parse, PARSE_DOUBLE_MIN, PARSE_DOUBLE_MAX);
     } break;
     case PARSE_XLIM_RIGHT: {
-      plot->param.xlim_right = (int)parse_get_double_range(parse, PARSE_DOUBLE_MIN, PARSE_DOUBLE_MAX);
+      plot->param.xlim_right = parse_get_double_range(parse, PARSE_DOUBLE_MIN, PARSE_DOUBLE_MAX);
     } break;
     case PARSE_YLIM_TOP: {
-      plot->param.ylim_top = (int)parse_get_double_range(parse, PARSE_DOUBLE_MIN, PARSE_DOUBLE_MAX);
+      plot->param.ylim_top = parse_get_double_range(parse, PARSE_DOUBLE_MIN, PARSE_DOUBLE_MAX);
     } break;
     case PARSE_YLIM_BOTTOM: {
-      plot->param.ylim_bottom = (int)parse_get_double_range(parse, PARSE_DOUBLE_MIN, PARSE_DOUBLE_MAX);
+      plot->param.ylim_bottom = parse_get_double_range(parse, PARSE_DOUBLE_MIN, PARSE_DOUBLE_MAX);
     } break;
     default: {
       parse_report_pos(parse);
