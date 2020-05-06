@@ -98,6 +98,7 @@ void test_color_init_file() {
   color_scheme_print(scheme, 1);
   color_scheme_free(scheme);
   printf("Pass\n");
+  //exit(1);
   return;
 }
 
