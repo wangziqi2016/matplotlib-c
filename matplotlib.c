@@ -947,6 +947,8 @@ parse_t *_parse_init(char *s) {
   parse->size = strlen(s) + 1;  // Including terminating zero
   // Sort top-level function table
   parse_sort_cb(parse, parse_cb_top_funcs, parse_cb_top_funcs_count);
+  // Sort top-level properties
+  parse_cb_top_props(parse, parse_cb_top_props, parse_cb_top_props_count);
   return parse;
 }
 
@@ -1261,16 +1263,16 @@ void parse_sort_cb(parse_t *parse, parse_cb_entry_t *table, int count) {
 }
 
 // Finds a call back given a name using binary search
-parse_cb_t parse_find_cb(parse_t *parse, parse_cb_entry_t *table, int count, const char *name) {
+parse_cb_entry_t parse_find_cb_entry(parse_t *parse, parse_cb_entry_t *table, int count, const char *name) {
   (void)parse;
-  parse_cb_t cb = NULL;
+  parse_cb_entry_t cb_entry;
   // [begin, end)
   int begin = 0, end = count;
   while(begin < end) {
     int mid = (begin + end) / 2;
     int cmp = strcmp(name, table[mid].name);
     if(cmp == 0) {
-      cb = table[mid].cb;
+      cb_entry = table[mid];
       break;
     } else if(cmp < 0) {
       end = mid;
@@ -1278,7 +1280,7 @@ parse_cb_t parse_find_cb(parse_t *parse, parse_cb_entry_t *table, int count, con
       begin = mid + 1;
     }
   }
-  return cb;
+  return cb_entry;
 }
 
 // Top-level parsing function
@@ -1333,6 +1335,7 @@ parse_cb_entry_t parse_cb_top_props[] = {
   PARSE_GEN_PROP("bar_text_decimals", PARSE_BAR_TEXT_DECIMALS),
   PARSE_GEN_PROP("bar_text_rtrim", PARSE_BAR_TEXT_RTRIM),
 };
+const int parse_cb_top_props_count = sizeof(parse_cb_top_props) / sizeof(parse_cb_entry_t);
 
 // The "." has been removed from the stream
 // We do not use jump table for this function, since most of the handlers are small and straightforward
@@ -1343,6 +1346,14 @@ void parse_top_property(parse_t *parse, plot_t *plot) {
     error_exit("Expecting a property name after top-level '.'\n");
   }
   parse_expect_char(parse, '=');
+
+  // Table lookup
+  parse_cb_t cb = parse_find_cb(parse, parse_cb_top_props, parse_cb_top_props_count, name);
+  if(cb == NULL) {
+    parse_report_pos(parse);
+    error_exit("Unknown top-level property: \"%s\"\n", name);
+  } 
+
   if(streq(name, "xtitle") == 1) {
     plot->xtitle = parse_get_str(parse);
   } else if(streq(name, "ytitle") == 1) {
@@ -1361,7 +1372,13 @@ void parse_top_property(parse_t *parse, plot_t *plot) {
       free(plot->legend_filename);
     }
     plot->legend_filename = parse_get_str(parse);
-  } else if(streq(name, "xtitle_font_size") == 1) {
+  } else {
+    
+  }
+  
+  
+  
+  else if(streq(name, "xtitle_font_size") == 1) {
     plot->param.xtick_font_size = (int)parse_get_int64_range(parse, 1, PARSE_INT64_MAX);
   } else if(streq(name, "ytitle_font_size") == 1) {
     plot->param.ytick_font_size = (int)parse_get_int64_range(parse, 1, PARSE_INT64_MAX);
@@ -1381,8 +1398,7 @@ void parse_top_property(parse_t *parse, plot_t *plot) {
     plot->param.height = parse_get_double_range(parse, 0.0, PARSE_DOUBLE_MAX);
   }
   else {
-    parse_report_pos(parse);
-    error_exit("Unknown top-level property: \"%s\"\n", name);
+    
   }
   // This is common for all properties
   parse_expect_char(parse, ';');
