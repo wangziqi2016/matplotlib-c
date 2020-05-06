@@ -1288,7 +1288,7 @@ void parse_top(parse_t *parse, plot_t *plot) {
     ch = parse_getchar_nospace(parse);
     switch(ch) {
       case '+': { // Entities
-
+        parse_top_entity(parse_plot);
       } break; 
       case '.': { // Properties
         parse_top_property(parse, plot);
@@ -1308,6 +1308,16 @@ void parse_top(parse_t *parse, plot_t *plot) {
     }
   }
 func_ret:
+  return;
+}
+
+parse_cb_entry_t parse_cb_top_entities[] = {
+
+};
+const int parse_cb_top_entities_count = sizeof(parse_cb_top_entities) / sizeof(parse_cb_top_entities);
+
+void parse_top_entity(parse_t *parse, plot_t *plot) {
+
   return;
 }
 
@@ -1476,7 +1486,6 @@ void parse_cb_plot_print(parse_t *parse, plot_t *plot) {
     parse_report_pos(parse);
     error_exit("Function \"plot_print\" only takes 1 optional argument\n");
   }
-  parse_expect_char(parse, ';');
   return;
 }
 
@@ -1488,7 +1497,6 @@ void parse_cb_version_print(parse_t *parse, plot_t *plot) {
   if(parse_has_more_arg(parse) == 1) {
     error_exit("Function \"version_print\" takes no argument\n");
   }
-  parse_expect_char(parse, ';');
   return;
 }
 
@@ -1498,13 +1506,11 @@ void parse_cb_param_print(parse_t *parse, plot_t *plot) {
   if(parse_has_more_arg(parse) == 1) {
     error_exit("Function \"param_print\" takes no argument\n");
   }
-  parse_expect_char(parse, ';');
   return;
 }
 
 void parse_cb_save_fig(parse_t *parse, plot_t *plot) {
   printf("Save fig called!\n");
-  parse_expect_char(parse, ';');
   return;
   char *filename = NULL; // Given in arg list
   if(parse_has_more_arg(parse) == 1) {
@@ -1523,13 +1529,11 @@ void parse_cb_save_fig(parse_t *parse, plot_t *plot) {
   if(parse_has_more_arg(parse) == 1) {
     error_exit("Function \"save_fig\" takes 1 optional argument\n");
   }
-  parse_expect_char(parse, ';');
   return;
 }
 
 void parse_cb_save_legend(parse_t *parse, plot_t *plot) {
   printf("Save legend called!\n");
-  parse_expect_char(parse, ';');
   return;
   char *filename = NULL;
   if(parse_has_more_arg(parse) == 1) {
@@ -1548,7 +1552,6 @@ void parse_cb_save_legend(parse_t *parse, plot_t *plot) {
   if(parse_has_more_arg(parse) == 1) {
     error_exit("Function \"save_legend\" takes 1 optional argument\n");
   }
-  parse_expect_char(parse, ';');
   return;
 }
 
@@ -1571,7 +1574,6 @@ void parse_cb_create_fig(parse_t *parse, plot_t *plot) {
     error_exit("Function \"create_fig\" takes 1 or 2 optional arguments\n");
   }
   plot_create_fig(plot, width, height);
-  parse_expect_char(parse, ';');
   return;
 }
 
@@ -1592,7 +1594,6 @@ void parse_cb_set_hatch_scheme(parse_t *parse, plot_t *plot) {
   if(parse_has_more_arg(parse) == 1) {
     error_exit("Function \"set_hatch_scheme\" takes 1 or 2 arguments\n");
   }
-  parse_expect_char(parse, ';');
   return;
 }
 
@@ -1613,7 +1614,6 @@ void parse_cb_set_color_scheme(parse_t *parse, plot_t *plot) {
   if(parse_has_more_arg(parse) == 1) {
     error_exit("Function \"set_color_scheme\" takes 1 or 2 arguments\n");
   }
-  parse_expect_char(parse, ';');
   return;
 }
 
@@ -1628,7 +1628,6 @@ void parse_cb_test_hatch(parse_t *parse, plot_t *plot) {
   printf("Saving hatch test file to \"%s\"\n", filename);
   plot_save_hatch_test(plot, filename);
   free(filename);
-  parse_expect_char(parse, ';');
   return;
 }
 
@@ -1643,7 +1642,6 @@ void parse_cb_test_color(parse_t *parse, plot_t *plot) {
   printf("Saving color test file to \"%s\"\n", filename);
   plot_save_color_test(plot, filename);
   free(filename);
-  parse_expect_char(parse, ';');
   return;
 }
 
@@ -1659,6 +1657,7 @@ void parse_top_func(parse_t *parse, plot_t *plot) {
     error_exit("Unknown top-level function: \"%s\"\n", name);
   } else {
     cb_entry.cb(parse, plot);
+    parse_expect_char(parse, ';');
   }
   free(name);
   return;
