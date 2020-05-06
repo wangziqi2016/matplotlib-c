@@ -369,10 +369,14 @@ parse_cb_entry_t parse_find_cb_entry(parse_t *parse, parse_cb_entry_t *table, in
 
 void parse_top(parse_t *parse, plot_t *plot); // Parse a script and call plot functions to complete the graph
 
+// Top entity lookup table
 extern parse_cb_entry_t parse_cb_top_entities[];
 extern const int parse_cb_top_entities_count;
 
+// Top entity parse functions
 void parse_top_entity(parse_t *parse, plot_t *plot);
+void parse_cb_bar_type(parse_t *parse, plot_t *plot);
+void parse_cb_bar_group(parse_t *parse, plot_t *plot);
 
 extern parse_cb_entry_t parse_cb_top_props[];
 extern const int parse_cb_top_props_count;
@@ -383,6 +387,7 @@ void parse_top_property(parse_t *parse, plot_t *plot);
 extern parse_cb_entry_t parse_cb_top_funcs[];
 extern const int parse_cb_top_funcs_count;
 
+void parse_top_func(parse_t *parse, plot_t *plot);
 // Call backs for top-level functions
 void parse_cb_plot_print(parse_t *parse, plot_t *plot);
 void parse_cb_version_print(parse_t *parse, plot_t *plot);
@@ -394,9 +399,6 @@ void parse_cb_set_hatch_scheme(parse_t *parse, plot_t *plot);
 void parse_cb_set_color_scheme(parse_t *parse, plot_t *plot);
 void parse_cb_test_hatch(parse_t *parse, plot_t *plot);
 void parse_cb_test_color(parse_t *parse, plot_t *plot);
-
-
-void parse_top_func(parse_t *parse, plot_t *plot);
 
 void parse_report_pos(parse_t *parse);
 void parse_print(parse_t *parse);

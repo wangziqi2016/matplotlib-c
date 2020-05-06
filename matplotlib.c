@@ -1288,7 +1288,7 @@ void parse_top(parse_t *parse, plot_t *plot) {
     ch = parse_getchar_nospace(parse);
     switch(ch) {
       case '+': { // Entities
-        parse_top_entity(parse_plot);
+        parse_top_entity(parse, plot);
       } break; 
       case '.': { // Properties
         parse_top_property(parse, plot);
@@ -1312,12 +1312,23 @@ func_ret:
 }
 
 parse_cb_entry_t parse_cb_top_entities[] = {
-
+  PARSE_GEN_CB{"bar_type", parse_cb_bar_type},
+  PARSE_GEN_CB{"bar_group", parse_cb_bar_group},
 };
 const int parse_cb_top_entities_count = sizeof(parse_cb_top_entities) / sizeof(parse_cb_top_entities);
 
 void parse_top_entity(parse_t *parse, plot_t *plot) {
+  void(parse); (void)plot;
+  return;
+}
 
+void parse_cb_bar_type(parse_t *parse, plot_t *plot) {
+  void(parse); (void)plot;
+  return;
+}
+
+void parse_cb_bar_group(parse_t *parse, plot_t *plot) {
+  void(parse); (void)plot;
   return;
 }
 
