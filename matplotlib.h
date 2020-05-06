@@ -283,11 +283,22 @@ void plot_print(plot_t *plot, int print_buf);
 
 //* parse_* - String processing
 
+#define PARSE_TYPE_INT     0
+#define PARSE_TYPE_STR     1
+#define PARSE_TYPE_DOUBLE  2
+
 typedef void (*parse_cb_t)(struct parse_struct_t *parse, plot_t *plot);
 
 typedef struct {
   const char *name;      // Keyword
-  parse_cb_t cb;         // Call back function
+  union {
+    parse_cb_t cb;       // Call back function
+    struct {
+      int offset;        // Data offset
+      int8_t type;       // Data type, see macros above
+      int8_t size;       // If string type, maximum size (including trailing zero)
+    };
+  };
 } parse_cb_entry_t;
 
 #define PARSE_INT64_MAX  (0x7FFFFFFFFFFFFFFFL)
