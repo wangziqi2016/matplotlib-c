@@ -948,7 +948,7 @@ parse_t *_parse_init(char *s) {
   // Sort top-level function table
   parse_sort_cb(parse, parse_cb_top_funcs, parse_cb_top_funcs_count);
   // Sort top-level properties
-  parse_cb_top_props(parse, parse_cb_top_props, parse_cb_top_props_count);
+  parse_sort_cb(parse, parse_cb_top_props, parse_cb_top_props_count);
   return parse;
 }
 
@@ -1350,14 +1350,22 @@ void parse_top_property(parse_t *parse, plot_t *plot) {
   parse_expect_char(parse, '=');
 
   // Table lookup
-  int prop = parse_find_cb_entry(parse, parse_cb_top_props, parse_cb_top_props_count, name).prop;
-  if(cb == NULL) {
+  parse_cb_entry_t cb_entry = parse_find_cb_entry(parse, parse_cb_top_props, parse_cb_top_props_count, name);
+  if(cb_entry.name == NULL) {
     parse_report_pos(parse);
     error_exit("Unknown top-level property: \"%s\"\n", name);
   } 
 
-  switch()
+  switch(cb_entry.prop) {
+    case PARSE_WIDTH: {
 
+    } break;
+    default: {
+      parse_report_pos(parse);
+      error_exit("Internal error: unknown top-level property handler: \"%s\" (code %d)\n", name, cb_entry.prop);
+    }
+  }
+/*
   if(streq(name, "xtitle") == 1) {
     plot->xtitle = parse_get_str(parse);
   } else if(streq(name, "ytitle") == 1) {
@@ -1404,6 +1412,7 @@ void parse_top_property(parse_t *parse, plot_t *plot) {
   else {
     
   }
+  */
   // This is common for all properties
   parse_expect_char(parse, ';');
   free(name);
@@ -1625,7 +1634,7 @@ void parse_top_func(parse_t *parse, plot_t *plot) {
     parse_report_pos(parse);
     error_exit("Expecting a function name after top-level '!'\n");
   } 
-  parse_cb_t cb_entry = parse_find_cb_entry(parse, parse_cb_top_funcs, parse_cb_top_funcs_count, name);
+  parse_cb_entry_t cb_entry = parse_find_cb_entry(parse, parse_cb_top_funcs, parse_cb_top_funcs_count, name);
   if(cb_entry.name == NULL) {
     parse_report_pos(parse);
     error_exit("Unknown top-level function: \"%s\"\n", name);

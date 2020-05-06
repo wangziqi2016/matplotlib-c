@@ -359,6 +359,10 @@ void parse_sort_cb(parse_t *parse, parse_cb_entry_t *table, int count);
 parse_cb_entry_t parse_find_cb_entry(parse_t *parse, parse_cb_entry_t *table, int count, const char *name);
 
 void parse_top(parse_t *parse, plot_t *plot); // Parse a script and call plot functions to complete the graph
+
+extern parse_cb_entry_t parse_cb_top_props[];
+extern const int parse_cb_top_props_count;
+
 void parse_top_property(parse_t *parse, plot_t *plot);
 
 // Top function parsing and table
