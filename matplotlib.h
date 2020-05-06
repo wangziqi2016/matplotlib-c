@@ -65,6 +65,7 @@ typedef struct {
 
 // Init or copy-init depending on scheme
 color_scheme_t *color_scheme_init(const char *name, uint32_t *base, int item_count);
+color_scheme_t *color_scheme_init_file(const char *filename);
 void color_scheme_free(color_scheme_t *scheme);
 
 extern uint32_t color_scheme_mixed[];

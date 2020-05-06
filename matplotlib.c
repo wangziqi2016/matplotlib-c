@@ -148,6 +148,12 @@ color_scheme_t *color_scheme_init(const char *name, uint32_t *base, int item_cou
   return scheme;
 }
 
+// This function does not terminate program on error; It returns NULL and caller should handle error
+color_scheme_t *color_scheme_init_file(const char *filename) {
+  FILE *fp = fopen(filename, "r");
+  return NULL;
+}
+
 void color_scheme_free(color_scheme_t *scheme) {
   free(scheme->name);
   free(scheme->base);
@@ -1252,7 +1258,7 @@ int64_t parse_get_int64_range(parse_t *parse, int64_t lower, int64_t upper) {
 
 // Reads file name and opens the file and returns the file pointer
 // Files are indicated by "@"
-FILE *parse_get_filename(parse_t *parse) {
+char *parse_get_filename(parse_t *parse) {
   parse_expect_char(parse, '@');
   char *filename = parse_get_str(parse);
   return filename;
@@ -1722,15 +1728,15 @@ void parse_cb_set_color_scheme(parse_t *parse, plot_t *plot) {
   if(next_type == PARSE_ARG_STR) {
     char *scheme_name = parse_get_str(parse);
     color_scheme_t *scheme = color_find_scheme(scheme_name);
-    free(scheme_name);
     if(scheme == NULL) {
       error_exit("Color scheme name \"%s\" does not exist\n", scheme_name);
     }
+    free(scheme_name);
     // Copy initialize the hardcoded color scheme
     param->color_scheme = color_scheme_init(scheme->name, scheme->base, scheme->item_count);
   } else if(next_type == PARSE_ARG_FILE) {
-    const char *filename = parse_get_filename(parse);
-    param->color_scheme = color_scheme_from_file(filename);
+    char *filename = parse_get_filename(parse);
+    param->color_scheme = color_scheme_init_file(filename);
     if(param->color_scheme == NULL) {
       parse_report_pos(parse);
       error_exit("Failed to read file \"%s\" for color scheme\n", filename);
