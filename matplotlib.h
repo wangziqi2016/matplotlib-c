@@ -290,6 +290,7 @@ void plot_print(plot_t *plot, int print_buf);
 
 typedef void (*parse_cb_t)(struct parse_struct_t *parse, plot_t *plot);
 
+// plot_param_t fields
 #define PARSE_WIDTH                  0
 #define PARSE_HEIGHT                 1
 #define PARSE_LEGEND_ROWS            2
@@ -305,6 +306,11 @@ typedef void (*parse_cb_t)(struct parse_struct_t *parse, plot_t *plot);
 #define PARSE_BAR_TEXT_ROTATION      12
 #define PARSE_BAR_TEXT_DECIMALS      13
 #define PARSE_BAR_TEXT_RTRIM         14
+// plot_t fields
+#define PARSE_XTITLE                 15
+#define PARSE_YTITLE                 16
+#define PARSE_FIG_FILENAME           17
+#define PARSE_LEGEND_FILENAME        18
 
 typedef struct {
   const char *name;      // Keyword
