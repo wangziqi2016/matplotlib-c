@@ -1357,39 +1357,39 @@ void parse_top_property(parse_t *parse, plot_t *plot) {
   } 
 
   switch(cb_entry.prop) {
-    case PARSE_WIDTH: {
-
+    case PARSE_XTITLE: {
+      plot->xtitle = parse_get_str(parse);
     } break;
+    case PARSE_YTITLE: {
+      plot->ytitle = parse_get_str(parse);
+    } break;
+    case PARSE_FIG_FILENAME: {
+      if(plot->fig_filename != NULL) {
+        printf("WARNING: The property \"fig_filename\" already exists, value \"%s\"\n", 
+          plot->fig_filename);
+        free(plot->fig_filename);
+      }
+      plot->fig_filename = parse_get_str(parse);
+    } break;
+    case PARSE_LEGEND_FILENAME: {
+      if(plot->legend_filename != NULL) {
+        printf("WARNING: The property \"legend_filename\" already exists, value \"%s\"\n", 
+          plot->legend_filename);
+        free(plot->legend_filename);
+      }
+      plot->legend_filename = parse_get_str(parse);
+    } break;
+    /*
+    case : {
+      
+    } break;
+    */
     default: {
       parse_report_pos(parse);
       error_exit("Internal error: unknown top-level property handler: \"%s\" (code %d)\n", name, cb_entry.prop);
     }
   }
-/*
-  if(streq(name, "xtitle") == 1) {
-    plot->xtitle = parse_get_str(parse);
-  } else if(streq(name, "ytitle") == 1) {
-    plot->ytitle = parse_get_str(parse);
-  } else if(streq(name, "fig_filename") == 1) {
-    if(plot->fig_filename != NULL) {
-      printf("WARNING: The property \"fig_filename\" already exists, value \"%s\"\n", 
-        plot->fig_filename);
-      free(plot->fig_filename);
-    }
-    plot->fig_filename = parse_get_str(parse);
-  } else if(streq(name, "legend_filename") == 1) {
-    if(plot->legend_filename != NULL) {
-      printf("WARNING: The property \"legend_filename\" already exists, value \"%s\"\n", 
-        plot->legend_filename);
-      free(plot->legend_filename);
-    }
-    plot->legend_filename = parse_get_str(parse);
-  } else {
-    
-  }
-  
-  
-  
+  /*
   else if(streq(name, "xtitle_font_size") == 1) {
     plot->param.xtick_font_size = (int)parse_get_int64_range(parse, 1, PARSE_INT64_MAX);
   } else if(streq(name, "ytitle_font_size") == 1) {
