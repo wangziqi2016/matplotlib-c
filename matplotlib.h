@@ -351,6 +351,7 @@ typedef struct {
 #define PARSE_INT64_MAX  (0x7FFFFFFFFFFFFFFFL)
 #define PARSE_INT64_MIN  (0x8000000000000000L)
 #define PARSE_DOUBLE_MAX (DBL_MAX)
+#define PARSE_DOUBLE_MIN (DBL_MIN)
 
 typedef struct parse_struct_t {
   char *filename;  // Has ownership; Undefined for string init
