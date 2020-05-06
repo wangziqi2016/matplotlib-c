@@ -287,6 +287,8 @@ void plot_print(plot_t *plot, int print_buf);
 #define PARSE_TYPE_STR     1
 #define PARSE_TYPE_DOUBLE  2
 
+#define PARSE_GEN_CB(name, func) {name, {.cb = func}}
+
 typedef void (*parse_cb_t)(struct parse_struct_t *parse, plot_t *plot);
 
 typedef struct {
