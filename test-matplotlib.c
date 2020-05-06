@@ -490,10 +490,18 @@ void test_parse_color() {
 void test_parse_sort() {
   printf("========== test_parse_sort ==========\n");
   parse_t *parse = parse_init("");
+  printf("Top funcs table:\n");
   for(int i = 0;i < parse_cb_top_funcs_count;i++) {
-    printf("name %s ptr 0x%p\n", parse_cb_top_funcs[i].name, parse_cb_top_funcs[i].cb);
+    printf("  name %s ptr 0x%p\n", parse_cb_top_funcs[i].name, parse_cb_top_funcs[i].cb);
     if(i != 0) {
       assert(strcmp(parse_cb_top_funcs[i - 1].name, parse_cb_top_funcs[i].name) < 0);
+    }
+  }
+  printf("Top props table:\n");
+  for(int i = 0;i < parse_cb_top_props_count;i++) {
+    printf("  name %s code %d\n", parse_cb_top_props[i].name, parse_cb_top_props[i].prop);
+    if(i != 0) {
+      assert(strcmp(parse_cb_top_props[i - 1].name, parse_cb_top_props[i].name) < 0);
     }
   }
   parse_free(parse);
