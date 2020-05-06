@@ -148,7 +148,12 @@ color_scheme_t *color_scheme_init(const char *name, uint32_t *base, int item_cou
   return scheme;
 }
 
-void color_scheme_free();
+void color_scheme_free(color_scheme_t *scheme) {
+  free(scheme->name);
+  free(scheme->base);
+  free(scheme);
+  return;
+}
 
 // This function is re-entrant
 void _color_str(uint32_t color, char *buf, int for_latex) {
