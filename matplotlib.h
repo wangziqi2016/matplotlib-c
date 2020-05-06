@@ -284,10 +284,12 @@ void plot_print(plot_t *plot, int print_buf);
 
 //* parse_* - String processing
 
-#define PARSE_PROPERTY_INT     0
-#define PARSE_PROPERTY_STR     1
-#define PARSE_PROPERTY_DOUBLE  2
+#define PARSE_PROPERTY_INT32   0
+#define PARSE_PROPERTY_INT64   1
+#define PARSE_PROPERTY_STR     2
+#define PARSE_PROPERTY_DOUBLE  3
 
+// Generates parse_cb_entry_t entry
 #define PARSE_GEN_CB(name, func) {name, {.cb = func}}
 #define PARSE_GEN_OFFSET(name, p) {name, {.property = p}}
 

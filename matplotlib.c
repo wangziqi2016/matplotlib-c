@@ -1312,8 +1312,17 @@ func_ret:
 }
 
 parse_property_t parse_properties[] = {
-  {(int)offsetof(plot_param_t, width), PARSE_PROPERTY_DOUBLE, (int8_t)sizeof(double), {0}, {.upper_double = PARSE_DOUBLE_MAX}},
-  {(int)offsetof(plot_param_t, height), PARSE_PROPERTY_DOUBLE, (int8_t)sizeof(double), {0}, {.upper_double = PARSE_DOUBLE_MAX}},
+  {(int)offsetof(plot_param_t, width), PARSE_PROPERTY_DOUBLE, (int8_t)sizeof(double), 
+    {0}, {.upper_double = PARSE_DOUBLE_MAX}},
+  {(int)offsetof(plot_param_t, height), PARSE_PROPERTY_DOUBLE, (int8_t)sizeof(double), 
+    {0}, {.upper_double = PARSE_DOUBLE_MAX}},
+  {(int)offsetof(plot_param_t, legend_rows), PARSE_PROPERTY_INT32, (int8_t)sizeof(int32_t), 
+    {1}, {.upper_int64 = PARSE_INT64_MAX}},
+  {(int)offsetof(plot_param_t, legend_font_size), PARSE_PROPERTY_INT32, (int8_t)sizeof(int32_t), 
+    {1}, {.upper_int64 = PARSE_INT64_MAX}},
+  {(int)offsetof(plot_param_t, legend_pos), PARSE_PROPERTY_STR, PLOT_LEGEND_POS_MAX_SIZE, 
+    {0}, {0}},
+  
 };
 
 // The "." has been removed from the stream
