@@ -91,6 +91,15 @@ void test_color() {
   return;
 }
 
+void test_color_init_file() {
+  printf("========== test_color_init_file ==========\n");
+  color_scheme_t *scheme = color_scheme_init_file("./conf/test_color_init_file.txt");
+  color_scheme_print(scheme);
+  color_scheme_free(scheme);
+  printf("Pass\n");
+  return;
+}
+
 void test_py() {
   printf("========== test_py ==========\n");
   assert(py_get_instance_count() == 0);
@@ -536,6 +545,7 @@ int main(int argc, char **argv) {
   test_fp_trim();
   test_fp_print();
   test_color();
+  test_color_init_file();
   if(valgrind_flag == 0) test_bar_type();
   if(valgrind_flag == 0) test_py();
   test_buf();
