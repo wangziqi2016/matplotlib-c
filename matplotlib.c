@@ -168,17 +168,27 @@ color_scheme_t *color_scheme_init_file(const char *filename) {
   scheme->base = (uint32_t *)malloc(COLOR_SIZE * COLOR_INIT_FILE_COUNT);
   SYSEXPECT(scheme->base != NULL);
   scheme->item_count = COLOR_INIT_FILE_COUNT;
-  // Current count
-  int count = 0;
-  int line = 0;
+  int count = 0; // item count
+  int line = 1;  // For error reporting
   char buf[16];
   while(fgets(buf, 16, fp) != NULL) {
-    int len = strlen(buf);
-    if(len < 8 || buf[7] != '\n') {
+    // Jump over space
+    char *p = buf;
+    while(isspace(*p)) p++;
+    int len = strlen(p);
+    if(len == 0) {
+      continue;
+    } if(len < 7) {
       printf("Illegal color in line %d: \"%s\"\n", line, buf);
       return NULL;
     }
-    buf[7] = '\0'; // Remove the new line
+    char *q = p + 7;
+    while(isspace(*q)) q++;
+    if(*q != '\0') {
+      printf("Illegal color in line %d: \"%s\"\n", line, buf);
+      return NULL;
+    }
+    p[7] = '\0';
     // This may also print error message
     uint32_t color = color_decode(buf);
     if(color == -1U) return NULL;
