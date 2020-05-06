@@ -729,6 +729,8 @@ void plot_param_print(plot_param_t *param) {
       param->color_scheme->name, param->color_scheme->item_count, param->color_offset,
       param->color_scheme->item_count - param->color_offset);
   }
+  printf("[param x/y_lim] left %f right %f top %f bottom %f\n",
+    param->xlim_left, param->xlim_right, param->ylim_top, param->ylim_bottom);
   return;
 }
 
