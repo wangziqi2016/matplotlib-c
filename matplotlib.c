@@ -1252,7 +1252,14 @@ int parse_next_arg(parse_t *parse) {
     parse_report_pos(parse);
     error_exit("Did you miss a semicolon after function call?\n");
   }
-  return ch != ';';
+  if(ch == ';') return 0;
+  if(ch == '\"') return PARSE_ARG_STR;
+  if(ch == '_' || isalpha(ch)) return PARSE_ARG_IDENT;
+  if(ch == '.' || isdigit(ch)) return PARSE_ARG_NUM; // hex 0xfff dec .decimal oct 0777
+  char buf[16];
+  parse_print_char(parse, ch, buf);
+  error_exit("Unknown argument character: %s\n", buf);
+  return -1;
 }
 
 // Sort a given table
