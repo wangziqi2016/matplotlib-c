@@ -1329,9 +1329,9 @@ parse_cb_entry_t parse_cb_top_props[] = {
   PARSE_GEN_PROP("ytitle_font_size", PARSE_YTITLE_FONT_SIZE),
   // Bar text
   PARSE_GEN_PROP("bar_text_font_size", PARSE_BAR_TEXT_FONT_SIZE),
-  PARSE_GEN_PROP("bar_text_rotation", ),
-  PARSE_GEN_PROP("bar_text_decimals", ),
-  PARSE_GEN_PROP("bar_text_rtrim", ),
+  PARSE_GEN_PROP("bar_text_rotation", PARSE_BAR_TEXT_ROTATION),
+  PARSE_GEN_PROP("bar_text_decimals", PARSE_BAR_TEXT_DECIMALS),
+  PARSE_GEN_PROP("bar_text_rtrim", PARSE_BAR_TEXT_RTRIM),
 };
 
 // The "." has been removed from the stream
