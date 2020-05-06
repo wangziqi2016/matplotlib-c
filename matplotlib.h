@@ -230,7 +230,7 @@ typedef struct {
   int bar_text_rotation;
   int bar_text_decimals;      // Number of decimals after decimal point when printing the bar text
   int bar_text_rtrim;         // Whether trim zeros after the number
-  // Hatch and color
+  // Hatch and color - These two are set with functions, not properties
   const hatch_scheme_t *hatch_scheme;  // Hatch scheme
   int hatch_offset;                    // Offset in the array
   const color_scheme_t *color_scheme;  // Color scheme
