@@ -380,7 +380,7 @@ void hatch_scheme_free(hatch_scheme_t *scheme) {
 // This is a full list of charracter hatches supported by matplotlib
 char hatch_scheme_all[] = {
   '-', '+', 'x', '\\', '*', 'o', 'O', '.', ',', 'v', '^', '<', '>', '1', '2', '3', '4', '8',
-  's', 'p', 'P', 'h', 'H', 'X', 'd', 'D', '|', '_', '/',
+  's', 'p', 'P', 'h', 'H', 'X', 'd', 'D', '|', '_', '/', '%', '$'
 };
 int hatch_scheme_all_count = sizeof(hatch_scheme_all) / sizeof(char); 
 
@@ -1016,6 +1016,7 @@ void plot_add_bar(plot_t *plot, bar_t *bar) {
   char hatch = bar_get_hatch(bar);
   if(hatch != '\0') {
     if(hatch == '\\') buf_printf(buf, "  , hatch='\\\\'\n");
+    else if(hatch == '%') buf_printf(buf, "  , hatch='\\%'\n");
     else buf_printf(buf, "  , hatch='%c'\n", hatch);
   }
   // Add label if it has not been used for bars
