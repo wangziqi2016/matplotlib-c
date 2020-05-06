@@ -11,7 +11,8 @@
 #include <ctype.h>
 #include <error.h>
 #include <stdarg.h>
-#include <float.h>
+#include <float.h>  // double max
+#include <stddef.h> // offsetof()
 
 #include "Python.h"
 
@@ -283,15 +284,16 @@ void plot_print(plot_t *plot, int print_buf);
 
 //* parse_* - String processing
 
-#define PARSE_TYPE_INT     0
-#define PARSE_TYPE_STR     1
-#define PARSE_TYPE_DOUBLE  2
+#define PARSE_PROPERTY_INT     0
+#define PARSE_PROPERTY_STR     1
+#define PARSE_PROPERTY_DOUBLE  2
 
 #define PARSE_GEN_CB(name, func) {name, {.cb = func}}
 #define PARSE_GEN_OFFSET(name, p) {name, {.property = p}}
 
 typedef void (*parse_cb_t)(struct parse_struct_t *parse, plot_t *plot);
 
+// This instructs the parser to fill in param struct
 typedef struct {
   int offset;
   int8_t type;
