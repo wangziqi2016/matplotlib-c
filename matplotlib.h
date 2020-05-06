@@ -286,15 +286,17 @@ void plot_print(plot_t *plot, int print_buf);
 
 // Generates parse_cb_entry_t entry
 #define PARSE_GEN_CB(name, func) {name, {.cb = func}}
-#define PARSE_GEN_PROPERTY(name, p) {name, {.property = p}}
+#define PARSE_GEN_PROP(name, p) {name, {.prop = p}}
 
 typedef void (*parse_cb_t)(struct parse_struct_t *parse, plot_t *plot);
+
+#define PARSE_TOP_PROP_WIDTH    0
 
 typedef struct {
   const char *name;      // Keyword
   union {
     parse_cb_t cb;       // Call back function
-    parse_property_t *property; // Pointer to the property
+    int prop;            // Pointer to the property
   };
 } parse_cb_entry_t;
 

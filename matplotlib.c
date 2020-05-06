@@ -1312,8 +1312,26 @@ func_ret:
 }
 
 // This is the offset table, each having a pointer to parse_properties
-parse_cb_t parse_cb_top_properties[] = {
-  PARSE_GEN_PROPERTY("width", &parse_properties[0]),
+parse_cb_entry_t parse_cb_top_props[] = {
+  PARSE_GEN_PROP("width", PARSE_TOP_PROP_WIDTH),
+  PARSE_GEN_PROP("height", PARSE_TOP_PROP_HEIGHT),
+  // Legend
+  PARSE_GEN_PROP("legend_rows", ),
+  PARSE_GEN_PROP("legend_font_size", ),
+  PARSE_GEN_PROP("legend_pos", ),
+  // Ticks
+  PARSE_GEN_PROP("xtick_font_size", ),
+  PARSE_GEN_PROP("xtick_rotation", ),
+  PARSE_GEN_PROP("ytick_font_size", ),
+  PARSE_GEN_PROP("ytick_rotation", ),
+  // Title
+  PARSE_GEN_PROP("xtitle_font_size", ),
+  PARSE_GEN_PROP("ytitle_font_size", ),
+  // Bar text
+  PARSE_GEN_PROP("bar_text_font_size", ),
+  PARSE_GEN_PROP("bar_text_rotation", ),
+  PARSE_GEN_PROP("bar_text_decimals", ),
+  PARSE_GEN_PROP("bar_text_rtrim", ),
 };
 
 // The "." has been removed from the stream
