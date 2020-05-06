@@ -91,7 +91,8 @@ void color_scheme_print(color_scheme_t *scheme, int print_content);
 
 //* hatch_*
 
-#define HATCH_SIZE   1
+#define HATCH_SIZE            1
+#define HATCH_INIT_FILE_COUNT 1
 
 typedef struct {
   char *name;
@@ -104,7 +105,8 @@ void hatch_scheme_free(hatch_scheme_t *scheme);
 
 #define HATCH_SCHEME_GEN(name, base) {name, base, sizeof(base) / HATCH_SIZE}
 
-extern char hatch_scheme_default[];
+extern char hatch_scheme_all[];
+extern int hatch_scheme_all_count; 
 
 extern hatch_scheme_t hatch_schemes[];
 
