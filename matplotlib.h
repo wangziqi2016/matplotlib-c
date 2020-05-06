@@ -291,26 +291,29 @@ void plot_print(plot_t *plot, int print_buf);
 typedef void (*parse_cb_t)(struct parse_struct_t *parse, plot_t *plot);
 
 // plot_param_t fields
-#define PARSE_WIDTH                  0
-#define PARSE_HEIGHT                 1
-#define PARSE_LEGEND_ROWS            2
-#define PARSE_LEGEND_FONT_SIZE       3
-#define PARSE_LEGEND_POS             4
-#define PARSE_XTICK_FONT_SIZE        5
-#define PARSE_XTICK_ROTATION         6
-#define PARSE_YTICK_FONT_SIZE        7
-#define PARSE_YTICK_ROTATION         8
-#define PARSE_XTITLE_FONT_SIZE       9
-#define PARSE_YTITLE_FONT_SIZE       10
-#define PARSE_BAR_TEXT_FONT_SIZE     11
-#define PARSE_BAR_TEXT_ROTATION      12
-#define PARSE_BAR_TEXT_DECIMALS      13
-#define PARSE_BAR_TEXT_RTRIM         14
-// plot_t fields
-#define PARSE_XTITLE                 15
-#define PARSE_YTITLE                 16
-#define PARSE_FIG_FILENAME           17
-#define PARSE_LEGEND_FILENAME        18
+enum {
+  // plot_t fields
+  PARSE_XTITLE,
+  PARSE_YTITLE,
+  PARSE_FIG_FILENAME,
+  PARSE_LEGEND_FILENAME,
+  // plot_param_t fields
+  PARSE_WIDTH,
+  PARSE_HEIGHT,
+  PARSE_LEGEND_ROWS,
+  PARSE_LEGEND_FONT_SIZE,
+  PARSE_LEGEND_POS,
+  PARSE_XTICK_FONT_SIZE,
+  PARSE_XTICK_ROTATION,
+  PARSE_YTICK_FONT_SIZE,
+  PARSE_YTICK_ROTATION,
+  PARSE_XTITLE_FONT_SIZE,
+  PARSE_YTITLE_FONT_SIZE,
+  PARSE_BAR_TEXT_FONT_SIZE,
+  PARSE_BAR_TEXT_ROTATION,
+  PARSE_BAR_TEXT_DECIMALS,
+  PARSE_BAR_TEXT_RTRIM,
+};
 
 typedef struct {
   const char *name;      // Keyword
