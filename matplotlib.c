@@ -182,15 +182,17 @@ color_scheme_t *color_scheme_init_file(const char *filename) {
       printf("Illegal color in line %d: \"%s\"\n", line, buf);
       return NULL;
     }
+    // Check if any non-space char after the color code
     char *q = p + 7;
     while(isspace(*q)) q++;
     if(*q != '\0') {
       printf("Illegal color in line %d: \"%s\"\n", line, buf);
       return NULL;
     }
+    // Length check passed, truncate first 7 non-space chars
     p[7] = '\0';
     // This may also print error message
-    uint32_t color = color_decode(buf);
+    uint32_t color = color_decode(p);
     if(color == -1U) return NULL;
     assert(count <= scheme->item_count);
     // Expand the base array if it is too small
@@ -236,7 +238,7 @@ void _color_str(uint32_t color, char *buf, int for_latex) {
 // This function does not report error; Instead, it prints error message, and caller should handle it
 uint32_t color_decode(const char *s) {
   if(*s++ != '#') {
-    printf("Color code must begin with '#'\n");
+    printf("Color code must begin with '#' (see \"%s\")\n", s);
     return -1u;
   }
   uint32_t ret = 0u;
