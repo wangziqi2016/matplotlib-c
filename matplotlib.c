@@ -1368,16 +1368,16 @@ void parse_top_property(parse_t *parse, plot_t *plot) {
 }
 
 parse_cb_entry_t parse_cb_top_funcs[] = {
-  {"plot_print", {parse_cb_plot_print}},
-  {"version_print", {parse_cb_version_print}},
-  {"param_print", {parse_cb_param_print}},
-  {"save_fig", {parse_cb_save_fig}},
-  {"save_legend", {parse_cb_save_legend}},
-  {"create_fig", {parse_cb_create_fig}},
-  {"set_hatch_scheme", {parse_cb_set_hatch_scheme}},
-  {"set_color_scheme", {parse_cb_set_color_scheme}},
-  {"test_hatch", {parse_cb_test_hatch}},
-  {"test_color", {parse_cb_test_color}},
+  PARSE_GEN_CB("plot_print", parse_cb_plot_print),
+  PARSE_GEN_CB("version_print", parse_cb_version_print),
+  PARSE_GEN_CB("param_print", parse_cb_param_print),
+  PARSE_GEN_CB("save_fig", parse_cb_save_fig),
+  PARSE_GEN_CB("save_legend", parse_cb_save_legend),
+  PARSE_GEN_CB("create_fig", parse_cb_create_fig),
+  PARSE_GEN_CB("set_hatch_scheme", parse_cb_set_hatch_scheme),
+  PARSE_GEN_CB("set_color_scheme", parse_cb_set_color_scheme),
+  PARSE_GEN_CB("test_hatch", parse_cb_test_hatch),
+  PARSE_GEN_CB("test_color", parse_cb_test_color),
 };
 const int parse_cb_top_funcs_count = sizeof(parse_cb_top_funcs) / sizeof(parse_cb_entry_t);
 
