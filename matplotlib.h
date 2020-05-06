@@ -91,7 +91,7 @@ void color_scheme_print(color_scheme_t *scheme);
 #define HATCH_SIZE   1
 
 typedef struct {
-  const char *name;
+  char *name;
   char *base;
   int item_count;
 } hatch_scheme_t;

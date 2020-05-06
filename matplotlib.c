@@ -142,9 +142,9 @@ color_scheme_t *color_scheme_init(const char *name, uint32_t *base, int item_cou
   scheme->name = (char *)malloc(len + 1);
   SYSEXPECT(scheme->name != NULL);
   strcpy(scheme->name, name);
-  scheme->base = (uint32_t *)malloc(sizeof(uint32_t) * item_count);
+  scheme->base = (uint32_t *)malloc(COLOR_SIZE * item_count);
   SYSEXPECT(scheme->base != NULL);
-  memcpy(scheme->base, base, sizeof(uint32_t) * item_count);
+  memcpy(scheme->base, base, COLOR_SIZE * item_count);
   return scheme;
 }
 
@@ -1719,21 +1719,27 @@ void parse_cb_set_color_scheme(parse_t *parse, plot_t *plot) {
   if(next_type == 0) {
     error_exit("Function \"set_color_scheme\" takes at least 1 argument\n");
   }
-  // TODO: FREE CURRENT COLOR SCHEME
-  
+  plot_param_t *param = &plot->param;
+  // Free current one if there is one
+  if(param->color_scheme != NULL) {
+    printf("Overriding existing color scheme \"%s\"\n", param->color_scheme->name);
+    color_scheme_free(param->color_scheme);
+  }
   if(next_type == PARSE_ARG_STR) {
     char *scheme_name = parse_get_str(parse);
-    plot->param.color_scheme = color_find_scheme(scheme_name);
+    color_scheme_t *scheme = color_find_scheme(scheme_name);
     free(scheme_name);
-    if(plot->param.color_scheme == NULL) {
+    if(scheme == NULL) {
       error_exit("Color scheme name \"%s\" does not exist\n", scheme_name);
     }
+    // Copy initialize the hardcoded color scheme
+    param->color_scheme = color_scheme_init(scheme->name, scheme->base, scheme->item_count);
   } else if(next_type == PARSE_ARG_FILE) {
     // TODO: READ FILE
   }
   // Read hatch offset
   if(parse_next_arg(parse)) {
-    plot->param.color_offset = parse_get_int64_range(parse, 0, plot->param.color_scheme->item_count - 1);
+    param->color_offset = parse_get_int64_range(parse, 0, param->color_scheme->item_count - 1);
   }
   if(parse_next_arg(parse)) {
     error_exit("Function \"set_color_scheme\" takes 1 or 2 arguments\n");
