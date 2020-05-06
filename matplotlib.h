@@ -361,6 +361,8 @@ double parse_get_double(parse_t *parse); // Reads a double from the stream
 double parse_get_double_range(parse_t *parse, double lower, double upper); // Reads a double from the stream
 int64_t parse_get_int64(parse_t *parse); // Reads a long int from the stream
 int64_t parse_get_int64_range(parse_t *parse, int64_t lower, int64_t upper); // Adds range check
+FILE *parse_get_file_with_mode(parse_t *parse, const char *mode);
+inline static FILE *parse_get_file_rd(parse_t *parse) { return parse_get_file_with_mode(parse, "r"); }
 void parse_expect_char(parse_t *parse, char ch); // Fetch a char and discard; Report error if mismatch
 void parse_expect_char_opt(parse_t *parse, char ch); // Read an optional char and discard; No error if not found
 
