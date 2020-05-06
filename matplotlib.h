@@ -395,7 +395,7 @@ extern parse_cb_entry_t parse_cb_top_funcs[];
 extern const int parse_cb_top_funcs_count;
 
 // Top func parse functions
-void parse_top_func(parse_t *parse, plot_t *plot)
+void parse_top_func(parse_t *parse, plot_t *plot);
 void parse_cb_plot_print(parse_t *parse, plot_t *plot);
 void parse_cb_version_print(parse_t *parse, plot_t *plot);
 void parse_cb_param_print(parse_t *parse, plot_t *plot);
