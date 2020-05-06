@@ -1252,16 +1252,10 @@ int64_t parse_get_int64_range(parse_t *parse, int64_t lower, int64_t upper) {
 
 // Reads file name and opens the file and returns the file pointer
 // Files are indicated by "@"
-FILE *parse_get_file_with_mode(parse_t *parse, const char *mode) {
+FILE *parse_get_filename(parse_t *parse) {
   parse_expect_char(parse, '@');
   char *filename = parse_get_str(parse);
-  FILE *fp = fopen(filename, mode);
-  if(fp == NULL) {
-    parse_report_pos(parse);
-    error_exit("Cannot open file \"%s\" in mode \"%s\"\n", filename, mode);
-  }
-  free(filename);
-  return fp;
+  return filename;
 }
 
 // buf should be at least 5 chars in size (\xHH\0)
@@ -1735,7 +1729,13 @@ void parse_cb_set_color_scheme(parse_t *parse, plot_t *plot) {
     // Copy initialize the hardcoded color scheme
     param->color_scheme = color_scheme_init(scheme->name, scheme->base, scheme->item_count);
   } else if(next_type == PARSE_ARG_FILE) {
-    // TODO: READ FILE
+    const char *filename = parse_get_filename(parse);
+    param->color_scheme = color_scheme_from_file(filename);
+    if(param->color_scheme == NULL) {
+      parse_report_pos(parse);
+      error_exit("Failed to read file \"%s\" for color scheme\n", filename);
+    }
+    free(filename);
   }
   // Read hatch offset
   if(parse_next_arg(parse)) {

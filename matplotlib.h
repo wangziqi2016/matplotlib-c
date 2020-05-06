@@ -235,13 +235,13 @@ typedef struct {
   // Bar text
   int bar_text_font_size;
   int bar_text_rotation;
-  int bar_text_decimals;      // Number of decimals after decimal point when printing the bar text
-  int bar_text_rtrim;         // Whether trim zeros after the number
+  int bar_text_decimals;         // Number of decimals after decimal point when printing the bar text
+  int bar_text_rtrim;            // Whether trim zeros after the number
   // Hatch and color - These two are set with functions, not properties
-  const hatch_scheme_t *hatch_scheme;  // Hatch scheme
-  int hatch_offset;                    // Offset in the array
-  const color_scheme_t *color_scheme;  // Color scheme
-  int color_offset;                    // Offset in the array
+  hatch_scheme_t *hatch_scheme;  // Hatch scheme
+  int hatch_offset;              // Offset in the array
+  color_scheme_t *color_scheme;  // Color scheme
+  int color_offset;              // Offset in the array
 } plot_param_t;
 
 extern plot_param_t default_param; // Default param, will be copied over during init
@@ -368,9 +368,7 @@ double parse_get_double(parse_t *parse); // Reads a double from the stream
 double parse_get_double_range(parse_t *parse, double lower, double upper); // Reads a double from the stream
 int64_t parse_get_int64(parse_t *parse); // Reads a long int from the stream
 int64_t parse_get_int64_range(parse_t *parse, int64_t lower, int64_t upper); // Adds range check
-FILE *parse_get_file_with_mode(parse_t *parse, const char *mode);
-inline static FILE *parse_get_file_rd(parse_t *parse) { return parse_get_file_with_mode(parse, "r"); }
-inline static FILE *parse_get_file_wr(parse_t *parse) { return parse_get_file_with_mode(parse, "w"); }
+char *parse_get_filename(parse_t *parse); // Returns a file name (prefixed with "@")
 void parse_expect_char(parse_t *parse, char ch); // Fetch a char and discard; Report error if mismatch
 void parse_expect_char_opt(parse_t *parse, char ch); // Read an optional char and discard; No error if not found
 
