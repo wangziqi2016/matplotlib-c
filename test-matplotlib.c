@@ -83,10 +83,10 @@ void test_color() {
   color_scheme_t *scheme = NULL;
   scheme = color_find_scheme("red");
   assert(scheme->base == color_scheme_red);
-  color_scheme_print(scheme);
+  color_scheme_print(scheme, 1);
   scheme = color_find_scheme("mixed");
   assert(scheme->base == color_scheme_mixed);
-  color_scheme_print(scheme);
+  color_scheme_print(scheme, 1);
   printf("Pass\n");
   return;
 }
@@ -94,7 +94,8 @@ void test_color() {
 void test_color_init_file() {
   printf("========== test_color_init_file ==========\n");
   color_scheme_t *scheme = color_scheme_init_file("./conf/test_color_init_file.txt");
-  color_scheme_print(scheme);
+  assert(scheme != NULL);
+  color_scheme_print(scheme, 1);
   color_scheme_free(scheme);
   printf("Pass\n");
   return;

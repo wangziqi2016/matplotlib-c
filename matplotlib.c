@@ -285,7 +285,7 @@ color_scheme_t *color_find_scheme(const char *name) {
   return NULL;
 }
 
-void color_scheme_print(color_scheme_t *scheme) {
+void color_scheme_print(color_scheme_t *scheme, int print_content) {
   printf("Name %s count %d base 0x%p\n", scheme->name, scheme->item_count, scheme->base);
   return;
 }

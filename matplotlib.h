@@ -87,7 +87,7 @@ inline static void color_str_latex(uint32_t color, char *buf) { _color_str(color
 uint32_t color_decode(const char *s); // Decode string representation of color
 color_scheme_t *color_find_scheme(const char *name);  // Using string name to locate the color_scheme_t object
 
-void color_scheme_print(color_scheme_t *scheme);
+void color_scheme_print(color_scheme_t *scheme, int print_content);
 
 //* hatch_*
 
