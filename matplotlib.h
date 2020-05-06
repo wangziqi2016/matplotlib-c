@@ -284,31 +284,11 @@ void plot_print(plot_t *plot, int print_buf);
 
 //* parse_* - String processing
 
-#define PARSE_PROPERTY_INT32   0
-#define PARSE_PROPERTY_INT64   1
-#define PARSE_PROPERTY_STR     2
-#define PARSE_PROPERTY_DOUBLE  3
-
 // Generates parse_cb_entry_t entry
 #define PARSE_GEN_CB(name, func) {name, {.cb = func}}
-#define PARSE_GEN_OFFSET(name, p) {name, {.property = p}}
+#define PARSE_GEN_PROPERTY(name, p) {name, {.property = p}}
 
 typedef void (*parse_cb_t)(struct parse_struct_t *parse, plot_t *plot);
-
-// This instructs the parser to fill in param struct
-typedef struct {
-  int offset;
-  int8_t type;
-  int8_t size;
-  union {
-    int64_t lower_int64;
-    double lower_double;
-  };
-  union {
-    int64_t upper_int64;
-    double upper_double;
-  };
-} parse_property_t;
 
 typedef struct {
   const char *name;      // Keyword
