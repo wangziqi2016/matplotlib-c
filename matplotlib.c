@@ -1208,6 +1208,20 @@ int64_t parse_get_int64_range(parse_t *parse, int64_t lower, int64_t upper) {
   return ret;
 }
 
+// Reads file name and opens the file and returns the file pointer
+// Files are indicated by "@"
+FILE *parse_get_file_with_mode(parse_t *parse, const char *mode) {
+  parse_expect_char(parse, '@');
+  char *filename = parse_get_str(parse);
+  FILE *fp = fopen(filename, mode);
+  if(fp == NULL) {
+    parse_report_pos(parse);
+    error_exit("Cannot open file \"%s\" in mode \"%s\"\n", filename, mode);
+  }
+  free(filename);
+  return fp;
+}
+
 // buf should be at least 5 chars in size (\xHH\0)
 static void parse_print_char(parse_t *parse, char ch, char *buf) {
   (void)parse;
@@ -1658,15 +1672,22 @@ void parse_cb_set_hatch_scheme(parse_t *parse, plot_t *plot) {
 }
 
 void parse_cb_set_color_scheme(parse_t *parse, plot_t *plot) {
-  if(parse_next_arg(parse) == 0) {
+  int next_type = parse_next_arg(parse);
+  if(next_type == 0) {
     error_exit("Function \"set_color_scheme\" takes at least 1 argument\n");
   }
-  char *scheme_name = parse_get_str(parse);
-  plot->param.color_scheme = color_find_scheme(scheme_name);
-  if(plot->param.color_scheme == NULL) {
-    error_exit("Color scheme name \"%s\" does not exist\n", scheme_name);
+  // TODO: FREE CURRENT COLOR SCHEME
+  
+  if(next_type == PARSE_ARG_STR) {
+    char *scheme_name = parse_get_str(parse);
+    plot->param.color_scheme = color_find_scheme(scheme_name);
+    free(scheme_name);
+    if(plot->param.color_scheme == NULL) {
+      error_exit("Color scheme name \"%s\" does not exist\n", scheme_name);
+    }
+  } else if(next_type == PARSE_ARG_FILE) {
+    // TODO: READ FILE
   }
-  free(scheme_name);
   // Read hatch offset
   if(parse_next_arg(parse)) {
     plot->param.color_offset = parse_get_int64_range(parse, 0, plot->param.color_scheme->item_count - 1);
