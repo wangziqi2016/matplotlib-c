@@ -1348,14 +1348,13 @@ void parse_top_property(parse_t *parse, plot_t *plot) {
     error_exit("Expecting a property name after top-level '.'\n");
   }
   parse_expect_char(parse, '=');
-
   // Table lookup
   parse_cb_entry_t cb_entry = parse_find_cb_entry(parse, parse_cb_top_props, parse_cb_top_props_count, name);
   if(cb_entry.name == NULL) {
     parse_report_pos(parse);
     error_exit("Unknown top-level property: \"%s\"\n", name);
   } 
-
+  // This should be compiled into a jump table
   switch(cb_entry.prop) {
     case PARSE_XTITLE: {
       plot->xtitle = parse_get_str(parse);
@@ -1379,40 +1378,58 @@ void parse_top_property(parse_t *parse, plot_t *plot) {
       }
       plot->legend_filename = parse_get_str(parse);
     } break;
-    /*
-    case : {
-      
+    case PARSE_WIDTH: {
+      plot->param.width = parse_get_double_range(parse, 0.0, PARSE_DOUBLE_MAX);
     } break;
-    */
+    case PARSE_HEIGHT: {
+      plot->param.height = parse_get_double_range(parse, 0.0, PARSE_DOUBLE_MAX);
+    } break;
+    case PARSE_LEGEND_ROWS: {
+      plot->param.legend_rows = (int)parse_get_int64_range(parse, 1, PARSE_INT64_MAX);
+    } break;
+    case PARSE_LEGEND_FONT_SIZE: {
+      plot->param.legend_font_size = (int)parse_get_int64_range(parse, 1, PARSE_INT64_MAX);
+    } break;
+    case PARSE_LEGEND_POS: {
+      char *pos = parse_get_str(parse);
+      plot_set_legend_pos(plot, pos); // Copies the string (report error if too long)
+      free(pos); // We already copied the pos string into param
+    } break;
+    case PARSE_XTICK_FONT_SIZE: {
+      plot->param.xtick_font_size = (int)parse_get_int64_range(parse, 1, PARSE_INT64_MAX);
+    } break;
+    case PARSE_XTICK_ROTATION: {
+      plot->param.xtick_rotation = (int)parse_get_int64_range(parse, 0, 359);
+    } break;
+    case PARSE_YTICK_FONT_SIZE: {
+      plot->param.ytick_font_size = (int)parse_get_int64_range(parse, 1, PARSE_INT64_MAX);
+    } break;
+    case PARSE_YTICK_ROTATION: {
+      plot->param.ytick_rotation = (int)parse_get_int64_range(parse, 0, 359L);
+    } break;
+    case PARSE_XTITLE_FONT_SIZE: {
+      plot->param.xtitle_font_size = (int)parse_get_int64_range(parse, 1, PARSE_INT64_MAX);
+    } break;
+    case PARSE_YTITLE_FONT_SIZE: {
+      plot->param.ytitle_font_size = (int)parse_get_int64_range(parse, 1, PARSE_INT64_MAX);
+    } break;
+    case PARSE_BAR_TEXT_FONT_SIZE: {
+      plot->param.bar_text_font_size = (int)parse_get_int64_range(parse, 1, PARSE_INT64_MAX);
+    } break;
+    case PARSE_BAR_TEXT_ROTATION: {
+      plot->param.bar_text_rotation = (int)parse_get_int64_range(parse, 0, 359L);
+    } break;
+    case PARSE_BAR_TEXT_DECIMALS: {
+      plot->param.bar_text_decimals = (int)parse_get_int64(parse);
+    } break;
+    case PARSE_BAR_TEXT_RTRIM: {
+      plot->param.bar_text_rtrim = (int)parse_get_int64_range(parse, 0, 1);
+    } break;
     default: {
       parse_report_pos(parse);
       error_exit("Internal error: unknown top-level property handler: \"%s\" (code %d)\n", name, cb_entry.prop);
     }
   }
-  /*
-  else if(streq(name, "xtitle_font_size") == 1) {
-    plot->param.xtick_font_size = (int)parse_get_int64_range(parse, 1, PARSE_INT64_MAX);
-  } else if(streq(name, "ytitle_font_size") == 1) {
-    plot->param.ytick_font_size = (int)parse_get_int64_range(parse, 1, PARSE_INT64_MAX);
-  } else if(streq(name, "xtick_font_size") == 1) {
-    plot->param.xtick_font_size = (int)parse_get_int64_range(parse, 1, PARSE_INT64_MAX);
-  } else if(streq(name, "ytick_font_size") == 1) {
-    plot->param.ytick_font_size = (int)parse_get_int64_range(parse, 1, PARSE_INT64_MAX);
-  } else if(streq(name, "legend_pos") == 1) {
-    char *pos = parse_get_str(parse);
-    plot_set_legend_pos(plot, pos); // Copies the string (report error if too long)
-    free(pos); // We already copied the pos string into param
-  } else if(streq(name, "legend_font_size") == 1) {
-    plot->param.legend_font_size = parse_get_int64_range(parse, 0, PARSE_INT64_MAX);
-  } else if(streq(name, "width") == 1) {
-    plot->param.width = parse_get_double_range(parse, 0.0, PARSE_DOUBLE_MAX);
-  } else if(streq(name, "height") == 1) {
-    plot->param.height = parse_get_double_range(parse, 0.0, PARSE_DOUBLE_MAX);
-  }
-  else {
-    
-  }
-  */
   // This is common for all properties
   parse_expect_char(parse, ';');
   free(name);
