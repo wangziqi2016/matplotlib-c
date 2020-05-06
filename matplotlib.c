@@ -340,6 +340,11 @@ hatch_scheme_t *hatch_scheme_init_file(const char *filename) {
     while(isspace(*p)) p++;
     int len = strlen(p);
     if(len == 0) continue;
+    // Removing trailing spaces
+    char *q = p + len - 1;
+    while(isspace(*q)) { *q = '\0'; q--; }
+    len = strlen(p);
+    //printf("len %d p[1] %d valid %d\n", len, len == 2 ? p[1] : -1, hatch_is_valid(p[0]));
     // Length either 1 or 2; If it is 2 then p[1] must be \n
     if(len > 2 || (len == 2 && p[1] != '\n') || (hatch_is_valid(p[0]) == 0)) {
       printf("Illegal hatch in line %d: \"%s\"\n", line, buf);
@@ -375,7 +380,7 @@ void hatch_scheme_free(hatch_scheme_t *scheme) {
 // This is a full list of charracter hatches supported by matplotlib
 char hatch_scheme_all[] = {
   '-', '+', 'x', '\\', '*', 'o', 'O', '.', ',', 'v', '^', '<', '>', '1', '2', '3', '4', '8',
-  's', 'p', 'P', 'h', 'H', 'X', 'd', 'D', '|', '_',
+  's', 'p', 'P', 'h', 'H', 'X', 'd', 'D', '|', '_', '/',
 };
 int hatch_scheme_all_count = sizeof(hatch_scheme_all) / sizeof(char); 
 
