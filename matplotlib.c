@@ -300,7 +300,7 @@ void color_scheme_print(color_scheme_t *scheme, int print_content) {
 
 //* hatch_*
 
-hatch_scheme_t *hatch_scheme_init(const char *name, uint32_t *base, int item_count) {
+hatch_scheme_t *hatch_scheme_init(const char *name, char *base, int item_count) {
   hatch_scheme_t *scheme = (hatch_scheme_t *)malloc(sizeof(hatch_scheme_t));
   SYSEXPECT(scheme != NULL);
   memset(scheme, 0x00, sizeof(hatch_scheme_t));
@@ -1866,15 +1866,33 @@ void parse_cb_create_fig(parse_t *parse, plot_t *plot) {
 }
 
 void parse_cb_set_hatch_scheme(parse_t *parse, plot_t *plot) {
-  if(parse_next_arg(parse) == 0) {
+  int next_type = parse_next_arg(parse);
+  if(next_type == PARSE_ARG_NONE) {
     error_exit("Function \"set_hatch_scheme\" takes at least 1 argument\n");
   }
-  char *scheme_name = parse_get_str(parse);
-  plot->param.hatch_scheme = hatch_find_scheme(scheme_name);
-  if(plot->param.hatch_scheme == NULL) {
-    error_exit("Hatch scheme name \"%s\" does not exist\n", scheme_name);
+  plot_param_t *param = &plot->param;
+  // Free current one if there is one
+  if(param->hatch_scheme != NULL) {
+    printf("Overriding existing hatch scheme \"%s\"\n", param->hatch_scheme->name);
+    hatch_scheme_free(param->hatch_scheme);
   }
-  free(scheme_name);
+  if(next_type == PARSE_ARG_STR) {
+    char *scheme_name = parse_get_str(parse);
+    hatch_scheme_t *scheme = hatch_find_scheme(scheme_name);
+    if(scheme == NULL) {
+      error_exit("Hatch scheme name \"%s\" does not exist\n", scheme_name);
+    }
+    free(scheme_name);
+    param->hatch_scheme = hatch_scheme_init(scheme->name, scheme->base, scheme->item_count);
+  } else if(next_type == PARSE_ARG_FILE) {
+    char *filename = parse_get_filename(parse);
+    param->hatch_scheme = hatch_scheme_init_file(filename);
+    if(param->hatch_scheme == NULL) {
+      parse_report_pos(parse);
+      error_exit("Failed to read file \"%s\" for hatch scheme\n", filename);
+    }
+    free(filename);
+  }
   // Read hatch offset
   if(parse_next_arg(parse)) {
     plot->param.hatch_offset = parse_get_int64_range(parse, 0, plot->param.hatch_scheme->item_count - 1);
@@ -1887,7 +1905,7 @@ void parse_cb_set_hatch_scheme(parse_t *parse, plot_t *plot) {
 
 void parse_cb_set_color_scheme(parse_t *parse, plot_t *plot) {
   int next_type = parse_next_arg(parse);
-  if(next_type == 0) {
+  if(next_type == PARSE_ARG_NONE) {
     error_exit("Function \"set_color_scheme\" takes at least 1 argument\n");
   }
   plot_param_t *param = &plot->param;
