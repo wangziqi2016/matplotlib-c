@@ -315,6 +315,56 @@ hatch_scheme_t *hatch_scheme_init(const char *name, uint32_t *base, int item_cou
   return scheme;
 }
 
+hatch_scheme_t *hatch_scheme_init_file(const char *filename) {
+  FILE *fp = fopen(filename, "r");
+  if(fp == NULL) {
+    printf("Could not open file \"%s\" for read\n", filename);
+    return NULL;
+  }
+  hatch_scheme_t *scheme = (hatch_scheme_t *)malloc(sizeof(hatch_scheme_t));
+  SYSEXPECT(scheme != NULL);
+  memset(scheme, 0x00, sizeof(hatch_scheme_t));
+  int len = strlen(filename);
+  scheme->name = (char *)malloc(len + 1);
+  SYSEXPECT(scheme->name != NULL);
+  strcpy(scheme->name, filename);
+  scheme->base = (char *)malloc(HATCH_SIZE * HATCH_INIT_FILE_COUNT);
+  SYSEXPECT(scheme->base != NULL);
+  scheme->item_count = HATCH_INIT_FILE_COUNT;
+  int count = 0; // item count
+  int line = 1;  // For error reporting
+  char buf[16];
+  while(fgets(buf, 16, fp) != NULL) {
+    // Jump over space
+    char *p = buf;
+    while(isspace(*p)) p++;
+    int len = strlen(p);
+    if(len == 0) continue;
+    // Length either 1 or 2; If it is 2 then p[1] must be \n
+    if(len > 2 || (len == 2 && p[1] != '\n') || (hatch_is_valid(p[0]) == 0)) {
+      printf("Illegal hatch in line %d: \"%s\"\n", line, buf);
+      return NULL;
+    }
+    assert(count <= scheme->item_count);
+    // Expand the base array if it is too small
+    if(count == scheme->item_count) {
+      char *old = scheme->base;
+      scheme->item_count *= 2;
+      scheme->base = (char *)malloc(HATCH_SIZE * scheme->item_count);
+      SYSEXPECT(scheme->base != NULL);
+      memcpy(scheme->base, old, HATCH_SIZE * (scheme->item_count / 2));
+      free(old);
+    }
+    assert(count < scheme->item_count);
+    scheme->base[count++] = p[0];
+    line++;
+  }
+  fclose(fp);
+  // Now this represents item count, not capacity
+  scheme->item_count = count;
+  return scheme;
+}
+
 void hatch_scheme_free(hatch_scheme_t *scheme) {
   free(scheme->name);
   free(scheme->base);
@@ -323,14 +373,24 @@ void hatch_scheme_free(hatch_scheme_t *scheme) {
 }
 
 // This is a full list of charracter hatches supported by matplotlib
-char hatch_scheme_default[] = {
+char hatch_scheme_all[] = {
   '-', '+', 'x', '\\', '*', 'o', 'O', '.', ',', 'v', '^', '<', '>', '1', '2', '3', '4', '8',
   's', 'p', 'P', 'h', 'H', 'X', 'd', 'D', '|', '_',
 };
+int hatch_scheme_all_count = sizeof(hatch_scheme_all) / sizeof(char); 
+
+char *hatch_scheme_default = hatch_scheme_all;
 
 hatch_scheme_t hatch_schemes[] = {
-  HATCH_SCHEME_GEN("default", hatch_scheme_default),
+  HATCH_SCHEME_GEN("default", hatch_scheme_all),
 };
+
+int hatch_is_valid(char hatch) {
+  for(int i = 0;i < hatch_scheme_all_count;i++) {
+    if(hatch_scheme_all[i] == hatch) return 1;
+  }
+  return 0;
+}
 
 // Returns NULL if not found
 hatch_scheme_t *hatch_find_scheme(const char *name) {
@@ -344,8 +404,10 @@ hatch_scheme_t *hatch_find_scheme(const char *name) {
 
 void hatch_scheme_print(hatch_scheme_t *scheme, int print_content) {
   printf("Name %s count %d base 0x%p\n", scheme->name, scheme->item_count, scheme->base);
-  for(int i = 0;i < scheme->item_count;i++) {
-    printf("  Index %d hatch '%c'\n", i, scheme->base[i]);
+  if(print_content == 1) {
+    for(int i = 0;i < scheme->item_count;i++) {
+      printf("  Index %d hatch '%c'\n", i, scheme->base[i]);
+    }
   }
   return;
 }

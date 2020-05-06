@@ -107,6 +107,7 @@ void hatch_scheme_free(hatch_scheme_t *scheme);
 
 extern char hatch_scheme_all[];
 extern int hatch_scheme_all_count; 
+extern char *hatch_scheme_default;
 
 extern hatch_scheme_t hatch_schemes[];
 
