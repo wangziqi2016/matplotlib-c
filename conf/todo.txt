@@ -11,7 +11,9 @@ X Adding string jump table
 
 X Adding tick and text and use color test as a way of testing
 
-Adding automated way of setting params (jump table or offset table)
+X Adding automated way of setting params (jump table or offset table)
+
+Adding xlim and ylim, and use them to avoid extra spaces
 
 Adding color scheme overflow handling
 

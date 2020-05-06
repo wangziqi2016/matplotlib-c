@@ -109,7 +109,6 @@ void test_hatch_init_file() {
   hatch_scheme_print(scheme, 1);
   hatch_scheme_free(scheme);
   printf("Pass\n");
-  exit(1);
   return;
 }
 
