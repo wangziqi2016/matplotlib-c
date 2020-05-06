@@ -369,6 +369,11 @@ parse_cb_entry_t parse_find_cb_entry(parse_t *parse, parse_cb_entry_t *table, in
 
 void parse_top(parse_t *parse, plot_t *plot); // Parse a script and call plot functions to complete the graph
 
+extern parse_cb_entry_t parse_cb_top_entities[];
+extern const int parse_cb_top_entities_count;
+
+void parse_top_entity(parse_t *parse, plot_t *plot);
+
 extern parse_cb_entry_t parse_cb_top_props[];
 extern const int parse_cb_top_props_count;
 
