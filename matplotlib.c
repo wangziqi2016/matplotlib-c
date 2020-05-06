@@ -1336,6 +1336,11 @@ parse_cb_entry_t parse_cb_top_props[] = {
   PARSE_GEN_PROP("bar_text_rotation", PARSE_BAR_TEXT_ROTATION),
   PARSE_GEN_PROP("bar_text_decimals", PARSE_BAR_TEXT_DECIMALS),
   PARSE_GEN_PROP("bar_text_rtrim", PARSE_BAR_TEXT_RTRIM),
+  // plot_t fields
+  PARSE_GEN_PROP("xtitle", PARSE_XTITLE),
+  PARSE_GEN_PROP("ytitle", PARSE_YTITLE),
+  PARSE_GEN_PROP("fig_filename", PARSE_FIG_FILENAME),
+  PARSE_GEN_PROP("legend_filename", PARSE_LEGEND_FILENAME),
 };
 const int parse_cb_top_props_count = sizeof(parse_cb_top_props) / sizeof(parse_cb_entry_t);
 
