@@ -1311,6 +1311,11 @@ func_ret:
   return;
 }
 
+parse_property_t parse_properties[] = {
+  {(int)offsetof(plot_param_t, width), PARSE_PROPERTY_DOUBLE, (int8_t)sizeof(double), {0}, {.upper_double = PARSE_DOUBLE_MAX}},
+  {(int)offsetof(plot_param_t, height), PARSE_PROPERTY_DOUBLE, (int8_t)sizeof(double), {0}, {.upper_double = PARSE_DOUBLE_MAX}},
+};
+
 // The "." has been removed from the stream
 // We do not use jump table for this function, since most of the handlers are small and straightforward
 void parse_top_property(parse_t *parse, plot_t *plot) {
