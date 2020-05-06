@@ -857,10 +857,10 @@ void plot_save_fig(plot_t *plot, const char *filename) {
   }
   buf_printf(buf, ")\n");
   // Set X/Y limits
-  if(param->xlim_left != INFINITY) buf_printf(buf, "plot.set_xlim(left=%f)\n", param->xlim_left);
-  if(param->xlim_right != INFINITY) buf_printf(buf, "plot.set_xlim(right=%f)\n", param->xlim_left);
-  if(param->ylim_top != INFINITY) buf_printf(buf, "plot.set_ylim(top=%f)\n", param->ylim_top);
-  if(param->ylim_bottom != INFINITY) buf_printf(buf, "plot.set_ylim(bottom=%f)\n", param->ylim_bottom);
+  if(param->xlim_left != INFINITY) buf_printf(buf, "ax.set_xlim(left=%f)\n", param->xlim_left);
+  if(param->xlim_right != INFINITY) buf_printf(buf, "ax.set_xlim(right=%f)\n", param->xlim_right);
+  if(param->ylim_top != INFINITY) buf_printf(buf, "ax.set_ylim(top=%f)\n", param->ylim_top);
+  if(param->ylim_bottom != INFINITY) buf_printf(buf, "ax.set_ylim(bottom=%f)\n", param->ylim_bottom);
   // Pass the file name
   buf_printf(plot->buf, "plot.savefig(\"%s\", bbox_inches='tight')\n\n", filename);
   // Execute script
@@ -952,6 +952,7 @@ void plot_save_hatch_test(plot_t *plot, const char *filename) {
   int usable = param->hatch_scheme->item_count - param->color_offset;
   double bar_width = 2.0; // To show the hatch we need fixed width bar
   param->width = usable * bar_width; // Graph width is extended as there are more hatches
+  param->xlim_right = usable * bar_width; // Set X right limit to avoid blank
   double bar_height = param->height;
   double bar_pos = 0.0;
   // Must do it here since we adjusted the width
