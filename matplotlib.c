@@ -1611,6 +1611,11 @@ parse_cb_entry_t parse_cb_top_props[] = {
   PARSE_GEN_PROP("bar_text_rotation", PARSE_BAR_TEXT_ROTATION),
   PARSE_GEN_PROP("bar_text_decimals", PARSE_BAR_TEXT_DECIMALS),
   PARSE_GEN_PROP("bar_text_rtrim", PARSE_BAR_TEXT_RTRIM),
+  // Limits
+  PARSE_GEN_PROP("xlim_left", PARSE_XLIM_LEFT),
+  PARSE_GEN_PROP("xlim_right", PARSE_XLIM_RIGHT),
+  PARSE_GEN_PROP("ylim_top", PARSE_YLIM_TOP),
+  PARSE_GEN_PROP("ylim_bottom", PARSE_YLIM_BOTTOM),
 };
 const int parse_cb_top_props_count = sizeof(parse_cb_top_props) / sizeof(parse_cb_entry_t);
 
