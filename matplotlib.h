@@ -101,7 +101,7 @@ typedef struct {
   int item_count;
 } hatch_scheme_t;
 
-hatch_scheme_t *hatch_scheme_init(const char *name, uint32_t *base, int item_count);
+hatch_scheme_t *hatch_scheme_init(const char *name, char *base, int item_count);
 hatch_scheme_t *hatch_scheme_init_file(const char *filename);
 void hatch_scheme_free(hatch_scheme_t *scheme);
 
