@@ -50,7 +50,7 @@ char *fp_rtrim(char *buf); // Remove trailing zeros after the decimal point
 // Size of color string (excl. '\0'): # HH HH HH
 #define COLOR_STRLEN      7
 // Number of elements we allocate when reading from file
-#define COLOR_INIT_FILE_COUNT  16
+#define COLOR_INIT_FILE_COUNT  1
 
 // Macros for extracting color components
 #define COLOR_R(x) ((x >> 16) & 0xFF)

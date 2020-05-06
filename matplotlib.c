@@ -287,6 +287,13 @@ color_scheme_t *color_find_scheme(const char *name) {
 
 void color_scheme_print(color_scheme_t *scheme, int print_content) {
   printf("Name %s count %d base 0x%p\n", scheme->name, scheme->item_count, scheme->base);
+  if(print_content == 1) {
+    for(int i = 0;i < scheme->item_count;i++) {
+      char buf[16];
+      color_str(scheme->base[i], buf);
+      printf("  Index %d color %s\n", i, buf);
+    }
+  }
   return;
 }
 
