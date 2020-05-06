@@ -363,6 +363,7 @@ int64_t parse_get_int64(parse_t *parse); // Reads a long int from the stream
 int64_t parse_get_int64_range(parse_t *parse, int64_t lower, int64_t upper); // Adds range check
 FILE *parse_get_file_with_mode(parse_t *parse, const char *mode);
 inline static FILE *parse_get_file_rd(parse_t *parse) { return parse_get_file_with_mode(parse, "r"); }
+inline static FILE *parse_get_file_wr(parse_t *parse) { return parse_get_file_with_mode(parse, "w"); }
 void parse_expect_char(parse_t *parse, char ch); // Fetch a char and discard; Report error if mismatch
 void parse_expect_char_opt(parse_t *parse, char ch); // Read an optional char and discard; No error if not found
 
@@ -370,6 +371,7 @@ void parse_expect_char_opt(parse_t *parse, char ch); // Read an optional char an
 #define PARSE_ARG_STR    1
 #define PARSE_ARG_NUM    2
 #define PARSE_ARG_IDENT  3
+#define PARSE_ARG_FILE   4
 
 int parse_next_arg(parse_t *parse); // Argument handling
 
