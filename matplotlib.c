@@ -1313,22 +1313,22 @@ func_ret:
 
 // This is the offset table, each having a pointer to parse_properties
 parse_cb_entry_t parse_cb_top_props[] = {
-  PARSE_GEN_PROP("width", PARSE_TOP_PROP_WIDTH),
-  PARSE_GEN_PROP("height", PARSE_TOP_PROP_HEIGHT),
+  PARSE_GEN_PROP("width", PARSE_WIDTH),
+  PARSE_GEN_PROP("height", PARSE_HEIGHT),
   // Legend
-  PARSE_GEN_PROP("legend_rows", ),
-  PARSE_GEN_PROP("legend_font_size", ),
-  PARSE_GEN_PROP("legend_pos", ),
+  PARSE_GEN_PROP("legend_rows", PARSE_LEGEND_ROWS),
+  PARSE_GEN_PROP("legend_font_size", PARSE_LEGEND_FONT_SIZE),
+  PARSE_GEN_PROP("legend_pos", PARSE_LEGEND_POS),
   // Ticks
-  PARSE_GEN_PROP("xtick_font_size", ),
-  PARSE_GEN_PROP("xtick_rotation", ),
-  PARSE_GEN_PROP("ytick_font_size", ),
-  PARSE_GEN_PROP("ytick_rotation", ),
+  PARSE_GEN_PROP("xtick_font_size", PARSE_XTICK_FONT_SIZE),
+  PARSE_GEN_PROP("xtick_rotation", PARSE_XTICK_ROTATION),
+  PARSE_GEN_PROP("ytick_font_size", PARSE_YTICK_FONT_SIZE),
+  PARSE_GEN_PROP("ytick_rotation", PARSE_YTICK_ROTATION),
   // Title
-  PARSE_GEN_PROP("xtitle_font_size", ),
-  PARSE_GEN_PROP("ytitle_font_size", ),
+  PARSE_GEN_PROP("xtitle_font_size", PARSE_XTITLE_FONT_SIZE),
+  PARSE_GEN_PROP("ytitle_font_size", PARSE_YTITLE_FONT_SIZE),
   // Bar text
-  PARSE_GEN_PROP("bar_text_font_size", ),
+  PARSE_GEN_PROP("bar_text_font_size", PARSE_BAR_TEXT_FONT_SIZE),
   PARSE_GEN_PROP("bar_text_rotation", ),
   PARSE_GEN_PROP("bar_text_decimals", ),
   PARSE_GEN_PROP("bar_text_rtrim", ),
