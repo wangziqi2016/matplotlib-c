@@ -110,6 +110,7 @@ extern int hatch_scheme_all_count;
 
 extern hatch_scheme_t hatch_schemes[];
 
+int hatch_is_valid(char hatch);
 hatch_scheme_t *hatch_find_scheme(const char *name);
 void hatch_scheme_print(hatch_scheme_t *scheme, int print_content);
 
