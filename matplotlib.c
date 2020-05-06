@@ -226,6 +226,27 @@ void color_scheme_print(color_scheme_t *scheme) {
 
 //* hatch_*
 
+hatch_scheme_t *hatch_scheme_init(const char *name, uint32_t *base, int item_count) {
+  hatch_scheme_t *scheme = (hatch_scheme_t *)malloc(sizeof(hatch_scheme_t));
+  SYSEXPECT(scheme != NULL);
+  memset(scheme, 0x00, sizeof(hatch_scheme_t));
+  int len = strlen(name);
+  scheme->name = (char *)malloc(len + 1);
+  SYSEXPECT(scheme->name != NULL);
+  strcpy(scheme->name, name);
+  scheme->base = (char *)malloc(HATCH_SIZE * item_count);
+  SYSEXPECT(scheme->base != NULL);
+  memcpy(scheme->base, base, HATCH_SIZE * item_count);
+  return scheme;
+}
+
+void hatch_scheme_free(hatch_scheme_t *scheme) {
+  free(scheme->name);
+  free(scheme->base);
+  free(scheme);
+  return;
+}
+
 // This is a full list of charracter hatches supported by matplotlib
 char hatch_scheme_default[] = {
   '-', '+', 'x', '\\', '*', 'o', 'O', '.', ',', 'v', '^', '<', '>', '1', '2', '3', '4', '8',

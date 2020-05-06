@@ -58,14 +58,14 @@ char *fp_rtrim(char *buf); // Remove trailing zeros after the decimal point
 #define COLOR_GEN(r, g, b) (((r & 0xFF) << 16) | ((g & 0xFF) << 8) | ((b & 0xFF) << 0))
 
 typedef struct {
-  const char *name;   // Name of the scheme
+  char *name;         // Name of the scheme
   uint32_t *base;     // Points to the array
   int item_count;     // Number of items in the base array
 } color_scheme_t;
 
 // Init or copy-init depending on scheme
 color_scheme_t *color_scheme_init(const char *name, uint32_t *base, int item_count);
-void color_scheme_free();
+void color_scheme_free(color_scheme_t *scheme);
 
 extern uint32_t color_scheme_mixed[];
 extern uint32_t color_scheme_red[];
@@ -95,6 +95,9 @@ typedef struct {
   char *base;
   int item_count;
 } hatch_scheme_t;
+
+hatch_scheme_t *hatch_scheme_init(const char *name, uint32_t *base, int item_count);
+void hatch_scheme_free(hatch_scheme_t *scheme);
 
 #define HATCH_SCHEME_GEN(name, base) {name, base, sizeof(base) / HATCH_SIZE}
 
