@@ -718,8 +718,6 @@ void plot_save_color_test(plot_t *plot, const char *filename) {
   plot_copy_param(test, &plot->param);
   plot_create_fig(test, test->param.width, test->param.height);
   plot_param_t *param = &test->param;
-  param->xtick_rotation = 45; // Rotate 45 degree
-  param->bar_text_rotation = 90; // Rotate 90 degree
   char label_buf[16];
   int usable = param->color_scheme->item_count - param->color_offset;
   double bar_width = param->width / (double)usable;
@@ -755,8 +753,6 @@ void plot_save_hatch_test(plot_t *plot, const char *filename) {
   // Use current plot's configuration
   plot_copy_param(test, &plot->param);
   plot_param_t *param = &test->param;
-  param->xtick_rotation = 45; // Rotate 45 degree
-  param->bar_text_rotation = 90; // Rotate 90 degree
   char label_buf[16];
   int usable = param->hatch_scheme->item_count - param->color_offset;
   double bar_width = 2.0; // To show the hatch we need fixed width bar
@@ -1317,6 +1313,12 @@ func_ret:
 
 // This is the offset table, each having a pointer to parse_properties
 parse_cb_entry_t parse_cb_top_props[] = {
+  // plot_t fields
+  PARSE_GEN_PROP("xtitle", PARSE_XTITLE),
+  PARSE_GEN_PROP("ytitle", PARSE_YTITLE),
+  PARSE_GEN_PROP("fig_filename", PARSE_FIG_FILENAME),
+  PARSE_GEN_PROP("legend_filename", PARSE_LEGEND_FILENAME),
+  // Size
   PARSE_GEN_PROP("width", PARSE_WIDTH),
   PARSE_GEN_PROP("height", PARSE_HEIGHT),
   // Legend
@@ -1336,11 +1338,6 @@ parse_cb_entry_t parse_cb_top_props[] = {
   PARSE_GEN_PROP("bar_text_rotation", PARSE_BAR_TEXT_ROTATION),
   PARSE_GEN_PROP("bar_text_decimals", PARSE_BAR_TEXT_DECIMALS),
   PARSE_GEN_PROP("bar_text_rtrim", PARSE_BAR_TEXT_RTRIM),
-  // plot_t fields
-  PARSE_GEN_PROP("xtitle", PARSE_XTITLE),
-  PARSE_GEN_PROP("ytitle", PARSE_YTITLE),
-  PARSE_GEN_PROP("fig_filename", PARSE_FIG_FILENAME),
-  PARSE_GEN_PROP("legend_filename", PARSE_LEGEND_FILENAME),
 };
 const int parse_cb_top_props_count = sizeof(parse_cb_top_props) / sizeof(parse_cb_entry_t);
 

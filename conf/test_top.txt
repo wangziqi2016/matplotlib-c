@@ -50,6 +50,9 @@
 !set_hatch_scheme "default" 27;
 !set_color_scheme "red" 0;
 
+.xtick_rotation = 45;
+.bar_text_rotation = 90;
+
 !test_color "test_color_2.pdf";
 !test_hatch "test_hatch_1.pdf";
 
