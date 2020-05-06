@@ -1242,6 +1242,19 @@ void parse_expect_char_opt(parse_t *parse, char ch) {
   return;
 }
 
+// Returns argument type (STR, NUM, IDENT) and stop the parser at the next arg on the same line, if any.
+// Otherwise, it returns 0 and stops at the terminating ';'
+// If we reach the next line without seeing either a ';' or argument, report error
+int parse_next_arg(parse_t *parse) {
+  int line = parse->line;
+  char ch = parse_peek_nospace(parse);
+  if(line != parse->line || *parse->curr == '\0') {
+    parse_report_pos(parse);
+    error_exit("Did you miss a semicolon after function call?\n");
+  }
+  return ch != ';';
+}
+
 // Sort a given table
 void parse_sort_cb(parse_t *parse, parse_cb_entry_t *table, int count) {
   (void)parse;
@@ -1338,6 +1351,11 @@ void parse_top_entity(parse_t *parse, plot_t *plot) {
   return;
 }
 
+// Bar type can be sprcified using scheme or in an ad-hoc manner
+// Syntax:
+// +bar_type "label" ["color"] ["hatch"]
+// If one of or both color and/or hatch are not specified, we use the one from scheme, and increment offset pointer
+// If color overflows, we report error
 void parse_cb_bar_type(parse_t *parse, plot_t *plot) {
   (void)parse; (void)plot;
   printf("entity bar type\n");
@@ -1509,27 +1527,15 @@ void parse_top_func(parse_t *parse, plot_t *plot) {
   return;
 }
 
-// This function will return 1 and stop the parser at the next arg, if there is one
-// Otherwise, it returns 0 and stops at the next token
-int parse_has_more_arg(parse_t *parse) {
-  int line = parse->line;
-  char ch = parse_peek_nospace(parse);
-  if(line != parse->line || *parse->curr == '\0') {
-    parse_report_pos(parse);
-    error_exit("Did you miss a semicolon after function call?\n");
-  }
-  return ch != ';';
-}
-
 void parse_cb_plot_print(parse_t *parse, plot_t *plot) {
   int print_buf = 0;
   // Read arguments
-  if(parse_has_more_arg(parse)) {
+  if(parse_next_arg(parse)) {
     print_buf = (int)parse_get_int64_range(parse, 0, 1); // [0, 1] binary
     if(print_buf != 0) print_buf = 1;
   }
   plot_print(plot, print_buf);
-  if(parse_has_more_arg(parse)) {
+  if(parse_next_arg(parse)) {
     parse_report_pos(parse);
     error_exit("Function \"plot_print\" only takes 1 optional argument\n");
   }
@@ -1541,7 +1547,7 @@ void parse_cb_version_print(parse_t *parse, plot_t *plot) {
   printf("[version] matplotlib C language wrapper and script interpreter, version %s.%s\n", 
     MAJOR_VERSION, MINOR_VERSION);
   printf("[version] https://github.com/wangziqi2016/matplotlib-c\n");
-  if(parse_has_more_arg(parse) == 1) {
+  if(parse_next_arg(parse)) {
     error_exit("Function \"version_print\" takes no argument\n");
   }
   return;
@@ -1550,7 +1556,7 @@ void parse_cb_version_print(parse_t *parse, plot_t *plot) {
 void parse_cb_param_print(parse_t *parse, plot_t *plot) {
   (void)parse;
   plot_param_print(&plot->param);
-  if(parse_has_more_arg(parse) == 1) {
+  if(parse_next_arg(parse)) {
     error_exit("Function \"param_print\" takes no argument\n");
   }
   return;
@@ -1560,7 +1566,7 @@ void parse_cb_save_fig(parse_t *parse, plot_t *plot) {
   printf("Save fig called!\n");
   return;
   char *filename = NULL; // Given in arg list
-  if(parse_has_more_arg(parse) == 1) {
+  if(parse_next_arg(parse)) {
     filename = parse_get_str(parse);
     if(plot->fig_filename != NULL) {
       printf("Overriding existing save fig filename: \"%s\"\n", plot->fig_filename);
@@ -1573,7 +1579,7 @@ void parse_cb_save_fig(parse_t *parse, plot_t *plot) {
     }
     plot_save_fig(plot, plot->fig_filename);
   }
-  if(parse_has_more_arg(parse) == 1) {
+  if(parse_next_arg(parse)) {
     error_exit("Function \"save_fig\" takes 1 optional argument\n");
   }
   return;
@@ -1583,7 +1589,7 @@ void parse_cb_save_legend(parse_t *parse, plot_t *plot) {
   printf("Save legend called!\n");
   return;
   char *filename = NULL;
-  if(parse_has_more_arg(parse) == 1) {
+  if(parse_next_arg(parse)) {
     filename = parse_get_str(parse);
     if(plot->legend_filename != NULL) {
       printf("Overriding existing save legend filename: \"%s\"\n", plot->legend_filename);
@@ -1596,7 +1602,7 @@ void parse_cb_save_legend(parse_t *parse, plot_t *plot) {
     }
     plot_save_legend(plot, plot->legend_filename);
   }
-  if(parse_has_more_arg(parse) == 1) {
+  if(parse_next_arg(parse)) {
     error_exit("Function \"save_legend\" takes 1 optional argument\n");
   }
   return;
@@ -1607,17 +1613,17 @@ void parse_cb_save_legend(parse_t *parse, plot_t *plot) {
 void parse_cb_create_fig(parse_t *parse, plot_t *plot) {
   double width = plot->param.width;
   double height = plot->param.height;
-  if(parse_has_more_arg(parse) == 1) {
+  if(parse_next_arg(parse)) {
     double new_width = parse_get_double_range(parse, 0.0, PARSE_DOUBLE_MAX);
     printf("Overriding param width %g with %g\n", width, new_width);
     width = new_width;
   } 
-  if(parse_has_more_arg(parse) == 1) {
+  if(parse_next_arg(parse)) {
     double new_height = parse_get_double_range(parse, 0.0, PARSE_DOUBLE_MAX);
     printf("Overriding param height %g with %g\n", height, new_height);
     height = new_height;
   }
-  if(parse_has_more_arg(parse) == 1) {
+  if(parse_next_arg(parse)) {
     error_exit("Function \"create_fig\" takes 1 or 2 optional arguments\n");
   }
   plot_create_fig(plot, width, height);
@@ -1625,7 +1631,7 @@ void parse_cb_create_fig(parse_t *parse, plot_t *plot) {
 }
 
 void parse_cb_set_hatch_scheme(parse_t *parse, plot_t *plot) {
-  if(parse_has_more_arg(parse) == 0) {
+  if(parse_next_arg(parse) == 0) {
     error_exit("Function \"set_hatch_scheme\" takes at least 1 argument\n");
   }
   char *scheme_name = parse_get_str(parse);
@@ -1635,17 +1641,17 @@ void parse_cb_set_hatch_scheme(parse_t *parse, plot_t *plot) {
   }
   free(scheme_name);
   // Read hatch offset
-  if(parse_has_more_arg(parse) == 1) {
+  if(parse_next_arg(parse)) {
     plot->param.hatch_offset = parse_get_int64_range(parse, 0, plot->param.hatch_scheme->item_count - 1);
   }
-  if(parse_has_more_arg(parse) == 1) {
+  if(parse_next_arg(parse)) {
     error_exit("Function \"set_hatch_scheme\" takes 1 or 2 arguments\n");
   }
   return;
 }
 
 void parse_cb_set_color_scheme(parse_t *parse, plot_t *plot) {
-  if(parse_has_more_arg(parse) == 0) {
+  if(parse_next_arg(parse) == 0) {
     error_exit("Function \"set_color_scheme\" takes at least 1 argument\n");
   }
   char *scheme_name = parse_get_str(parse);
@@ -1655,21 +1661,21 @@ void parse_cb_set_color_scheme(parse_t *parse, plot_t *plot) {
   }
   free(scheme_name);
   // Read hatch offset
-  if(parse_has_more_arg(parse) == 1) {
+  if(parse_next_arg(parse)) {
     plot->param.color_offset = parse_get_int64_range(parse, 0, plot->param.color_scheme->item_count - 1);
   }
-  if(parse_has_more_arg(parse) == 1) {
+  if(parse_next_arg(parse)) {
     error_exit("Function \"set_color_scheme\" takes 1 or 2 arguments\n");
   }
   return;
 }
 
 void parse_cb_test_hatch(parse_t *parse, plot_t *plot) {
-  if(parse_has_more_arg(parse) == 0) {
+  if(parse_next_arg(parse) == 0) {
     error_exit("Function \"test_hatch\" takes 1 argument\n");
   }
   char *filename = parse_get_str(parse);
-  if(parse_has_more_arg(parse) == 1) {
+  if(parse_next_arg(parse)) {
     error_exit("Function \"test_hatch\" only takes 1 argument\n");
   }
   printf("Saving hatch test file to \"%s\"\n", filename);
@@ -1679,11 +1685,11 @@ void parse_cb_test_hatch(parse_t *parse, plot_t *plot) {
 }
 
 void parse_cb_test_color(parse_t *parse, plot_t *plot) {
-  if(parse_has_more_arg(parse) == 0) {
+  if(parse_next_arg(parse) == 0) {
     error_exit("Function \"test_color\" takes 1 argument\n");
   }
   char *filename = parse_get_str(parse);
-  if(parse_has_more_arg(parse) == 1) {
+  if(parse_next_arg(parse)) {
     error_exit("Function \"test_color\" only takes 1 argument\n");
   }
   printf("Saving color test file to \"%s\"\n", filename);

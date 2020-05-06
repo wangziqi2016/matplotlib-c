@@ -369,7 +369,7 @@ void parse_expect_char_opt(parse_t *parse, char ch); // Read an optional char an
 #define PARSE_ARG_NUM    2
 #define PARSE_ARG_IDENT  3
 
-int parse_has_more_arg(parse_t *parse); // Argument handling
+int parse_next_arg(parse_t *parse); // Argument handling
 
 void parse_sort_cb(parse_t *parse, parse_cb_entry_t *table, int count);
 parse_cb_entry_t parse_find_cb_entry(parse_t *parse, parse_cb_entry_t *table, int count, const char *name);
