@@ -248,7 +248,8 @@ void test_plot_legend() {
 void test_plot_color_test() {
   printf("========== test_plot_color_test ==========\n");
   plot_t *plot = plot_init();
-  plot->param.color_scheme = color_find_scheme("mixed");
+  color_scheme_t *scheme = color_find_scheme("mixed");
+  plot->param.color_scheme = color_scheme_init(scheme->name, scheme->base, scheme->item_count);
   plot->param.color_offset = 0;
   plot_save_color_test(plot, "test_color_1.pdf");
   plot_print(plot, 1);
@@ -542,6 +543,7 @@ void test_parse_top() {
   plot_t *plot = plot_init();
   plot_open(plot, "./conf/test_top.txt");
   parse_top(plot->parse, plot);
+  plot_free(plot);
   printf("Pass\n");
   return;
 }
