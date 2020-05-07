@@ -122,7 +122,7 @@ void hatch_scheme_print(hatch_scheme_t *scheme, int print_content);
 //* py_* - Python interpreter
 
 typedef struct {
-  int dry_run;   // Whether we actually execute the scripts (will not if set to 1)
+  uint64_t padding; // Avoid allocating zero bytes; Some malloc() do not handle this well
 } py_t;
 
 py_t *py_init();
@@ -277,6 +277,7 @@ typedef struct {
   char *ytitle;                        // Y title; Specified at top level
   char *fig_filename;                  // File name to save the figure
   char *legend_filename;               // File name to save legend, if there is one (optional)
+  int dry_run;                         // Whether we actually execute the scripts (will not if set to 1)
 } plot_t;
 
 plot_t *plot_init();

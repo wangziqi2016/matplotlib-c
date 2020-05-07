@@ -461,14 +461,9 @@ void py_free(py_t *py) {
 }
 
 void py_run(py_t *py, const char *s) {
-  // Only execute if dry run
-  if(py->dry_run == 0) {
-    int ret = PyRun_SimpleString(s);
-    if(ret != 0) {
-      error_exit("Python interpreter raises an exception. Exiting.\n");
-    }
-  } else {
-    printf("[python] Dry run mode is on, not executing anything\n");
+  int ret = PyRun_SimpleString(s);
+  if(ret != 0) {
+    error_exit("Python interpreter raises an exception. Exiting.\n");
   }
   return;
 }
@@ -886,7 +881,11 @@ void plot_save_fig(plot_t *plot, const char *filename) {
   // Pass the file name
   buf_printf(plot->buf, "plot.savefig(\"%s\", bbox_inches='tight')\n\n", filename);
   // Execute script
-  py_run(plot->py, buf_c_str(plot->buf));
+  if(plot->dry_run == 0) {
+    py_run(plot->py, buf_c_str(plot->buf));
+  } else {
+    printf("[plot] Dry run mode is on; not executing anything\n");
+  }
   return;
 }
 
@@ -1748,11 +1747,11 @@ void parse_top_property(parse_t *parse, plot_t *plot) {
       plot->param.ylim_bottom = parse_get_double_range(parse, PARSE_DOUBLE_MIN, PARSE_DOUBLE_MAX);
     } break;
     case PARSE_DRY_RUN: {
-      int prev = plot->py->dry_run;
-      plot->py->dry_run = (int)parse_get_int64_range(parse, 0, 1);
-      if(prev == 0 && plot->py->dry_run == 1) {
+      int prev = plot->dry_run;
+      plot->dry_run = (int)parse_get_int64_range(parse, 0, 1);
+      if(prev == 0 && plot->dry_run == 1) {
         printf("[parse] Dry run mode enabled; Scripts will not be actually executed\n");
-      } else if(prev == 1 && plot->py->dry_run == 0) {
+      } else if(prev == 1 && plot->dry_run == 0) {
         printf("[parse] Dry run mode disabled; Scripts will be executed\n");
       }
     } break;
@@ -1995,7 +1994,7 @@ void parse_cb_test_hatch(parse_t *parse, plot_t *plot) {
   if(parse_next_arg(parse)) {
     error_exit("Function \"test_hatch\" only takes 1 argument\n");
   }
-  printf("Saving hatch test file to \"%s\"\n", filename);
+  printf("[parse] Saving hatch test file to \"%s\"\n", filename);
   plot_save_hatch_test(plot, filename);
   free(filename);
   return;
@@ -2009,7 +2008,7 @@ void parse_cb_test_color(parse_t *parse, plot_t *plot) {
   if(parse_next_arg(parse)) {
     error_exit("Function \"test_color\" only takes 1 argument\n");
   }
-  printf("Saving color test file to \"%s\"\n", filename);
+  printf("[parse] Saving color test file to \"%s\"\n", filename);
   plot_save_color_test(plot, filename);
   free(filename);
   return;
