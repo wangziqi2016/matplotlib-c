@@ -116,6 +116,7 @@ extern hatch_scheme_t hatch_schemes[];
 
 int hatch_is_valid(char hatch);
 hatch_scheme_t *hatch_find_scheme(const char *name);
+hatch_scheme_t *hatch_scheme_dup(hatch_scheme_t *scheme);
 void hatch_scheme_print(hatch_scheme_t *scheme, int print_content);
 
 //* py_* - Python interpreter
