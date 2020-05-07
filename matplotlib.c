@@ -461,11 +461,15 @@ void py_free(py_t *py) {
 }
 
 void py_run(py_t *py, const char *s) {
-  int ret = PyRun_SimpleString(s);
-  if(ret != 0) {
-    error_exit("Python interpreter raises an exception. Exiting.\n");
+  // Only execute if dry run
+  if(py->dry_run == 0) {
+    int ret = PyRun_SimpleString(s);
+    if(ret != 0) {
+      error_exit("Python interpreter raises an exception. Exiting.\n");
+    }
+  } else {
+    printf("[python] Dry run mode is on, not executing anything\n");
   }
-  (void)py;
   return;
 }
 

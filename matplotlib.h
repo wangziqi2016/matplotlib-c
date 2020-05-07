@@ -122,7 +122,7 @@ void hatch_scheme_print(hatch_scheme_t *scheme, int print_content);
 //* py_* - Python interpreter
 
 typedef struct {
-  uint64_t padding;  // Avoid allocating 0 bytes (some malloc may not behave correctly)
+  int dry_run;   // Whether we actually execute the scripts (will not if set to 1)
 } py_t;
 
 py_t *py_init();
