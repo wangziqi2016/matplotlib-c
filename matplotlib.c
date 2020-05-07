@@ -1734,9 +1734,6 @@ void parse_top_property(parse_t *parse, plot_t *plot) {
 }
 
 parse_cb_entry_t parse_cb_top_funcs[] = {
-  PARSE_GEN_CB("plot_print", parse_cb_plot_print),
-  PARSE_GEN_CB("version_print", parse_cb_version_print),
-  PARSE_GEN_CB("param_print", parse_cb_param_print),
   PARSE_GEN_CB("print", parse_cb_print),
   PARSE_GEN_CB("save_fig", parse_cb_save_fig),
   PARSE_GEN_CB("save_legend", parse_cb_save_legend),
@@ -1763,41 +1760,6 @@ void parse_top_func(parse_t *parse, plot_t *plot) {
     parse_expect_char(parse, ';');
   }
   free(name);
-  return;
-}
-
-void parse_cb_plot_print(parse_t *parse, plot_t *plot) {
-  int print_buf = 0;
-  // Read arguments
-  if(parse_next_arg(parse)) {
-    print_buf = (int)parse_get_int64_range(parse, 0, 1); // [0, 1] binary
-    if(print_buf != 0) print_buf = 1;
-  }
-  plot_print(plot, print_buf);
-  if(parse_next_arg(parse)) {
-    parse_report_pos(parse);
-    error_exit("Function \"plot_print\" only takes 1 optional argument\n");
-  }
-  return;
-}
-
-void parse_cb_version_print(parse_t *parse, plot_t *plot) {
-  (void)plot;
-  printf("[version] matplotlib C language wrapper and script interpreter, version %s.%s\n", 
-    MAJOR_VERSION, MINOR_VERSION);
-  printf("[version] https://github.com/wangziqi2016/matplotlib-c\n");
-  if(parse_next_arg(parse)) {
-    error_exit("Function \"version_print\" takes no argument\n");
-  }
-  return;
-}
-
-void parse_cb_param_print(parse_t *parse, plot_t *plot) {
-  (void)parse;
-  plot_param_print(&plot->param, 1);
-  if(parse_next_arg(parse)) {
-    error_exit("Function \"param_print\" takes no argument\n");
-  }
   return;
 }
 
