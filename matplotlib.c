@@ -720,15 +720,13 @@ void plot_param_print(plot_param_t *param, int verbose) {
   printf("[param bar_text] decimals %d rtrim %d\n", 
     param->bar_text_decimals, param->bar_text_rtrim);
   if(param->hatch_scheme != NULL) {
-    printf("[param hatch] name \"%s\" count %d offset %d (usable %d)\n", 
-      param->hatch_scheme->name, param->hatch_scheme->item_count, param->hatch_offset,
-      param->hatch_scheme->item_count - param->hatch_offset);
+    printf("[param hatch] Offset %d (usable %d)\n", 
+      param->hatch_offset, param->hatch_scheme->item_count - param->hatch_offset);
     if(verbose == 1) hatch_scheme_print(param->hatch_scheme, verbose);
   }
   if(param->color_scheme != NULL) {
-    printf("[param color] name \"%s\" count %d offset %d (usable %d)\n", 
-      param->color_scheme->name, param->color_scheme->item_count, param->color_offset,
-      param->color_scheme->item_count - param->color_offset);
+    printf("[param color] Offset %d (usable %d)\n",  
+      param->color_offset, param->color_scheme->item_count - param->color_offset);
     if(verbose == 1) color_scheme_print(param->color_scheme, verbose);
   }
   printf("[param x/y_lim] left %f right %f top %f bottom %f\n",
@@ -1821,9 +1819,9 @@ void parse_cb_print(parse_t *parse, plot_t *plot) {
     free(verbose);
   }
   if(streq(name, "plot") == 1) {
-    
+    plot_print(plot, verbose);
   } else if(streq(name, "param") == 1) {
-
+    plot_param_print(plot, verbose);
   } else if(streq(name, "version") == 1) {
     printf("[version] matplotlib C language wrapper and script interpreter, version %s.%s\n", 
       MAJOR_VERSION, MINOR_VERSION);
