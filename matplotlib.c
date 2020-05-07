@@ -276,6 +276,11 @@ uint32_t color_decode(const char *s) {
   return ret;
 }
 
+// Duplicates an existing scheme
+color_scheme_t *color_scheme_dup(color_scheme_t *scheme) {
+  return color_scheme_init(scheme->name, scheme->base, scheme->item_count);
+}
+
 // Returns NULL if the name does not exist; Otherwise return the pointer to the scheme
 color_scheme_t *color_find_scheme(const char *name) {
   for(int i = 0;i < (int)(sizeof(color_schemes) / sizeof(color_scheme_t));i++) {
@@ -880,6 +885,9 @@ void plot_save_fig(plot_t *plot, const char *filename) {
 // Copies a param object over
 void plot_copy_param(plot_t *plot, plot_param_t *param) {
   memcpy(&plot->param, param, sizeof(plot_param_t));
+  // These two belongs to the new plot's param object
+  plot->param.color_scheme = color_scheme_dup(param->color_scheme);
+  plot->param.hatch_scheme = hatch_scheme_dup(param->hatch_scheme);
   return;
 }
 
