@@ -1825,7 +1825,24 @@ void parse_cb_print(parse_t *parse, plot_t *plot) {
   } else if(streq(name, "param") == 1) {
 
   } else if(streq(name, "version") == 1) {
-
+    printf("[version] matplotlib C language wrapper and script interpreter, version %s.%s\n", 
+      MAJOR_VERSION, MINOR_VERSION);
+    printf("[version] Author: Ziqi Wang\n");
+    printf("[version] Github: https://github.com/wangziqi2016/matplotlib-c\n");
+    if(verbose == 1) {
+#ifdef __GNUC__
+      printf("[version] GCC version: %d.%d.%d\n", __GNUC__, __GNUC_MINOR__, __GNUC_PATCHLEVEL__);
+#endif
+#ifdef __DATE__
+      printf("[version] Date: %s\n", __DATE__);
+#endif
+#ifdef __TIME__
+      printf("[version] Time: %s\n", __TIME__);
+#endif
+#ifdef __FILE__
+      printf("[version] File: %s\n", __FILE__);
+#endif
+    }
   }
   free(name);
   return;
