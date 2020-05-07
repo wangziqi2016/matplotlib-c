@@ -341,6 +341,7 @@ enum {
   PARSE_XLIM_RIGHT,
   PARSE_YLIM_TOP,
   PARSE_YLIM_BOTTOM,
+  PARSE_DRY_RUN,     // py_t object
 };
 
 typedef struct {

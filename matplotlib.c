@@ -1644,6 +1644,8 @@ parse_cb_entry_t parse_cb_top_props[] = {
   PARSE_GEN_PROP("xlim_right", PARSE_XLIM_RIGHT),
   PARSE_GEN_PROP("ylim_top", PARSE_YLIM_TOP),
   PARSE_GEN_PROP("ylim_bottom", PARSE_YLIM_BOTTOM),
+  // py_t object
+  PARSE_GEN_PROP("dry_run", PARSE_DRY_RUN),
 };
 const int parse_cb_top_props_count = sizeof(parse_cb_top_props) / sizeof(parse_cb_entry_t);
 
@@ -1744,6 +1746,15 @@ void parse_top_property(parse_t *parse, plot_t *plot) {
     } break;
     case PARSE_YLIM_BOTTOM: {
       plot->param.ylim_bottom = parse_get_double_range(parse, PARSE_DOUBLE_MIN, PARSE_DOUBLE_MAX);
+    } break;
+    case PARSE_DRY_RUN: {
+      int prev = plot->py->dry_run;
+      plot->py->dry_run = (int)parse_get_int64_range(parse, 0, 1);
+      if(prev == 0 && plot->py->dry_run == 1) {
+        printf("Dry run mode enabled; Scripts will not be actually executed\n");
+      } else if(prev == 1 && plot->py->dry_run == 0) {
+        printf("Dry run mode disabled; Scripts will be executed\n");
+      }
     } break;
     default: {
       parse_report_pos(parse);
