@@ -1734,6 +1734,7 @@ parse_cb_entry_t parse_cb_top_funcs[] = {
   PARSE_GEN_CB("plot_print", parse_cb_plot_print),
   PARSE_GEN_CB("version_print", parse_cb_version_print),
   PARSE_GEN_CB("param_print", parse_cb_param_print),
+  PARSE_GEN_CB("print", parse_cb_print),
   PARSE_GEN_CB("save_fig", parse_cb_save_fig),
   PARSE_GEN_CB("save_legend", parse_cb_save_legend),
   PARSE_GEN_CB("create_fig", parse_cb_create_fig),
@@ -1794,6 +1795,34 @@ void parse_cb_param_print(parse_t *parse, plot_t *plot) {
   if(parse_next_arg(parse)) {
     error_exit("Function \"param_print\" takes no argument\n");
   }
+  return;
+}
+
+void parse_cb_print(parse_t *parse, plot_t *plot) {
+  if(parse_next_arg(parse) != PARSE_ARG_NONE) {
+    parse_report_pos(parse);
+    error_exit("Function \"print\" expects at least 1 argument\n");
+  }
+  char *name = parse_get_ident(parse);
+  int verbose = 0;
+  if(parse_next_arg(parse) != PARSE_ARG_NONE) {
+    char *verbose = parse_get_ident(parse);
+    if(streq(verbose, "verbose") == 1) {
+      verbose = 1;
+    } else {
+      parse_report_pos(parse);
+      error_exit("Unknown option for \"print\": \"%s\"\n", verbose);
+    }
+    free(verbose);
+  }
+  if(streq(name, "plot") == 1) {
+
+  } else if(streq(name, "param") == 1) {
+
+  } else if(streq(name, "version") == 1) {
+
+  }
+  free(name);
   return;
 }
 
