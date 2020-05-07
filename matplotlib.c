@@ -287,7 +287,7 @@ color_scheme_t *color_find_scheme(const char *name) {
 }
 
 void color_scheme_print(color_scheme_t *scheme, int print_content) {
-  printf("Name %s count %d base 0x%p\n", scheme->name, scheme->item_count, scheme->base);
+  printf("[color] Name \"%s\" count %d base 0x%p\n", scheme->name, scheme->item_count, scheme->base);
   if(print_content == 1) {
     for(int i = 0;i < scheme->item_count;i++) {
       char buf[16];
@@ -408,7 +408,7 @@ hatch_scheme_t *hatch_find_scheme(const char *name) {
 }
 
 void hatch_scheme_print(hatch_scheme_t *scheme, int print_content) {
-  printf("Name %s count %d base 0x%p\n", scheme->name, scheme->item_count, scheme->base);
+  printf("[hatch] Name \"%s\" count %d base 0x%p\n", scheme->name, scheme->item_count, scheme->base);
   if(print_content == 1) {
     for(int i = 0;i < scheme->item_count;i++) {
       printf("  Index %d hatch '%c'\n", i, scheme->base[i]);
@@ -720,14 +720,17 @@ void plot_param_print(plot_param_t *param, int verbose) {
   printf("[param bar_text] decimals %d rtrim %d\n", 
     param->bar_text_decimals, param->bar_text_rtrim);
   if(param->hatch_scheme != NULL) {
-    printf("[param hatch] Offset %d (usable %d)\n", 
+    // There is no nwe line after this, if verbose is turned on
+    printf("[param hatch] Offset %d (usable %d) ", 
       param->hatch_offset, param->hatch_scheme->item_count - param->hatch_offset);
     if(verbose == 1) hatch_scheme_print(param->hatch_scheme, verbose);
+    else putchar('\n');
   }
   if(param->color_scheme != NULL) {
-    printf("[param color] Offset %d (usable %d)\n",  
+    printf("[param color] Offset %d (usable %d) ",  
       param->color_offset, param->color_scheme->item_count - param->color_offset);
     if(verbose == 1) color_scheme_print(param->color_scheme, verbose);
+    else putchar('\n');
   }
   printf("[param x/y_lim] left %f right %f top %f bottom %f\n",
     param->xlim_left, param->xlim_right, param->ylim_top, param->ylim_bottom);
@@ -786,6 +789,10 @@ void plot_free(plot_t *plot) {
   if(plot->ytitle) free(plot->ytitle);
   if(plot->fig_filename) free(plot->fig_filename);
   if(plot->legend_filename) free(plot->legend_filename);
+  plot_param_t *param = &plot->param;
+  // Free color and hatch scheme if they are allocated
+  if(param->color_scheme != NULL) color_scheme_free(param->color_scheme);
+  if(param->hatch_scheme != NULL) hatch_scheme_free(param->hatch_scheme);
   return;
 }
 
@@ -1764,7 +1771,7 @@ void parse_top_func(parse_t *parse, plot_t *plot) {
 }
 
 void parse_cb_print(parse_t *parse, plot_t *plot) {
-  if(parse_next_arg(parse) != PARSE_ARG_NONE) {
+  if(parse_next_arg(parse) == PARSE_ARG_NONE) {
     parse_report_pos(parse);
     error_exit("Function \"print\" expects at least 1 argument\n");
   }
