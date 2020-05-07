@@ -163,13 +163,13 @@ typedef struct {
 buf_t *buf_init();          // Default to BUF_INIT_SIZE
 buf_t *buf_init_sz(int sz); // Using any init size
 void buf_free(buf_t *buf);
+void buf_reset(buf_t *buf);
 
 inline static int buf_get_size(buf_t *buf) { return buf->size; }
 inline static int buf_get_capacity(buf_t *buf) { return buf->capacity; }
 inline static char *buf_c_str(buf_t *buf) { return buf->data; }
 inline static int buf_strlen(buf_t *buf) { return buf->size - 1; }
 
-void buf_reset(buf_t *buf);
 void buf_realloc(buf_t *buf, int target);
 void buf_append(buf_t *buf, const char *s);
 void buf_concat(buf_t *buf, buf_t *s);
@@ -258,6 +258,8 @@ typedef struct {
   double xlim_right;
   double ylim_top;
   double ylim_bottom;
+  // Debugging
+  int dry_run;                   // Whether we actually execute the scripts (will not if set to 1)
 } plot_param_t;
 
 void plot_param_print(plot_param_t *param, int verbose);
@@ -277,7 +279,6 @@ typedef struct {
   char *ytitle;                        // Y title; Specified at top level
   char *fig_filename;                  // File name to save the figure
   char *legend_filename;               // File name to save legend, if there is one (optional)
-  int dry_run;                         // Whether we actually execute the scripts (will not if set to 1)
 } plot_t;
 
 plot_t *plot_init();

@@ -465,6 +465,7 @@ void py_run(py_t *py, const char *s) {
   if(ret != 0) {
     error_exit("Python interpreter raises an exception. Exiting.\n");
   }
+  (void)py;
   return;
 }
 
@@ -712,6 +713,7 @@ plot_param_t default_param = {
   NULL, 0,   // Color scheme/offset
   INFINITY, INFINITY, // xlimits
   INFINITY, INFINITY, // ylimits
+  0,         // Dry run
 };
 
 void plot_param_print(plot_param_t *param, int verbose) {
@@ -881,7 +883,7 @@ void plot_save_fig(plot_t *plot, const char *filename) {
   // Pass the file name
   buf_printf(plot->buf, "plot.savefig(\"%s\", bbox_inches='tight')\n\n", filename);
   // Execute script
-  if(plot->dry_run == 0) {
+  if(param->dry_run == 0) {
     py_run(plot->py, buf_c_str(plot->buf));
   } else {
     printf("[plot] Dry run mode is on; not executing anything\n");
@@ -889,8 +891,11 @@ void plot_save_fig(plot_t *plot, const char *filename) {
   return;
 }
 
-// Copies a param object over
+// Copies a param object over; If the old param object has color and hatch scheme
+// pointers not NULL, we also free them to avoid memory leak
 void plot_copy_param(plot_t *plot, plot_param_t *param) {
+  if(plot->param.color_scheme != NULL) color_scheme_free(plot->param.color_scheme);
+  if(plot->param.hatch_scheme != NULL) hatch_scheme_free(plot->param.hatch_scheme);
   memcpy(&plot->param, param, sizeof(plot_param_t));
   // These two belongs to the new plot's param object
   plot->param.color_scheme = color_scheme_dup(param->color_scheme);
@@ -1747,11 +1752,11 @@ void parse_top_property(parse_t *parse, plot_t *plot) {
       plot->param.ylim_bottom = parse_get_double_range(parse, PARSE_DOUBLE_MIN, PARSE_DOUBLE_MAX);
     } break;
     case PARSE_DRY_RUN: {
-      int prev = plot->dry_run;
-      plot->dry_run = (int)parse_get_int64_range(parse, 0, 1);
-      if(prev == 0 && plot->dry_run == 1) {
+      int prev = plot->param.dry_run;
+      plot->param.dry_run = (int)parse_get_int64_range(parse, 0, 1);
+      if(prev == 0 && plot->param.dry_run == 1) {
         printf("[parse] Dry run mode enabled; Scripts will not be actually executed\n");
-      } else if(prev == 1 && plot->dry_run == 0) {
+      } else if(prev == 1 && plot->param.dry_run == 0) {
         printf("[parse] Dry run mode disabled; Scripts will be executed\n");
       }
     } break;
