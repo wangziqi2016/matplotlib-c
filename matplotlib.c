@@ -1115,21 +1115,24 @@ void plot_add_y_title(plot_t *plot, const char *title) {
   return;
 }
 
-void plot_print(plot_t *plot, int print_buf) {
+void plot_print(plot_t *plot, int verbose) {
   // Print plot properties
   if(plot->xtitle != NULL) printf("[plot] xtitle %s\n", plot->xtitle);
   if(plot->ytitle != NULL) printf("[plot] ytitle %s\n", plot->ytitle);
   if(plot->fig_filename != NULL) printf("[plot] fig_filename %s\n", plot->fig_filename);
   if(plot->legend_filename != NULL) printf("[plot] legend_filename %s\n", plot->legend_filename);
   // Print param
-  plot_param_print(&plot->param);
+  plot_param_print(&plot->param, verbose);
   // Print bar types
-  for(int i = 0;i < vec_count(plot->bar_types);i++) {
-    bar_type_t *type = (bar_type_t *)vec_at(plot->bar_types, i);
-    bar_type_print(type);
+  printf("[plot] bar types %d\n", vec_count(plot->bar_types));
+  if(verbose == 1) {
+    for(int i = 0;i < vec_count(plot->bar_types);i++) {
+      bar_type_t *type = (bar_type_t *)vec_at(plot->bar_types, i);
+      bar_type_print(type);
+    }
   }
   // Optionally print buffer content
-  buf_print(plot->buf, print_buf);
+  buf_print(plot->buf, verbose);
   return;
 }
 
@@ -1816,7 +1819,7 @@ void parse_cb_print(parse_t *parse, plot_t *plot) {
     free(verbose);
   }
   if(streq(name, "plot") == 1) {
-
+    
   } else if(streq(name, "param") == 1) {
 
   } else if(streq(name, "version") == 1) {
