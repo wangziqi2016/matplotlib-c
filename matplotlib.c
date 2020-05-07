@@ -1794,7 +1794,7 @@ void parse_cb_version_print(parse_t *parse, plot_t *plot) {
 
 void parse_cb_param_print(parse_t *parse, plot_t *plot) {
   (void)parse;
-  plot_param_print(&plot->param);
+  plot_param_print(&plot->param, 1);
   if(parse_next_arg(parse)) {
     error_exit("Function \"param_print\" takes no argument\n");
   }
@@ -1809,19 +1809,19 @@ void parse_cb_print(parse_t *parse, plot_t *plot) {
   char *name = parse_get_ident(parse);
   int verbose = 0;
   if(parse_next_arg(parse) != PARSE_ARG_NONE) {
-    char *verbose = parse_get_ident(parse);
-    if(streq(verbose, "verbose") == 1) {
+    char *verbose_ident = parse_get_ident(parse);
+    if(streq(verbose_ident, "verbose") == 1) {
       verbose = 1;
     } else {
       parse_report_pos(parse);
-      error_exit("Unknown option for \"print\": \"%s\"\n", verbose);
+      error_exit("Unknown option for \"print\": \"%s\"\n", verbose_ident);
     }
-    free(verbose);
+    free(verbose_ident);
   }
   if(streq(name, "plot") == 1) {
     plot_print(plot, verbose);
   } else if(streq(name, "param") == 1) {
-    plot_param_print(plot, verbose);
+    plot_param_print(&plot->param, verbose);
   } else if(streq(name, "version") == 1) {
     printf("[version] matplotlib C language wrapper and script interpreter, version %s.%s\n", 
       MAJOR_VERSION, MINOR_VERSION);
