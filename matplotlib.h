@@ -258,7 +258,7 @@ typedef struct {
   double ylim_bottom;
 } plot_param_t;
 
-void plot_param_print(plot_param_t *param);
+void plot_param_print(plot_param_t *param, int verbose);
 
 extern plot_param_t default_param; // Default param, will be copied over during init
 extern const char *plot_preamble; // This is added to the buffer on plot init

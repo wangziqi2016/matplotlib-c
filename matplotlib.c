@@ -706,7 +706,7 @@ plot_param_t default_param = {
   INFINITY, INFINITY, // ylimits
 };
 
-void plot_param_print(plot_param_t *param) {
+void plot_param_print(plot_param_t *param, int verbose) {
   printf("[param] width %f height %f\n", param->width, param->height);
   printf("[param legend] font size %d rows %d pos \"%s\"\n", 
     param->legend_font_size, param->legend_rows, param->legend_pos);
@@ -723,11 +723,13 @@ void plot_param_print(plot_param_t *param) {
     printf("[param hatch] name \"%s\" count %d offset %d (usable %d)\n", 
       param->hatch_scheme->name, param->hatch_scheme->item_count, param->hatch_offset,
       param->hatch_scheme->item_count - param->hatch_offset);
+    if(verbose == 1) hatch_scheme_print(param->hatch_scheme, verbose);
   }
   if(param->color_scheme != NULL) {
     printf("[param color] name \"%s\" count %d offset %d (usable %d)\n", 
       param->color_scheme->name, param->color_scheme->item_count, param->color_offset,
       param->color_scheme->item_count - param->color_offset);
+    if(verbose == 1) color_scheme_print(param->color_scheme, verbose);
   }
   printf("[param x/y_lim] left %f right %f top %f bottom %f\n",
     param->xlim_left, param->xlim_right, param->ylim_top, param->ylim_bottom);
