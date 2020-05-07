@@ -1674,7 +1674,7 @@ void parse_top_property(parse_t *parse, plot_t *plot) {
     } break;
     case PARSE_FIG_FILENAME: {
       if(plot->fig_filename != NULL) {
-        printf("WARNING: The property \"fig_filename\" already exists, value \"%s\"\n", 
+        printf("[parse] WARNING: The property \"fig_filename\" already exists, value \"%s\"\n", 
           plot->fig_filename);
         free(plot->fig_filename);
       }
@@ -1682,7 +1682,7 @@ void parse_top_property(parse_t *parse, plot_t *plot) {
     } break;
     case PARSE_LEGEND_FILENAME: {
       if(plot->legend_filename != NULL) {
-        printf("WARNING: The property \"legend_filename\" already exists, value \"%s\"\n", 
+        printf("[parse] WARNING: The property \"legend_filename\" already exists, value \"%s\"\n", 
           plot->legend_filename);
         free(plot->legend_filename);
       }
@@ -1751,9 +1751,9 @@ void parse_top_property(parse_t *parse, plot_t *plot) {
       int prev = plot->py->dry_run;
       plot->py->dry_run = (int)parse_get_int64_range(parse, 0, 1);
       if(prev == 0 && plot->py->dry_run == 1) {
-        printf("Dry run mode enabled; Scripts will not be actually executed\n");
+        printf("[parse] Dry run mode enabled; Scripts will not be actually executed\n");
       } else if(prev == 1 && plot->py->dry_run == 0) {
-        printf("Dry run mode disabled; Scripts will be executed\n");
+        printf("[parse] Dry run mode disabled; Scripts will be executed\n");
       }
     } break;
     default: {
@@ -1849,7 +1849,7 @@ void parse_cb_save_fig(parse_t *parse, plot_t *plot) {
   if(parse_next_arg(parse)) {
     filename = parse_get_str(parse);
     if(plot->fig_filename != NULL) {
-      printf("Overriding existing save fig filename: \"%s\"\n", plot->fig_filename);
+      printf("[parse] Overriding existing save fig filename: \"%s\"\n", plot->fig_filename);
     }
     plot_save_fig(plot, filename);
     free(filename);
@@ -1872,7 +1872,7 @@ void parse_cb_save_legend(parse_t *parse, plot_t *plot) {
   if(parse_next_arg(parse)) {
     filename = parse_get_str(parse);
     if(plot->legend_filename != NULL) {
-      printf("Overriding existing save legend filename: \"%s\"\n", plot->legend_filename);
+      printf("[parse] Overriding existing save legend filename: \"%s\"\n", plot->legend_filename);
     }
     plot_save_legend(plot, filename);
     free(filename);
@@ -1895,12 +1895,12 @@ void parse_cb_create_fig(parse_t *parse, plot_t *plot) {
   double height = plot->param.height;
   if(parse_next_arg(parse)) {
     double new_width = parse_get_double_range(parse, 0.0, PARSE_DOUBLE_MAX);
-    printf("Overriding param width %g with %g\n", width, new_width);
+    printf("[parse] Overriding param width %g with %g\n", width, new_width);
     width = new_width;
   } 
   if(parse_next_arg(parse)) {
     double new_height = parse_get_double_range(parse, 0.0, PARSE_DOUBLE_MAX);
-    printf("Overriding param height %g with %g\n", height, new_height);
+    printf("[parse] Overriding param height %g with %g\n", height, new_height);
     height = new_height;
   }
   if(parse_next_arg(parse)) {
@@ -1918,7 +1918,7 @@ void parse_cb_set_hatch_scheme(parse_t *parse, plot_t *plot) {
   plot_param_t *param = &plot->param;
   // Free current one if there is one
   if(param->hatch_scheme != NULL) {
-    printf("Overriding existing hatch scheme \"%s\"\n", param->hatch_scheme->name);
+    printf("[parse] Overriding existing hatch scheme \"%s\"\n", param->hatch_scheme->name);
     hatch_scheme_free(param->hatch_scheme);
   }
   if(next_type == PARSE_ARG_STR) {
@@ -1956,7 +1956,7 @@ void parse_cb_set_color_scheme(parse_t *parse, plot_t *plot) {
   plot_param_t *param = &plot->param;
   // Free current one if there is one
   if(param->color_scheme != NULL) {
-    printf("Overriding existing color scheme \"%s\"\n", param->color_scheme->name);
+    printf("[parse] Overriding existing color scheme \"%s\"\n", param->color_scheme->name);
     color_scheme_free(param->color_scheme);
   }
   if(next_type == PARSE_ARG_STR) {
