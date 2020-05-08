@@ -2070,7 +2070,35 @@ void parse_print_prop(parse_t *parse, buf_t *buf, const char *name, const char *
 void parse_print_str(parse_t *parse, buf_t *buf, const char *str) {
   char *p = str;
   while(*p != '\0') {
+    char ch = *p;
+    if(ch == '%') {
 
+    } else if(ch == '\\') {
+      char ch2 = *(++p);
+      switch(ch2) {
+        case '\0': {
+          parse_report_pos(parse);
+          error_exit("Trailing '\\' at the end of string\n");
+        } break;
+        case 'n': ch2 = '\n'; break;
+        case 't': ch2 = '\t'; break;
+        case 'r': ch2 = '\r'; break;
+        case 'v': ch2 = '\v'; break;
+        case '\'': ch2 = '\''; break;
+        case '\"': ch2 = '\"'; break;
+        case '\\': ch2 = '\\'; break;
+        default: {
+          parse_report_pos(parse);
+          char buf[16];
+          parse_print_char(parse, ch2, buf);
+          error_exit("Unknown escape character: %s\n", buf);
+        } break;
+      }
+      buf_putchar(buf, ch2);
+    } else {
+      buf_putchar(buf, ch);
+    }
+    p++;
   }
 }
 
