@@ -898,8 +898,8 @@ void plot_copy_param(plot_t *plot, plot_param_t *param) {
   if(plot->param.hatch_scheme != NULL) hatch_scheme_free(plot->param.hatch_scheme);
   memcpy(&plot->param, param, sizeof(plot_param_t));
   // These two belongs to the new plot's param object
-  plot->param.color_scheme = color_scheme_dup(param->color_scheme);
-  plot->param.hatch_scheme = hatch_scheme_dup(param->hatch_scheme);
+  if(param->color_scheme != NULL) plot->param.color_scheme = color_scheme_dup(param->color_scheme);
+  if(param->hatch_scheme != NULL) plot->param.hatch_scheme = hatch_scheme_dup(param->hatch_scheme);
   return;
 }
 
@@ -1773,6 +1773,7 @@ void parse_top_property(parse_t *parse, plot_t *plot) {
 
 parse_cb_entry_t parse_cb_top_funcs[] = {
   PARSE_GEN_CB("print", parse_cb_print),
+  PARSE_GEN_CB("reset", parse_cb_reset),
   PARSE_GEN_CB("save_fig", parse_cb_save_fig),
   PARSE_GEN_CB("save_legend", parse_cb_save_legend),
   PARSE_GEN_CB("create_fig", parse_cb_create_fig),
@@ -1841,6 +1842,31 @@ void parse_cb_print(parse_t *parse, plot_t *plot) {
       printf("[version] File: %s\n", __FILE__);
 #endif
     }
+  }
+  free(name);
+  return;
+}
+
+void parse_cb_reset(parse_t *parse, plot_t *plot) {
+  if(parse_next_arg(parse) == PARSE_ARG_NONE) {
+    parse_report_pos(parse);
+    error_exit("Function \"reset\" expects 1 argument\n");
+  }
+  // This can be "buf" "param" or "plot"
+  char *name = parse_get_ident(parse);
+  plot_param_t *param = &plot->param;
+  if(streq(name, "buf") == 1) {
+    buf_reset(plot->buf);
+  } else if(streq(name, "param") == 1) {
+    if(param->color_scheme != NULL) {
+      printf("[parse] Color scheme \"%s\" will be removed from plot\n", param->color_scheme->name);
+    }
+    if(param->hatch_scheme != NULL) {
+      printf("[parse] Hatch scheme \"%s\" will be removed from plot\n", param->hatch_scheme->name);
+    }
+    plot_copy_param(&plot->param, &default_param);
+  } else if(streq(name, "plot") == 1) {
+    
   }
   free(name);
   return;
