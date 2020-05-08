@@ -1809,10 +1809,21 @@ void parse_top_func(parse_t *parse, plot_t *plot) {
 }
 
 void parse_cb_print(parse_t *parse, plot_t *plot) {
-  if(parse_next_arg(parse) == PARSE_ARG_NONE) {
+  int next_arg = parse_next_arg(parse);
+  if(next_arg == PARSE_ARG_NONE) {
     parse_report_pos(parse);
     error_exit("Function \"print\" expects at least 1 argument\n");
+  } else if(next_arg == PARSE_ARG_STR) {
+    // Format string print
+    char *fmt = parse_get_str(parse);
+    buf_t *buf = buf_init();
+    parse_print_fmt(parse, plot, buf, fmt);
+    printf("%s", buf_c_str(buf));
+    buf_free(buf);
+    free(fmt);
+    return;
   }
+  // First param of print function
   char *name = parse_get_ident(parse);
   int verbose = 0;
   if(parse_next_arg(parse) != PARSE_ARG_NONE) {
@@ -2187,7 +2198,7 @@ void parse_print_prop(parse_t *parse, plot_t *plot, buf_t *buf, const char *name
 
 // Prints a string, which can possibly be a format string containing format specifiers
 // The parser will keep reading arguments for each specifier except %%
-void parse_print_str(parse_t *parse, plot_t *plot, buf_t *buf, const char *str) {
+void parse_print_fmt(parse_t *parse, plot_t *plot, buf_t *buf, const char *str) {
   const char *p = str;
   int fmt_index = 0;
   while(*p != '\0') {
