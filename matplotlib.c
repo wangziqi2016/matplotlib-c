@@ -900,24 +900,12 @@ void plot_save_fig(plot_t *plot, const char *filename) {
   return;
 }
 
-// Copies a param object over; If the old param object has color and hatch scheme
-// pointers not NULL, we also free them to avoid memory leak
-void plot_copy_param(plot_t *plot, plot_param_t *param) {
-  if(plot->param.color_scheme != NULL) color_scheme_free(plot->param.color_scheme);
-  if(plot->param.hatch_scheme != NULL) hatch_scheme_free(plot->param.hatch_scheme);
-  memcpy(&plot->param, param, sizeof(plot_param_t));
-  // These two belongs to the new plot's param object
-  if(param->color_scheme != NULL) plot->param.color_scheme = color_scheme_dup(param->color_scheme);
-  if(param->hatch_scheme != NULL) plot->param.hatch_scheme = hatch_scheme_dup(param->hatch_scheme);
-  return;
-}
-
 // Saves a standalone legend file
 // This function can be called anywhere during the plotting procedure. Legends drawn will be 
 // bar types stored in the plot object
 void plot_save_legend(plot_t *plot, const char *filename) {
   plot_t *legend = plot_init(); // Preamble is set after this
-  plot_copy_param(legend, &plot->param); // Copy legend configuration to the new legend plot
+  plot_param_copy(&legend->param, &plot->param); // Copy legend configuration to the new legend plot
   legend->param.width = legend->param.height = 0.001; // Super small graph
   assert(legend->buf != NULL && legend->py != NULL);
   plot_create_fig(legend, legend->param.width, legend->param.height);
@@ -948,7 +936,7 @@ void plot_save_legend(plot_t *plot, const char *filename) {
 void plot_save_color_test(plot_t *plot, const char *filename) {
   plot_t *test = plot_init();
   // Use current plot's configuration
-  plot_copy_param(test, &plot->param);
+  plot_param_copy(&test->param, &plot->param);
   plot_create_fig(test, test->param.width, test->param.height);
   plot_param_t *param = &test->param;
   char label_buf[16];
@@ -984,7 +972,7 @@ void plot_save_color_test(plot_t *plot, const char *filename) {
 void plot_save_hatch_test(plot_t *plot, const char *filename) {
   plot_t *test = plot_init();
   // Use current plot's configuration
-  plot_copy_param(test, &plot->param);
+  plot_param_copy(&test->param, &plot->param);
   plot_param_t *param = &test->param;
   char label_buf[16];
   int usable = param->hatch_scheme->item_count - param->color_offset;
@@ -1873,7 +1861,7 @@ void parse_cb_reset(parse_t *parse, plot_t *plot) {
     if(param->hatch_scheme != NULL) {
       printf("[parse] Hatch scheme \"%s\" will be removed from plot\n", param->hatch_scheme->name);
     }
-    plot_copy_param(plot, &default_param);
+    plot_param_param(&plot->param, &default_param);
   } else if(streq(name, "plot") == 1) {
     
   }
