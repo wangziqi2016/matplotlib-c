@@ -441,8 +441,8 @@ void parse_cb_set_color_scheme(parse_t *parse, plot_t *plot);
 void parse_cb_test_hatch(parse_t *parse, plot_t *plot);
 void parse_cb_test_color(parse_t *parse, plot_t *plot);
 
-void parse_print_prop(parse_t *parse, buf_t *buf, const char *name, const char *fmt);
-void parse_print_str(parse_t *parse, buf_t *buf, const char *str);
+void parse_print_prop(parse_t *parse, plot_t *plot, buf_t *buf, const char *name, const char *fmt);
+void parse_print_str(parse_t *parse, plot_t *plot, buf_t *buf, const char *str);
 
 void parse_report_pos(parse_t *parse);
 void parse_print(parse_t *parse);
