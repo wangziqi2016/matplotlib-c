@@ -574,6 +574,15 @@ void buf_append(buf_t *buf, const char *s) {
   return;
 }
 
+void buf_putchar(buf_t *buf, char ch) {
+  buf_realloc(buf, buf->size + 1); 
+  // Before this, buf[size - 1] is '\0'
+  buf->data[buf->size - 1] = ch;
+  buf->data[buf->size] = '\0';
+  buf->size++;
+  return;
+}
+
 // Concatenate the second arg after the first one and frees the second one
 void buf_concat(buf_t *buf, buf_t *s) {
   buf_append(buf, s->data);
@@ -2061,7 +2070,7 @@ void parse_print_prop(parse_t *parse, buf_t *buf, const char *name, const char *
 void parse_print_str(parse_t *parse, buf_t *buf, const char *str) {
   char *p = str;
   while(*p != '\0') {
-    
+
   }
 }
 

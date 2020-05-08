@@ -172,6 +172,7 @@ inline static int buf_strlen(buf_t *buf) { return buf->size - 1; }
 
 void buf_realloc(buf_t *buf, int target);
 void buf_append(buf_t *buf, const char *s);
+void buf_putchar(buf_t *buf, char ch);
 void buf_concat(buf_t *buf, buf_t *s);
 void buf_printf(buf_t *buf, const char *fmt, ...);
 void buf_append_color(buf_t *buf, uint32_t color);
