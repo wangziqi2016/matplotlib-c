@@ -1768,7 +1768,7 @@ void parse_top_property(parse_t *parse, plot_t *plot) {
     } break;
     default: {
       parse_report_pos(parse);
-      error_exit("Internal error: unknown top-level property handler: \"%s\" (code %d)\n", name, cb_entry.prop);
+      error_exit("Peoperty \"%s\" cannot be assigned\n", name);
     }
   }
   // This is common for all properties
@@ -2061,13 +2061,95 @@ void parse_cb_test_color(parse_t *parse, plot_t *plot) {
 
 // Prints the value of a property into the given buf
 // This function uses the same format string as printf
-void parse_print_prop(parse_t *parse, buf_t *buf, const char *name, const char *fmt) {
+void parse_print_prop(parse_t *parse, plot_t *plot, buf_t *buf, const char *name, const char *fmt) {
+  parse_cb_entry_t cb_entry = parse_find_cb_entry(parse, parse_cb_top_props, parse_cb_top_props_count, name);
+  if(cb_entry.name == NULL) {
+    parse_report_pos(parse);
+    error_exit("Property name \"%s\" cannot be found for string formatting\n");
+  }
+  switch(cb_entry.prop) {
+    case PARSE_XTITLE: {
+      
+    } break;
+    case PARSE_YTITLE: {
+      
+    } break;
+    case PARSE_FIG_FILENAME: {
+      
+    } break;
+    case PARSE_LEGEND_FILENAME: {
+      
+    } break;
+    case PARSE_WIDTH: {
+      
+    } break;
+    case PARSE_HEIGHT: {
+      
+    } break;
+    case PARSE_LEGEND_ROWS: {
+      
+    } break;
+    case PARSE_LEGEND_FONT_SIZE: {
+      
+    } break;
+    case PARSE_LEGEND_POS: {
+      
+    } break;
+    case PARSE_XTICK_FONT_SIZE: {
+      
+    } break;
+    case PARSE_XTICK_ROTATION: {
+      
+    } break;
+    case PARSE_YTICK_FONT_SIZE: {
+      
+    } break;
+    case PARSE_YTICK_ROTATION: {
+      
+    } break;
+    case PARSE_XTITLE_FONT_SIZE: {
+      
+    } break;
+    case PARSE_YTITLE_FONT_SIZE: {
+      
+    } break;
+    case PARSE_BAR_TEXT_FONT_SIZE: {
+      
+    } break;
+    case PARSE_BAR_TEXT_ROTATION: {
+      
+    } break;
+    case PARSE_BAR_TEXT_DECIMALS: {
+      
+    } break;
+    case PARSE_BAR_TEXT_RTRIM: {
+     
+    } break;
+    case PARSE_XLIM_LEFT: {
+      
+    } break;
+    case PARSE_XLIM_RIGHT: {
+      
+    } break;
+    case PARSE_YLIM_TOP: {
 
+    } break;
+    case PARSE_YLIM_BOTTOM: {
+
+    } break;
+    case PARSE_DRY_RUN: {
+
+    } break;
+    default: {
+      parse_report_pos(parse);
+      error_exit("Property name \"%s\" cannot be used for string formatting\n");
+    }
+  }
 }
 
 // Prints a string, which can possibly be a format string containing format specifiers
 // The parser will keep reading arguments for each specifier except %%
-void parse_print_str(parse_t *parse, buf_t *buf, const char *str) {
+void parse_print_str(parse_t *parse, plot_t *plot, buf_t *buf, const char *str) {
   char *p = str;
   int fmt_index = 0;
   while(*p != '\0') {
@@ -2076,7 +2158,7 @@ void parse_print_str(parse_t *parse, buf_t *buf, const char *str) {
       char ch2 = *(++p);
       if(ch2 == '\0') {
         parse_report_pos(parse);
-        error_exit("Trailing '%' at the end of string\n");
+        error_exit("Trailing '%%' at the end of string\n");
       } else if(ch2 == '%') {
         buf_putchar(buf, ch2); // %% means %
       } else {
@@ -2086,7 +2168,7 @@ void parse_print_str(parse_t *parse, buf_t *buf, const char *str) {
         buf_putchar(fmt_buf, '%');
         // Substring from '%' to the first letter
         while(*q != '\0' && !isalpha(*q)) {
-          buf_putchar(*q);
+          buf_putchar(fmt_buf, *q);
           q++;
         }
         if(*q == 0) {
