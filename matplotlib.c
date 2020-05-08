@@ -716,6 +716,15 @@ plot_param_t default_param = {
   0,         // Dry run
 };
 
+void plot_param_copy(plot_param_t *dst, plot_param_t *src) {
+  if(dst->color_scheme != NULL) color_scheme_free(dst->color_scheme);
+  if(dst->hatch_scheme != NULL) hatch_scheme_free(dst->hatch_scheme);
+  memcpy(dst, src, sizeof(plot_param_t));
+  if(src->color_scheme != NULL) dst->color_scheme = color_scheme_dup(src->color_scheme);
+  if(src->hatch_scheme != NULL) dst->hatch_scheme = hatch_scheme_dup(src->hatch_scheme);
+  return;
+}
+
 void plot_param_print(plot_param_t *param, int verbose) {
   printf("[param] width %f height %f\n", param->width, param->height);
   printf("[param legend] font size %d rows %d pos \"%s\"\n", 
@@ -1864,7 +1873,7 @@ void parse_cb_reset(parse_t *parse, plot_t *plot) {
     if(param->hatch_scheme != NULL) {
       printf("[parse] Hatch scheme \"%s\" will be removed from plot\n", param->hatch_scheme->name);
     }
-    plot_copy_param(&plot->param, &default_param);
+    plot_copy_param(plot, &default_param);
   } else if(streq(name, "plot") == 1) {
     
   }

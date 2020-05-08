@@ -262,6 +262,7 @@ typedef struct {
   int dry_run;                   // Whether we actually execute the scripts (will not if set to 1)
 } plot_param_t;
 
+void plot_param_copy(plot_param_t *dst, plot_param_t *src);
 void plot_param_print(plot_param_t *param, int verbose);
 
 extern plot_param_t default_param; // Default param, will be copied over during init
@@ -431,6 +432,7 @@ extern const int parse_cb_top_funcs_count;
 // Top func parse functions
 void parse_top_func(parse_t *parse, plot_t *plot);
 void parse_cb_print(parse_t *parse, plot_t *plot);
+void parse_cb_reset(parse_t *parse, plot_t *plot);
 void parse_cb_save_fig(parse_t *parse, plot_t *plot);
 void parse_cb_save_legend(parse_t *parse, plot_t *plot);
 void parse_cb_create_fig(parse_t *parse, plot_t *plot);
