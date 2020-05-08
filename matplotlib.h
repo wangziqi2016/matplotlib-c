@@ -441,6 +441,10 @@ void parse_cb_set_color_scheme(parse_t *parse, plot_t *plot);
 void parse_cb_test_hatch(parse_t *parse, plot_t *plot);
 void parse_cb_test_color(parse_t *parse, plot_t *plot);
 
+#define PARSE_SPEC_FLOAT "fFeEgGaA"
+#define PARSE_SPEC_STR   "sp"
+#define PARSE_SPEC_INT32 "dixXuo"
+
 void parse_print_prop(parse_t *parse, plot_t *plot, buf_t *buf, const char *name, const char *fmt);
 void parse_print_str(parse_t *parse, plot_t *plot, buf_t *buf, const char *str);
 
