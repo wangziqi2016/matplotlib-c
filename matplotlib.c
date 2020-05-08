@@ -1860,7 +1860,10 @@ void parse_cb_reset(parse_t *parse, plot_t *plot) {
   } else if(streq(name, "plot") == 1) {
     reset_buf = reset_param = 1; // Reset both
   }
-  if(reset_buf == 1) buf_reset(plot->buf);
+  if(reset_buf == 1) {
+    buf_reset(plot->buf);
+    buf_append(plot->buf, plot_preamble);
+  }
   if(reset_param == 1) {
     if(param->color_scheme != NULL) {
       printf("[parse] Color scheme \"%s\" will be removed from plot during reset\n", param->color_scheme->name);
@@ -2045,6 +2048,21 @@ void parse_cb_test_color(parse_t *parse, plot_t *plot) {
   plot_save_color_test(plot, filename);
   free(filename);
   return;
+}
+
+// Prints the value of a property into the given buf
+// This function uses the same format string as printf
+void parse_print_prop(parse_t *parse, buf_t *buf, const char *name, const char *fmt) {
+
+}
+
+// Prints a string, which can possibly be a format string containing format specifiers
+// The parser will keep reading arguments for each specifier except %%
+void parse_print_str(parse_t *parse, buf_t *buf, const char *str) {
+  char *p = str;
+  while(*p != '\0') {
+    
+  }
 }
 
 // Reports current line and col followed by the current line; Used in error reporting
