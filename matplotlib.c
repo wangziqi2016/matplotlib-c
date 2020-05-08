@@ -912,13 +912,17 @@ void plot_save_fig(plot_t *plot, const char *filename) {
   if(param->xlim_right != INFINITY) buf_printf(buf, "ax.set_xlim(right=%f)\n", param->xlim_right);
   if(param->ylim_top != INFINITY) buf_printf(buf, "ax.set_ylim(top=%f)\n", param->ylim_top);
   if(param->ylim_bottom != INFINITY) buf_printf(buf, "ax.set_ylim(bottom=%f)\n", param->ylim_bottom);
-  // Pass the file name
-  buf_printf(plot->buf, "plot.savefig(\"%s\", bbox_inches='tight')\n\n", filename);
-  // Execute script
-  if(param->dry_run == 0) {
+  // Print draw command and execute script
+  if(param->dry_run == PLOT_DRY_RUN_DISABLED) {
+    // Pass the file name
+    buf_printf(plot->buf, "plot.savefig(\"%s\", bbox_inches='tight')\n\n", filename);
     py_run(plot->py, buf_c_str(plot->buf));
-  } else {
+  } else if(param->dry_run == PLOT_DRY_RUN_ENABLED) {
+    buf_printf(plot->buf, "plot.savefig(\"%s\", bbox_inches='tight')\n\n", filename);
     printf("[plot] Dry run mode is on; not executing anything\n");
+  } else if(param->dry_run == PLOT_DRY_RUN_SHOW) {
+    buf_printf(plot->buf, "plot.show()\n\n", filename);
+    py_run(plot->py, buf_c_str(plot->buf));
   }
   return;
 }
@@ -1776,10 +1780,10 @@ void parse_top_property(parse_t *parse, plot_t *plot) {
     } break;
     case PARSE_DRY_RUN: {
       int prev = plot->param.dry_run;
-      plot->param.dry_run = (int)parse_get_int64_range(parse, 0, 1);
-      if(prev == 0 && plot->param.dry_run == 1) {
+      plot->param.dry_run = (int)parse_get_int64_range(parse, 0, 2);
+      if(prev == PLOT_DRY_RUN_DISABLED && plot->param.dry_run != PLOT_DRY_RUN_DISABLED) {
         printf("[parse] Dry run mode enabled; Scripts will not be actually executed\n");
-      } else if(prev == 1 && plot->param.dry_run == 0) {
+      } else if(prev != PLOT_DRY_RUN_DISABLED && plot->param.dry_run == PLOT_DRY_RUN_DISABLED) {
         printf("[parse] Dry run mode disabled; Scripts will be executed\n");
       }
     } break;
@@ -1915,8 +1919,8 @@ void parse_cb_reset(parse_t *parse, plot_t *plot) {
 }
 
 void parse_cb_save_fig(parse_t *parse, plot_t *plot) {
-  printf("Save fig called!\n");
-  return;
+  //printf("Save fig called!\n");
+  //return;
   char *filename = NULL; // Given in arg list
   if(parse_next_arg(parse)) {
     filename = parse_get_str(parse);
@@ -1938,8 +1942,8 @@ void parse_cb_save_fig(parse_t *parse, plot_t *plot) {
 }
 
 void parse_cb_save_legend(parse_t *parse, plot_t *plot) {
-  printf("Save legend called!\n");
-  return;
+  //printf("Save legend called!\n");
+  //return;
   char *filename = NULL;
   if(parse_next_arg(parse)) {
     filename = parse_get_str(parse);
