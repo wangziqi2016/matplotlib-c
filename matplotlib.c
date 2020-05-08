@@ -2082,40 +2082,44 @@ void parse_print_prop(parse_t *parse, plot_t *plot, buf_t *buf, const char *name
   }
   switch(cb_entry.prop) {
     case PARSE_XTITLE: {
-      parse_print_check_spec(parse, "sp", spec_ch, name);
+      parse_print_check_spec(parse, PARSE_SPEC_STR, spec_ch, name);
       buf_printf(buf, fmt, plot->xtitle);
     } break;
     case PARSE_YTITLE: {
-      parse_print_check_spec(parse, "sp", spec_ch, name);
+      parse_print_check_spec(parse, PARSE_SPEC_STR, spec_ch, name);
       buf_printf(buf, fmt, plot->ytitle);
     } break;
     case PARSE_FIG_FILENAME: {
-      parse_print_check_spec(parse, "sp", spec_ch, name);
+      parse_print_check_spec(parse, PARSE_SPEC_STR, spec_ch, name);
       buf_printf(buf, fmt, plot->fig_filename);
     } break;
     case PARSE_LEGEND_FILENAME: {
-      parse_print_check_spec(parse, "sp", spec_ch, name);
+      parse_print_check_spec(parse, PARSE_SPEC_STR, spec_ch, name);
       buf_printf(buf, fmt, plot->legend_filename);
     } break;
     case PARSE_WIDTH: {
-      parse_print_check_spec(parse, "fFeEgGaA", spec_ch, name);
+      parse_print_check_spec(parse, PARSE_SPEC_FLOAT, spec_ch, name);
       buf_printf(buf, fmt, plot->param.width);
     } break;
     case PARSE_HEIGHT: {
-      parse_print_check_spec(parse, "fFeEgGaA", spec_ch, name);
+      parse_print_check_spec(parse, PARSE_SPEC_FLOAT, spec_ch, name);
       buf_printf(buf, fmt, plot->param.height);
     } break;
     case PARSE_LEGEND_ROWS: {
-      
+      parse_print_check_spec(parse, PARSE_SPEC_INT32, spec_ch, name);
+      buf_printf(buf, fmt, plot->param.legend_rows);
     } break;
     case PARSE_LEGEND_FONT_SIZE: {
-      
+      parse_print_check_spec(parse, PARSE_SPEC_INT32, spec_ch, name);
+      buf_printf(buf, fmt, plot->param.legend_font_size);
     } break;
     case PARSE_LEGEND_POS: {
-      
+      parse_print_check_spec(parse, PARSE_SPEC_STR, spec_ch, name);
+      buf_printf(buf, fmt, plot->param.legend_pos);
     } break;
     case PARSE_XTICK_FONT_SIZE: {
-      
+      parse_print_check_spec(parse, PARSE_SPEC_INT32, spec_ch, name);
+      buf_printf(buf, fmt, plot->param.legend_font_size);
     } break;
     case PARSE_XTICK_ROTATION: {
       
