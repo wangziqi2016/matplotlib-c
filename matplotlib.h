@@ -114,6 +114,7 @@ extern char *hatch_scheme_default;
 
 extern hatch_scheme_t hatch_schemes[];
 
+char hatch_decode(const char *s);
 int hatch_is_valid(char hatch);
 hatch_scheme_t *hatch_find_scheme(const char *name);
 hatch_scheme_t *hatch_scheme_dup(hatch_scheme_t *scheme);

@@ -395,6 +395,20 @@ hatch_scheme_t hatch_schemes[] = {
   HATCH_SCHEME_GEN("default", hatch_scheme_all),
 };
 
+// Returns the hatch char given a string (basically containing the hatch char)
+// Similar to color_decode, this function returns 0xFF if error, prints error message, and caller
+// should actually handle the error
+char hatch_decode(const char *s) {
+  if(strlen(s) != 1) {
+    printf("Hatch should be only one character in length (see \"%s\")\n", s);
+    return 0xFF;
+  } else if(hatch_is_valid(s[0]) == 0) {
+    printf("Invalid hatch character: \'%c\'\n", s[0]);
+    return 0xFF;
+  }
+  return s[0];
+}
+
 int hatch_is_valid(char hatch) {
   for(int i = 0;i < hatch_scheme_all_count;i++) {
     if(hatch_scheme_all[i] == hatch) return 1;
