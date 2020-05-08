@@ -2126,49 +2126,63 @@ void parse_print_prop(parse_t *parse, plot_t *plot, buf_t *buf, const char *name
       buf_printf(buf, fmt, plot->param.xtick_rotation);
     } break;
     case PARSE_YTICK_FONT_SIZE: {
-      
+      parse_print_check_spec(parse, PARSE_SPEC_INT32, spec_ch, name);
+      buf_printf(buf, fmt, plot->param.ytick_font_size);
     } break;
     case PARSE_YTICK_ROTATION: {
-      
+      parse_print_check_spec(parse, PARSE_SPEC_INT32, spec_ch, name);
+      buf_printf(buf, fmt, plot->param.ytick_rotation);
     } break;
     case PARSE_XTITLE_FONT_SIZE: {
-      
+      parse_print_check_spec(parse, PARSE_SPEC_INT32, spec_ch, name);
+      buf_printf(buf, fmt, plot->param.xtitle_font_size);
     } break;
     case PARSE_YTITLE_FONT_SIZE: {
-      
+      parse_print_check_spec(parse, PARSE_SPEC_INT32, spec_ch, name);
+      buf_printf(buf, fmt, plot->param.ytitle_font_size);
     } break;
     case PARSE_BAR_TEXT_FONT_SIZE: {
-      
+      parse_print_check_spec(parse, PARSE_SPEC_INT32, spec_ch, name);
+      buf_printf(buf, fmt, plot->param.bar_text_font_size);
     } break;
     case PARSE_BAR_TEXT_ROTATION: {
-      
+      parse_print_check_spec(parse, PARSE_SPEC_INT32, spec_ch, name);
+      buf_printf(buf, fmt, plot->param.bar_text_rotation);
     } break;
     case PARSE_BAR_TEXT_DECIMALS: {
-      
+      parse_print_check_spec(parse, PARSE_SPEC_INT32, spec_ch, name);
+      buf_printf(buf, fmt, plot->param.bar_text_decimals);
     } break;
     case PARSE_BAR_TEXT_RTRIM: {
-     
+     parse_print_check_spec(parse, PARSE_SPEC_INT32, spec_ch, name);
+      buf_printf(buf, fmt, plot->param.bar_text_rtrim);
     } break;
     case PARSE_XLIM_LEFT: {
-      
+      parse_print_check_spec(parse, PARSE_SPEC_FLOAT, spec_ch, name);
+      buf_printf(buf, fmt, plot->param.xlim_left);
     } break;
     case PARSE_XLIM_RIGHT: {
-      
+      parse_print_check_spec(parse, PARSE_SPEC_FLOAT, spec_ch, name);
+      buf_printf(buf, fmt, plot->param.xlim_right);
     } break;
     case PARSE_YLIM_TOP: {
-
+      parse_print_check_spec(parse, PARSE_SPEC_FLOAT, spec_ch, name);
+      buf_printf(buf, fmt, plot->param.ylim_top);
     } break;
     case PARSE_YLIM_BOTTOM: {
-
+      parse_print_check_spec(parse, PARSE_SPEC_FLOAT, spec_ch, name);
+      buf_printf(buf, fmt, plot->param.ylim_bottom);
     } break;
     case PARSE_DRY_RUN: {
-
+      parse_print_check_spec(parse, PARSE_SPEC_INT32, spec_ch, name);
+      buf_printf(buf, fmt, plot->param.dry_run);
     } break;
     default: {
       parse_report_pos(parse);
       error_exit("Property name \"%s\" cannot be used for string formatting\n", name);
     }
   }
+  return;
 }
 
 // Prints a string, which can possibly be a format string containing format specifiers
