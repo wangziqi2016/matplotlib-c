@@ -2078,7 +2078,7 @@ void parse_print_prop(parse_t *parse, plot_t *plot, buf_t *buf, const char *name
   char spec_ch = fmt[spec_len - 2]; // Specifier character
   if(cb_entry.name == NULL) {
     parse_report_pos(parse);
-    error_exit("Property name \"%s\" cannot be found for string formatting\n");
+    error_exit("Property name \"%s\" cannot be found for string formatting\n", name);
   }
   switch(cb_entry.prop) {
     case PARSE_XTITLE: {
@@ -2122,7 +2122,8 @@ void parse_print_prop(parse_t *parse, plot_t *plot, buf_t *buf, const char *name
       buf_printf(buf, fmt, plot->param.legend_font_size);
     } break;
     case PARSE_XTICK_ROTATION: {
-      
+      parse_print_check_spec(parse, PARSE_SPEC_INT32, spec_ch, name);
+      buf_printf(buf, fmt, plot->param.xtick_rotation);
     } break;
     case PARSE_YTICK_FONT_SIZE: {
       
@@ -2165,7 +2166,7 @@ void parse_print_prop(parse_t *parse, plot_t *plot, buf_t *buf, const char *name
     } break;
     default: {
       parse_report_pos(parse);
-      error_exit("Property name \"%s\" cannot be used for string formatting\n");
+      error_exit("Property name \"%s\" cannot be used for string formatting\n", name);
     }
   }
 }
@@ -2173,7 +2174,7 @@ void parse_print_prop(parse_t *parse, plot_t *plot, buf_t *buf, const char *name
 // Prints a string, which can possibly be a format string containing format specifiers
 // The parser will keep reading arguments for each specifier except %%
 void parse_print_str(parse_t *parse, plot_t *plot, buf_t *buf, const char *str) {
-  char *p = str;
+  const char *p = str;
   int fmt_index = 0;
   while(*p != '\0') {
     char ch = *p;
@@ -2186,7 +2187,7 @@ void parse_print_str(parse_t *parse, plot_t *plot, buf_t *buf, const char *str) 
         buf_putchar(buf, ch2); // %% means %
       } else {
         // p points to the first char after %
-        char *q = p;
+        const char *q = p;
         buf_t *fmt_buf = buf_init();
         buf_putchar(fmt_buf, '%');
         // Substring from '%' to the first letter
