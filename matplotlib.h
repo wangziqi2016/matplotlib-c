@@ -226,6 +226,9 @@ void bar_print(bar_t *bar);
 
 // Maximum size of legend pos (including trailing zero)
 #define PLOT_LEGEND_POS_MAX_SIZE  16
+#define PLOT_DRY_RUN_DISABLED     0     // Always output
+#define PLOT_DRY_RUN_ENABLED      1     // Always not output
+#define PLOT_DRY_RUN_SHOW         2     // Not output but show the graph
 
 struct parse_struct_t;
 
