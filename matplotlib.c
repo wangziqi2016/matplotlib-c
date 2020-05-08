@@ -2080,6 +2080,15 @@ static void parse_print_check_spec(parse_t *parse, const char *spec, char ch, co
   return;
 }
 
+// Whether the given char belongs to the string in spec
+static int parse_print_is_spec(parse_t *parse, const char *spec, char ch) {
+  while(*spec != '\0') {
+    if(*spec == ch) return 1;
+    spec++;
+  }
+  return 0;
+}
+
 // Prints the value of a property into the given buf
 // This function uses the same format string as printf
 void parse_print_prop(parse_t *parse, plot_t *plot, buf_t *buf, const char *name, const char *fmt) {
@@ -2200,7 +2209,7 @@ void parse_print_prop(parse_t *parse, plot_t *plot, buf_t *buf, const char *name
 // The parser will keep reading arguments for each specifier except %%
 void parse_print_fmt(parse_t *parse, plot_t *plot, buf_t *buf, const char *str) {
   const char *p = str;
-  int fmt_index = 0;
+  int spec_index = 0;
   while(*p != '\0') {
     char ch = *p;
     if(ch == '%') {
@@ -2216,10 +2225,12 @@ void parse_print_fmt(parse_t *parse, plot_t *plot, buf_t *buf, const char *str) 
         buf_t *fmt_buf = buf_init();
         buf_putchar(fmt_buf, '%');
         // Substring from '%' to the first letter
-        while(*q != '\0' && !isalpha(*q)) {
-          buf_putchar(fmt_buf, *q);
+        char spec_ch;
+        do {
+          spec_ch = *q;
+          buf_putchar(fmt_buf, spec_ch);
           q++;
-        }
+        } while(spec_ch != '\0' && spec_ch != '' && );
         if(*q == 0) {
           parse_report_pos(parse);
           error_exit("Illegal format string: \"%s\"\n", p);
@@ -2227,14 +2238,14 @@ void parse_print_fmt(parse_t *parse, plot_t *plot, buf_t *buf, const char *str) 
         char *fmt_str = buf_c_str(fmt_buf);  // Format string
         if(parse_next_arg(parse) == PARSE_ARG_NONE) {
           parse_report_pos(parse);
-          error_exit("Format string \"%s\" (index %d) has no corresponding argument\n", p, fmt_index);
+          error_exit("Format string \"%s\" (index %d) has no corresponding argument\n", p, spec_index);
         }
         char *name = parse_get_ident(parse); // Property name
         parse_print_prop(parse, plot, buf, name, fmt_str);
         free(name);
         buf_free(fmt_buf);
       }
-      fmt_index++;
+      spec_index++;
     } else if(ch == '\\') {
       char ch2 = *(++p);
       switch(ch2) {
