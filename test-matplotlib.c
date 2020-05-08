@@ -172,6 +172,13 @@ void test_buf() {
   buf_append_color(buf, COLOR_GEN(0x55, 0xaa, 0x55));
   buf_print(buf, 1);
   assert(buf_strlen(buf) == COLOR_STRLEN * 3); // Three color strings
+  printf("Step 6: Test putchar\n");
+  buf_free(buf);
+  const char *step6 = "qwertyuiop";
+  buf = buf_init_sz(1);
+  const char *p = step6;
+  while(*p != '\0') { buf_putchar(buf, *p); p++; }
+  buf_print(buf, 1);
   buf_free(buf);
   printf("Pass\n");
   return;
