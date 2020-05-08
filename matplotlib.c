@@ -2086,19 +2086,24 @@ void parse_print_prop(parse_t *parse, plot_t *plot, buf_t *buf, const char *name
       buf_printf(buf, fmt, plot->xtitle);
     } break;
     case PARSE_YTITLE: {
-      
+      parse_print_check_spec(parse, "sp", spec_ch, name);
+      buf_printf(buf, fmt, plot->ytitle);
     } break;
     case PARSE_FIG_FILENAME: {
-      
+      parse_print_check_spec(parse, "sp", spec_ch, name);
+      buf_printf(buf, fmt, plot->fig_filename);
     } break;
     case PARSE_LEGEND_FILENAME: {
-      
+      parse_print_check_spec(parse, "sp", spec_ch, name);
+      buf_printf(buf, fmt, plot->legend_filename);
     } break;
     case PARSE_WIDTH: {
-      
+      parse_print_check_spec(parse, "fFeEgGaA", spec_ch, name);
+      buf_printf(buf, fmt, plot->param.width);
     } break;
     case PARSE_HEIGHT: {
-      
+      parse_print_check_spec(parse, "fFeEgGaA", spec_ch, name);
+      buf_printf(buf, fmt, plot->param.height);
     } break;
     case PARSE_LEGEND_ROWS: {
       
