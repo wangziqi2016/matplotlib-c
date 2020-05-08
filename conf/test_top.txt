@@ -31,9 +31,9 @@
 # Interpreter will report error if argument does not match prototype
 
 # Prints the plot configuration
-!plot_print 1;  # One optional argument for whether to print buffer content
-!plot_print;    # Function with no argument
-!version_print; # This function takes no argument
+!print plot verbose;     # One optional argument for whether to print buffer content
+!print plot;             # Function with no argument
+!print version verbose;  # This function takes no argument
 
 # Uncomment the following to reveal error
 # !unknown_func
@@ -41,6 +41,8 @@
 # !create_fig 123 456;
 # !create_fig 123;
 # !create_fig;
+
+.dry_run = 1; # This disables script execution
 
 !save_legend;
 !save_fig;
@@ -54,13 +56,20 @@
 !test_color "test_color_2.pdf";
 !test_hatch "test_hatch_1.pdf";
 
-!plot_print 0;
+!print plot verbose;
+
+!set_color_scheme @"./conf/test_color_init_file.txt";
+!test_color "test_color_3.pdf";
 
 .xlim_left = 12.34;
 .xlim_right = 56.78;
 .ylim_top = 10.12;
 
-!param_print;
+!print param verbose;
+
+!reset plot; # This resets both buffer and param
+
+!print plot verbose;
 
 +bar_type;
 +bar_group;
