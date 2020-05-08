@@ -71,5 +71,9 @@
 
 !print plot verbose;
 
+!print "\"Hello World!\"\n";
+!print "xtitle \"%s\" y title \"%s\" (%p)\n" xtitle ytitle ytitle;
+!print "width = %012lf\n" width;
+
 +bar_type;
 +bar_group;
