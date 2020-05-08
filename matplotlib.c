@@ -2082,6 +2082,7 @@ static void parse_print_check_spec(parse_t *parse, const char *spec, char ch, co
 
 // Whether the given char belongs to the string in spec
 static int parse_print_is_spec(parse_t *parse, const char *spec, char ch) {
+  (void)parse;
   while(*spec != '\0') {
     if(*spec == ch) return 1;
     spec++;
@@ -2094,8 +2095,8 @@ static int parse_print_is_spec(parse_t *parse, const char *spec, char ch) {
 void parse_print_prop(parse_t *parse, plot_t *plot, buf_t *buf, const char *name, const char *fmt) {
   parse_cb_entry_t cb_entry = parse_find_cb_entry(parse, parse_cb_top_props, parse_cb_top_props_count, name);
   int spec_len = strlen(fmt);
-  assert(spec_len >= 3); // %?\0
-  char spec_ch = fmt[spec_len - 2]; // Specifier character
+  assert(spec_len >= 2); // %?\0
+  char spec_ch = fmt[spec_len - 1]; // Specifier character
   if(cb_entry.name == NULL) {
     parse_report_pos(parse);
     error_exit("Property name \"%s\" cannot be found for string formatting\n", name);
@@ -2227,9 +2228,8 @@ void parse_print_fmt(parse_t *parse, plot_t *plot, buf_t *buf, const char *str) 
         // Substring from '%' to the first letter
         char spec_ch;
         do {
-          spec_ch = *q;
+          spec_ch = *q++; // q stops at the next char after the specifier
           buf_putchar(fmt_buf, spec_ch);
-          q++;
         } while(spec_ch != '\0' && parse_print_is_spec(parse, PARSE_SPEC_ALL, spec_ch) != 1);
         if(*q == '\0') {
           parse_report_pos(parse);
@@ -2244,6 +2244,8 @@ void parse_print_fmt(parse_t *parse, plot_t *plot, buf_t *buf, const char *str) 
         parse_print_prop(parse, plot, buf, name, fmt_str);
         free(name);
         buf_free(fmt_buf);
+        // Need to -1 since we also have p++ below
+        p = q - 1;
       }
       spec_index++;
     } else if(ch == '\\') {
