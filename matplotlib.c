@@ -2073,8 +2073,9 @@ static void parse_print_check_spec(parse_t *parse, const char *spec, char ch, co
 // This function uses the same format string as printf
 void parse_print_prop(parse_t *parse, plot_t *plot, buf_t *buf, const char *name, const char *fmt) {
   parse_cb_entry_t cb_entry = parse_find_cb_entry(parse, parse_cb_top_props, parse_cb_top_props_count, name);
-  assert(buf_get_size(buf) >= 3); // %?\0
-  char spec_ch = buf_c_str[buf_get_size(buf) - 2]; // Specifier character
+  int spec_len = strlen(fmt);
+  assert(spec_len >= 3); // %?\0
+  char spec_ch = fmt[spec_len - 2]; // Specifier character
   if(cb_entry.name == NULL) {
     parse_report_pos(parse);
     error_exit("Property name \"%s\" cannot be found for string formatting\n");
