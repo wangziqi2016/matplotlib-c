@@ -1330,7 +1330,10 @@ char *parse_get_str(parse_t *parse) {
     } else if(ch == '\\') {
       parse_getchar(parse);
       // Only process escaped here; Other cases are left to the next iter loop
-      if(parse_peek(parse) == '\"') {
+      char escaped_ch = parse_peek(parse);
+      // We should take care that strings like "\\" should be handled as valid string
+      // So we also skip over '\\' here. Other cases are fine, since they do not contain '\"' or '\\'
+      if(escaped_ch == '\"' || escaped_ch == '\\') {
         parse_getchar(parse);
       }
     } else if(ch == '\"') {
