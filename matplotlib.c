@@ -2230,8 +2230,8 @@ void parse_print_fmt(parse_t *parse, plot_t *plot, buf_t *buf, const char *str) 
           spec_ch = *q;
           buf_putchar(fmt_buf, spec_ch);
           q++;
-        } while(spec_ch != '\0' && spec_ch != '' && );
-        if(*q == 0) {
+        } while(spec_ch != '\0' && parse_print_is_spec(parse, PARSE_SPEC_ALL, spec_ch) != 1);
+        if(*q == '\0') {
           parse_report_pos(parse);
           error_exit("Illegal format string: \"%s\"\n", p);
         }
