@@ -2069,10 +2069,41 @@ void parse_print_prop(parse_t *parse, buf_t *buf, const char *name, const char *
 // The parser will keep reading arguments for each specifier except %%
 void parse_print_str(parse_t *parse, buf_t *buf, const char *str) {
   char *p = str;
+  int fmt_index = 0;
   while(*p != '\0') {
     char ch = *p;
     if(ch == '%') {
-
+      char ch2 = *(++p);
+      if(ch2 == '\0') {
+        parse_report_pos(parse);
+        error_exit("Trailing '%' at the end of string\n");
+      } else if(ch2 == '%') {
+        buf_putchar(buf, ch2); // %% means %
+      } else {
+        // p points to the first char after %
+        char *q = p;
+        buf_t *fmt_buf = buf_init();
+        buf_putchar(fmt_buf, '%');
+        // Substring from '%' to the first letter
+        while(*q != '\0' && !isalpha(*q)) {
+          buf_putchar(*q);
+          q++;
+        }
+        if(*q == 0) {
+          parse_report_pos(parse);
+          error_exit("Illegal format string: \"%s\"\n", p);
+        }
+        char *fmt_str = buf_c_str(fmt_buf);  // Format string
+        if(parse_next_arg(parse) == PARSE_ARG_NONE) {
+          parse_report_pos(parse);
+          error_exit("Format string \"%s\" (index %d) has no corresponding argument\n", p, fmt_index);
+        }
+        char *name = parse_get_ident(parse); // Property name
+        parse_print_prop(parse, buf, name, fmt_str);
+        free(name);
+        buf_free(fmt_buf);
+      }
+      fmt_index++;
     } else if(ch == '\\') {
       char ch2 = *(++p);
       switch(ch2) {
