@@ -2059,6 +2059,15 @@ void parse_cb_test_color(parse_t *parse, plot_t *plot) {
   return;
 }
 
+static void parse_print_check_spec(parse_t *parse, const char *spec, char ch, const char *name) {
+  while(*spec != '\0') {
+    if(*spec == ch) return;
+  }
+  parse_report_pos(parse);
+  error_exit("Specifier \'%c\' could not be used to format property \"%s\"\n", ch, name);
+  return;
+}
+
 // Prints the value of a property into the given buf
 // This function uses the same format string as printf
 void parse_print_prop(parse_t *parse, plot_t *plot, buf_t *buf, const char *name, const char *fmt) {
@@ -2181,7 +2190,7 @@ void parse_print_str(parse_t *parse, plot_t *plot, buf_t *buf, const char *str) 
           error_exit("Format string \"%s\" (index %d) has no corresponding argument\n", p, fmt_index);
         }
         char *name = parse_get_ident(parse); // Property name
-        parse_print_prop(parse, buf, name, fmt_str);
+        parse_print_prop(parse, plot, buf, name, fmt_str);
         free(name);
         buf_free(fmt_buf);
       }
