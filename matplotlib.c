@@ -1852,18 +1852,23 @@ void parse_cb_reset(parse_t *parse, plot_t *plot) {
   // This can be "buf" "param" or "plot"
   char *name = parse_get_ident(parse);
   plot_param_t *param = &plot->param;
+  int reset_buf = 0, reset_param = 0;
   if(streq(name, "buf") == 1) {
-    buf_reset(plot->buf);
+    reset_buf = 1;
   } else if(streq(name, "param") == 1) {
+    reset_param = 1;
+  } else if(streq(name, "plot") == 1) {
+    reset_buf = reset_param = 1; // Reset both
+  }
+  if(reset_buf == 1) buf_reset(plot->buf);
+  if(reset_param == 1) {
     if(param->color_scheme != NULL) {
-      printf("[parse] Color scheme \"%s\" will be removed from plot\n", param->color_scheme->name);
+      printf("[parse] Color scheme \"%s\" will be removed from plot during reset\n", param->color_scheme->name);
     }
     if(param->hatch_scheme != NULL) {
-      printf("[parse] Hatch scheme \"%s\" will be removed from plot\n", param->hatch_scheme->name);
+      printf("[parse] Hatch scheme \"%s\" will be removed from plot during reset\n", param->hatch_scheme->name);
     }
-    plot_param_param(&plot->param, &default_param);
-  } else if(streq(name, "plot") == 1) {
-    
+    plot_param_copy(&plot->param, &default_param);
   }
   free(name);
   return;
