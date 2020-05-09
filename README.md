@@ -33,6 +33,7 @@ The plotting script is a text file consisting of three types of statements:
 - A "function call" statement invoking a pre-defined procedure with optional arguments. 
   Function calls are of the form "!\[function name\] arg1 arg2 ...".
   Some arguments are optional, while some others can be of various types.
+  A complete list of functions is given below.
   If function argument error occurs, the parser will report error.
 - An "eneity addition" statement adding an entity (e.g. bars, labels) to be plotted or will help plotting.
   The entity addition statements are of the form "+\[entity name\] arg1 arg2 ...".
@@ -43,7 +44,7 @@ within a single line.
 
 ### Lists of Properties
 
-| Name | Meaning | Type  |
+| Name | Description | Type  |
 |:----:|:--------|:-----:|
 | xtitle | X axis title | string |
 | ytitle | Y axis title | string |
@@ -70,5 +71,17 @@ within a single line.
 | ylim_bottom | Y axis bottom limit | float\[-inf, +inf\] |
 | dry_run | Whether to execute the script. 0 means true. 1 means false. 2 means only show the plot on-screen. | \[0, 2\] or "disabled", "enabled", "show" |
 
+### Lists of Functions
+
+| Name | Description | Arguments |
+|:----:|:------------|:----------|
+| print | Print properties or a formatting string using property name | If followed by identifier, then print property name; If followed by a format string, then print format string. Arguments are given after the format string. Type error will occur if argument types do not match format string's specifier |
+|  |  |  |
+|  |  |  |
+|  |  |  |
+|  |  |  |
+|  |  |  |
+|  |  |  |
+|  |  |  |
 
 ## Decimals
