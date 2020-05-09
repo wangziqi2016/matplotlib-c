@@ -37,7 +37,7 @@ The plotting script is a text file consisting of three types of statements:
   Some arguments are optional, while some others can be of various types.
   A complete list of functions is given below.
   If function argument error occurs, the parser will report error.
-- An "eneity addition" statement adding an entity (e.g. bars, labels) to be plotted or will help plotting.
+- An "entity addition" statement adding an entity (e.g. bars, labels) to be plotted or will help plotting.
   The entity addition statements are of the form "+\[entity name\] arg1 arg2 ...".
   Argument rules are identical to those of function calls.
 
@@ -89,3 +89,20 @@ a string), the file will be used as import file to load a color scheme. The file
 | test_color | Output a graph with all current colors | The save file name is given as argument. Offset is ignored, and the test graph always start from element zero. |
 
 ## Decimals
+
+Users could control the number of digits after the decimal point and/or the number of significant digits before the 
+decimal point for the text printed over bars. Property "bar_text_decimals" specifies how many digits we preserve after 
+the decimal point, if it is positive value, or how many digits will be ignored before the decimal point, if it is 
+a negative value. If the number of digits exceeds the actual number of digits, zero will be padded, only if the value
+is positive.
+
+For example:
+
+- 1234.56789, decimals = 3, output 1234.568 (rounded upwards)
+- 1234.56789, decimals = 6, output 1234.567890 (decimals exceeding number of digits after the point)
+- 1234.56789, decimals = -2, output 1200 (negative decimals)
+- 1234.56789, decimals = -10, output 0 (decimals exceeding number of digits before the point)
+- 56789.1234, decimals = -2, output 56800 (rounded upwards)
+
+Users could further control whether trailing zeros of a floating point after the decimal point should be chopped off
+to reduce the length of the text. This is enabled by setting "bar_text_rtrim" to 1.
