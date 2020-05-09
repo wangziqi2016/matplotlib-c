@@ -1903,7 +1903,11 @@ void parse_cb_print(parse_t *parse, plot_t *plot) {
       printf("There is no color scheme to print\n");
     }
   } else if(streq(name, "hatch") == 1) {
-    if()
+    if(scheme->hatch_scheme != NULL) {
+      hatch_scheme_print(param->hatch_scheme, verbose);
+    } else {
+      printf("There is no hatch scheme to print\n");
+    }
   }
   free(name);
   return;
