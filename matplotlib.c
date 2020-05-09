@@ -2107,11 +2107,19 @@ void parse_cb_test_color(parse_t *parse, plot_t *plot) {
 }
 
 static void parse_print_check_spec(parse_t *parse, const char *spec, char ch, const char *name) {
-  while(*spec != '\0') {
-    if(*spec == ch) return;
-    spec++;
+  const char *p = spec;
+  while(*p != '\0') {
+    if(*p == ch) return;
+    p++;
   }
   parse_report_pos(parse);
+  printf("Usable sprciciers: ");
+  p = spec;
+  while(*p != '\0') {
+    printf("'%c' ", *p);
+    p++;
+  }
+  putchar('\n');
   error_exit("Specifier \'%c\' could not be used to format property \"%s\"\n", ch, name);
   return;
 }
