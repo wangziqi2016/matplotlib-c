@@ -75,8 +75,8 @@ within a single line.
 
 | Name | Description | Arguments |
 |:----:|:------------|:----------|
-| print | Print properties or a formatting string using property name | If followed by identifier, then print property name; If followed by a format string, then print format string. Arguments are given after the format string. Type error will occur if argument types do not match format string's specifier |
-|  |  |  |
+| print | Print internal data structures or a formatting string using property name | If followed by param, plot, version, color or hatch, print the corresponding data structure. Optional argument is verbose, which enabled verbose printing. If followed by a format string, then print format string. Arguments are given after the format string. Type error will occur if argument types do not match format string's specifier.|
+| reset | Reset an internal data structure | Follwed by param, buf or plot, which resets the corresponding internal data structure to the initial state as if they were just initialized (e.g. for buffer we clear all contents, and copy over the standard preamble). |
 |  |  |  |
 |  |  |  |
 |  |  |  |
