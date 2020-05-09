@@ -44,15 +44,13 @@
 
 .dry_run = 1; # This disables script execution
 
-!save_legend;
-!save_fig;
-
 !set_hatch_scheme "default" 27;
 !set_color_scheme "red" 0;
 
 .xtick_rotation = 45;
 .bar_text_rotation = 90;
 
+.dry_run = "enabled"; # This shows the graph
 !test_color "test_color_2.pdf";
 !test_hatch "test_hatch_1.pdf";
 
@@ -73,7 +71,21 @@
 
 !print "\"Hello World!\"\n";
 !print "xtitle \"%s\" y title \"%s\" (%p)\n" xtitle ytitle ytitle;
-!print "width = %012lf\n" width;
+!print "width = %012lf height = %.10lf\n" width height;
+!print "%%%%%%%%\\\n\\"; # This tests escaped strings
+
+# Error case
+#!print "xtitle %lllllld" xtitle;
 
 +bar_type;
 +bar_group;
+#+abcdefg;
+
+!print color 1;
+!print hatch verbose;
+
+.fig_filename = "This is fig file name.pdf";
+.legend_filename = "This is a legend file name.pdf";
+
+#!save_legend;
+#!save_fig;

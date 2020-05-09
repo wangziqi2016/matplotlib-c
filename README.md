@@ -77,8 +77,8 @@ within a single line.
 |:----:|:------------|:----------|
 | print | Print internal data structures or a formatting string using property name | If followed by param, plot, version, color or hatch, print the corresponding data structure. Optional argument is verbose, which enabled verbose printing. If followed by a format string, then print format string. Arguments are given after the format string. Type error will occur if argument types do not match format string's specifier.|
 | reset | Reset an internal data structure | Follwed by param, buf or plot, which resets the corresponding internal data structure to the initial state as if they were just initialized (e.g. for buffer we clear all contents, and copy over the standard preamble). |
-|  |  |  |
-|  |  |  |
+| save_fig | Save the current plot to an external file | Optional file name can be given as a string, which overrides existing figure file name if there is one. If not given, then use the existing file name. If neither is present, report error. |
+| save_legend | Save legend using current bar types in the plot | Same rule for file name, except that we use legend file name stored in the plot object |
 |  |  |  |
 |  |  |  |
 |  |  |  |
