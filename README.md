@@ -21,6 +21,8 @@ There are three types of primitives in the script:
   Adjacent strings, however, are not joined automatically as in C preprocessor, since this will cause issues for 
   argument passing.
 - An identifier in C encoding. We fully comply with C language rules.
+- A file name indicator, beginning with '@' follwed by a string primitive, indicates that the string should be used as a file name.
+  Note that for saving files this is not needed.
 
 ### Statements
 
@@ -79,7 +81,7 @@ within a single line.
 | reset | Reset an internal data structure | Follwed by param, buf or plot, which resets the corresponding internal data structure to the initial state as if they were just initialized (e.g. for buffer we clear all contents, and copy over the standard preamble). |
 | save_fig | Save the current plot to an external file | Optional file name can be given as a string, which overrides existing figure file name if there is one. If not given, then use the existing file name. If neither is present, report error. |
 | save_legend | Save legend using current bar types in the plot | Same rule for file name, except that we use legend file name stored in the plot object |
-|  |  |  |
+| create_fig | Initialize width and height for the current figure | Two optional arguments, width and height. If not specified then just use default values. This function can only be called once before a re-initialization or reset |
 |  |  |  |
 |  |  |  |
 |  |  |  |
