@@ -16,7 +16,11 @@ There are three types of primitives in the script:
 - A floating pointer number in C encoding. We support both decimal-point and scientific forms.
   We only perform loose checks on floating point numbers, and users should be aware not to abuse the parser, which
   may cause undefined bahavior.
-- A string in C encoding. Escaped characters are 
+- A string in C encoding. Escaped characters are prefixed with '\\' just in C language. We only support a subset
+  of escaped characters, i.e. \\n, \\v, \\r, \\\\, \\" and \\'. Strings could span lines without panicing the parser.
+  Adjacent strings, however, are not joined automatically as in C preprocessor, since this will cause issues for 
+  argument passing.
+- An identifier in C encoding. We fully comply with C language rules.
 
 ### Statements
 
