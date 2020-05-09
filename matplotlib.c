@@ -1859,12 +1859,12 @@ void parse_cb_print(parse_t *parse, plot_t *plot) {
     free(fmt);
     return;
   }
+  plot_param_t *param = &plot->param;
   // First param of print function
   char *name = parse_get_ident(parse);
   int verbose = 0;
-  plot_param_t *param = &plot->param;
   next_arg = parse_next_arg(parse);
-  if(next_arg == PARSE_ARG_STR) {
+  if(next_arg == PARSE_ARG_IDENT) {
     char *verbose_ident = parse_get_ident(parse);
     if(streq(verbose_ident, "verbose") == 1) {
       verbose = 1;
@@ -1875,6 +1875,9 @@ void parse_cb_print(parse_t *parse, plot_t *plot) {
     free(verbose_ident);
   } else if(next_arg == PARSE_ARG_NUM) {
     verbose = parse_get_int64_range(parse, 0, 1);
+  } else if(next_arg != PARSE_ARG_NONE) {
+    parse_report_pos(parse);
+    error_exit("Function \"print [target]\" only takes 1 optional argument\n");
   }
   if(streq(name, "plot") == 1) {
     plot_print(plot, verbose);
@@ -1911,8 +1914,15 @@ void parse_cb_print(parse_t *parse, plot_t *plot) {
     } else {
       printf("There is no hatch scheme to print\n");
     }
+  } else {
+    parse_report_pos(parse);
+    error_exit("Unknown print target: \"%s\"\n", name);
   }
   free(name);
+  if(parse_next_arg(parse) != PARSE_ARG_NONE) {
+    parse_report_pos(parse);
+    error_exit("Function \"print [target]\" only takes 1 optional argument\n");
+  }
   return;
 }
 
