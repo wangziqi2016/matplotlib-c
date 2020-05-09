@@ -1863,7 +1863,8 @@ void parse_cb_print(parse_t *parse, plot_t *plot) {
   char *name = parse_get_ident(parse);
   int verbose = 0;
   plot_param_t *param = &plot->param;
-  if(parse_next_arg(parse) != PARSE_ARG_NONE) {
+  next_arg = parse_next_arg(parse);
+  if(next_arg == PARSE_ARG_STR) {
     char *verbose_ident = parse_get_ident(parse);
     if(streq(verbose_ident, "verbose") == 1) {
       verbose = 1;
@@ -1872,6 +1873,8 @@ void parse_cb_print(parse_t *parse, plot_t *plot) {
       error_exit("Unknown option for \"print\": \"%s\"\n", verbose_ident);
     }
     free(verbose_ident);
+  } else if(next_arg == PARSE_ARG_NUM) {
+    verbose = parse_get_int64_range(parse, 0, 1);
   }
   if(streq(name, "plot") == 1) {
     plot_print(plot, verbose);
@@ -1903,7 +1906,7 @@ void parse_cb_print(parse_t *parse, plot_t *plot) {
       printf("There is no color scheme to print\n");
     }
   } else if(streq(name, "hatch") == 1) {
-    if(scheme->hatch_scheme != NULL) {
+    if(param->hatch_scheme != NULL) {
       hatch_scheme_print(param->hatch_scheme, verbose);
     } else {
       printf("There is no hatch scheme to print\n");
