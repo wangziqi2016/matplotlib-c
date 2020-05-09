@@ -43,6 +43,28 @@ within a single line.
 
 ### Lists of Properties
 
-| Name | Meaning |
-|:----:|:--------|
-|  | |
+| Name | Meaning | Type  |
+|:----:|:--------|:-----:|
+| xtitle | X axis title | string |
+| ytitle | Y axis title | string |
+| fig_filename | The file name when saving a figure | string |
+| legend_filename | The file name when saving only the legend | string |
+| width | The width of the figure | float\[0.0, +inf\] |
+| height | The height of the figure | float\[0.0, +inf\] |
+| legend_rows | Number of rows in the legend. This applies to both figure and legend plot | int\[1, +inf\] |
+| legend_font_size | Font size in the legend. This applies to both figure and legend plot | int\[1, +inf\] |
+| legend_pos | Position of the legend. Only applies to figure. Refer to matplotlib doc for valid values | string |
+| xtick_font_size | Font size for X axis ticks | int\[1, +inf\] |
+| xtick_rotation | Rotation for X axis ticks | int\[0, 359\] |
+| ytick_font_size | Font size for Y axis ticks | int\[1, +inf\] |
+| ytick_rotation | Rotation for Y axis ticks | int\[0, 359\] |
+| xtitle_font_size | Font size for X axis title | int\[1, +inf\] |
+| ytitle_font_size | Font size for Y axis title | int\[1, +inf\] |
+| bar_text_font_size | Font size for bar texts | int\[1, +inf\] |
+| bar_text_rotation | Rotation for bar texts | int\[0, 359\] |
+|  | | |
+|  | | |
+|  | | |
+|  | | |
+|  | | |
+|  | | |
