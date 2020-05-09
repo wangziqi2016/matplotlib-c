@@ -80,10 +80,11 @@ within a single line.
 | print | Print internal data structures or a formatting string using property name | If followed by param, plot, version, color or hatch, print the corresponding data structure. Optional argument is verbose, which enabled verbose printing. If followed by a format string, then print format string. Arguments are given after the format string. Type error will occur if argument types do not match format string's specifier.|
 | reset | Reset an internal data structure | Follwed by param, buf or plot, which resets the corresponding internal data structure to the initial state as if they were just initialized (e.g. for buffer we clear all contents, and copy over the standard preamble). |
 | save_fig | Save the current plot to an external file | Optional file name can be given as a string, which overrides existing figure file name if there is one. If not given, then use the existing file name. If neither is present, report error. |
-| save_legend | Save legend using current bar types in the plot | Same rule for file name, except that we use legend file name stored in the plot object |
-| create_fig | Initialize width and height for the current figure | Two optional arguments, width and height. If not specified then just use default values. This function can only be called once before a re-initialization or reset |
-|  |  |  |
-|  |  |  |
+| save_legend | Save legend using current bar types in the plot | Same rule for file name, except that we use legend file name stored in the plot object. |
+| create_fig | Initialize width and height for the current figure | Two optional arguments, width and height. If not specified then just use default values. This function can only be called once before a re-initialization or reset. |
+| set_color_scheme | Sets color scheme used to create bar types and labels | If followed by a string, the string is used as the scheme name, and the built-in database is searched for that name. Report error if name does not exist. If followed by a file indicator ('@' and
+a string), the file will be used as import file to load a color scheme. The file consists of one color code per line (spaces and empty lines will be ignored). An optional argument can also be given to indicate the begin offset in the color scheme. The begin offset defaults to zero, and is used as the current position for initializing bar types. |
+| set_hatch_scheme | Sets hatch scheme used to create bar types and labels | Same as set_color_scheme, except that the hatch scheme file consists of one hatch (single character) per line. |
 |  |  |  |
 
 ## Decimals
