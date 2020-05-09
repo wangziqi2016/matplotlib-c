@@ -2275,9 +2275,9 @@ void parse_print_fmt(parse_t *parse, plot_t *plot, buf_t *buf, const char *str) 
           spec_ch = *q++; // q stops at the next char after the specifier
           buf_putchar(fmt_buf, spec_ch);
         } while(spec_ch != '\0' && parse_print_is_spec(parse, PARSE_SPEC_ALL, spec_ch) != 1);
-        if(*q == '\0') {
+        if(spec_ch == '\0') {
           parse_report_pos(parse);
-          error_exit("Illegal format string: \"%s\"\n", p);
+          error_exit("Illegal format string: \"%s\"\n", p - 1);
         }
         char *fmt_str = buf_c_str(fmt_buf);  // Format string
         if(parse_next_arg(parse) == PARSE_ARG_NONE) {
