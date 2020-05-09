@@ -1862,6 +1862,7 @@ void parse_cb_print(parse_t *parse, plot_t *plot) {
   // First param of print function
   char *name = parse_get_ident(parse);
   int verbose = 0;
+  plot_param_t *param = &plot->param;
   if(parse_next_arg(parse) != PARSE_ARG_NONE) {
     char *verbose_ident = parse_get_ident(parse);
     if(streq(verbose_ident, "verbose") == 1) {
@@ -1875,7 +1876,7 @@ void parse_cb_print(parse_t *parse, plot_t *plot) {
   if(streq(name, "plot") == 1) {
     plot_print(plot, verbose);
   } else if(streq(name, "param") == 1) {
-    plot_param_print(&plot->param, verbose);
+    plot_param_print(param, verbose);
   } else if(streq(name, "version") == 1) {
     printf("[version] matplotlib C language wrapper and script interpreter, version %s.%s\n", 
       MAJOR_VERSION, MINOR_VERSION);
@@ -1895,6 +1896,14 @@ void parse_cb_print(parse_t *parse, plot_t *plot) {
       printf("[version] File: %s\n", __FILE__);
 #endif
     }
+  } else if(streq(name, "color") == 1) {
+    if(param->color_scheme != NULL) {
+      color_scheme_print(param->color_scheme, verbose);
+    } else {
+      printf("There is no color scheme to print\n");
+    }
+  } else if(streq(name, "hatch") == 1) {
+    if()
   }
   free(name);
   return;
