@@ -85,6 +85,7 @@ within a single line.
 | set_color_scheme | Sets color scheme used to create bar types and labels | If followed by a string, the string is used as the scheme name, and the built-in database is searched for that name. Report error if name does not exist. If followed by a file indicator ('@' and
 a string), the file will be used as import file to load a color scheme. The file consists of one color code per line (spaces and empty lines will be ignored). An optional argument can also be given to indicate the begin offset in the color scheme. The begin offset defaults to zero, and is used as the current position for initializing bar types. |
 | set_hatch_scheme | Sets hatch scheme used to create bar types and labels | Same as set_color_scheme, except that the hatch scheme file consists of one hatch (single character) per line. |
-|  |  |  |
+| test_hatch | Output a graph with all current hatchs | The save file name is given as argument. Offset is ignored, and the test graph always start from element zero. |
+| test_color | Output a graph with all current colors | The save file name is given as argument. Offset is ignored, and the test graph always start from element zero. |
 
 ## Decimals
