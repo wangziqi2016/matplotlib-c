@@ -40,3 +40,9 @@ The plotting script is a text file consisting of three types of statements:
 
 All statements are terminated with a semicolon at the end (comments can still go after that), and must complete
 within a single line.
+
+### Lists of Properties
+
+| Name | Meaning |
+|:----:|:--------|
+|  | |
