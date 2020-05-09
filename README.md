@@ -62,9 +62,13 @@ within a single line.
 | ytitle_font_size | Font size for Y axis title | int\[1, +inf\] |
 | bar_text_font_size | Font size for bar texts | int\[1, +inf\] |
 | bar_text_rotation | Rotation for bar texts | int\[0, 359\] |
-|  | | |
-|  | | |
-|  | | |
-|  | | |
-|  | | |
-|  | | |
+| bar_text_decimals | Number of digits to print for bar texts | int\[-inf, +inf\] |
+| bar_text_rtrim | Whether to trim trailing zeros after the decimal point | int\[0, 1\] |
+| xlim_left | X axis left limit | float\[-inf, +inf\] |
+| xlim_right | X axis right limit | float\[-inf, +inf\] |
+| ylim_top | Y axis top limit | float\[-inf, +inf\] |
+| ylim_bottom | Y axis bottom limit | float\[-inf, +inf\] |
+| dry_run | Whether to execute the script. 0 means true. 1 means false. 2 means only show the plot on-screen. | \[0, 2\] or "disabled", "enabled", "show" |
+
+
+## Decimals
