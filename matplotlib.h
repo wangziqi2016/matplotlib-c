@@ -409,6 +409,7 @@ void parse_expect_char_opt(parse_t *parse, char ch); // Read an optional char an
 #define PARSE_ARG_NUM    2
 #define PARSE_ARG_IDENT  3
 #define PARSE_ARG_FILE   4
+#define PARSE_ARG_QMARK  5 // This is specifically used to print help string
 
 int parse_next_arg(parse_t *parse); // Argument handling
 

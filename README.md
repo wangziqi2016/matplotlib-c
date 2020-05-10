@@ -56,7 +56,7 @@ The plotting script is a text file consisting of three types of statements:
 - A "function call" statement invoking a pre-defined procedure with optional arguments. 
   Function calls are of the form "!\[function name\] arg1 arg2 ...".
   Some arguments are optional, while some others can be of various types.
-  All functions can take symbol ? as its first argument to print the help string.
+  All functions can take symbol "?" (not a string) as its first argument to print the help string.
   A complete list of functions is given below.
   If function argument error occurs, the parser will report error.
 - An "entity addition" statement adding an entity (e.g. bars, labels) to be plotted or will help plotting.

@@ -1959,6 +1959,17 @@ void parse_cb_print(parse_t *parse, plot_t *plot) {
   if(next_arg == PARSE_ARG_NONE) {
     parse_report_pos(parse);
     error_exit("Function \"print\" expects at least 1 argument\n");
+  } else if(next_arg == PARSE_ARG_QMARK) {
+    parse_expect_char(parse, '?'); // Eat the symbol. The ';' will be processed by caller
+    printf("Usage: print [target] [\"verbose\"]/[arg]\n");
+    printf("       The following targets are supported:\n");
+    printf("         plot, param, version, color, hatch, bar_type\n");
+    printf("       The following targets can have an optional \"verbose\" string arg\n");
+    printf("         plot, param, version, color, hatch\n");
+    printf("       The following targets can have an optional numeric arg indicating only the element on the"
+           " given index will be printed\n");
+    printf("         bar_type\n");
+    return;
   } else if(next_arg == PARSE_ARG_STR) {
     // Format string print
     char *fmt = parse_get_str(parse);
