@@ -77,12 +77,8 @@
 # Error case
 #!print "xtitle %lllllld" xtitle;
 
-+bar_type "Type 1";
-+bar_type "Type 2" "#aabbcc";
-+bar_type "Type 3" "" "*";
-
-+bar_group;
-#+abcdefg;
+!set_color_scheme "mixed"   0;
+!set_hatch_scheme "default" 0;
 
 !print color 1;
 !print hatch verbose;
@@ -90,5 +86,16 @@
 .fig_filename = "This is fig file name.pdf";
 .legend_filename = "This is a legend file name.pdf";
 
-#!save_legend;
-#!save_fig;
++bar_type "Type 1";
++bar_type "Type 2" "#aabbcc";
++bar_type "Type 3" "" "*";
++bar_type "Type 4" "" "";
+
+!print bar_type;
+
++bar_group;
+#+abcdefg;
+
+.dry_run = "enabled";
+!save_legend;
+!save_fig;
