@@ -1306,7 +1306,7 @@ char parse_peek_nospace(parse_t *parse) {
 char *parse_copy(parse_t *parse, char *begin, char *end) {
   (void)parse;
   int len = (int)(end - begin);
-  assert(len > 0);
+  assert(len >= 0); // We support 0 length string
   char *buf = (char *)malloc(len + 1);
   SYSEXPECT(buf != NULL);
   memcpy(buf, begin, len);
