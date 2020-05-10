@@ -1774,16 +1774,20 @@ void parse_top_property(parse_t *parse, plot_t *plot) {
     } break;
     case PARSE_FIG_FILENAME: {
       if(plot->fig_filename != NULL) {
-        printf("[parse] WARNING: The property \"fig_filename\" already exists, value \"%s\"\n", 
-          plot->fig_filename);
+        if(plot->param.info == 1) {
+          printf("[parse] WARNING: The property \"fig_filename\" already exists, value \"%s\"\n", 
+            plot->fig_filename);
+        }
         free(plot->fig_filename);
       }
       plot->fig_filename = parse_get_str(parse);
     } break;
     case PARSE_LEGEND_FILENAME: {
       if(plot->legend_filename != NULL) {
-        printf("[parse] WARNING: The property \"legend_filename\" already exists, value \"%s\"\n", 
-          plot->legend_filename);
+        if(plot->param.info == 1) {
+          printf("[parse] WARNING: The property \"legend_filename\" already exists, value \"%s\"\n", 
+            plot->legend_filename);
+        }
         free(plot->legend_filename);
       }
       plot->legend_filename = parse_get_str(parse);
@@ -1866,9 +1870,9 @@ void parse_top_property(parse_t *parse, plot_t *plot) {
         }
       }
       if(prev == PLOT_DRY_RUN_DISABLED && plot->param.dry_run != PLOT_DRY_RUN_DISABLED) {
-        printf("[parse] Dry run mode enabled; Scripts will not be actually executed\n");
+        if(plot->param.info == 1) printf("[parse] Dry run mode enabled; Scripts will not be actually executed\n");
       } else if(prev != PLOT_DRY_RUN_DISABLED && plot->param.dry_run == PLOT_DRY_RUN_DISABLED) {
-        printf("[parse] Dry run mode disabled; Scripts will be executed\n");
+        if(plot->param.info == 1) printf("[parse] Dry run mode disabled; Scripts will be executed\n");
       }
     } break;
     case PARSE_INFO: {
@@ -2044,10 +2048,14 @@ void parse_cb_reset(parse_t *parse, plot_t *plot) {
   }
   if(reset_param == 1) {
     if(param->color_scheme != NULL) {
-      printf("[parse] Color scheme \"%s\" will be removed from plot during reset\n", param->color_scheme->name);
+      if(plot->param.info == 1) {
+        printf("[parse] Color scheme \"%s\" will be removed from plot during reset\n", param->color_scheme->name);
+      }
     }
     if(param->hatch_scheme != NULL) {
-      printf("[parse] Hatch scheme \"%s\" will be removed from plot during reset\n", param->hatch_scheme->name);
+      if(plot->param.info == 1) {
+        printf("[parse] Hatch scheme \"%s\" will be removed from plot during reset\n", param->hatch_scheme->name);
+      }
     }
     plot_param_copy(&plot->param, &default_param);
   }
@@ -2062,7 +2070,9 @@ void parse_cb_save_fig(parse_t *parse, plot_t *plot) {
   if(parse_next_arg(parse)) {
     filename = parse_get_str(parse);
     if(plot->fig_filename != NULL) {
-      printf("[parse] Overriding existing save fig filename: \"%s\"\n", plot->fig_filename);
+      if(plot->param.info == 1) {
+        printf("[parse] Overriding existing save fig filename: \"%s\"\n", plot->fig_filename);
+      }
     }
     plot_save_fig(plot, filename);
     free(filename);
@@ -2085,7 +2095,9 @@ void parse_cb_save_legend(parse_t *parse, plot_t *plot) {
   if(parse_next_arg(parse)) {
     filename = parse_get_str(parse);
     if(plot->legend_filename != NULL) {
-      printf("[parse] Overriding existing save legend filename: \"%s\"\n", plot->legend_filename);
+      if(plot->param.info == 1) {
+        printf("[parse] Overriding existing save legend filename: \"%s\"\n", plot->legend_filename);
+      }
     }
     plot_save_legend(plot, filename);
     free(filename);
@@ -2108,12 +2120,16 @@ void parse_cb_create_fig(parse_t *parse, plot_t *plot) {
   double height = plot->param.height;
   if(parse_next_arg(parse)) {
     double new_width = parse_get_double_range(parse, 0.0, PARSE_DOUBLE_MAX);
-    printf("[parse] Overriding param width %g with %g\n", width, new_width);
+    if(plot->param.info == 1) {
+      printf("[parse] Overriding param width %g with %g\n", width, new_width);
+    }
     width = new_width;
   } 
   if(parse_next_arg(parse)) {
     double new_height = parse_get_double_range(parse, 0.0, PARSE_DOUBLE_MAX);
-    printf("[parse] Overriding param height %g with %g\n", height, new_height);
+    if(plot->param.info == 1) {
+      printf("[parse] Overriding param height %g with %g\n", height, new_height);
+    }
     height = new_height;
   }
   if(parse_next_arg(parse)) {
@@ -2131,7 +2147,9 @@ void parse_cb_set_hatch_scheme(parse_t *parse, plot_t *plot) {
   plot_param_t *param = &plot->param;
   // Free current one if there is one
   if(param->hatch_scheme != NULL) {
-    printf("[parse] Overriding existing hatch scheme \"%s\"\n", param->hatch_scheme->name);
+    if(plot->param.info == 1) {
+      printf("[parse] Overriding existing hatch scheme \"%s\"\n", param->hatch_scheme->name);
+    }
     hatch_scheme_free(param->hatch_scheme);
   }
   if(next_type == PARSE_ARG_STR) {
@@ -2169,7 +2187,9 @@ void parse_cb_set_color_scheme(parse_t *parse, plot_t *plot) {
   plot_param_t *param = &plot->param;
   // Free current one if there is one
   if(param->color_scheme != NULL) {
-    printf("[parse] Overriding existing color scheme \"%s\"\n", param->color_scheme->name);
+    if(plot->param.info == 1) {
+      printf("[parse] Overriding existing color scheme \"%s\"\n", param->color_scheme->name);
+    }
     color_scheme_free(param->color_scheme);
   }
   if(next_type == PARSE_ARG_STR) {
@@ -2208,7 +2228,9 @@ void parse_cb_test_hatch(parse_t *parse, plot_t *plot) {
   if(parse_next_arg(parse)) {
     error_exit("Function \"test_hatch\" only takes 1 argument\n");
   }
-  printf("[parse] Saving hatch test file to \"%s\"\n", filename);
+  if(plot->param.info == 1) {
+    printf("[parse] Saving hatch test file to \"%s\"\n", filename);
+  }
   plot_save_hatch_test(plot, filename);
   free(filename);
   return;
@@ -2222,7 +2244,9 @@ void parse_cb_test_color(parse_t *parse, plot_t *plot) {
   if(parse_next_arg(parse)) {
     error_exit("Function \"test_color\" only takes 1 argument\n");
   }
-  printf("[parse] Saving color test file to \"%s\"\n", filename);
+  if(plot->param.info == 1) {
+    printf("[parse] Saving color test file to \"%s\"\n", filename);
+  }
   plot_save_color_test(plot, filename);
   free(filename);
   return;
