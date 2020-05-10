@@ -3,6 +3,18 @@ C language wrapper of the Python drawing library matplotlib
 
 ## Script
 
+### Overview
+
+The script is not intended to be used as a programming language, not even a simple one. No notion of variables or 
+control flows are supported. The interpreter simply begins from the file start, runs a state machine, and interprets the 
+script token-by-token. We do have a few simple rules for how tokens are constructed, but still, no data structure is 
+supported.
+
+You would expect the plotting script to be imperative: Instead of detailing every single step to generate the plot, you
+simply express the basic structure and plotting parameters using one of the three types of statements. The plotting 
+backend will then generate the Python source code compatible with matplotlib, and call Python interpreter to eventually
+materialize the drawing.
+
 ### Primitives
 
 There are several types of primitives in the script:
