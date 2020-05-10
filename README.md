@@ -5,7 +5,7 @@ C language wrapper of the Python drawing library matplotlib
 
 ### Primitives
 
-There are three types of primitives in the script:
+There are several types of primitives in the script:
 
 - An integer in C encoding. Only decimals are supported (octal and hexadecimal are not supported, 
   and it is unlikely you will need them).
@@ -23,6 +23,9 @@ There are three types of primitives in the script:
 - An identifier in C encoding. We fully comply with C language rules.
 - A file name indicator, beginning with '@' follwed by a string primitive, indicates that the string should be used as a file name.
   Note that for saving files this is not needed.
+- Color literal, which is a string of form "#RRGGBB". Spaces will not be ignored, and will incur parsing error.
+- Hatch literal, which is a string of form "ch" where ch is the hatch character. Only single character hatch is supported
+  (although matplotlib may support multi-char hatches).
 
 ### Statements
 
