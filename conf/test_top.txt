@@ -77,7 +77,10 @@
 # Error case
 #!print "xtitle %lllllld" xtitle;
 
-+bar_type;
++bar_type "Type 1";
++bar_type "Type 2" "#aabbcc";
++bar_type "Type 3" "" "*";
+
 +bar_group;
 #+abcdefg;
 

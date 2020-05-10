@@ -1672,6 +1672,10 @@ void parse_cb_bar_type(parse_t *parse, plot_t *plot) {
   }
   plot_param_t *param = &plot->param;
   if(color == -1U) {
+    if(param->color_scheme == NULL) {
+      parse_report_pos(parse);
+      error_exit("Color scheme not specified\n");
+    }
     assert(param->color_offset <= param->color_scheme->item_count);
     if(param->color_offset == param->color_scheme->item_count) {
       parse_report_pos(parse);
@@ -1680,6 +1684,10 @@ void parse_cb_bar_type(parse_t *parse, plot_t *plot) {
     color = param->color_scheme->base[param->color_offset++];
   }
   if(hatch == -1) {
+    if(param->hatch_scheme == NULL) {
+      parse_report_pos(parse);
+      error_exit("Hatch scheme not specified\n");
+    }
     assert(param->hatch_offset <= param->hatch_scheme->item_count);
     if(param->hatch_offset == param->hatch_scheme->item_count) {
       parse_report_pos(parse);
