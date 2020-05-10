@@ -7,6 +7,9 @@
 # Line comments can be used at the beginning of a line, or after an existing line
 # Each line should end with a semicolon (';')
 
+# This turns off notifications
+.info = "disabled";
+
 # Properties are specified using '.'
 
 .xtitle = "This is x title";   # With semicolon

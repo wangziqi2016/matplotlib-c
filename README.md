@@ -99,7 +99,7 @@ a string), the file will be used as import file to load a color scheme. The file
 
 | Name | Explanation | Arguments |
 |:----:|:------------|:----------|
-| bar_type | An object containing bar label, color and hatch. It defines the appearance of a bar and entries in the legend | First mandatory argument is type label, which is of string type and must not collide with an existing type. The second and third arguments are color and hatch, both being optional. If user does not give color and/or hatch, the one from color scheme and/or hatch scheme will be used, and the corresponding offset will also be incremented. Overflow will be reported as errors. Empty string is handled as if the argument were not provided. They can be used to specify the hatch without explicitly specifying the color. |
+| bar_type | An object containing bar label, color and hatch. It defines the appearance of a bar and entries in the legend | First mandatory argument is type label, which is of string type and must not collide with an existing type. The second and third arguments are color and hatch, both being optional. If user does not give color and/or hatch, the one from color scheme and/or hatch scheme will be used, and the corresponding offset will be incremented. Overflow will be reported as errors. Empty string is handled as if the argument were not provided. They can be used to specify the hatch without explicitly specifying the color. |
 
 ## Decimals
 

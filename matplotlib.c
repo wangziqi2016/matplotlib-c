@@ -920,8 +920,9 @@ void plot_save_fig(plot_t *plot, const char *filename) {
     py_run(plot->py, buf_c_str(plot->buf));
   } else if(param->dry_run == PLOT_DRY_RUN_ENABLED) {
     buf_printf(plot->buf, "plot.savefig(\"%s\", bbox_inches='tight')\n\n", filename);
-    printf("[plot] Dry run mode is on; not executing anything\n");
+    if(plot->param.info == 1) printf("[plot] Dry run mode is on; not executing anything\n");
   } else if(param->dry_run == PLOT_DRY_RUN_SHOW) {
+    if(plot->param.info == 1) printf("[plot] Dry run mode is \"show\", showing the plot on-screen\n");
     buf_printf(plot->buf, "plot.show()\n\n", filename);
     py_run(plot->py, buf_c_str(plot->buf));
   }
