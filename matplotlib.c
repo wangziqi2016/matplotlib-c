@@ -1974,13 +1974,14 @@ void parse_cb_print(parse_t *parse, plot_t *plot) {
   char *name = parse_get_ident(parse);
   int verbose = 0;
   next_arg = parse_next_arg(parse);
-  
-
   if(streq(name, "plot") == 1) {
+    verbose = parse_get_verbose(parse);
     plot_print(plot, verbose);
   } else if(streq(name, "param") == 1) {
+    verbose = parse_get_verbose(parse);
     plot_param_print(param, verbose);
   } else if(streq(name, "version") == 1) {
+    verbose = parse_get_verbose(parse);
     printf("[version] matplotlib C language wrapper and script interpreter, version %s.%s\n", 
       MAJOR_VERSION, MINOR_VERSION);
     printf("[version] Author: Ziqi Wang\n");
@@ -2000,12 +2001,14 @@ void parse_cb_print(parse_t *parse, plot_t *plot) {
 #endif
     }
   } else if(streq(name, "color") == 1) {
+    verbose = parse_get_verbose(parse);
     if(param->color_scheme != NULL) {
       color_scheme_print(param->color_scheme, verbose);
     } else {
       printf("[parse] There is no color scheme to print\n");
     }
   } else if(streq(name, "hatch") == 1) {
+    verbose = parse_get_verbose(parse);
     if(param->hatch_scheme != NULL) {
       hatch_scheme_print(param->hatch_scheme, verbose);
     } else {
@@ -2036,7 +2039,15 @@ void parse_cb_print(parse_t *parse, plot_t *plot) {
         color_str(type->color, buf);
         printf("[bar_type] Index %d label %s color \"%s\" hatch \'%c\'\n", index, type->label, buf, type->hatch);
       } else if(next_arg == PARSE_ARG_STR) {
-        // Treat this as a label, and print the one with the label
+        // If there is a string, it will be treated as the label
+        char *label = parse_get_str(parse);
+        bar_type_t *type = plot_find_bar_type(plot, label);
+        if(type == NULL) {
+          parse_report_pos(parse);
+          error_exit("Bar type label \"%s\" does not exist\n", label);
+        }
+        printf("[bar_type] label %s color \"%s\" hatch \'%c\'\n", type->label, buf, type->hatch);
+        free(label);
       }
     }
   } else {
