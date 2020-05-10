@@ -1663,9 +1663,9 @@ void parse_cb_bar_type(parse_t *parse, plot_t *plot) {
     // If it is zero length string, we still use current color
     if(strlen(hatch_str) != 0) {
       hatch = hatch_decode(hatch_str);
-      if(hatch == -1U) {
+      if(hatch == -1) {
         parse_report_pos(parse);
-        error_exit("Could not decode hatch string: \"%s\"\n", color_str);
+        error_exit("Could not decode hatch string: \"%s\"\n", hatch_str);
       }
     }
     free(hatch_str);
@@ -1677,7 +1677,7 @@ void parse_cb_bar_type(parse_t *parse, plot_t *plot) {
       parse_report_pos(parse);
       error_exit("Color scheme \"%s\" overflows: offset %d\n", param->color_scheme->name, param->color_offset);
     }
-    color = param->color_scheme[param->color_offset++];
+    color = param->color_scheme->base[param->color_offset++];
   }
   if(hatch == -1) {
     assert(param->hatch_offset <= param->hatch_scheme->item_count);
@@ -1685,9 +1685,13 @@ void parse_cb_bar_type(parse_t *parse, plot_t *plot) {
       parse_report_pos(parse);
       error_exit("Hatch scheme \"%s\" overflows: offset %d\n", param->hatch_scheme->name, param->hatch_offset);
     }
-    hatch = param->hatch_scheme[param->hatch_offset++];
+    hatch = param->hatch_scheme->base[param->hatch_offset++];
   }
   plot_add_bar_type(plot, label, color, hatch);
+  if(parse_next_arg(parse) != PARSE_ARG_NONE) {
+    parse_report_pos(parse);
+    error_exit("Entity \"bar_type\" (label \"%s\") takes one mandatory argument and two optional arguments\n", label);
+  }
   free(label);
   return;
 }
@@ -1961,13 +1965,24 @@ void parse_cb_print(parse_t *parse, plot_t *plot) {
     if(param->color_scheme != NULL) {
       color_scheme_print(param->color_scheme, verbose);
     } else {
-      printf("There is no color scheme to print\n");
+      printf("[parse] There is no color scheme to print\n");
     }
   } else if(streq(name, "hatch") == 1) {
     if(param->hatch_scheme != NULL) {
       hatch_scheme_print(param->hatch_scheme, verbose);
     } else {
-      printf("There is no hatch scheme to print\n");
+      printf("[parse] There is no hatch scheme to print\n");
+    }
+  } else if(streq(name, "bar_type") == 1) {
+    if(vec_count(plot->bar_types) == 0) {
+      printf("[parse] There is no bar type objects to print\n");
+    } else {
+      for(int i = 0;i < vec_count(plot->bar_types);i++) {
+        char buf[16];
+        bar_type_t *type = vec_at(plot->bar_types, i);
+        color_str(type->color, buf);
+        printf("[bar_type] label %s color \"%s\" hatch \'%c\'\n", type->label, buf, type->hatch);
+      }
     }
   } else {
     parse_report_pos(parse);
