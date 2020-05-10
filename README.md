@@ -78,6 +78,7 @@ within a single line.
 | ylim_top | Y axis top limit | float\[-inf, +inf\] |
 | ylim_bottom | Y axis bottom limit | float\[-inf, +inf\] |
 | dry_run | Whether to execute the script. 0 means true. 1 means false. 2 means only show the plot on-screen. | \[0, 2\] or "disabled", "enabled", "show" |
+| info | Whether to notify users of internal state change | \[0, 1\] or "disabled", "enabled" |
 
 ### Lists of Functions
 
