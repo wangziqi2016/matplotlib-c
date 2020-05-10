@@ -88,6 +88,12 @@ a string), the file will be used as import file to load a color scheme. The file
 | test_hatch | Output a graph with all current hatchs | The save file name is given as argument. Offset is ignored, and the test graph always start from element zero. |
 | test_color | Output a graph with all current colors | The save file name is given as argument. Offset is ignored, and the test graph always start from element zero. |
 
+### List of Entities
+
+| Name | Explanation | Arguments |
+|:----:|:------------|:----------|
+| bar_type | An object containing bar label, color and hatch. It defines the appearance of a bar and entries in the legend | First mandatory argument is type label, which is of string type and must not collide with an existing type. The second and third arguments are color and hatch, both being optional. If user does not give color and/or hatch, the one from color scheme and/or hatch scheme will be used, and the corresponding offset will also be incremented. Overflow will be reported as errors. Empty string is handled as if the argument were not provided. They can be used to specify the hatch without explicitly specifying the color. |
+
 ## Decimals
 
 Users could control the number of digits after the decimal point and/or the number of significant digits before the 
