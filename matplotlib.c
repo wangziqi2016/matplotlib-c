@@ -1934,6 +1934,26 @@ void parse_top_func(parse_t *parse, plot_t *plot) {
   return;
 }
 
+// Reads verbose flag as either numeric 0/1 value or "verbose string"
+// If verbose flag is not found return 0 (default not verbose)
+static int parse_get_verbose(parse_t *parse) {
+  int next_arg = parse_next_arg(parse);
+  int verbose = 0;
+  if(next_arg == PARSE_ARG_IDENT) {
+    char *verbose_ident = parse_get_ident(parse);
+    if(streq(verbose_ident, "verbose") == 1) {
+      verbose = 1;
+    } else {
+      parse_report_pos(parse);
+      error_exit("Unknown verbose option for \"print\": \"%s\"\n", verbose_ident);
+    }
+    free(verbose_ident);
+  } else if(next_arg == PARSE_ARG_NUM) {
+    verbose = parse_get_int64_range(parse, 0, 1);
+  }
+  return verbose;
+}
+
 void parse_cb_print(parse_t *parse, plot_t *plot) {
   int next_arg = parse_next_arg(parse);
   if(next_arg == PARSE_ARG_NONE) {
@@ -1954,21 +1974,8 @@ void parse_cb_print(parse_t *parse, plot_t *plot) {
   char *name = parse_get_ident(parse);
   int verbose = 0;
   next_arg = parse_next_arg(parse);
-  if(next_arg == PARSE_ARG_IDENT) {
-    char *verbose_ident = parse_get_ident(parse);
-    if(streq(verbose_ident, "verbose") == 1) {
-      verbose = 1;
-    } else {
-      parse_report_pos(parse);
-      error_exit("Unknown option for \"print\": \"%s\"\n", verbose_ident);
-    }
-    free(verbose_ident);
-  } else if(next_arg == PARSE_ARG_NUM) {
-    verbose = parse_get_int64_range(parse, 0, 1);
-  } else if(next_arg != PARSE_ARG_NONE) {
-    parse_report_pos(parse);
-    error_exit("Function \"print [target]\" only takes 1 optional argument\n");
-  }
+  
+
   if(streq(name, "plot") == 1) {
     plot_print(plot, verbose);
   } else if(streq(name, "param") == 1) {
@@ -2027,7 +2034,7 @@ void parse_cb_print(parse_t *parse, plot_t *plot) {
         bar_type_t *type = vec_at(plot->bar_types, index);
         char buf[16];
         color_str(type->color, buf);
-        printf("[bar_type] label %s color \"%s\" hatch \'%c\'\n", type->label, buf, type->hatch);
+        printf("[bar_type] Index %d label %s color \"%s\" hatch \'%c\'\n", index, type->label, buf, type->hatch);
       } else if(next_arg == PARSE_ARG_STR) {
         // Treat this as a label, and print the one with the label
       }
@@ -2036,11 +2043,12 @@ void parse_cb_print(parse_t *parse, plot_t *plot) {
     parse_report_pos(parse);
     error_exit("Unknown print target: \"%s\"\n", name);
   }
-  free(name);
+  // Check whether the state machine has deleped all arguments
   if(parse_next_arg(parse) != PARSE_ARG_NONE) {
     parse_report_pos(parse);
-    error_exit("Function \"print [target]\" only takes 1 optional argument\n");
+    error_exit("Unexpected argument for function \"print %s\"\n", name);
   }
+  free(name);
   return;
 }
 
