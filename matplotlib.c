@@ -737,6 +737,7 @@ plot_param_t default_param = {
   INFINITY, INFINITY, // xlimits
   INFINITY, INFINITY, // ylimits
   0,         // Dry run
+  1,         // Info
 };
 
 void plot_param_copy(plot_param_t *dst, plot_param_t *src) {
@@ -1744,6 +1745,7 @@ parse_cb_entry_t parse_cb_top_props[] = {
   PARSE_GEN_PROP("ylim_bottom", PARSE_YLIM_BOTTOM),
   // py_t object
   PARSE_GEN_PROP("dry_run", PARSE_DRY_RUN),
+  PARSE_GEN_PROP("info", PARSE_INFO),
 };
 const int parse_cb_top_props_count = sizeof(parse_cb_top_props) / sizeof(parse_cb_entry_t);
 

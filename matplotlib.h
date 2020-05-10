@@ -265,6 +265,7 @@ typedef struct {
   double ylim_bottom;
   // Debugging
   int dry_run;                   // Whether we actually execute the scripts (will not if set to 1)
+  int info;                      // Whether to print info when the internal state changes
 } plot_param_t;
 
 void plot_param_copy(plot_param_t *dst, plot_param_t *src);
@@ -349,6 +350,7 @@ enum {
   PARSE_YLIM_TOP,
   PARSE_YLIM_BOTTOM,
   PARSE_DRY_RUN,     // py_t object
+  PARSE_INFO,        // Whether to print information
 };
 
 typedef struct {
