@@ -1670,6 +1670,24 @@ void parse_cb_bar_type(parse_t *parse, plot_t *plot) {
     }
     free(hatch_str);
   }
+  plot_param_t *param = &plot->param;
+  if(color == -1U) {
+    assert(param->color_offset <= param->color_scheme->item_count);
+    if(param->color_offset == param->color_scheme->item_count) {
+      parse_report_pos(parse);
+      error_exit("Color scheme \"%s\" overflows: offset %d\n", param->color_scheme->name, param->color_offset);
+    }
+    color = param->color_scheme[param->color_offset++];
+  }
+  if(hatch == -1) {
+    assert(param->hatch_offset <= param->hatch_scheme->item_count);
+    if(param->hatch_offset == param->hatch_scheme->item_count) {
+      parse_report_pos(parse);
+      error_exit("Hatch scheme \"%s\" overflows: offset %d\n", param->hatch_scheme->name, param->hatch_offset);
+    }
+    hatch = param->hatch_scheme[param->hatch_offset++];
+  }
+  plot_add_bar_type(plot, label, color, hatch);
   free(label);
   return;
 }
