@@ -2019,13 +2019,13 @@ void parse_cb_print(parse_t *parse, plot_t *plot) {
       printf("[parse] There is no bar type objects to print\n");
     } else {
       next_arg = parse_next_arg(parse);
+      char buf[16]; // Used to print color, used by all branches
       if(next_arg == PARSE_ARG_NONE) {
         // If no index then just print all of them
         for(int i = 0;i < vec_count(plot->bar_types);i++) {
-          char buf[16];
           bar_type_t *type = vec_at(plot->bar_types, i);
           color_str(type->color, buf);
-          printf("[bar_type] label %s color \"%s\" hatch \'%c\'\n", type->label, buf, type->hatch);
+          printf("[bar_type] label \"%s\" color \"%s\" hatch \'%c\'\n", type->label, buf, type->hatch);
         }
       } else if(next_arg == PARSE_ARG_NUM) {
         // If there is an numeric index, print the one on that index
@@ -2035,9 +2035,8 @@ void parse_cb_print(parse_t *parse, plot_t *plot) {
           error_exit("[parse] Bar type index out of range [0, %d) (see %d)\n", vec_count(plot->bar_types), index);
         }
         bar_type_t *type = vec_at(plot->bar_types, index);
-        char buf[16];
         color_str(type->color, buf);
-        printf("[bar_type] Index %d label %s color \"%s\" hatch \'%c\'\n", index, type->label, buf, type->hatch);
+        printf("[bar_type] Index %d label \"%s\" color \"%s\" hatch \'%c\'\n", index, type->label, buf, type->hatch);
       } else if(next_arg == PARSE_ARG_STR) {
         // If there is a string, it will be treated as the label
         char *label = parse_get_str(parse);
@@ -2046,7 +2045,8 @@ void parse_cb_print(parse_t *parse, plot_t *plot) {
           parse_report_pos(parse);
           error_exit("Bar type label \"%s\" does not exist\n", label);
         }
-        printf("[bar_type] label %s color \"%s\" hatch \'%c\'\n", type->label, buf, type->hatch);
+        color_str(type->color, buf);
+        printf("[bar_type] label \"%s\" color \"%s\" hatch \'%c\'\n", type->label, buf, type->hatch);
         free(label);
       }
     }

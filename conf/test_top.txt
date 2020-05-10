@@ -95,10 +95,13 @@
 +bar_type "Type 4" "" "";
 
 !print bar_type;
+!print bar_type 3;
+!print bar_type "Type 2";
 
 +bar_group;
 #+abcdefg;
 
+.info = "disabled";
 .dry_run = "enabled";
 !save_legend;
 !save_fig;
