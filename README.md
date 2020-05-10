@@ -11,7 +11,7 @@ script token-by-token. We do have a few simple rules for how tokens are construc
 supported.
 
 You would expect the plotting script to be imperative: Instead of detailing every single step to generate the plot, you
-simply express the basic structure and plotting parameters using one of the three types of statements. The plotting 
+simply express the basic structure and parameters using one of the three types of statements. The plotting 
 backend will then compute coordinates and plotting arguments, generate the Python source code compatible with matplotlib, 
 and call Python interpreter to eventually materialize the drawing. Users only need to memorize a small subset of concepts 
 compared with what is in matplotlib. In addition, low-level concepts such as bars, texts and legends are highly abstracted
@@ -56,6 +56,7 @@ The plotting script is a text file consisting of three types of statements:
 - A "function call" statement invoking a pre-defined procedure with optional arguments. 
   Function calls are of the form "!\[function name\] arg1 arg2 ...".
   Some arguments are optional, while some others can be of various types.
+  All functions can take symbol ? as its first argument to print the help string.
   A complete list of functions is given below.
   If function argument error occurs, the parser will report error.
 - An "entity addition" statement adding an entity (e.g. bars, labels) to be plotted or will help plotting.
@@ -99,7 +100,7 @@ within a single line.
 
 | Name | Description | Arguments |
 |:----:|:------------|:----------|
-| print | Print internal data structures or a formatting string using property name | If followed by param, plot, version, color or hatch, print the corresponding data structure. Optional argument is verbose, which enabled verbose printing. If followed by a format string, then print format string. Arguments are given after the format string. Type error will occur if argument types do not match format string's specifier.|
+| print | Print internal data structures or a formatting string using property name | If followed by param, plot, version, color, hatch, etc, print the corresponding data structure (please refer to the help string for complete list). If followed by a format string, then print format string. Arguments are given after the format string. Type error will occur if argument types do not match format string's specifier. |
 | reset | Reset an internal data structure | Follwed by param, buf or plot, which resets the corresponding internal data structure to the initial state as if they were just initialized (e.g. for buffer we clear all contents, and copy over the standard preamble). |
 | save_fig | Save the current plot to an external file | Optional file name can be given as a string, which overrides existing figure file name if there is one. If not given, then use the existing file name. If neither is present, report error. |
 | save_legend | Save legend using current bar types in the plot | Same rule for file name, except that we use legend file name stored in the plot object. |
