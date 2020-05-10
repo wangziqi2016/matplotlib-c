@@ -1630,10 +1630,36 @@ void parse_top_entity(parse_t *parse, plot_t *plot) {
 // Syntax:
 // +bar_type "label" ["color"] ["hatch"]
 // If one of or both color and/or hatch are not specified, we use the one from scheme, and increment offset pointer
+// Empty string means placeholder - we still use the one from scheme, but we can specify the hatch without having to
+// manually enter color
 // If color overflows, we report error
 void parse_cb_bar_type(parse_t *parse, plot_t *plot) {
-  (void)parse; (void)plot;
-  printf("entity bar type\n");
+  //(void)parse; (void)plot;
+  //printf("entity bar type\n");
+  int next_arg = parse_next_arg(parse);
+  char *label = NULL;
+  if(next_arg == PARSE_ARG_STR) {
+    label = parse_get_str(parse);
+  } else {
+    parse_report_pos(parse);
+    error_exit("Entity \"bar_type\" requires at least a label\n");
+  }
+  uint32_t color = -1U;
+  char hatch = -1;
+  if(parse_next_arg(parse) == PARSE_ARG_STR) {
+    char *color_str = parse_get_str(parse);
+    // If it is zero length string, we still use current color
+    if(strlen(color_str) != 0) {
+      color = color_decode(color_str);
+      if(color == -1U) {
+        parse_report_pos(parse);
+        error_exit("Could not decode color string: \"%s\"\n", color_str);
+      }
+    }
+    free(color_str);
+  }
+  
+  free(label);
   return;
 }
 
