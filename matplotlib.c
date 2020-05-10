@@ -1871,6 +1871,22 @@ void parse_top_property(parse_t *parse, plot_t *plot) {
         printf("[parse] Dry run mode disabled; Scripts will be executed\n");
       }
     } break;
+    case PARSE_INFO: {
+      int next_arg = parse_next_arg(parse);
+      if(next_arg == PARSE_ARG_NUM) {
+        plot->param.dry_run = (int)parse_get_int64_range(parse, 0, 2);
+      } else {
+        char *info_str = parse_get_str(parse);
+        if(streq(info_str, "disabled") == 1) {
+          plot->param.info = 0;
+        } else if(streq(info_str, "enabled") == 1) {
+          plot->param.info = 1;
+        } else {
+          parse_report_pos(parse);
+          error_exit("Invalid string value for property \"info\"\n");
+        }
+      }
+    } break;
     default: {
       parse_report_pos(parse);
       error_exit("Peoperty \"%s\" cannot be assigned\n", name);
