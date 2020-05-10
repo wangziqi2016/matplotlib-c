@@ -21,6 +21,9 @@ There are several types of primitives in the script:
   Adjacent strings, however, are not joined automatically as in C preprocessor, since this will cause issues for 
   argument passing.
 - An identifier in C encoding. We fully comply with C language rules.
+  
+There are also several derived but commonly used types:
+
 - A file name indicator, beginning with '@' follwed by a string primitive, indicates that the string should be used as a file name.
   Note that for saving files this is not needed.
 - Color literal, which is a string of form "#RRGGBB". Spaces will not be ignored, and will incur parsing error.
