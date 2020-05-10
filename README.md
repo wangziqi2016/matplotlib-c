@@ -12,8 +12,11 @@ supported.
 
 You would expect the plotting script to be imperative: Instead of detailing every single step to generate the plot, you
 simply express the basic structure and plotting parameters using one of the three types of statements. The plotting 
-backend will then generate the Python source code compatible with matplotlib, and call Python interpreter to eventually
-materialize the drawing.
+backend will then compute coordinates and plotting arguments, generate the Python source code compatible with matplotlib, 
+and call Python interpreter to eventually materialize the drawing. Users only need to memorize a small subset of concepts 
+compared with what is in matplotlib. In addition, low-level concepts such as bars, texts and legends are highly abstracted
+to make common tasks easier and less effort-taking. Users may still want to dump the final script into a file, if further 
+tweaks are needed.
 
 ### Primitives
 
