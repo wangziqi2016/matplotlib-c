@@ -1658,7 +1658,18 @@ void parse_cb_bar_type(parse_t *parse, plot_t *plot) {
     }
     free(color_str);
   }
-  
+  if(parse_next_arg(parse) == PARSE_ARG_STR) {
+    char *hatch_str = parse_get_str(parse);
+    // If it is zero length string, we still use current color
+    if(strlen(hatch_str) != 0) {
+      hatch = hatch_decode(hatch_str);
+      if(hatch == -1U) {
+        parse_report_pos(parse);
+        error_exit("Could not decode hatch string: \"%s\"\n", color_str);
+      }
+    }
+    free(hatch_str);
+  }
   free(label);
   return;
 }
