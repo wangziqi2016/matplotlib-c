@@ -1749,8 +1749,10 @@ parse_cb_entry_t parse_cb_top_props[] = {
   PARSE_GEN_PROP("legend_font_size", PARSE_LEGEND_FONT_SIZE),
   PARSE_GEN_PROP("legend_pos", PARSE_LEGEND_POS),
   // Ticks
+  PARSE_GEN_PROP("xtick_enabled", PARSE_XTICK_ENABLED),
   PARSE_GEN_PROP("xtick_font_size", PARSE_XTICK_FONT_SIZE),
   PARSE_GEN_PROP("xtick_rotation", PARSE_XTICK_ROTATION),
+  PARSE_GEN_PROP("ytick_enabled", PARSE_YTICK_ENABLED),
   PARSE_GEN_PROP("ytick_font_size", PARSE_YTICK_FONT_SIZE),
   PARSE_GEN_PROP("ytick_rotation", PARSE_YTICK_ROTATION),
   // Title
@@ -1832,11 +1834,17 @@ void parse_top_property(parse_t *parse, plot_t *plot) {
       plot_set_legend_pos(plot, pos); // Copies the string (report error if too long)
       free(pos); // We already copied the pos string into param
     } break;
+    case PARSE_XTICK_ENABLED: {
+      plot->param.xtick_enabled = (int)parse_get_int64_range(parse, 0, 1);
+    } break;
     case PARSE_XTICK_FONT_SIZE: {
       plot->param.xtick_font_size = (int)parse_get_int64_range(parse, 1, PARSE_INT64_MAX);
     } break;
     case PARSE_XTICK_ROTATION: {
       plot->param.xtick_rotation = (int)parse_get_int64_range(parse, 0, 359);
+    } break;
+    case PARSE_YTICK_ENABLED: {
+      plot->param.ytick_enabled = (int)parse_get_int64_range(parse, 0, 1);
     } break;
     case PARSE_YTICK_FONT_SIZE: {
       plot->param.ytick_font_size = (int)parse_get_int64_range(parse, 1, PARSE_INT64_MAX);
