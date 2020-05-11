@@ -2124,7 +2124,7 @@ void parse_cb_save_fig(parse_t *parse, plot_t *plot) {
   int next_arg = parse_next_arg(parse);
   if(next_arg == PARSE_ARG_QMARK) {
     parse_expect_char(parse, '?');
-    printf("[save_fig] Usage: save_fig [filename]\n");
+    printf("[save_fig] Usage: save_fig [file name]\n");
     printf("[save_fig] The optional file name, if given, will override an existing file name. Otherwise, the existing file name "
            "will be used. If neither is present, error will be reported\n");
     return;
@@ -2155,7 +2155,7 @@ void parse_cb_save_legend(parse_t *parse, plot_t *plot) {
   int next_arg = parse_next_arg(parse);
   if(next_arg == PARSE_ARG_QMARK) {
     parse_expect_char(parse, '?');
-    printf("[save_legend] Usage: save_legend [filename]\n");
+    printf("[save_legend] Usage: save_legend [file name]\n");
     printf("[save_legend] The optional file name, if given, will override an existing file name. Otherwise, the existing file name "
            "will be used. If neither is present, error will be reported\n");
     return;
@@ -2310,6 +2310,12 @@ void parse_cb_set_color_scheme(parse_t *parse, plot_t *plot) {
 void parse_cb_test_hatch(parse_t *parse, plot_t *plot) {
   if(parse_next_arg(parse) == 0) {
     error_exit("Function \"test_hatch\" takes 1 argument\n");
+  } else if(parse_next_arg(parse) == PARSE_ARG_QMARK) {
+    parse_expect_char(parse, '?');
+    printf("[test_hatch] Usage: test_hatch [file name]\n");
+    printf("[test_hatch] The optional file name, if given, will override an existing file name. Otherwise, the "
+           "existing file name will be used. If neither is present, error will be reported\n");
+    return;
   }
   char *filename = parse_get_str(parse);
   if(parse_next_arg(parse)) {
@@ -2326,6 +2332,12 @@ void parse_cb_test_hatch(parse_t *parse, plot_t *plot) {
 void parse_cb_test_color(parse_t *parse, plot_t *plot) {
   if(parse_next_arg(parse) == 0) {
     error_exit("Function \"test_color\" takes 1 argument\n");
+  } else if(parse_next_arg(parse) == PARSE_ARG_QMARK) {
+    parse_expect_char(parse, '?');
+    printf("[test_color] Usage: test_color [file name]\n");
+    printf("[test_color] The optional file name, if given, will override an existing file name. Otherwise, the "
+           "existing file name will be used. If neither is present, error will be reported\n");
+    return;
   }
   char *filename = parse_get_str(parse);
   if(parse_next_arg(parse)) {
