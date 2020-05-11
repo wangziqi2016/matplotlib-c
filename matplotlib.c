@@ -756,9 +756,9 @@ void plot_param_print(plot_param_t *param, int verbose) {
   printf("[param title] x font %d y font %d\n", 
     param->xtitle_font_size, param->ytitle_font_size);
   printf("[param xtick] enabled %d font %d rot %d\n", 
-    param->xtick_enabled, ->xtick_font_size, param->xtick_rotation);
+    param->xtick_enabled, param->xtick_font_size, param->xtick_rotation);
   printf("[param ytick] enabled %d font %d rot %d\n", 
-    param->ytick_enabled, ->ytick_font_size, param->ytick_rotation);
+    param->ytick_enabled, param->ytick_font_size, param->ytick_rotation);
   printf("[param bar_text] font %d rotation %d\n", param->bar_text_font_size, param->bar_text_rotation);
   printf("[param bar_text] decimals %d rtrim %d\n", 
     param->bar_text_decimals, param->bar_text_rtrim);
@@ -894,21 +894,29 @@ void plot_save_fig(plot_t *plot, const char *filename) {
   buf_t *buf = plot->buf;
   plot_param_t *param = &plot->param;
   // Set x tick and y tick
-  buf_printf(buf, "if len(cmatplotlib_xticks) != 0:\n");
-  buf_printf(buf, "  plot.xticks(cmatplotlib_xticks, cmatplotlib_xtick_labels");
-  buf_printf(buf, ", fontsize=%d", param->xtick_font_size);
-  if(param->xtick_rotation != 0) {
-    //printf("rotation %d\n", param->xtick_rotation);
-    buf_printf(buf, ", rotation=%d", param->xtick_rotation);
+  if(param->xtick_enabled == 1) {
+    buf_printf(buf, "if len(cmatplotlib_xticks) != 0:\n");
+    buf_printf(buf, "  plot.xticks(cmatplotlib_xticks, cmatplotlib_xtick_labels");
+    buf_printf(buf, ", fontsize=%d", param->xtick_font_size);
+    if(param->xtick_rotation != 0) {
+      //printf("rotation %d\n", param->xtick_rotation);
+      buf_printf(buf, ", rotation=%d", param->xtick_rotation);
+    }
+    buf_printf(buf, ")\n");
+  } else {
+    buf_printf("plot.xticks([])\n");
   }
-  buf_printf(buf, ")\n");
-  buf_printf(buf, "if len(cmatplotlib_yticks) != 0:\n");
-  buf_printf(buf, "  plot.yticks(cmatplotlib_yticks, cmatplotlib_ytick_labels");
-  buf_printf(buf, ", fontsize=%d", param->ytick_font_size);
-  if(param->xtick_rotation != 0) {
-    buf_printf(buf, ", rotation=%d", param->ytick_rotation);
+  if(param->ytick_enabled == 1) {
+    buf_printf(buf, "if len(cmatplotlib_yticks) != 0:\n");
+    buf_printf(buf, "  plot.yticks(cmatplotlib_yticks, cmatplotlib_ytick_labels");
+    buf_printf(buf, ", fontsize=%d", param->ytick_font_size);
+    if(param->xtick_rotation != 0) {
+      buf_printf(buf, ", rotation=%d", param->ytick_rotation);
+    }
+    buf_printf(buf, ")\n");
+  } else {
+    buf_printf("plot.yticks([])\n");
   }
-  buf_printf(buf, ")\n");
   // Set X/Y limits
   if(param->xlim_left != INFINITY) buf_printf(buf, "ax.set_xlim(left=%f)\n", param->xlim_left);
   if(param->xlim_right != INFINITY) buf_printf(buf, "ax.set_xlim(right=%f)\n", param->xlim_right);
