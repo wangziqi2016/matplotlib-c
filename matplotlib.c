@@ -1526,6 +1526,7 @@ int parse_next_arg(parse_t *parse) {
   else if(ch == '_' || isalpha(ch)) return PARSE_ARG_IDENT;
   else if(ch == '.' || isdigit(ch)) return PARSE_ARG_NUM; // hex 0xfff dec .decimal oct 0777
   else if(ch == '@') return PARSE_ARG_FILE;
+  else if(ch == '?') return PARSE_ARG_QMARK;
   char buf[16];
   parse_print_char(parse, ch, buf);
   error_exit("Unknown argument character: %s\n", buf);
@@ -1962,13 +1963,13 @@ void parse_cb_print(parse_t *parse, plot_t *plot) {
   } else if(next_arg == PARSE_ARG_QMARK) {
     parse_expect_char(parse, '?'); // Eat the symbol. The ';' will be processed by caller
     printf("Usage: print [target] [\"verbose\"]/[arg]\n");
-    printf("       The following targets are supported:\n");
-    printf("         plot, param, version, color, hatch, bar_type\n");
-    printf("       The following targets can have an optional \"verbose\" string arg\n");
-    printf("         plot, param, version, color, hatch\n");
-    printf("       The following targets can have an optional numeric arg indicating only the element on the"
-           " given index will be printed\n");
-    printf("         bar_type\n");
+    printf("The following targets are supported:\n");
+    printf("  plot, param, version, color, hatch, bar_type\n");
+    printf("The following targets can have an optional \"verbose\" string arg\n");
+    printf("  plot, param, version, color, hatch\n");
+    printf("The following targets can have an optional numeric arg indicating only the element on the "
+           "given index will be printed\n");
+    printf("  bar_type\n");
     return;
   } else if(next_arg == PARSE_ARG_STR) {
     // Format string print
@@ -2075,9 +2076,16 @@ void parse_cb_print(parse_t *parse, plot_t *plot) {
 }
 
 void parse_cb_reset(parse_t *parse, plot_t *plot) {
-  if(parse_next_arg(parse) == PARSE_ARG_NONE) {
+  int next_arg = parse_next_arg(parse);
+  if(next_arg == PARSE_ARG_NONE) {
     parse_report_pos(parse);
     error_exit("Function \"reset\" expects 1 argument\n");
+  } else if(next_arg == PARSE_ARG_QMARK) {
+    parse_expect_char(parse, '?');
+    printf("Usage: reset [target]\n");
+    printf("  Valid targets are: buf, param, plot\n");
+    printf("Existing color and hatch schemes are also freed when the plot or param is reset\n");
+    return;
   }
   // This can be "buf" "param" or "plot"
   char *name = parse_get_ident(parse);
