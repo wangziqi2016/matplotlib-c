@@ -98,6 +98,7 @@
 !print bar_type 3;
 !print bar_type "Type 2";
 !print ?;
+!reset ?;
 
 +bar_group;
 #+abcdefg;

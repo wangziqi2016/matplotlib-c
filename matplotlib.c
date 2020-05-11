@@ -2120,10 +2120,16 @@ void parse_cb_reset(parse_t *parse, plot_t *plot) {
 }
 
 void parse_cb_save_fig(parse_t *parse, plot_t *plot) {
-  //printf("Save fig called!\n");
-  //return;
   char *filename = NULL; // Given in arg list
-  if(parse_next_arg(parse)) {
+  int next_arg = parse_next_arg(parse);
+  if(next_arg == PARSE_ARG_QMARK) {
+    parse_expect_char(parse, '?');
+    printf("Usage: save_fig [filename]\n");
+    printf("The optional file name, if given, will override an existing file name. Otherwise, the existing file name "
+           "will be used. If neither is present, error will be reported\n");
+    return;
+  }
+  if(next_arg == PARSE_ARG_STR) {
     filename = parse_get_str(parse);
     if(plot->fig_filename != NULL) {
       if(plot->param.info == 1) {
