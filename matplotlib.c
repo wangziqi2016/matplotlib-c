@@ -727,8 +727,8 @@ plot_param_t default_param = {
   1,         // legend_rows
   28,        // legend_font_size
   "best",    // Legend pos; Alternatives are: {lower, center, upper} x {left, center, right} or "center"
-  24, 0,     // x tick font size, rotation
-  24, 0,     // y tick font size, rotation
+  1, 24, 0,  // x tick enabled, font size, rotation
+  1, 24, 0,  // y tick enabled, font size, rotation
   28, 28,    // x/y title font size
   26, 90,    // bar text size, rotation
   2, 1,      // bar text decimals, rtrim
@@ -755,10 +755,10 @@ void plot_param_print(plot_param_t *param, int verbose) {
     param->legend_font_size, param->legend_rows, param->legend_pos);
   printf("[param title] x font %d y font %d\n", 
     param->xtitle_font_size, param->ytitle_font_size);
-  printf("[param xtick] font %d rot %d\n", 
-    param->xtick_font_size, param->xtick_rotation);
-  printf("[param ytick] font %d rot %d\n", 
-    param->ytick_font_size, param->ytick_rotation);
+  printf("[param xtick] enabled %d font %d rot %d\n", 
+    param->xtick_enabled, ->xtick_font_size, param->xtick_rotation);
+  printf("[param ytick] enabled %d font %d rot %d\n", 
+    param->ytick_enabled, ->ytick_font_size, param->ytick_rotation);
   printf("[param bar_text] font %d rotation %d\n", param->bar_text_font_size, param->bar_text_rotation);
   printf("[param bar_text] decimals %d rtrim %d\n", 
     param->bar_text_decimals, param->bar_text_rtrim);
@@ -777,6 +777,7 @@ void plot_param_print(plot_param_t *param, int verbose) {
   }
   printf("[param x/y_lim] left %f right %f top %f bottom %f\n",
     param->xlim_left, param->xlim_right, param->ylim_top, param->ylim_bottom);
+  printf("[debug] dry_run %d info %d\n", param->dry_run, param->info);
   return;
 }
 

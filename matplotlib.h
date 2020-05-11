@@ -248,8 +248,10 @@ typedef struct {
   int legend_font_size;      // Font size for text in the legend
   char legend_pos[PLOT_LEGEND_POS_MAX_SIZE]; // Legend position; This string should never be freed
   // Tick
+  int xtick_enabled;
   int xtick_font_size;
   int xtick_rotation;
+  int ytick_enabled;
   int ytick_font_size;
   int ytick_rotation;
   // Title
@@ -342,8 +344,10 @@ enum {
   PARSE_LEGEND_ROWS,
   PARSE_LEGEND_FONT_SIZE,
   PARSE_LEGEND_POS,
+  PARSE_XTICK_ENABLED,
   PARSE_XTICK_FONT_SIZE,
   PARSE_XTICK_ROTATION,
+  PARSE_YTICK_ENABLED,
   PARSE_YTICK_FONT_SIZE,
   PARSE_YTICK_ROTATION,
   PARSE_XTITLE_FONT_SIZE,
