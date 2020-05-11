@@ -2186,6 +2186,13 @@ void parse_cb_save_legend(parse_t *parse, plot_t *plot) {
 void parse_cb_create_fig(parse_t *parse, plot_t *plot) {
   double width = plot->param.width;
   double height = plot->param.height;
+  if(parse_next_arg(parse) == PARSE_ARG_QMARK) {
+    parse_expect_char(parse, '?');
+    printf("[create_fig] Usage: create_fig [width] [height]\n");
+    printf("[create_fig] Both width and height are optional floating point numbers, which, if given, override "
+           "existing parameters\n");
+    return;
+  }
   if(parse_next_arg(parse)) {
     double new_width = parse_get_double_range(parse, 0.0, PARSE_DOUBLE_MAX);
     if(plot->param.info == 1) {
