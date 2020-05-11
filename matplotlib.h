@@ -222,6 +222,13 @@ void bar_set_text(bar_t *bar, const char *text);
 
 void bar_print(bar_t *bar);
 
+//* bargrp_t - Bar groups
+
+typedef struct {
+  char *label;            // The X tick, if enabled. The group owns this string
+  vec_t *bars;            // A vector of bars
+} bargrp_t;
+
 //* plot_t - Plotting function
 
 // Maximum size of legend pos (including trailing zero)

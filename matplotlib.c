@@ -1521,7 +1521,7 @@ int parse_next_arg(parse_t *parse) {
     parse_report_pos(parse);
     error_exit("Did you miss a semicolon after function call?\n");
   }
-  if(ch == ';') return 0;
+  if(ch == ';') return PARSE_ARG_NONE;
   else if(ch == '\"') return PARSE_ARG_STR;
   else if(ch == '_' || isalpha(ch)) return PARSE_ARG_IDENT;
   else if(ch == '.' || isdigit(ch)) return PARSE_ARG_NUM; // hex 0xfff dec .decimal oct 0777
@@ -1649,9 +1649,11 @@ void parse_cb_bar_type(parse_t *parse, plot_t *plot) {
     printf("[+bar_type] Usage: +bar_type [label] [color] [hatch]\n");
     printf("[+bar_type] The mandatory label is a unique string giving an identifier of the type, which can be used to "
            "assign the type to a bar later.\n");
-    printf("Both color and hatch are optional. Ig not given, the color and/or hatch from the corresponding schemes will"
-           "be used to initialize the type object. If given, they are of string type and must be following the color "
-           "and hatch encoding. Empty strings will be ignored as placeholders\n");
+    printf("[+bar_type] Both color and hatch are optional. Ig not given, the color and/or hatch from the corresponding "
+           "schemes will be used to initialize the type object. If given, they are of string type and must be "
+           "following the color and hatch encoding. Empty strings will be ignored as placeholders\n");
+    printf("[+bar_type] If default schemes are used, the corresponding offset will also be incremented. If either "
+           "color or hatch overflows an error will be reported\n");
     return;
   }
   // Reading the label
@@ -1721,9 +1723,13 @@ void parse_cb_bar_type(parse_t *parse, plot_t *plot) {
   return;
 }
 
+// Bar group syntax:
+// +bar_group "label" {
+//
+//  }
 void parse_cb_bar_group(parse_t *parse, plot_t *plot) {
-  (void)parse; (void)plot;
-  printf("entity bar group\n");
+  //(void)parse; (void)plot;
+  //printf("entity bar group\n");
   return;
 }
 
