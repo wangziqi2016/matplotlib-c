@@ -1962,12 +1962,12 @@ void parse_cb_print(parse_t *parse, plot_t *plot) {
     error_exit("Function \"print\" expects at least 1 argument\n");
   } else if(next_arg == PARSE_ARG_QMARK) {
     parse_expect_char(parse, '?'); // Eat the symbol. The ';' will be processed by caller
-    printf("Usage: print [target] [\"verbose\"]/[arg]\n");
-    printf("The following targets are supported:\n");
-    printf("  plot, param, version, color, hatch, bar_type\n");
-    printf("The following targets can have an optional \"verbose\" string arg\n");
-    printf("  plot, param, version, color, hatch\n");
-    printf("The following targets can have an optional numeric arg indicating only the element on the "
+    printf("[print] Usage: print [target] [\"verbose\"]/[arg]\n");
+    printf("[print] The following targets are supported:\n");
+    printf("[print]   plot, param, version, color, hatch, bar_type\n");
+    printf("[print] The following targets can have an optional \"verbose\" string arg\n");
+    printf("[print]   plot, param, version, color, hatch\n");
+    printf("[print] The following targets can have an optional numeric arg indicating only the element on the "
            "given index will be printed\n");
     printf("  bar_type\n");
     return;
@@ -2082,9 +2082,9 @@ void parse_cb_reset(parse_t *parse, plot_t *plot) {
     error_exit("Function \"reset\" expects 1 argument\n");
   } else if(next_arg == PARSE_ARG_QMARK) {
     parse_expect_char(parse, '?');
-    printf("Usage: reset [target]\n");
-    printf("  Valid targets are: buf, param, plot\n");
-    printf("Existing color and hatch schemes are also freed when the plot or param is reset\n");
+    printf("[reset] Usage: reset [target]\n");
+    printf("[reset] Valid targets are: buf, param, plot\n");
+    printf("[reset] Existing color and hatch schemes are also freed when the plot or param is reset\n");
     return;
   }
   // This can be "buf" "param" or "plot"
@@ -2124,12 +2124,12 @@ void parse_cb_save_fig(parse_t *parse, plot_t *plot) {
   int next_arg = parse_next_arg(parse);
   if(next_arg == PARSE_ARG_QMARK) {
     parse_expect_char(parse, '?');
-    printf("Usage: save_fig [filename]\n");
-    printf("The optional file name, if given, will override an existing file name. Otherwise, the existing file name "
+    printf("[save_fig] Usage: save_fig [filename]\n");
+    printf("[save_fig] The optional file name, if given, will override an existing file name. Otherwise, the existing file name "
            "will be used. If neither is present, error will be reported\n");
     return;
   }
-  if(next_arg == PARSE_ARG_STR) {
+  if(next_arg != PARSE_ARG_NONE) {
     filename = parse_get_str(parse);
     if(plot->fig_filename != NULL) {
       if(plot->param.info == 1) {
@@ -2151,10 +2151,16 @@ void parse_cb_save_fig(parse_t *parse, plot_t *plot) {
 }
 
 void parse_cb_save_legend(parse_t *parse, plot_t *plot) {
-  //printf("Save legend called!\n");
-  //return;
   char *filename = NULL;
-  if(parse_next_arg(parse)) {
+  int next_arg = parse_next_arg(parse);
+  if(next_arg == PARSE_ARG_QMARK) {
+    parse_expect_char(parse, '?');
+    printf("[save_legend] Usage: save_legend [filename]\n");
+    printf("[save_legend] The optional file name, if given, will override an existing file name. Otherwise, the existing file name "
+           "will be used. If neither is present, error will be reported\n");
+    return;
+  }
+  if(next_arg != PARSE_ARG_NONE) {
     filename = parse_get_str(parse);
     if(plot->legend_filename != NULL) {
       if(plot->param.info == 1) {

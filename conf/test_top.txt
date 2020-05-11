@@ -99,6 +99,8 @@
 !print bar_type "Type 2";
 !print ?;
 !reset ?;
+!save_fig ?;
+!save_legend ?;
 
 +bar_group;
 #+abcdefg;
