@@ -102,6 +102,8 @@
 !save_fig ?;
 !save_legend ?;
 !create_fig ?;
+!test_hatch ?;
+!test_color ?;
 
 +bar_group;
 #+abcdefg;

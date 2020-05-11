@@ -1641,11 +1641,20 @@ void parse_cb_bar_type(parse_t *parse, plot_t *plot) {
   //printf("entity bar type\n");
   int next_arg = parse_next_arg(parse);
   char *label = NULL;
+  if(next_arg == PARSE_ARG_NONE) {
+    parse_report_pos(parse);
+    error_exit("Entity \"bar_type\" requires at least a label\n");
+  } else if(next_arg == PARSE_ARG_QMARK) {
+    parse_expect_char(parse, '?');
+    printf("[+bar_type] Usage: +bar_type");
+    return;
+  }
+  // Reading the label
   if(next_arg == PARSE_ARG_STR) {
     label = parse_get_str(parse);
   } else {
     parse_report_pos(parse);
-    error_exit("Entity \"bar_type\" requires at least a label\n");
+    error_exit("Expecting a label for the bar group\n");
   }
   uint32_t color = -1U;
   char hatch = -1;
@@ -1962,12 +1971,12 @@ void parse_cb_print(parse_t *parse, plot_t *plot) {
     error_exit("Function \"print\" expects at least 1 argument\n");
   } else if(next_arg == PARSE_ARG_QMARK) {
     parse_expect_char(parse, '?'); // Eat the symbol. The ';' will be processed by caller
-    printf("[print] Usage: print [target] [\"verbose\"]/[arg]\n");
-    printf("[print] The following targets are supported:\n");
-    printf("[print]   plot, param, version, color, hatch, bar_type\n");
-    printf("[print] The following targets can have an optional \"verbose\" string arg\n");
-    printf("[print]   plot, param, version, color, hatch\n");
-    printf("[print] The following targets can have an optional numeric arg indicating only the element on the "
+    printf("[!print] Usage: !print [target] [\"verbose\"]/[arg]\n");
+    printf("[!print] The following targets are supported:\n");
+    printf("[!print]   plot, param, version, color, hatch, bar_type\n");
+    printf("[!print] The following targets can have an optional \"verbose\" string arg\n");
+    printf("[!print]   plot, param, version, color, hatch\n");
+    printf("[!print] The following targets can have an optional numeric arg indicating only the element on the "
            "given index will be printed\n");
     printf("  bar_type\n");
     return;
@@ -2082,9 +2091,9 @@ void parse_cb_reset(parse_t *parse, plot_t *plot) {
     error_exit("Function \"reset\" expects 1 argument\n");
   } else if(next_arg == PARSE_ARG_QMARK) {
     parse_expect_char(parse, '?');
-    printf("[reset] Usage: reset [target]\n");
-    printf("[reset] Valid targets are: buf, param, plot\n");
-    printf("[reset] Existing color and hatch schemes are also freed when the plot or param is reset\n");
+    printf("[!reset] Usage: !reset [target]\n");
+    printf("[!reset] Valid targets are: buf, param, plot\n");
+    printf("[!reset] Existing color and hatch schemes are also freed when the plot or param is reset\n");
     return;
   }
   // This can be "buf" "param" or "plot"
@@ -2124,8 +2133,8 @@ void parse_cb_save_fig(parse_t *parse, plot_t *plot) {
   int next_arg = parse_next_arg(parse);
   if(next_arg == PARSE_ARG_QMARK) {
     parse_expect_char(parse, '?');
-    printf("[save_fig] Usage: save_fig [file name]\n");
-    printf("[save_fig] The optional file name, if given, will override an existing file name. Otherwise, the existing file name "
+    printf("[!save_fig] Usage: !save_fig [file name]\n");
+    printf("[!save_fig] The optional file name, if given, will override an existing file name. Otherwise, the existing file name "
            "will be used. If neither is present, error will be reported\n");
     return;
   }
@@ -2155,8 +2164,8 @@ void parse_cb_save_legend(parse_t *parse, plot_t *plot) {
   int next_arg = parse_next_arg(parse);
   if(next_arg == PARSE_ARG_QMARK) {
     parse_expect_char(parse, '?');
-    printf("[save_legend] Usage: save_legend [file name]\n");
-    printf("[save_legend] The optional file name, if given, will override an existing file name. Otherwise, the existing file name "
+    printf("[!save_legend] Usage: !save_legend [file name]\n");
+    printf("[!save_legend] The optional file name, if given, will override an existing file name. Otherwise, the existing file name "
            "will be used. If neither is present, error will be reported\n");
     return;
   }
@@ -2188,8 +2197,8 @@ void parse_cb_create_fig(parse_t *parse, plot_t *plot) {
   double height = plot->param.height;
   if(parse_next_arg(parse) == PARSE_ARG_QMARK) {
     parse_expect_char(parse, '?');
-    printf("[create_fig] Usage: create_fig [width] [height]\n");
-    printf("[create_fig] Both width and height are optional floating point numbers, which, if given, override "
+    printf("[!create_fig] Usage: !create_fig [width] [height]\n");
+    printf("[!create_fig] Both width and height are optional floating point numbers, which, if given, override "
            "existing parameters\n");
     return;
   }
@@ -2220,8 +2229,8 @@ void parse_cb_set_hatch_scheme(parse_t *parse, plot_t *plot) {
     error_exit("Function \"set_hatch_scheme\" takes at least 1 argument\n");
   } else if(next_type == PARSE_ARG_QMARK) {
     parse_expect_char(parse, '?');
-    printf("[set_hatch_scheme] Usage: set_hatch_scheme [name]/[file name]\n");
-    printf("[set_hatch_scheme] Name is a string for built-in schemes; File name is a file name indicator"
+    printf("[!set_hatch_scheme] Usage: !set_hatch_scheme [name]/[file name]\n");
+    printf("[!set_hatch_scheme] Name is a string for built-in schemes; File name is a file name indicator"
            " (beginning with '@'), which causes the scheme file being load\n");
     return;
   }
@@ -2266,8 +2275,8 @@ void parse_cb_set_color_scheme(parse_t *parse, plot_t *plot) {
     error_exit("Function \"set_color_scheme\" takes at least 1 argument\n");
   } else if(next_type == PARSE_ARG_QMARK) {
     parse_expect_char(parse, '?');
-    printf("[set_color_scheme] Usage: set_color_scheme [name]/[file name]\n");
-    printf("[set_color_scheme] Name is a string for built-in schemes; File name is a file name indicator"
+    printf("[!set_color_scheme] Usage: !set_color_scheme [name]/[file name]\n");
+    printf("[!set_color_scheme] Name is a string for built-in schemes; File name is a file name indicator"
            " (beginning with '@'), which causes the scheme file being load\n");
     return;
   }
@@ -2312,8 +2321,8 @@ void parse_cb_test_hatch(parse_t *parse, plot_t *plot) {
     error_exit("Function \"test_hatch\" takes 1 argument\n");
   } else if(parse_next_arg(parse) == PARSE_ARG_QMARK) {
     parse_expect_char(parse, '?');
-    printf("[test_hatch] Usage: test_hatch [file name]\n");
-    printf("[test_hatch] The optional file name, if given, will override an existing file name. Otherwise, the "
+    printf("[!test_hatch] Usage: !test_hatch [file name]\n");
+    printf("[!test_hatch] The optional file name, if given, will override an existing file name. Otherwise, the "
            "existing file name will be used. If neither is present, error will be reported\n");
     return;
   }
@@ -2334,8 +2343,8 @@ void parse_cb_test_color(parse_t *parse, plot_t *plot) {
     error_exit("Function \"test_color\" takes 1 argument\n");
   } else if(parse_next_arg(parse) == PARSE_ARG_QMARK) {
     parse_expect_char(parse, '?');
-    printf("[test_color] Usage: test_color [file name]\n");
-    printf("[test_color] The optional file name, if given, will override an existing file name. Otherwise, the "
+    printf("[!test_color] Usage: !test_color [file name]\n");
+    printf("[!test_color] The optional file name, if given, will override an existing file name. Otherwise, the "
            "existing file name will be used. If neither is present, error will be reported\n");
     return;
   }
