@@ -101,6 +101,7 @@
 !reset ?;
 !save_fig ?;
 !save_legend ?;
+!create_fig ?;
 
 +bar_group;
 #+abcdefg;

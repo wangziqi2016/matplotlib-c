@@ -2218,6 +2218,12 @@ void parse_cb_set_hatch_scheme(parse_t *parse, plot_t *plot) {
   int next_type = parse_next_arg(parse);
   if(next_type == PARSE_ARG_NONE) {
     error_exit("Function \"set_hatch_scheme\" takes at least 1 argument\n");
+  } else if(next_type == PARSE_ARG_QMARK) {
+    parse_expect_char(parse, '?');
+    printf("[set_hatch_scheme] Usage: set_hatch_scheme [name]/[file name]\n");
+    printf("[set_hatch_scheme] Name is a string for built-in schemes; File name is a file name indicator"
+           " (beginning with '@'), which causes the scheme file being load\n");
+    return;
   }
   plot_param_t *param = &plot->param;
   // Free current one if there is one
