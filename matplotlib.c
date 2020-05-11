@@ -1646,7 +1646,12 @@ void parse_cb_bar_type(parse_t *parse, plot_t *plot) {
     error_exit("Entity \"bar_type\" requires at least a label\n");
   } else if(next_arg == PARSE_ARG_QMARK) {
     parse_expect_char(parse, '?');
-    printf("[+bar_type] Usage: +bar_type");
+    printf("[+bar_type] Usage: +bar_type [label] [color] [hatch]\n");
+    printf("[+bar_type] The mandatory label is a unique string giving an identifier of the type, which can be used to "
+           "assign the type to a bar later.\n");
+    printf("Both color and hatch are optional. Ig not given, the color and/or hatch from the corresponding schemes will"
+           "be used to initialize the type object. If given, they are of string type and must be following the color "
+           "and hatch encoding. Empty strings will be ignored as placeholders\n");
     return;
   }
   // Reading the label
