@@ -904,7 +904,7 @@ void plot_save_fig(plot_t *plot, const char *filename) {
     }
     buf_printf(buf, ")\n");
   } else {
-    buf_printf("plot.xticks([])\n");
+    buf_printf(buf, "plot.xticks([])\n");
   }
   if(param->ytick_enabled == 1) {
     buf_printf(buf, "if len(cmatplotlib_yticks) != 0:\n");
@@ -914,8 +914,8 @@ void plot_save_fig(plot_t *plot, const char *filename) {
       buf_printf(buf, ", rotation=%d", param->ytick_rotation);
     }
     buf_printf(buf, ")\n");
-  } else {
-    buf_printf("plot.yticks([])\n");
+  } else { 
+    buf_printf(buf, "plot.yticks([])\n");
   }
   // Set X/Y limits
   if(param->xlim_left != INFINITY) buf_printf(buf, "ax.set_xlim(left=%f)\n", param->xlim_left);

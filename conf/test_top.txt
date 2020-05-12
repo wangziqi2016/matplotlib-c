@@ -53,7 +53,9 @@
 .xtick_rotation = 45;
 .bar_text_rotation = 90;
 
-.dry_run = "enabled"; # This shows the graph
+.dry_run = "disabled"; # This shows the graph
+.ytick_enabled = 0;
+#.xtick_enabled = 0;
 !test_color "test_color_2.pdf";
 !test_hatch "test_hatch_1.pdf";
 
