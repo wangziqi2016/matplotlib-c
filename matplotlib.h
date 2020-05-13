@@ -349,7 +349,9 @@ void plot_print(plot_t *plot, int verbose);
 typedef struct {
   const char *key;
   int value;
-} parse_arg_mapping_entry_t;
+} parse_mapped_arg_entry_t;
+
+extern parse_mapped_arg_entry_t parse_mapped_arg_direction[];
 
 // Generates parse_cb_entry_t entry
 #define PARSE_GEN_CB(name, func) {name, {.cb = func}}
@@ -453,7 +455,7 @@ void parse_expect_char_opt(parse_t *parse, char ch); // Read an optional char an
 #define PARSE_ARG_QMARK  5 // This is specifically used to print help string
 
 int parse_next_arg(parse_t *parse); // Argument handling
-int parse_get_mapped_arg(parse_t *parse, parse_arg_mapping_entry_t *table); // Argument mapping from str to int
+int parse_get_mapped_arg(parse_t *parse, parse_mapped_arg_entry_t *table); // Argument mapping from str to int
 
 void parse_sort_cb(parse_t *parse, parse_cb_entry_t *table, int count);
 parse_cb_entry_t parse_find_cb_entry(parse_t *parse, parse_cb_entry_t *table, int count, const char *name);

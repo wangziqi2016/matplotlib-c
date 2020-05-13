@@ -1638,7 +1638,7 @@ int parse_next_arg(parse_t *parse) {
 // Read an argument in either integral or string form
 // If it is integer, then we just 
 // The arg is mandatory. Report error and exit if not found or type error
-int parse_get_mapped_arg(parse_t *parse, parse_arg_mapping_entry_t *table) {
+int parse_get_mapped_arg(parse_t *parse, parse_mapped_arg_entry_t *table) {
   int next_arg = parse_next_arg(parse);
 }
 
@@ -1888,7 +1888,7 @@ parse_cb_entry_t parse_cb_top_props[] = {
 const int parse_cb_top_props_count = sizeof(parse_cb_top_props) / sizeof(parse_cb_entry_t);
 
 // Mapping axis direction string to integer
-parse_arg_mapping_entry_t parse_arg_mapping_direction[] = {
+parse_mapped_arg_entry_t parse_mapped_arg_direction[] = {
   {"in", PLOT_DIRECTION_INSIDE},
   {"out", PLOT_DIRECTION_OUTSIDE},
   {"inout", PLOT_DIRECTION_BOTH},
