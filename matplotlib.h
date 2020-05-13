@@ -229,6 +229,10 @@ typedef struct {
   vec_t *bars;            // A vector of bars
 } bargrp_t;
 
+bargrp_t *bargrp_init(const char *name);
+void bargrp_free(bargrp_t *grp);
+inline static void bargrp_add_bar(bargrp_t *grp, bar_t *bar) { vec_append(grp->bars, bar); }
+
 //* plot_t - Plotting function
 
 // Maximum size of legend pos (including trailing zero)
