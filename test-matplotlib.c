@@ -202,8 +202,9 @@ void test_vec() {
 void test_bargrp() {
   printf("========== test_bargrp ==========\n");
   bargrp_t *grp = bargrp_init("Group Test");
+  const int count = 17;
   // Add 10 bar instances to the group
-  for(int i = 0;i < 10;i++) {
+  for(int i = 0;i < count;i++) {
     char buf[32];
     snprintf(buf, 32, "Bar #%d", i);
     bar_t *bar = bar_init();
@@ -212,6 +213,7 @@ void test_bargrp() {
   }
   // Print in verbose mode, all bars shoud be present
   bargrp_print(grp, 1);
+  assert(bargrp_count(grp) == count);
   // This should free all bars
   bargrp_free(grp);
   printf("Pass\n");
