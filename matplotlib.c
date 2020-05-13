@@ -996,7 +996,16 @@ void plot_draw_tick(plot_t *plot) {
 void plot_draw_grid(plot_t *plot) {
   buf_t *buf = plot->buf;
   plot_param_t *param = &plot->param;
-
+  if(param->xgrid_enabled == 1) {
+    buf_printf("plot.grid(b=True, axis='x'");
+    // Here goes X grid customization
+    buf_printf(")\n");
+  }
+  if(param->ygrid_enabled == 1) {
+    buf_printf("plot.grid(b=True, axis='y'");
+    // Here goes Y grid customization
+    buf_printf(")\n");
+  }
   return;
 }
 
@@ -1017,7 +1026,8 @@ void plot_save_fig(plot_t *plot, const char *filename) {
   buf_t *buf = plot->buf;
   plot_param_t *param = &plot->param;
   plot_draw_tick(plot);
-  
+  plot_draw_grid(plot);
+  plot_draw_limit(plot);
   // Print draw command and execute script
   if(param->dry_run == PLOT_DRY_RUN_DISABLED) {
     // Pass the file name
