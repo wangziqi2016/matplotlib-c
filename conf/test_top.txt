@@ -57,7 +57,7 @@
 .ytick_enabled = 0;
 .xtick_enabled = 1;
 .xtick_length = 20;
-.xtick_direction = 2;
+.xtick_direction = "both";
 !test_color "test_color_2.pdf";
 !test_hatch "test_hatch_1.pdf";
 
