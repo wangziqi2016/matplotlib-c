@@ -1888,6 +1888,10 @@ parse_cb_entry_t parse_cb_top_props[] = {
   PARSE_GEN_PROP("ytick_direction", PARSE_YTICK_DIRECTION),
   PARSE_GEN_PROP("ytick_font_size", PARSE_YTICK_FONT_SIZE),
   PARSE_GEN_PROP("ytick_rotation", PARSE_YTICK_ROTATION),
+  // X grid
+  PARSE_GEN_PROP("xgrid_enabled", PARSE_XGRID_ENABLED),
+  // Y grid
+  PARSE_GEN_PROP("ygrid_enabled", PARSE_YGRID_ENABLED),
   // Title
   PARSE_GEN_PROP("xtitle_font_size", PARSE_XTITLE_FONT_SIZE),
   PARSE_GEN_PROP("ytitle_font_size", PARSE_YTITLE_FONT_SIZE),
@@ -1975,6 +1979,7 @@ void parse_top_property(parse_t *parse, plot_t *plot) {
       plot_set_legend_pos(plot, pos); // Copies the string (report error if too long)
       free(pos); // We already copied the pos string into param
     } break;
+    // X ticks
     case PARSE_XTICK_ENABLED: {
       plot->param.xtick_enabled = (int)parse_get_int64_range(parse, 0, 1);
     } break;
@@ -1995,6 +2000,7 @@ void parse_top_property(parse_t *parse, plot_t *plot) {
     case PARSE_XTICK_ROTATION: {
       plot->param.xtick_rotation = (int)parse_get_int64_range(parse, 0, 359);
     } break;
+    // Y ticks
     case PARSE_YTICK_ENABLED: {
       plot->param.ytick_enabled = (int)parse_get_int64_range(parse, 0, 1);
     } break;
@@ -2015,6 +2021,13 @@ void parse_top_property(parse_t *parse, plot_t *plot) {
     case PARSE_YTICK_ROTATION: {
       plot->param.ytick_rotation = (int)parse_get_int64_range(parse, 0, 359L);
     } break;
+    case PARSE_XGRID_ENABLED: {
+      plot->param.xgrid_enabled = (int)parse_get_int64_range(parse, 0, 1);
+    } break;
+    case PARSE_YGRID_ENABLED: {
+      plot->param.ygrid_enabled = (int)parse_get_int64_range(parse, 0, 1);
+    } break;
+    // XY Title
     case PARSE_XTITLE_FONT_SIZE: {
       plot->param.xtitle_font_size = (int)parse_get_int64_range(parse, 1, PARSE_INT64_MAX);
     } break;
@@ -2621,6 +2634,7 @@ void parse_print_prop(parse_t *parse, plot_t *plot, buf_t *buf, const char *name
       parse_print_check_spec(parse, PARSE_SPEC_STR, spec_ch, name);
       buf_printf(buf, fmt, plot->param.legend_pos);
     } break;
+    // X tick
     case PARSE_XTICK_ENABLED: {
       parse_print_check_spec(parse, PARSE_SPEC_INT32, spec_ch, name);
       buf_printf(buf, fmt, plot->param.xtick_enabled);
@@ -2641,6 +2655,7 @@ void parse_print_prop(parse_t *parse, plot_t *plot, buf_t *buf, const char *name
       parse_print_check_spec(parse, PARSE_SPEC_INT32, spec_ch, name);
       buf_printf(buf, fmt, plot->param.xtick_rotation);
     } break;
+    // Y tick
     case PARSE_YTICK_ENABLED: {
       parse_print_check_spec(parse, PARSE_SPEC_INT32, spec_ch, name);
       buf_printf(buf, fmt, plot->param.ytick_enabled);
@@ -2661,6 +2676,15 @@ void parse_print_prop(parse_t *parse, plot_t *plot, buf_t *buf, const char *name
       parse_print_check_spec(parse, PARSE_SPEC_INT32, spec_ch, name);
       buf_printf(buf, fmt, plot->param.ytick_rotation);
     } break;
+    case PARSE_XGRID_ENABLED: {
+      parse_print_check_spec(parse, PARSE_SPEC_INT32, spec_ch, name);
+      buf_printf(buf, fmt, plot->param.xgrid_enabled);
+    } break;
+    case PARSE_YGRID_ENABLED: {
+      parse_print_check_spec(parse, PARSE_SPEC_INT32, spec_ch, name);
+      buf_printf(buf, fmt, plot->param.ygrid_enabled);
+    } break;
+    // XY Title
     case PARSE_XTITLE_FONT_SIZE: {
       parse_print_check_spec(parse, PARSE_SPEC_INT32, spec_ch, name);
       buf_printf(buf, fmt, plot->param.xtitle_font_size);
