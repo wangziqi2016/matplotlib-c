@@ -570,18 +570,22 @@ void test_parse_sort() {
 void test_parse_mapped_arg() {
   printf("========== test_parse_mapped_arg ==========\n");
   parse_mapped_arg_entry_t table[] = {
-    {"key1", 100}, {"key2", 200}, {"key3", 300}, {"key4", 400},
+    {"key 1", 100}, {"key 2", 200}, {"key 3", 300}, {"key 4", 400},
     PARSE_MAPPED_ARG_END,
   };
   for(int i = 1;i <= 4;i++) {
     char buf[16];
-    snprintf(buf, 16, "key %d", i);
+    snprintf(buf, 16, "\"key %d\"", i);
     parse_t *parse = parse_init(buf);
     int value = parse_get_mapped_arg(parse, table);
     printf("Iter %d value %d\n", i, value);
     assert(value == i * 100);
     parse_free(parse);
   }
+  // Uncomment this to reveal error
+  //parse_t *parse = parse_init("\"invalid key\"");
+  //int value = parse_get_mapped_arg(parse, table);
+  //parse_free(parse);
   printf("Pass\n");
   return;
 }
