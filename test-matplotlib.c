@@ -498,6 +498,7 @@ void test_parse_skip_space() {
   ret = parse_get_ident(parse);
   printf("ret = \"%s\"\n", ret);
   assert(streq(ret, "ident1") == 1);
+  free(ret);
   parse_skip_space(parse);
   assert(parse_peek(parse) == '\0');
   parse_free(parse);

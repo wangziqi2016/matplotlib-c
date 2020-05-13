@@ -1967,6 +1967,7 @@ void parse_top_property(parse_t *parse, plot_t *plot) {
           parse_report_pos(parse);
           error_exit("Invalid string value for property \"dry_run\"\n");
         }
+        free(dry_run_str);
       }
       if(prev == PLOT_DRY_RUN_DISABLED && plot->param.dry_run != PLOT_DRY_RUN_DISABLED) {
         if(plot->param.info == 1) printf("[parse] Dry run mode enabled; Scripts will not be actually executed\n");
