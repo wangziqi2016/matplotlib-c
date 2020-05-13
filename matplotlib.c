@@ -862,6 +862,13 @@ void plot_free(plot_t *plot) {
     bar_type_free((bar_type_t *)vec_at(plot->bar_types, i));
   }
   vec_free(plot->bar_types);
+  // Free bar groups and the vector
+  for(int i = 0;i < vec_count(plot->bargrps);i++) {
+    bargrp_free(vec_at(plot->bargrps, i));
+  }
+  vec_free(plot->bargrps);
+  // Free current bar group
+  if(plot->curr_bargrp != NULL) bargrp_free(plot->curr_bargrp);
   // Note that parse can be NULL if it is not initialized
   if(plot->parse != NULL) parse_free(plot->parse);
   if(plot->xtitle) free(plot->xtitle);
