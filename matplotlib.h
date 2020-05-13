@@ -269,6 +269,9 @@ typedef struct {
   int ytick_direction;
   int ytick_font_size;
   int ytick_rotation;
+  // Grid
+  int xgrid_enabled;
+  int ygrid_enabled;
   // Title
   int xtitle_font_size;
   int ytitle_font_size;
@@ -375,26 +378,36 @@ enum {
   PARSE_LEGEND_ROWS,
   PARSE_LEGEND_FONT_SIZE,
   PARSE_LEGEND_POS,
+
   PARSE_XTICK_ENABLED,
   PARSE_XTICK_LENGTH,
   PARSE_XTICK_DIRECTION,
   PARSE_XTICK_FONT_SIZE,
   PARSE_XTICK_ROTATION,
+
   PARSE_YTICK_ENABLED,
   PARSE_YTICK_LENGTH,
   PARSE_YTICK_DIRECTION,
   PARSE_YTICK_FONT_SIZE,
   PARSE_YTICK_ROTATION,
+
+  PARSE_XGRID_ENABLED,
+
+  PARSE_YGRID_ENABLED,
+
   PARSE_XTITLE_FONT_SIZE,
   PARSE_YTITLE_FONT_SIZE,
+
   PARSE_BAR_TEXT_FONT_SIZE,
   PARSE_BAR_TEXT_ROTATION,
   PARSE_BAR_TEXT_DECIMALS,
   PARSE_BAR_TEXT_RTRIM,
+
   PARSE_XLIM_LEFT,
   PARSE_XLIM_RIGHT,
   PARSE_YLIM_TOP,
   PARSE_YLIM_BOTTOM,
+
   PARSE_DRY_RUN,     // py_t object
   PARSE_INFO,        // Whether to print information
 };

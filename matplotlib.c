@@ -763,6 +763,8 @@ plot_param_t default_param = {
   "best",    // Legend pos; Alternatives are: {lower, center, upper} x {left, center, right} or "center"
   1, INFINITY, PLOT_DIRECTION_INSIDE, 24, 0,  // x tick enabled, length, dir, font size, rotation
   1, INFINITY, PLOT_DIRECTION_INSIDE, 24, 0,  // y tick enabled, length, dir, font size, rotation
+  0,         // x grid enabled
+  0,         // y grid enabled
   28, 28,    // x/y title font size
   26, 90,    // bar text size, rotation
   2, 1,      // bar text decimals, rtrim
@@ -793,6 +795,10 @@ void plot_param_print(plot_param_t *param, int verbose) {
     param->xtick_enabled, param->xtick_length, param->xtick_direction, param->xtick_font_size, param->xtick_rotation);
   printf("[param ytick] enabled %d len %f dir %d font %d rot %d\n", 
     param->ytick_enabled, param->ytick_length, param->ytick_direction, param->ytick_font_size, param->ytick_rotation);
+  printf("[param xgrid] enabled %d\n",
+    param->xgrid_enabled);
+  printf("[param ygrid] enabled %d\n",
+    param->ygrid_enabled);
   printf("[param bar_text] font %d rotation %d\n", param->bar_text_font_size, param->bar_text_rotation);
   printf("[param bar_text] decimals %d rtrim %d\n", 
     param->bar_text_decimals, param->bar_text_rtrim);
