@@ -789,10 +789,10 @@ void plot_param_print(plot_param_t *param, int verbose) {
     param->legend_font_size, param->legend_rows, param->legend_pos);
   printf("[param title] x font %d y font %d\n", 
     param->xtitle_font_size, param->ytitle_font_size);
-  printf("[param xtick] enabled %d font %d rot %d\n", 
-    param->xtick_enabled, param->xtick_font_size, param->xtick_rotation);
-  printf("[param ytick] enabled %d font %d rot %d\n", 
-    param->ytick_enabled, param->ytick_font_size, param->ytick_rotation);
+  printf("[param xtick] enabled %d len %f font %d rot %d\n", 
+    param->xtick_enabled, param->xtick_length, param->xtick_font_size, param->xtick_rotation);
+  printf("[param ytick] enabled %d len %f font %d rot %d\n", 
+    param->ytick_enabled, param->ytick_length, param->ytick_font_size, param->ytick_rotation);
   printf("[param bar_text] font %d rotation %d\n", param->bar_text_font_size, param->bar_text_rotation);
   printf("[param bar_text] decimals %d rtrim %d\n", 
     param->bar_text_decimals, param->bar_text_rtrim);
