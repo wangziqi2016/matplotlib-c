@@ -761,8 +761,8 @@ plot_param_t default_param = {
   1,         // legend_rows
   28,        // legend_font_size
   "best",    // Legend pos; Alternatives are: {lower, center, upper} x {left, center, right} or "center"
-  1, INFINITY, 24, 0,  // x tick enabled, length, font size, rotation
-  1, INFINITY, 24, 0,  // y tick enabled, length, font size, rotation
+  1, INFINITY, 1, 24, 0,  // x tick enabled, length, inside, font size, rotation
+  1, INFINITY, 1, 24, 0,  // y tick enabled, length, inside, font size, rotation
   28, 28,    // x/y title font size
   26, 90,    // bar text size, rotation
   2, 1,      // bar text decimals, rtrim
@@ -789,10 +789,10 @@ void plot_param_print(plot_param_t *param, int verbose) {
     param->legend_font_size, param->legend_rows, param->legend_pos);
   printf("[param title] x font %d y font %d\n", 
     param->xtitle_font_size, param->ytitle_font_size);
-  printf("[param xtick] enabled %d len %f font %d rot %d\n", 
-    param->xtick_enabled, param->xtick_length, param->xtick_font_size, param->xtick_rotation);
-  printf("[param ytick] enabled %d len %f font %d rot %d\n", 
-    param->ytick_enabled, param->ytick_length, param->ytick_font_size, param->ytick_rotation);
+  printf("[param xtick] enabled %d len %f dir %d font %d rot %d\n", 
+    param->xtick_enabled, param->xtick_length, param->xtick_inside, param->xtick_font_size, param->xtick_rotation);
+  printf("[param ytick] enabled %d len %f dir %d font %d rot %d\n", 
+    param->ytick_enabled, param->ytick_length, param->ytick_inside, param->ytick_font_size, param->ytick_rotation);
   printf("[param bar_text] font %d rotation %d\n", param->bar_text_font_size, param->bar_text_rotation);
   printf("[param bar_text] decimals %d rtrim %d\n", 
     param->bar_text_decimals, param->bar_text_rtrim);
@@ -1842,11 +1842,13 @@ parse_cb_entry_t parse_cb_top_props[] = {
   // X Ticks
   PARSE_GEN_PROP("xtick_enabled", PARSE_XTICK_ENABLED),
   PARSE_GEN_PROP("xtick_length", PARSE_XTICK_LENGTH),
+  PARSE_GEN_PROP("xtick_inside", PARSE_XTICK_INSIDE),
   PARSE_GEN_PROP("xtick_font_size", PARSE_XTICK_FONT_SIZE),
   PARSE_GEN_PROP("xtick_rotation", PARSE_XTICK_ROTATION),
   // Y Ticks
   PARSE_GEN_PROP("ytick_enabled", PARSE_YTICK_ENABLED),
   PARSE_GEN_PROP("ytick_length", PARSE_YTICK_LENGTH),
+  PARSE_GEN_PROP("ytick_inside", PARSE_YTICK_INSIDE),
   PARSE_GEN_PROP("ytick_font_size", PARSE_YTICK_FONT_SIZE),
   PARSE_GEN_PROP("ytick_rotation", PARSE_YTICK_ROTATION),
   // Title
