@@ -847,6 +847,7 @@ plot_t *plot_init() {
   plot->py = py_init();
   plot->buf = buf_init();
   plot->bar_types = vec_init();
+  plot->bargrps = vec_init();
   buf_append(plot->buf, plot_preamble);
   // Init param
   memcpy(&plot->param, &default_param, sizeof(plot_param_t));
@@ -1220,13 +1221,30 @@ void plot_print(plot_t *plot, int verbose) {
   // Print param
   plot_param_print(&plot->param, verbose);
   // Print bar types
-  printf("[plot] bar types %d\n", vec_count(plot->bar_types));
+  printf("[plot] Bar types %d\n", vec_count(plot->bar_types));
   if(verbose == 1) {
     for(int i = 0;i < vec_count(plot->bar_types);i++) {
       bar_type_t *type = (bar_type_t *)vec_at(plot->bar_types, i);
       bar_type_print(type);
     }
   }
+  // Print current bar group
+  if(plot->curr_bargrp != NULL) {
+    printf("[plot] Current active bar group:\n");
+    bargrp_print(plot->curr_bargrp, verbose);
+  } else {
+    printf("[plot] There is no currently active bar group\n");
+  }
+  // Print previously added bar groups
+  int bar_count = 0;
+  for(int i = 0;i < vec_count(plot->bargrps);i++) {
+    bargrp_t *grp = vec_at(plot->bargrps, i);
+    if(verbose == 1) {
+      bargrp_print(grp, verbose);
+    } 
+    bar_count += bargrp_count(grp);
+  }
+  printf("[plot] Bar groups: size %d total bars %d\n", vec_count(plot->bargrps), bar_count);
   // Optionally print buffer content
   buf_print(plot->buf, verbose);
   return;
