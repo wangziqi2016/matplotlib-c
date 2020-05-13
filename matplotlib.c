@@ -1947,7 +1947,17 @@ void parse_top_property(parse_t *parse, plot_t *plot) {
       plot->param.xtick_length = parse_get_double_range(parse, 0.0, PARSE_DOUBLE_MAX);
     } break;
     case PARSE_XTICK_DIRECTION: {
-      plot->param.xtick_direction = (int)parse_get_int64_range(parse, 0, 2);
+      int next_arg = parse_next_arg(parse);
+      if(next_arg == PARSE_ARG_NUM) {
+        plot->param.xtick_direction = (int)parse_get_int64_range(parse, 0, 2);
+      } else if(next_arg == PARSE_ARG_STR) {
+        char *s = parse_get_str(parse);
+        if(streq(s, "in") == 1) plot->param.xtick_direction = PLOT_DIRECTION_INSIDE;
+        else if(streq(s, "out") == 1) plot->param.xtick_direction = PLOT_DIRECTION_OUTSIDE;
+        else if(streq(s, "both") == 1) plot->param.xtick_direction = PLOT_DIRECTION_BOTH;
+        else error_exit("Invalid direction string: \"%s\"\n", s);
+        free(s);
+      }
     } break;
     case PARSE_XTICK_FONT_SIZE: {
       plot->param.xtick_font_size = (int)parse_get_int64_range(parse, 1, PARSE_INT64_MAX);
