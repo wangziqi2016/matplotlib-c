@@ -346,10 +346,13 @@ void plot_print(plot_t *plot, int verbose);
 //* parse_* - String processing
 
 // String argument mapping - used to read arguments that can be passed using both int and str
+// The table is terminated with an empty entry with key setting to NULL
 typedef struct {
   const char *key;
   int value;
 } parse_mapped_arg_entry_t;
+
+#define PARSE_MAPPED_ARG_END {NULL, 0}
 
 extern parse_mapped_arg_entry_t parse_mapped_arg_direction[];
 
