@@ -971,6 +971,8 @@ void plot_draw_tick(plot_t *plot) {
   } else { 
     buf_printf(buf, "plot.yticks([])\n");
   }
+  //printf("****** BUFFER CONTENT\n");
+  //printf("%s\n", buf_c_str(buf));
   return;
 }
 

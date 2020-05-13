@@ -53,9 +53,10 @@
 .xtick_rotation = 45;
 .bar_text_rotation = 90;
 
-.dry_run = "enabled"; # This shows the graph
+.dry_run = "disabled"; # This shows the graph
 .ytick_enabled = 0;
-#.xtick_enabled = 0;
+.xtick_enabled = 1;
+.xtick_length = 0;
 !test_color "test_color_2.pdf";
 !test_hatch "test_hatch_1.pdf";
 
@@ -112,5 +113,8 @@
 
 .info = "disabled";
 .dry_run = "enabled";
-!save_legend;
-!save_fig;
+#!save_legend;
+#!save_fig;
+
+!print "X TICK LENGTH = %f\n" xtick_length;
+!print "Y TICK LENGTH = %f\n" ytick_length;

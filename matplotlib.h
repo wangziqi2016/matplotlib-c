@@ -257,10 +257,12 @@ typedef struct {
   // Tick
   int xtick_enabled;         // This turns off both labels and tick
   double xtick_length;       // Length of the tick - set to 0.0 to turn off. Set to INFINITY uses default
+  int xtick_inside;          // Whether the tick stays inside. Default to 1
   int xtick_font_size;
   int xtick_rotation;
   int ytick_enabled;         // Same as above
   double ytick_length;
+  int ytick_inside;
   int ytick_font_size;
   int ytick_rotation;
   // Title
@@ -360,10 +362,12 @@ enum {
   PARSE_LEGEND_POS,
   PARSE_XTICK_ENABLED,
   PARSE_XTICK_LENGTH,
+  PARSE_XTICK_INSIDE,
   PARSE_XTICK_FONT_SIZE,
   PARSE_XTICK_ROTATION,
   PARSE_YTICK_ENABLED,
   PARSE_YTICK_LENGTH,
+  PARSE_YTICK_INSIDE,
   PARSE_YTICK_FONT_SIZE,
   PARSE_YTICK_ROTATION,
   PARSE_XTITLE_FONT_SIZE,
