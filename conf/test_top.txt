@@ -54,10 +54,12 @@
 .bar_text_rotation = 90;
 
 .dry_run = "disabled"; # This shows the graph
-.ytick_enabled = 0;
+.ytick_enabled = 1;
 .xtick_enabled = 1;
 .xtick_length = 20;
 .xtick_direction = "both";
+.xgrid_enabled = 1;
+.ygrid_enabled = 1;
 !test_color "test_color_2.pdf";
 !test_hatch "test_hatch_1.pdf";
 

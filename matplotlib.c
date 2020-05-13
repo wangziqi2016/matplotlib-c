@@ -997,14 +997,16 @@ void plot_draw_grid(plot_t *plot) {
   buf_t *buf = plot->buf;
   plot_param_t *param = &plot->param;
   if(param->xgrid_enabled == 1) {
-    buf_printf("plot.grid(b=True, axis='x'");
+    if(param->xtick_enabled == 0) printf("[plot] X tick is disabled. X grid will not be shown\n");
+    buf_printf(buf, "plot.grid(b=True, axis='x'");
     // Here goes X grid customization
-    buf_printf(")\n");
+    buf_printf(buf, ")\n");
   }
   if(param->ygrid_enabled == 1) {
-    buf_printf("plot.grid(b=True, axis='y'");
+    if(param->ytick_enabled == 0) printf("[plot] Y tick is disabled. Y grid will not be shown\n");
+    buf_printf(buf, "plot.grid(b=True, axis='y'");
     // Here goes Y grid customization
-    buf_printf(")\n");
+    buf_printf(buf, ")\n");
   }
   return;
 }
