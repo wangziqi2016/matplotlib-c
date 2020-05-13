@@ -879,6 +879,7 @@ void plot_free(plot_t *plot) {
   // Free color and hatch scheme if they are allocated
   if(param->color_scheme != NULL) color_scheme_free(param->color_scheme);
   if(param->hatch_scheme != NULL) hatch_scheme_free(param->hatch_scheme);
+  free(plot);
   return;
 }
 
@@ -1987,6 +1988,7 @@ void parse_top_property(parse_t *parse, plot_t *plot) {
           parse_report_pos(parse);
           error_exit("Invalid string value for property \"info\"\n");
         }
+        free(info_str);
       }
     } break;
     default: {
