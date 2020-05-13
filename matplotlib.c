@@ -930,10 +930,8 @@ void plot_create_fig(plot_t *plot, double width, double height) {
   return;
 }
 
-void plot_save_fig(plot_t *plot, const char *filename) {
-  if(plot->fig_created == 0) {
-    error_exit("The figure has not been created yet\n");
-  }
+// Generates tick plotting code to the buffer using tick parameters
+void plot_draw_tick(plot_t *plot) {
   buf_t *buf = plot->buf;
   plot_param_t *param = &plot->param;
   // Set x tick and y tick
@@ -960,6 +958,16 @@ void plot_save_fig(plot_t *plot, const char *filename) {
   } else { 
     buf_printf(buf, "plot.yticks([])\n");
   }
+  return;
+}
+
+void plot_save_fig(plot_t *plot, const char *filename) {
+  if(plot->fig_created == 0) {
+    error_exit("The figure has not been created yet\n");
+  }
+  buf_t *buf = plot->buf;
+  plot_param_t *param = &plot->param;
+  plot_draw_tick(plot);
   // Set X/Y limits
   if(param->xlim_left != INFINITY) buf_printf(buf, "ax.set_xlim(left=%f)\n", param->xlim_left);
   if(param->xlim_right != INFINITY) buf_printf(buf, "ax.set_xlim(right=%f)\n", param->xlim_right);

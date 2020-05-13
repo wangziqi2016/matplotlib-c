@@ -320,6 +320,7 @@ void plot_add_bar_type(plot_t *plot, const char *label, uint32_t color, char hat
 bar_type_t *plot_find_bar_type(plot_t *plot, const char *label);
 
 void plot_create_fig(plot_t *plot, double width, double height);
+void plot_draw_tick(plot_t *plot);
 void plot_save_fig(plot_t *plot, const char *filename);
 void plot_save_legend(plot_t *plot, const char *filename);
 void plot_save_color_test(plot_t *plot, const char *filename);
