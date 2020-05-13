@@ -944,15 +944,28 @@ void plot_draw_tick(plot_t *plot) {
       buf_printf(buf, ", rotation=%d", param->xtick_rotation);
     }
     buf_printf(buf, ")\n");
+    // Print length
+    buf_printf(buf, "ax.tick_params(axis='x', which='both'");
+    if(param->xtick_length != INFINITY) {
+      buf_printf(buf, ", length=%f", param->xtick_length);
+    }
+    buf_printf(buf, ")\n");
   } else {
     buf_printf(buf, "plot.xticks([])\n");
   }
   if(param->ytick_enabled == 1) {
+    // Print Y label
     buf_printf(buf, "if len(cmatplotlib_yticks) != 0:\n");
     buf_printf(buf, "  plot.yticks(cmatplotlib_yticks, cmatplotlib_ytick_labels");
     buf_printf(buf, ", fontsize=%d", param->ytick_font_size);
     if(param->xtick_rotation != 0) {
       buf_printf(buf, ", rotation=%d", param->ytick_rotation);
+    }
+    buf_printf(buf, ")\n");
+    // Print length
+    buf_printf(buf, "ax.tick_params(axis='y', which='both'");
+    if(param->ytick_length != INFINITY) {
+      buf_printf(buf, ", length=%f", param->ytick_length);
     }
     buf_printf(buf, ")\n");
   } else { 
