@@ -1635,11 +1635,25 @@ int parse_next_arg(parse_t *parse) {
   return -1;
 }
 
-// Read an argument in either integral or string form
-// If it is integer, then we just 
+// Read an argument in string form. The string is mapped to an integer using the given table
 // The arg is mandatory. Report error and exit if not found or type error
 int parse_get_mapped_arg(parse_t *parse, parse_mapped_arg_entry_t *table) {
   int next_arg = parse_next_arg(parse);
+  if(next_arg == PARSE_ARG_STR) {
+    char *s = parse_get_str(parse);
+    while(table->key != NULL) {
+      if(streq(table->key, s) == 1) {
+        free(s);
+        return table->value;
+      }
+      table++;
+    }
+    parse_report_pos(parse);
+    error_exit("Invalid string argument: \"%s\"\n", s);
+  } else {
+    parse_report_pos(parse);
+    error_exit("Invalid argument. Expecting a string.\n");
+  }
 }
 
 // Sort a given table
@@ -1892,6 +1906,7 @@ parse_mapped_arg_entry_t parse_mapped_arg_direction[] = {
   {"in", PLOT_DIRECTION_INSIDE},
   {"out", PLOT_DIRECTION_OUTSIDE},
   {"inout", PLOT_DIRECTION_BOTH},
+  PARSE_MAPPED_ARG_END,
 };
 
 // The "." has been removed from the stream
