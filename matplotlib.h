@@ -302,6 +302,10 @@ typedef struct {
   char *ytitle;                        // Y title; Specified at top level
   char *fig_filename;                  // File name to save the figure
   char *legend_filename;               // File name to save legend, if there is one (optional)
+  // Bar groups. If not NULL then we are in bar group mode
+  bargrp_t *curr_bargrp;
+  // List of bar groups we already added
+  vec_t *bargrps;
 } plot_t;
 
 plot_t *plot_init();
