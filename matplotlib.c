@@ -720,6 +720,19 @@ void bar_print(bar_t *bar) {
   return;
 }
 
+//* bargrp_t
+
+bargrp_t *bargrp_init(const char *name) {
+  bargrp_t *grp = (bargrp_t *)malloc(sizeof(bargrp_t));
+  SYSEXPECT(grp != NULL);
+  memset(grp, 0x00, sizeof(bargrp_t));
+  grp->name = (char *)malloc(strlen(name) + 1);
+  SYSEXPECT(grp->name != NULL);
+  strcpy(grp->name, name);
+  grp->bars = vec_init();
+  return grp;
+}
+
 //* plot_t
 
 plot_param_t default_param = {
