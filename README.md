@@ -89,6 +89,8 @@ within a single line.
 | ytick_direction | Direction of ticks. Can be integer or one of the following: "in", "out", "both" | int\[0, 2\] or string |
 | ytick_font_size | Font size for Y axis ticks | int\[1, +inf\] |
 | ytick_rotation | Rotation for Y axis ticks | int\[0, 359\] |
+| xgrid_enabled | Enabling X (vertical) grid | int\[0, 1\] |
+| ygrid_enabled | Enabling Y (horizontal) grid | int\[0, 1\] |
 | xtitle_font_size | Font size for X axis title | int\[1, +inf\] |
 | ytitle_font_size | Font size for Y axis title | int\[1, +inf\] |
 | bar_text_font_size | Font size for bar texts | int\[1, +inf\] |
