@@ -992,6 +992,24 @@ void plot_draw_tick(plot_t *plot) {
   return;
 }
 
+// Generates grid code before the plot is saved
+void plot_draw_grid(plot_t *plot) {
+  buf_t *buf = plot->buf;
+  plot_param_t *param = &plot->param;
+
+  return;
+}
+
+void plot_draw_limit(plot_t *plot) {
+  buf_t *buf = plot->buf;
+  plot_param_t *param = &plot->param;
+  if(param->xlim_left != INFINITY) buf_printf(buf, "ax.set_xlim(left=%f)\n", param->xlim_left);
+  if(param->xlim_right != INFINITY) buf_printf(buf, "ax.set_xlim(right=%f)\n", param->xlim_right);
+  if(param->ylim_top != INFINITY) buf_printf(buf, "ax.set_ylim(top=%f)\n", param->ylim_top);
+  if(param->ylim_bottom != INFINITY) buf_printf(buf, "ax.set_ylim(bottom=%f)\n", param->ylim_bottom);
+  return;
+}
+
 void plot_save_fig(plot_t *plot, const char *filename) {
   if(plot->fig_created == 0) {
     error_exit("The figure has not been created yet\n");
@@ -999,11 +1017,7 @@ void plot_save_fig(plot_t *plot, const char *filename) {
   buf_t *buf = plot->buf;
   plot_param_t *param = &plot->param;
   plot_draw_tick(plot);
-  // Set X/Y limits
-  if(param->xlim_left != INFINITY) buf_printf(buf, "ax.set_xlim(left=%f)\n", param->xlim_left);
-  if(param->xlim_right != INFINITY) buf_printf(buf, "ax.set_xlim(right=%f)\n", param->xlim_right);
-  if(param->ylim_top != INFINITY) buf_printf(buf, "ax.set_ylim(top=%f)\n", param->ylim_top);
-  if(param->ylim_bottom != INFINITY) buf_printf(buf, "ax.set_ylim(bottom=%f)\n", param->ylim_bottom);
+  
   // Print draw command and execute script
   if(param->dry_run == PLOT_DRY_RUN_DISABLED) {
     // Pass the file name
