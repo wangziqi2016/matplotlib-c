@@ -1908,6 +1908,9 @@ void parse_top_property(parse_t *parse, plot_t *plot) {
     case PARSE_XTICK_ENABLED: {
       plot->param.xtick_enabled = (int)parse_get_int64_range(parse, 0, 1);
     } break;
+    case PARSE_XTICK_LENGTH: {
+      plot->param.xtick_length = parse_get_double_range(parse, 0.0, PARSE_DOUBLE_MAX);
+    } break;
     case PARSE_XTICK_FONT_SIZE: {
       plot->param.xtick_font_size = (int)parse_get_int64_range(parse, 1, PARSE_INT64_MAX);
     } break;
@@ -1916,6 +1919,9 @@ void parse_top_property(parse_t *parse, plot_t *plot) {
     } break;
     case PARSE_YTICK_ENABLED: {
       plot->param.ytick_enabled = (int)parse_get_int64_range(parse, 0, 1);
+    } break;
+    case PARSE_YTICK_LENGTH: {
+      plot->param.ytick_length = parse_get_double_range(parse, 0.0, PARSE_DOUBLE_MAX);
     } break;
     case PARSE_YTICK_FONT_SIZE: {
       plot->param.ytick_font_size = (int)parse_get_int64_range(parse, 1, PARSE_INT64_MAX);
@@ -2529,6 +2535,10 @@ void parse_print_prop(parse_t *parse, plot_t *plot, buf_t *buf, const char *name
       parse_print_check_spec(parse, PARSE_SPEC_STR, spec_ch, name);
       buf_printf(buf, fmt, plot->param.legend_pos);
     } break;
+    case PARSE_XTICK_ENABLED: {
+      parse_print_check_spec(parse, PARSE_SPEC_INT32, spec_ch, name);
+      buf_printf(buf, fmt, plot->param.xtick_enabled);
+    } break;
     case PARSE_XTICK_FONT_SIZE: {
       parse_print_check_spec(parse, PARSE_SPEC_INT32, spec_ch, name);
       buf_printf(buf, fmt, plot->param.legend_font_size);
@@ -2536,6 +2546,10 @@ void parse_print_prop(parse_t *parse, plot_t *plot, buf_t *buf, const char *name
     case PARSE_XTICK_ROTATION: {
       parse_print_check_spec(parse, PARSE_SPEC_INT32, spec_ch, name);
       buf_printf(buf, fmt, plot->param.xtick_rotation);
+    } break;
+    case PARSE_YTICK_ENABLED: {
+      parse_print_check_spec(parse, PARSE_SPEC_INT32, spec_ch, name);
+      buf_printf(buf, fmt, plot->param.ytick_enabled);
     } break;
     case PARSE_YTICK_FONT_SIZE: {
       parse_print_check_spec(parse, PARSE_SPEC_INT32, spec_ch, name);
