@@ -135,3 +135,13 @@ For example:
 
 Users could further control whether trailing zeros of a floating point after the decimal point should be chopped off
 to reduce the length of the text. This is enabled by setting "bar_text_rtrim" to 1.
+
+## Adding new Members to `plot_param_t`
+
+First, you need to add the field to plot_param_t, and then assign a default value in default_param. 
+Then, enum definitions for the new field should be added to the anonymous enum in the header.
+Next, add search table entry to `parse_cb_top_props`, such that functions setting and reading this 
+value could map the string key to the enum constant.
+The next step to handle the constants in two switch statements, one in `parse_top_property`, 
+the other in `parse_print_prop`.
+Eventually, the field should also be printed by `plot_param_print`.
