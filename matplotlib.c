@@ -949,6 +949,9 @@ void plot_draw_tick(plot_t *plot) {
     if(param->xtick_length != INFINITY) {
       buf_printf(buf, ", length=%f", param->xtick_length);
     }
+    if(param->xtick_inside == 0) {
+      buf_printf(buf, ", direction='out'");
+    }
     buf_printf(buf, ")\n");
   } else {
     buf_printf(buf, "plot.xticks([])\n");
@@ -966,6 +969,9 @@ void plot_draw_tick(plot_t *plot) {
     buf_printf(buf, "ax.tick_params(axis='y', which='both'");
     if(param->ytick_length != INFINITY) {
       buf_printf(buf, ", length=%f", param->ytick_length);
+    }
+    if(param->ytick_inside == 0) {
+      buf_printf(buf, ", direction='out'");
     }
     buf_printf(buf, ")\n");
   } else { 
