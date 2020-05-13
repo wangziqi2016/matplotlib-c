@@ -1816,11 +1816,14 @@ parse_cb_entry_t parse_cb_top_props[] = {
   PARSE_GEN_PROP("legend_rows", PARSE_LEGEND_ROWS),
   PARSE_GEN_PROP("legend_font_size", PARSE_LEGEND_FONT_SIZE),
   PARSE_GEN_PROP("legend_pos", PARSE_LEGEND_POS),
-  // Ticks
+  // X Ticks
   PARSE_GEN_PROP("xtick_enabled", PARSE_XTICK_ENABLED),
+  PARSE_GEN_PROP("xtick_length", PARSE_XTICK_LENGTH),
   PARSE_GEN_PROP("xtick_font_size", PARSE_XTICK_FONT_SIZE),
   PARSE_GEN_PROP("xtick_rotation", PARSE_XTICK_ROTATION),
+  // Y Ticks
   PARSE_GEN_PROP("ytick_enabled", PARSE_YTICK_ENABLED),
+  PARSE_GEN_PROP("ytick_length", PARSE_YTICK_LENGTH),
   PARSE_GEN_PROP("ytick_font_size", PARSE_YTICK_FONT_SIZE),
   PARSE_GEN_PROP("ytick_rotation", PARSE_YTICK_ROTATION),
   // Title
