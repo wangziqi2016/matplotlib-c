@@ -761,8 +761,8 @@ plot_param_t default_param = {
   1,         // legend_rows
   28,        // legend_font_size
   "best",    // Legend pos; Alternatives are: {lower, center, upper} x {left, center, right} or "center"
-  1, INFINITY, 1, 24, 0,  // x tick enabled, length, inside, font size, rotation
-  1, INFINITY, 1, 24, 0,  // y tick enabled, length, inside, font size, rotation
+  1, INFINITY, PLOT_DIRECTION_INSIDE, 24, 0,  // x tick enabled, length, dir, font size, rotation
+  1, INFINITY, PLOT_DIRECTION_INSIDE, 24, 0,  // y tick enabled, length, dir, font size, rotation
   28, 28,    // x/y title font size
   26, 90,    // bar text size, rotation
   2, 1,      // bar text decimals, rtrim
@@ -790,9 +790,9 @@ void plot_param_print(plot_param_t *param, int verbose) {
   printf("[param title] x font %d y font %d\n", 
     param->xtitle_font_size, param->ytitle_font_size);
   printf("[param xtick] enabled %d len %f dir %d font %d rot %d\n", 
-    param->xtick_enabled, param->xtick_length, param->xtick_inside, param->xtick_font_size, param->xtick_rotation);
+    param->xtick_enabled, param->xtick_length, param->xtick_direction, param->xtick_font_size, param->xtick_rotation);
   printf("[param ytick] enabled %d len %f dir %d font %d rot %d\n", 
-    param->ytick_enabled, param->ytick_length, param->ytick_inside, param->ytick_font_size, param->ytick_rotation);
+    param->ytick_enabled, param->ytick_length, param->ytick_direction, param->ytick_font_size, param->ytick_rotation);
   printf("[param bar_text] font %d rotation %d\n", param->bar_text_font_size, param->bar_text_rotation);
   printf("[param bar_text] decimals %d rtrim %d\n", 
     param->bar_text_decimals, param->bar_text_rtrim);
@@ -949,8 +949,10 @@ void plot_draw_tick(plot_t *plot) {
     if(param->xtick_length != INFINITY) {
       buf_printf(buf, ", length=%f", param->xtick_length);
     }
-    if(param->xtick_inside == 0) {
+    if(param->xtick_direction == PLOT_DIRECTION_OUTSIDE) {
       buf_printf(buf, ", direction='out'");
+    } else if(param->xtick_direction == PLOT_DIRECTION_BOTH) {
+      buf_printf(buf, ", direction='inout'");
     }
     buf_printf(buf, ")\n");
   } else {
@@ -970,8 +972,10 @@ void plot_draw_tick(plot_t *plot) {
     if(param->ytick_length != INFINITY) {
       buf_printf(buf, ", length=%f", param->ytick_length);
     }
-    if(param->ytick_inside == 0) {
+    if(param->ytick_direction == PLOT_DIRECTION_OUTSIDE) {
       buf_printf(buf, ", direction='out'");
+    } else if(param->ytick_direction == PLOT_DIRECTION_BOTH) {
+      buf_printf(buf, ", direction='inout'");
     }
     buf_printf(buf, ")\n");
   } else { 
@@ -1848,13 +1852,13 @@ parse_cb_entry_t parse_cb_top_props[] = {
   // X Ticks
   PARSE_GEN_PROP("xtick_enabled", PARSE_XTICK_ENABLED),
   PARSE_GEN_PROP("xtick_length", PARSE_XTICK_LENGTH),
-  PARSE_GEN_PROP("xtick_inside", PARSE_XTICK_INSIDE),
+  PARSE_GEN_PROP("xtick_direction", PARSE_XTICK_DIRECTION),
   PARSE_GEN_PROP("xtick_font_size", PARSE_XTICK_FONT_SIZE),
   PARSE_GEN_PROP("xtick_rotation", PARSE_XTICK_ROTATION),
   // Y Ticks
   PARSE_GEN_PROP("ytick_enabled", PARSE_YTICK_ENABLED),
   PARSE_GEN_PROP("ytick_length", PARSE_YTICK_LENGTH),
-  PARSE_GEN_PROP("ytick_inside", PARSE_YTICK_INSIDE),
+  PARSE_GEN_PROP("ytick_direction", PARSE_YTICK_DIRECTION),
   PARSE_GEN_PROP("ytick_font_size", PARSE_YTICK_FONT_SIZE),
   PARSE_GEN_PROP("ytick_rotation", PARSE_YTICK_ROTATION),
   // Title
@@ -1942,8 +1946,8 @@ void parse_top_property(parse_t *parse, plot_t *plot) {
     case PARSE_XTICK_LENGTH: {
       plot->param.xtick_length = parse_get_double_range(parse, 0.0, PARSE_DOUBLE_MAX);
     } break;
-    case PARSE_XTICK_INSIDE: {
-      plot->param.xtick_inside = (int)parse_get_int64_range(parse, 0, 1);
+    case PARSE_XTICK_DIRECTION: {
+      plot->param.xtick_direction = (int)parse_get_int64_range(parse, 0, 2);
     } break;
     case PARSE_XTICK_FONT_SIZE: {
       plot->param.xtick_font_size = (int)parse_get_int64_range(parse, 1, PARSE_INT64_MAX);
@@ -1957,8 +1961,8 @@ void parse_top_property(parse_t *parse, plot_t *plot) {
     case PARSE_YTICK_LENGTH: {
       plot->param.ytick_length = parse_get_double_range(parse, 0.0, PARSE_DOUBLE_MAX);
     } break;
-    case PARSE_YTICK_INSIDE: {
-      plot->param.ytick_inside = (int)parse_get_int64_range(parse, 0, 1);
+    case PARSE_YTICK_DIRECTION: {
+      plot->param.ytick_direction = (int)parse_get_int64_range(parse, 0, 1);
     } break;
     case PARSE_YTICK_FONT_SIZE: {
       plot->param.ytick_font_size = (int)parse_get_int64_range(parse, 1, PARSE_INT64_MAX);
@@ -2580,9 +2584,9 @@ void parse_print_prop(parse_t *parse, plot_t *plot, buf_t *buf, const char *name
       parse_print_check_spec(parse, PARSE_SPEC_FLOAT, spec_ch, name);
       buf_printf(buf, fmt, plot->param.xtick_length);
     } break;
-    case PARSE_XTICK_INSIDE: {
+    case PARSE_XTICK_DIRECTION: {
       parse_print_check_spec(parse, PARSE_SPEC_INT32, spec_ch, name);
-      buf_printf(buf, fmt, plot->param.xtick_inside);
+      buf_printf(buf, fmt, plot->param.xtick_direction);
     } break;
     case PARSE_XTICK_FONT_SIZE: {
       parse_print_check_spec(parse, PARSE_SPEC_INT32, spec_ch, name);
@@ -2600,9 +2604,9 @@ void parse_print_prop(parse_t *parse, plot_t *plot, buf_t *buf, const char *name
       parse_print_check_spec(parse, PARSE_SPEC_FLOAT, spec_ch, name);
       buf_printf(buf, fmt, plot->param.ytick_length);
     } break;
-    case PARSE_YTICK_INSIDE: {
+    case PARSE_YTICK_DIRECTION: {
       parse_print_check_spec(parse, PARSE_SPEC_INT32, spec_ch, name);
-      buf_printf(buf, fmt, plot->param.ytick_inside);
+      buf_printf(buf, fmt, plot->param.ytick_direction);
     } break;
     case PARSE_YTICK_FONT_SIZE: {
       parse_print_check_spec(parse, PARSE_SPEC_INT32, spec_ch, name);
