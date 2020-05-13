@@ -15,13 +15,14 @@ X Adding automated way of setting params (jump table or offset table)
 
 X Adding xlim and ylim, and use them to avoid extra spaces
 
-Adding color scheme overflow handling
+X Adding color scheme overflow handling
 
-Adding reset and reset all
+X Adding reset and reset all
 
-Adding README to the repo
+X Adding README to the repo
 
 Adding bar group, bar type and bars 
+- Fix hatch/color test to use bar groups (and do not free bars)
 
 Adding top level properties
 

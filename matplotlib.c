@@ -736,6 +736,9 @@ bargrp_t *bargrp_init(const char *name) {
 void bargrp_free(bargrp_t *grp) {
   free(grp->name);
   // Free bars and the vector itself
+  for(int i = 0;i < vec_count(grp->bars);i++) {
+    bar_free(vec_at(grp->bars, i));
+  }
   vec_free(grp->bars);
   free(grp);
   return;
