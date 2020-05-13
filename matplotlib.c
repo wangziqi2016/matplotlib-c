@@ -1905,7 +1905,7 @@ const int parse_cb_top_props_count = sizeof(parse_cb_top_props) / sizeof(parse_c
 parse_mapped_arg_entry_t parse_mapped_arg_direction[] = {
   {"in", PLOT_DIRECTION_INSIDE},
   {"out", PLOT_DIRECTION_OUTSIDE},
-  {"inout", PLOT_DIRECTION_BOTH},
+  {"both", PLOT_DIRECTION_BOTH},
   PARSE_MAPPED_ARG_END,
 };
 
@@ -1980,12 +1980,7 @@ void parse_top_property(parse_t *parse, plot_t *plot) {
       if(next_arg == PARSE_ARG_NUM) {
         plot->param.xtick_direction = (int)parse_get_int64_range(parse, 0, 2);
       } else if(next_arg == PARSE_ARG_STR) {
-        char *s = parse_get_str(parse);
-        if(streq(s, "in") == 1) plot->param.xtick_direction = PLOT_DIRECTION_INSIDE;
-        else if(streq(s, "out") == 1) plot->param.xtick_direction = PLOT_DIRECTION_OUTSIDE;
-        else if(streq(s, "both") == 1) plot->param.xtick_direction = PLOT_DIRECTION_BOTH;
-        else error_exit("Invalid direction string: \"%s\"\n", s);
-        free(s);
+        plot->param.xtick_direction = parse_get_mapped_arg(parse, parse_mapped_arg_direction);
       }
     } break;
     case PARSE_XTICK_FONT_SIZE: {
@@ -2005,12 +2000,7 @@ void parse_top_property(parse_t *parse, plot_t *plot) {
       if(next_arg == PARSE_ARG_NUM) {
         plot->param.ytick_direction = (int)parse_get_int64_range(parse, 0, 2);
       } else if(next_arg == PARSE_ARG_STR) {
-        char *s = parse_get_str(parse);
-        if(streq(s, "in") == 1) plot->param.ytick_direction = PLOT_DIRECTION_INSIDE;
-        else if(streq(s, "out") == 1) plot->param.ytick_direction = PLOT_DIRECTION_OUTSIDE;
-        else if(streq(s, "both") == 1) plot->param.ytick_direction = PLOT_DIRECTION_BOTH;
-        else error_exit("Invalid direction string: \"%s\"\n", s);
-        free(s);
+        plot->param.ytick_direction = parse_get_mapped_arg(parse, parse_mapped_arg_direction);
       }
     } break;
     case PARSE_YTICK_FONT_SIZE: {
