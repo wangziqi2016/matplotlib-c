@@ -1635,6 +1635,13 @@ int parse_next_arg(parse_t *parse) {
   return -1;
 }
 
+// Read an argument in either integral or string form
+// If it is integer, then we just 
+// The arg is mandatory. Report error and exit if not found or type error
+int parse_get_mapped_arg(parse_t *parse, parse_arg_mapping_entry_t *table) {
+  int next_arg = parse_next_arg(parse);
+}
+
 // Sort a given table
 void parse_sort_cb(parse_t *parse, parse_cb_entry_t *table, int count) {
   (void)parse;
@@ -1879,6 +1886,13 @@ parse_cb_entry_t parse_cb_top_props[] = {
   PARSE_GEN_PROP("info", PARSE_INFO),
 };
 const int parse_cb_top_props_count = sizeof(parse_cb_top_props) / sizeof(parse_cb_entry_t);
+
+// Mapping axis direction string to integer
+parse_arg_mapping_entry_t parse_arg_mapping_direction[] = {
+  {"in", PLOT_DIRECTION_INSIDE},
+  {"out", PLOT_DIRECTION_OUTSIDE},
+  {"inout", PLOT_DIRECTION_BOTH},
+};
 
 // The "." has been removed from the stream
 // We do not use jump table for this function, since most of the handlers are small and straightforward
