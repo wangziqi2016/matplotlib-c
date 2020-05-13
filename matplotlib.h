@@ -226,12 +226,14 @@ void bar_print(bar_t *bar);
 
 typedef struct {
   char *name;             // The X tick, if enabled. The group owns this string
-  vec_t *bars;            // A vector of bars
+  vec_t *bars;            // A vector of bars; Bar group owns the bars
 } bargrp_t;
 
 bargrp_t *bargrp_init(const char *name);
 void bargrp_free(bargrp_t *grp);
 inline static void bargrp_add_bar(bargrp_t *grp, bar_t *bar) { vec_append(grp->bars, bar); }
+
+void bargrp_print(bargrp_t *grp, int verbose);
 
 //* plot_t - Plotting function
 

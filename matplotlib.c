@@ -735,8 +735,19 @@ bargrp_t *bargrp_init(const char *name) {
 
 void bargrp_free(bargrp_t *grp) {
   free(grp->name);
+  // Free bars and the vector itself
   vec_free(grp->bars);
   free(grp);
+  return;
+}
+
+void bargrp_print(bargrp_t *grp, int verbose) {
+  printf("[bargrp] name \"%s\" size %d\n", grp->name, vec_count(grp->bars));
+  if(verbose == 1) {
+    for(int i = 0;i < vec_count(grp->bars);i++) {
+      bar_print(vec_at(grp->bars, i));
+    }
+  }
   return;
 }
 
