@@ -244,11 +244,11 @@ void bargrp_print(bargrp_t *grp, int verbose);
 #define PLOT_DRY_RUN_ENABLED      1     // Always not output
 #define PLOT_DRY_RUN_SHOW         2     // Not output but show the graph
 
-struct parse_struct_t;
-
 #define PLOT_DIRECTION_INSIDE  0
 #define PLOT_DIRECTION_OUTSIDE 1
 #define PLOT_DIRECTION_BOTH    2
+
+struct parse_struct_t;
 
 // This object should not be freed; Always copy it over
 typedef struct {
@@ -344,6 +344,12 @@ void plot_add_y_title(plot_t *plot, const char *title);
 void plot_print(plot_t *plot, int verbose);
 
 //* parse_* - String processing
+
+// String argument mapping - used to read arguments that can be passed using both int and str
+typedef struct {
+  const char *key;
+  int value;
+} parse_arg_mapping_entry_t;
 
 // Generates parse_cb_entry_t entry
 #define PARSE_GEN_CB(name, func) {name, {.cb = func}}
@@ -447,6 +453,7 @@ void parse_expect_char_opt(parse_t *parse, char ch); // Read an optional char an
 #define PARSE_ARG_QMARK  5 // This is specifically used to print help string
 
 int parse_next_arg(parse_t *parse); // Argument handling
+int parse_get_mapped_arg(parse_t *parse, parse_arg_mapping_entry_t *table); // Argument mapping from str to int
 
 void parse_sort_cb(parse_t *parse, parse_cb_entry_t *table, int count);
 parse_cb_entry_t parse_find_cb_entry(parse_t *parse, parse_cb_entry_t *table, int count, const char *name);
