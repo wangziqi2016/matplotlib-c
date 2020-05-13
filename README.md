@@ -80,10 +80,11 @@ within a single line.
 | legend_font_size | Font size in the legend. This applies to both figure and legend plot | int\[1, +inf\] |
 | legend_pos | Position of the legend. Only applies to figure. Refer to matplotlib doc for valid values | string |
 | xtick_enabled | Enabling both ticks and tick labels. Setting to 0 will disable both | int\[0, 1\] |
-| | | |
+| xtick_length | Length of ticks. Setting to 0 will disable it while keeping the tick label | float\[0, +inf\] |
 | xtick_font_size | Font size for X axis ticks | int\[1, +inf\] |
 | xtick_rotation | Rotation for X axis ticks | int\[0, 359\] |
 | ytick_enabled | Enabling both ticks and tick labels. Setting to 0 will disable both | int\[0, 1\] |
+| xtick_length | Length of ticks. Setting to 0 will disable it while keeping the tick label | float\[0, +inf\] |
 | ytick_font_size | Font size for Y axis ticks | int\[1, +inf\] |
 | ytick_rotation | Rotation for Y axis ticks | int\[0, 359\] |
 | xtitle_font_size | Font size for X axis title | int\[1, +inf\] |
