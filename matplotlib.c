@@ -733,6 +733,13 @@ bargrp_t *bargrp_init(const char *name) {
   return grp;
 }
 
+void bargrp_free(bargrp_t *grp) {
+  free(grp->name);
+  vec_free(grp->bars);
+  free(grp);
+  return;
+}
+
 //* plot_t
 
 plot_param_t default_param = {
