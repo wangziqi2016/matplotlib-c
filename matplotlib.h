@@ -232,6 +232,7 @@ typedef struct {
 bargrp_t *bargrp_init(const char *name);
 void bargrp_free(bargrp_t *grp);
 inline static void bargrp_add_bar(bargrp_t *grp, bar_t *bar) { vec_append(grp->bars, bar); }
+inline static int bargrp_count(bargrp_t *bargrp) { return vec_count(bargrp->bars); }
 
 void bargrp_print(bargrp_t *grp, int verbose);
 
