@@ -255,10 +255,12 @@ typedef struct {
   int legend_font_size;      // Font size for text in the legend
   char legend_pos[PLOT_LEGEND_POS_MAX_SIZE]; // Legend position; This string should never be freed
   // Tick
-  int xtick_enabled;
+  int xtick_enabled;         // This turns off both labels and tick
+  double xtick_length;       // Length of the tick - set to 0.0 to turn off. Set to INFINITY uses default
   int xtick_font_size;
   int xtick_rotation;
-  int ytick_enabled;
+  int ytick_enabled;         // Same as above
+  double ytick_length;
   int ytick_font_size;
   int ytick_rotation;
   // Title

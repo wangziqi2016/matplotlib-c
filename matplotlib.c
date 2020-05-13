@@ -761,8 +761,8 @@ plot_param_t default_param = {
   1,         // legend_rows
   28,        // legend_font_size
   "best",    // Legend pos; Alternatives are: {lower, center, upper} x {left, center, right} or "center"
-  1, 24, 0,  // x tick enabled, font size, rotation
-  1, 24, 0,  // y tick enabled, font size, rotation
+  1, INFINITY, 24, 0,  // x tick enabled, length, font size, rotation
+  1, INFINITY, 24, 0,  // y tick enabled, length, font size, rotation
   28, 28,    // x/y title font size
   26, 90,    // bar text size, rotation
   2, 1,      // bar text decimals, rtrim
