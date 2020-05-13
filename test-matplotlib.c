@@ -199,6 +199,25 @@ void test_vec() {
   return;
 }
 
+void test_bargrp() {
+  printf("========== test_bargrp ==========\n");
+  bargrp_t *grp = bargrp_init("Group Test");
+  // Add 10 bar instances to the group
+  for(int i = 0;i < 10;i++) {
+    char buf[32];
+    snprintf(buf, 32, "Bar #%d", i);
+    bar_t *bar = bar_init();
+    bar_set_text(bar, buf);
+    bargrp_add_bar(grp, bar);
+  }
+  // Print in verbose mode, all bars shoud be present
+  bargrp_print(grp, 1);
+  // This should free all bars
+  bargrp_free(grp);
+  printf("Pass\n");
+  return;
+}
+
 void test_bar_type() {
   printf("========== test_bar_type ==========\n");
   plot_t *plot = plot_init();
@@ -572,6 +591,7 @@ int main(int argc, char **argv) {
   if(valgrind_flag == 0) test_py();
   test_buf();
   test_vec();
+  test_bargrp();
   if(valgrind_flag == 0) test_plot_legend();
   if(valgrind_flag == 0) test_plot_color_test();
   test_parse_getchar();
