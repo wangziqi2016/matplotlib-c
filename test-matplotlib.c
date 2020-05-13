@@ -567,6 +567,25 @@ void test_parse_sort() {
   return;
 }
 
+void test_parse_mapped_arg() {
+  printf("========== test_parse_mapped_arg ==========\n");
+  parse_mapped_arg_entry_t table[] = {
+    {"key1", 100}, {"key2", 200}, {"key3", 300}, {"key4", 400},
+    PARSE_MAPPED_ARG_END,
+  };
+  for(int i = 1;i <= 4;i++) {
+    char buf[16];
+    snprintf(buf, 16, "key %d", i);
+    parse_t *parse = parse_init(buf);
+    int value = parse_get_mapped_arg(parse, table);
+    printf("Iter %d value %d\n", i, value);
+    assert(value == i * 100);
+    parse_free(parse);
+  }
+  printf("Pass\n");
+  return;
+}
+
 void test_parse_top() {
   printf("========== test_parse_top ==========\n");
   plot_t *plot = plot_init();
@@ -607,6 +626,7 @@ int main(int argc, char **argv) {
   test_parse_skip_space();
   test_parse_color();
   test_parse_sort();
+  test_parse_mapped_arg();
   test_parse_top();
   printf("All test passed!\n");
   return 0;
