@@ -2560,6 +2560,10 @@ void parse_print_prop(parse_t *parse, plot_t *plot, buf_t *buf, const char *name
       parse_print_check_spec(parse, PARSE_SPEC_INT32, spec_ch, name);
       buf_printf(buf, fmt, plot->param.xtick_enabled);
     } break;
+    case PARSE_XTICK_LENGTH: {
+      parse_print_check_spec(parse, PARSE_SPEC_FLOAT, spec_ch, name);
+      buf_printf(buf, fmt, plot->param.xtick_length);
+    } break;
     case PARSE_XTICK_FONT_SIZE: {
       parse_print_check_spec(parse, PARSE_SPEC_INT32, spec_ch, name);
       buf_printf(buf, fmt, plot->param.legend_font_size);
@@ -2571,6 +2575,10 @@ void parse_print_prop(parse_t *parse, plot_t *plot, buf_t *buf, const char *name
     case PARSE_YTICK_ENABLED: {
       parse_print_check_spec(parse, PARSE_SPEC_INT32, spec_ch, name);
       buf_printf(buf, fmt, plot->param.ytick_enabled);
+    } break;
+    case PARSE_YTICK_LENGTH: {
+      parse_print_check_spec(parse, PARSE_SPEC_FLOAT, spec_ch, name);
+      buf_printf(buf, fmt, plot->param.ytick_length);
     } break;
     case PARSE_YTICK_FONT_SIZE: {
       parse_print_check_spec(parse, PARSE_SPEC_INT32, spec_ch, name);
