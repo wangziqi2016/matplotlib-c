@@ -26,15 +26,17 @@ X - Table linear scan lookup
 X - Could be used for dry run, direction, etc.
 X - Need a test for the function
 
-Adding dump command
-- dump legend
+X Adding dump command
+X - dump legend
+
+X Adding legend enabled property
+
+X Adding reset bar init and type used
+X - Also add to the command
+
+Plotting bar group ticks in draw_all_bargrps()
 
 Allowing all file names be indicators also
-
-Adding legend enabled property
-
-Adding reset bar init and type used
-- Also add to the command
 
 Always draw from bar group and bars stored in the group. 
 - Move plotting function to save_fig
