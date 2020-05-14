@@ -2600,39 +2600,6 @@ void parse_cb_save_legend(parse_t *parse, plot_t *plot) {
   return;
 }
 
-// This function has two optional arguments: width height
-// If only one is given then it defaults to width
-void parse_cb_create_fig(parse_t *parse, plot_t *plot) {
-  double width = plot->param.width;
-  double height = plot->param.height;
-  if(parse_next_arg(parse) == PARSE_ARG_QMARK) {
-    parse_expect_char(parse, '?');
-    printf("[!create_fig] Usage: !create_fig [width] [height]\n");
-    printf("[!create_fig] Both width and height are optional floating point numbers, which, if given, override "
-           "existing parameters\n");
-    return;
-  }
-  if(parse_next_arg(parse)) {
-    double new_width = parse_get_double_range(parse, 0.0, PARSE_DOUBLE_MAX);
-    if(plot->param.info == 1) {
-      printf("[parse] Overriding param width %g with %g\n", width, new_width);
-    }
-    width = new_width;
-  } 
-  if(parse_next_arg(parse)) {
-    double new_height = parse_get_double_range(parse, 0.0, PARSE_DOUBLE_MAX);
-    if(plot->param.info == 1) {
-      printf("[parse] Overriding param height %g with %g\n", height, new_height);
-    }
-    height = new_height;
-  }
-  if(parse_next_arg(parse)) {
-    error_exit("Function \"create_fig\" takes 1 or 2 optional arguments\n");
-  }
-  plot_create_fig(plot, width, height);
-  return;
-}
-
 void parse_cb_set_hatch_scheme(parse_t *parse, plot_t *plot) {
   int next_type = parse_next_arg(parse);
   if(next_type == PARSE_ARG_NONE) {
