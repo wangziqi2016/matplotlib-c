@@ -2002,6 +2002,7 @@ parse_cb_entry_t parse_cb_top_props[] = {
   PARSE_GEN_PROP("width", PARSE_WIDTH),
   PARSE_GEN_PROP("height", PARSE_HEIGHT),
   // Legend
+  PARSE_GEN_PROP("legend_enabled", PARSE_LEGEND_ENABLED),
   PARSE_GEN_PROP("legend_rows", PARSE_LEGEND_ROWS),
   PARSE_GEN_PROP("legend_font_size", PARSE_LEGEND_FONT_SIZE),
   PARSE_GEN_PROP("legend_pos", PARSE_LEGEND_POS),
@@ -2107,6 +2108,10 @@ void parse_top_property(parse_t *parse, plot_t *plot) {
     } break;
     case PARSE_HEIGHT: {
       plot->param.height = parse_get_double_range(parse, 0.0, PARSE_DOUBLE_MAX);
+    } break;
+    // Legend
+    case PARSE_LEGEND_ENABLED: {
+      plot->param.legend_enabled = (int)parse_get_int64_range(parse, 0, 1);
     } break;
     case PARSE_LEGEND_ROWS: {
       plot->param.legend_rows = (int)parse_get_int64_range(parse, 1, PARSE_INT64_MAX);
@@ -2765,6 +2770,11 @@ void parse_print_prop(parse_t *parse, plot_t *plot, buf_t *buf, const char *name
     case PARSE_HEIGHT: {
       parse_print_check_spec(parse, PARSE_SPEC_FLOAT, spec_ch, name);
       buf_printf(buf, fmt, plot->param.height);
+    } break;
+    // Legend
+    case PARSE_LEGEND_ENABLED: {
+      parse_print_check_spec(parse, PARSE_SPEC_INT32, spec_ch, name);
+      buf_printf(buf, fmt, plot->param.legend_enabled);
     } break;
     case PARSE_LEGEND_ROWS: {
       parse_print_check_spec(parse, PARSE_SPEC_INT32, spec_ch, name);
