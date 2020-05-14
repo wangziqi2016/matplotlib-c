@@ -2113,18 +2113,7 @@ void parse_top_property(parse_t *parse, plot_t *plot) {
       if(next_arg == PARSE_ARG_NUM) {
         plot->param.dry_run = (int)parse_get_int64_range(parse, 0, 2);
       } else if(next_arg == PARSE_ARG_STR) {
-        char *dry_run_str = parse_get_str(parse);
-        if(streq(dry_run_str, "disabled") == 1) {
-          plot->param.dry_run = PLOT_DRY_RUN_DISABLED;
-        } else if(streq(dry_run_str, "enabled") == 1) {
-          plot->param.dry_run = PLOT_DRY_RUN_ENABLED;
-        } else if(streq(dry_run_str, "show") == 1) {
-          plot->param.dry_run = PLOT_DRY_RUN_SHOW;
-        } else {
-          parse_report_pos(parse);
-          error_exit("Invalid string value for property \"dry_run\"\n");
-        }
-        free(dry_run_str);
+        plot->param.dry_run = parse_get_mapped_arg(parse, parse_mapped_arg_dry_run);
       }
       if(prev == PLOT_DRY_RUN_DISABLED && plot->param.dry_run != PLOT_DRY_RUN_DISABLED) {
         if(plot->param.info == 1) printf("[parse] Dry run mode enabled; Scripts will not be actually executed\n");
