@@ -819,6 +819,7 @@ void plot_param_print(plot_param_t *param, int verbose) {
   }
   printf("[param x/y_lim] left %f right %f top %f bottom %f\n",
     param->xlim_left, param->xlim_right, param->ylim_top, param->ylim_bottom);
+  printf("[param bargrp] space %d\n", param->bargrp_space);
   printf("[debug] dry_run %d info %d\n", param->dry_run, param->info);
   return;
 }
@@ -1939,6 +1940,8 @@ parse_cb_entry_t parse_cb_top_props[] = {
   PARSE_GEN_PROP("xlim_right", PARSE_XLIM_RIGHT),
   PARSE_GEN_PROP("ylim_top", PARSE_YLIM_TOP),
   PARSE_GEN_PROP("ylim_bottom", PARSE_YLIM_BOTTOM),
+  // Bar group
+  PARSE_GEN_PROP("bargrp_space", PARSE_BARGRP_SPACE),
   // py_t object
   PARSE_GEN_PROP("dry_run", PARSE_DRY_RUN),
   PARSE_GEN_PROP("info", PARSE_INFO),

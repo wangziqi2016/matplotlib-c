@@ -293,6 +293,8 @@ typedef struct {
   double xlim_right;
   double ylim_top;
   double ylim_bottom;
+  // Bar group
+  double bargrp_space;           // Space between bargrps
   // Debugging
   int dry_run;                   // Whether we actually execute the scripts (will not if set to 1)
   int info;                      // Whether to print info when the internal state changes
@@ -414,6 +416,8 @@ enum {
   PARSE_XLIM_RIGHT,
   PARSE_YLIM_TOP,
   PARSE_YLIM_BOTTOM,
+
+  PARSE_BARGRP_SPACE,
 
   PARSE_DRY_RUN,     // py_t object
   PARSE_INFO,        // Whether to print information
