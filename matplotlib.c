@@ -1376,11 +1376,14 @@ void plot_set_legend_pos(plot_t *plot, const char *pos) {
     }
     p++;
   }
-  error_exit("Invalid legend pos: \"%s\". We support the following:\n", pos);
+  printf("Invalid legend pos. We support the following:\n");
+  p = plot_valid_legend_poses;
   while(*p != NULL) {
-    printf("%s ", *p);
+    printf("\"%s\"%s ", *p, *(p + 1) == NULL ? "" : ",");
     p++;
   }
+  putchar('\n');
+  error_exit("Could not set legend pos: \"%s\"\n", pos);
   return;
 }
 
