@@ -1231,8 +1231,8 @@ void plot_draw(plot_t *plot) {
   // Params are not reset here
   plot_reset_flags(plot);
   plot_reset_buf(plot);
-  plot_create_fig(plot, plot->param.width, plot->param.height);
-  // Note that this can be skipped by arranging bars manually
+  // Note that these can be skipped by arranging bars manually
+  plot_draw_axis(plot);
   plot_draw_all_bargrps(plot);
   plot_draw_tick(plot);
   plot_draw_grid(plot);
@@ -1278,7 +1278,7 @@ void plot_save_legend(plot_t *plot, const char *filename) {
   legend->param.legend_enabled = 1;       // Forced to turn on
   plot_set_legend_pos(legend, "center");  // Hardcode legend pos
   assert(legend->buf != NULL && legend->py != NULL);
-  plot_create_fig(legend, legend->param.width, legend->param.height);
+  plot_draw_axis(legend); // Create the super small figure
   int count = vec_count(plot->bar_types);
   if(count == 0) {
     error_exit("Current plot does not contain any bar type\n");
@@ -1309,7 +1309,7 @@ void plot_save_color_test(plot_t *plot, const char *filename) {
   plot_t *test = plot_init();
   // Use current plot's configuration
   plot_param_copy(&test->param, &plot->param);
-  plot_create_fig(test, test->param.width, test->param.height);
+  plot_draw_axis(test);
   plot_param_t *param = &test->param;
   // Force turn off legend
   param->legend_enabled = 0;
@@ -1359,7 +1359,7 @@ void plot_save_hatch_test(plot_t *plot, const char *filename) {
   double bar_height = param->height;
   double bar_pos = 0.0;
   // Must do it here since we adjusted the width
-  plot_create_fig(test, param->width, param->height);
+  plot_draw_axis(test);
   for(int i = param->color_offset;i < param->hatch_scheme->item_count;i++) {
     snprintf(label_buf, 16, "hatch %d", i);
     char hatch = param->hatch_scheme->base[i];
