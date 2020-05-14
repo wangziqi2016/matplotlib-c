@@ -2328,7 +2328,6 @@ parse_cb_entry_t parse_cb_top_funcs[] = {
   PARSE_GEN_CB("reset", parse_cb_reset),
   PARSE_GEN_CB("save_fig", parse_cb_save_fig),
   PARSE_GEN_CB("save_legend", parse_cb_save_legend),
-  PARSE_GEN_CB("create_fig", parse_cb_create_fig),
   PARSE_GEN_CB("set_hatch_scheme", parse_cb_set_hatch_scheme),
   PARSE_GEN_CB("set_color_scheme", parse_cb_set_color_scheme),
   PARSE_GEN_CB("test_hatch", parse_cb_test_hatch),
