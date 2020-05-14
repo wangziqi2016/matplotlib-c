@@ -992,6 +992,15 @@ void plot_reset_buf(plot_t *plot) {
   return;
 }
 
+// This mainly initializes the axis object with its dimension
+void plot_draw_axis(plot_t *plot) {
+  plot_param_t *param = &plot->param;
+  buf_printf(plot->buf, "fig = plot.figure(figsize=(%f, %f))\n", param->width, param->height);
+  // "111" means the output consists of only one plot
+  buf_append(plot->buf, "ax = fig.add_subplot(111)\n\n");
+  return;
+}
+
 // Generates plotting script for an individual bar, assuming parameters are already set
 // This function could be called without adding bar and bar groups to the plot object
 // Only one new line is appended at the end of the draw
@@ -1222,6 +1231,7 @@ void plot_draw(plot_t *plot) {
   // Params are not reset here
   plot_reset_flags(plot);
   plot_reset_buf(plot);
+  plot_create_fig(plot, plot->param.width, plot->param.height);
   // Note that this can be skipped by arranging bars manually
   plot_draw_all_bargrps(plot);
   plot_draw_tick(plot);
