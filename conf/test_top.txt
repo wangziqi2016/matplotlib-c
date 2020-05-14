@@ -60,6 +60,8 @@
 .xtick_direction = "both";
 .xgrid_enabled = 1;
 .ygrid_enabled = 1;
+.xtick_label_enabled = 1;
+.ytick_label_enabled = 0;
 !test_color "test_color_2.pdf";
 !test_hatch "test_hatch_1.pdf";
 
