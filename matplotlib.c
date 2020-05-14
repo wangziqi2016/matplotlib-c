@@ -1330,10 +1330,10 @@ void plot_save_color_test_mode(plot_t *plot, int mode, void *arg) {
   }
   plot_add_x_title(test, "Color Scheme Test");
   if(mode == PLOT_SAVE_MODE_FILE) {
-    plot_save_fig(legend, (const char *)arg);
+    plot_save_fig(test, (const char *)arg);
   } else if(mode == PLOT_SAVE_MODE_BUF) {
     // Do not use buf_concat since this will free the second arg
-    buf_append((buf_t *)arg, buf_c_str(legend->buf));
+    buf_append((buf_t *)arg, buf_c_str(test->buf));
   } else {
     error_exit("Invalid save mode %d\n", mode);
   }
@@ -1341,7 +1341,7 @@ void plot_save_color_test_mode(plot_t *plot, int mode, void *arg) {
   return;
 }
 
-void plot_save_hatch_test(plot_t *plot, const char *filename) {
+void plot_save_hatch_test_mode(plot_t *plot, int mode, void *arg) {
   plot_t *test = plot_init();
   // Use current plot's configuration
   plot_param_copy(&test->param, &plot->param);
@@ -1385,7 +1385,14 @@ void plot_save_hatch_test(plot_t *plot, const char *filename) {
     bar_pos += bar_width;
   }
   plot_add_x_title(test, "Hatch Scheme Test");
-  plot_save_fig(test, filename);
+  if(mode == PLOT_SAVE_MODE_FILE) {
+    plot_save_fig(test, (const char *)arg);
+  } else if(mode == PLOT_SAVE_MODE_BUF) {
+    // Do not use buf_concat since this will free the second arg
+    buf_append((buf_t *)arg, buf_c_str(test->buf));
+  } else {
+    error_exit("Invalid save mode %d\n", mode);
+  }
   plot_free(test);
   return;
 }
