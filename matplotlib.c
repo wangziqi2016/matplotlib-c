@@ -695,6 +695,8 @@ bar_t *bar_init() {
   bar_t *bar = (bar_t *)malloc(sizeof(bar_t));
   SYSEXPECT(bar != NULL);
   memset(bar, 0x00, sizeof(bar_t));
+  // This is to avoid having bar width overwritten
+  bar->width = INFINITY;
   return bar;
 }
 
@@ -963,12 +965,78 @@ void plot_create_fig(plot_t *plot, double width, double height) {
   return;
 }
 
-// This generates code for bars stored in bargroup and bars
-//void plot_draw_bar(plot_t *plot) {
-//  int total_bar = 0;
-//  int total_space = 0
-//  double width;
-//}
+// Generates plotting script for an individual bar, assuming parameters are already set
+// This function could be called without adding bar and bar groups to the plot object
+// Only one new line is appended at the end of the draw
+void plot_draw_bar(plot_t *plot, bar_t *bar) {
+  assert(bar->type != NULL);
+  buf_t *buf = plot->buf;
+  plot_param_t *param = &plot->param;
+  if(bar->width == INFINITY) {
+    error_exit("Bar width is INFINITY; Did you initialize properly? "
+               "(call plot_draw_all_bars() to compute automatically)\n");
+  }
+  // Firts two args are fixed
+  buf_printf(buf, "ax.bar(%f, %f\n", bar->pos, bar->height);
+  // Following args are optional
+  buf_printf(buf, "  , width=%f\n", bar->width);
+  if(bar->bottom != 0.0) buf_printf(buf, "  , bottom=%f\n", bar->bottom);
+  // Color of the bar
+  buf_printf(buf, "  , color='");
+  buf_append_color(buf, bar_get_color(bar));
+  buf_printf(buf, "'\n");
+  // Hatch (if not '\0')
+  char hatch = bar_get_hatch(bar);
+  if(hatch != '\0') {
+    if(hatch == '\\') buf_printf(buf, "  , hatch='\\\\'\n");
+    else if(hatch == '%') buf_printf(buf, "  , hatch='\\\\%'\n"); // Python sees \\% latex sees \%
+    else if(hatch == '$') buf_printf(buf, "  , hatch='\\\\$'\n"); // Python sees \\% latex sees \$
+    else buf_printf(buf, "  , hatch='%c'\n", hatch);
+  }
+  // Add label if it has not been used for bars
+  if(bar_get_type(bar)->used == 0) {
+    bar_get_type(bar)->used = 1;
+    buf_printf(buf, "  , label='%s'\n", bar_get_type(bar)->label);
+  }
+  // This concludes arg list of bar()
+  buf_printf(buf, ")\n");
+  // Then draw bar text
+  char *bar_text = bar->text;
+  int bar_text_free = 0;
+  if(bar_text == NULL) {
+    // Round the height
+    bar_text = fp_print(bar->height, param->bar_text_decimals);
+    bar_text_free = 1;
+    if(param->bar_text_rtrim == 1) {
+      fp_rtrim(bar_text);
+    }
+  }
+  // TODO: ADJUST FOR ERROR BAR
+  buf_printf(buf, "ax.text(%f, %f, '%s'", bar->pos + bar->width / 2.0, bar->height, bar_text);
+  buf_printf(buf, "  , ha='center', va='bottom', rotation=%d, fontsize=%d)\n",
+    param->bar_text_rotation, param->bar_text_font_size);
+  if(bar_text_free == 1) free(bar_text);
+  return;
+}
+
+// This function will overrite bar width if already set
+void plot_draw_all_bars(plot_t *plot) {
+  if(plot->curr_bargrp != NULL) {
+    printf("[plot] WARNING: curr_bargrp is not NULL; Some bars may not be plotted\n");
+  }
+  plot_param_t *param = &plot->param;
+  int bar_count = 0;
+  int space_count = 2 + (vec_count(plot->bargrps) - 1);
+  for(int i = 0;i < vec_count(plot->bargrps);i++) {
+    bargrp_t *grp = (bargrp_t *)vec_at(plot->bargrps, i);
+    bar_count += bargrp_count(grp);
+  }
+  // Since bargrp space may be less than bar width
+  double effective_bar_count = (double)bar_count + (double)space_count * param->bargrp_space;
+  double bar_width = param->width / effective_bar_count;
+
+  return;
+}
 
 // Generates tick plotting code to the buffer using tick parameters
 void plot_draw_tick(plot_t *plot) {
@@ -1216,54 +1284,6 @@ void plot_set_legend_rows(plot_t *plot, int rows) {
     error_exit("Legend rows must be > 0 or -1 for vertical legend (sees %d)\n", rows);
   }
   plot->param.legend_rows = rows;
-  return;
-}
-
-// Only one new line is appended at the end of the draw
-void plot_draw_bar(plot_t *plot, bar_t *bar) {
-  assert(bar->type != NULL);
-  buf_t *buf = plot->buf;
-  plot_param_t *param = &plot->param;
-  // Firts two args are fixed
-  buf_printf(buf, "ax.bar(%f, %f\n", bar->pos, bar->height);
-  // Following args are optional
-  buf_printf(buf, "  , width=%f\n", bar->width);
-  if(bar->bottom != 0.0) buf_printf(buf, "  , bottom=%f\n", bar->bottom);
-  // Color of the bar
-  buf_printf(buf, "  , color='");
-  buf_append_color(buf, bar_get_color(bar));
-  buf_printf(buf, "'\n");
-  // Hatch (if not '\0')
-  char hatch = bar_get_hatch(bar);
-  if(hatch != '\0') {
-    if(hatch == '\\') buf_printf(buf, "  , hatch='\\\\'\n");
-    else if(hatch == '%') buf_printf(buf, "  , hatch='\\\\%'\n"); // Python sees \\% latex sees \%
-    else if(hatch == '$') buf_printf(buf, "  , hatch='\\\\$'\n"); // Python sees \\% latex sees \$
-    else buf_printf(buf, "  , hatch='%c'\n", hatch);
-  }
-  // Add label if it has not been used for bars
-  if(bar_get_type(bar)->used == 0) {
-    bar_get_type(bar)->used = 1;
-    buf_printf(buf, "  , label='%s'\n", bar_get_type(bar)->label);
-  }
-  // This concludes arg list of bar()
-  buf_printf(buf, ")\n");
-  // Then draw bar text
-  char *bar_text = bar->text;
-  int bar_text_free = 0;
-  if(bar_text == NULL) {
-    // Round the height
-    bar_text = fp_print(bar->height, param->bar_text_decimals);
-    bar_text_free = 1;
-    if(param->bar_text_rtrim == 1) {
-      fp_rtrim(bar_text);
-    }
-  }
-  // TODO: ADJUST FOR ERROR BAR
-  buf_printf(buf, "ax.text(%f, %f, '%s'", bar->pos + bar->width / 2.0, bar->height, bar_text);
-  buf_printf(buf, "  , ha='center', va='bottom', rotation=%d, fontsize=%d)\n",
-    param->bar_text_rotation, param->bar_text_font_size);
-  if(bar_text_free == 1) free(bar_text);
   return;
 }
 

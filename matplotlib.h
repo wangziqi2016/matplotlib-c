@@ -339,7 +339,8 @@ bargrp_t *plot_find_bargrp(plot_t *plot, const char *name);
 void plot_create_fig(plot_t *plot, double width, double height);
 
 // The following causes scripts to be generated using params and data points
-void plot_draw_bar(plot_t *plot, bar_t *bar);
+void plot_draw_bar(plot_t *plot, bar_t *bar); // This draws a single bar given the bar object
+void plot_draw_all_bars(plot_t *plot); // This computes coordinates and draws each bar individually
 void plot_draw_tick(plot_t *plot);
 void plot_draw_grid(plot_t *plot);
 void plot_draw_limit(plot_t *plot);
