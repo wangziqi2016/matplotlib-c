@@ -2726,7 +2726,7 @@ void parse_cb_test_hatch(parse_t *parse, plot_t *plot) {
   if(plot->param.info == 1) {
     printf("[parse] Saving hatch test file to \"%s\"\n", filename);
   }
-  plot_save_hatch_test(plot, filename);
+  plot_save_hatch_test_file(plot, filename);
   free(filename);
   return;
 }
@@ -2757,7 +2757,7 @@ void parse_cb_dump(parse_t *parse, plot_t *plot) {
   int next_arg = parse_next_arg(parse);
   if(next_arg == PARSE_ARG_QMARK) {
     printf("[!dump] Usage: dump [target] [file name]\n");
-    printf("[!dump] Valid targets are: plot, legend\n");
+    printf("[!dump] Valid targets are: plot, legend, color_test, hatch_test\n");
     printf("[!dump] The file name can be either a string or a file indicator\n");
     return;
   }
@@ -2775,12 +2775,24 @@ void parse_cb_dump(parse_t *parse, plot_t *plot) {
   int free_buf = 0;
   if(streq(ident, "plot") == 1) {
     plot_draw(plot);
+    plot_reset_flags(plot); // Reset flags here
     buf = plot->buf;
     free_buf = 0;
   } else if(streq(ident, "legend") == 1) {
     buf = buf_init();
     free_buf = 1;
     plot_save_legend_buf(plot, buf);
+  } else if(streq(ident, "color_test") == 1) {
+    buf = buf_init();
+    free_buf = 1;
+    plot_save_color_test_buf(plot, buf);
+  } else if(streq(ident, "hatch_test") == 1) {
+    buf = buf_init();
+    free_buf = 1;
+    plot_save_hatch_test_buf(plot, buf);
+  } else {
+    parse_report_pos(parse);
+    error_exit("Invalid dump target: \"%s\"\n", ident);
   }
   FILE *fp = fopen(filename, "w");
   SYSEXPECT(fp != NULL);

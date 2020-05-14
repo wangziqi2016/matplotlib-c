@@ -373,7 +373,7 @@ inline static void plot_save_color_test_buf(plot_t *plot, buf_t *buf) {
   plot_save_color_test_mode(plot, PLOT_SAVE_MODE_BUF, (void *)buf);
 }
 
-void plot_save_hatch_test_mode(plot_t *plot, const char *filename);
+void plot_save_hatch_test_mode(plot_t *plot, int mode, void *arg);
 inline static void plot_save_hatch_test_file(plot_t *plot, const char *filename) {
   plot_save_hatch_test_mode(plot, PLOT_SAVE_MODE_FILE, (void *)filename);
 }
