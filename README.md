@@ -76,6 +76,7 @@ within a single line.
 | legend_filename | The file name when saving only the legend | string |
 | width | The width of the figure | float\[0.0, +inf\] |
 | height | The height of the figure | float\[0.0, +inf\] |
+| legend_enabled | Whether or not to draw legend with the plot. Ignored for legend plotting | int\[0, 1\] |
 | legend_rows | Number of rows in the legend. This applies to both figure and legend plot | int\[1, +inf\] |
 | legend_font_size | Font size in the legend. This applies to both figure and legend plot | int\[1, +inf\] |
 | legend_pos | Position of the legend. Only applies to figure. Refer to matplotlib doc for valid values | string |
