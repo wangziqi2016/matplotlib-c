@@ -339,8 +339,6 @@ bar_type_t *plot_find_bar_type(plot_t *plot, const char *label);
 void plot_add_bargrp(plot_t *plot, bargrp_t *grp);
 bargrp_t *plot_find_bargrp(plot_t *plot, const char *name);
 
-void plot_create_fig(plot_t *plot, double width, double height);
-
 // This resets all flags that are set during plot_draw()
 void plot_reset_flags(plot_t *plot);
 void plot_reset_buf(plot_t *plot);

@@ -955,18 +955,6 @@ bargrp_t *plot_find_bargrp(plot_t *plot, const char *name) {
   return NULL;
 }
 
-// This function uses param object's width and height
-void plot_create_fig(plot_t *plot, double width, double height) {
-  if(plot->fig_created == 1) {
-    error_exit("A figure has already been created on this plot\n");
-  }
-  buf_printf(plot->buf, "fig = plot.figure(figsize=(%f, %f))\n", width, height);
-  // "111" means the output consists of only one plot
-  buf_append(plot->buf, "ax = fig.add_subplot(111)\n\n");
-  plot->fig_created = 1;
-  return;
-}
-
 // Reset flags that will be set during draw() such that we can draw again
 void plot_reset_flags(plot_t *plot) {
   // Reset types
