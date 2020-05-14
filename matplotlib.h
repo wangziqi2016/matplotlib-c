@@ -257,6 +257,7 @@ typedef struct {
   double width;
   double height;
   // Legend parameters
+  int legend_enabled;        // Whether to draw the legend
   int legend_rows;           // By default draw horizontal legend
   int legend_font_size;      // Font size for text in the legend
   char legend_pos[PLOT_LEGEND_POS_MAX_SIZE]; // Legend position; This string should never be freed
@@ -392,6 +393,8 @@ enum {
   // plot_param_t fields
   PARSE_WIDTH,
   PARSE_HEIGHT,
+  // Legend
+  PARSE_LEGEND_ENABLED,
   PARSE_LEGEND_ROWS,
   PARSE_LEGEND_FONT_SIZE,
   PARSE_LEGEND_POS,

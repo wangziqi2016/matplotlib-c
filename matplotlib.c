@@ -761,6 +761,7 @@ void bargrp_print(bargrp_t *grp, int verbose) {
 
 plot_param_t default_param = {
   12.0, 6.0, // Width and Height
+  1,         // legend_enabled
   1,         // legend_rows
   28,        // legend_font_size
   "best",    // Legend pos; Alternatives are: {lower, center, upper} x {left, center, right} or "center"
@@ -791,8 +792,8 @@ void plot_param_copy(plot_param_t *dst, plot_param_t *src) {
 
 void plot_param_print(plot_param_t *param, int verbose) {
   printf("[param] width %f height %f\n", param->width, param->height);
-  printf("[param legend] font size %d rows %d pos \"%s\"\n", 
-    param->legend_font_size, param->legend_rows, param->legend_pos);
+  printf("[param legend] enabled %d font size %d rows %d pos \"%s\"\n", 
+    param->legend_enabled, param->legend_font_size, param->legend_rows, param->legend_pos);
   printf("[param title] x font %d y font %d\n", 
     param->xtitle_font_size, param->ytitle_font_size);
   printf("[param xtick] enabled %d len %f dir %d font %d rot %d label %d\n", 

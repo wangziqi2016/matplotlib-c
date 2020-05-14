@@ -29,6 +29,9 @@ X - Need a test for the function
 Adding dump command
 - dump legend
 
+Adding reset bar init and type used
+- Also add to the command
+
 Always draw from bar group and bars stored in the group. 
 - Move plotting function to save_fig
 
