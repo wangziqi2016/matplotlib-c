@@ -930,10 +930,21 @@ bar_type_t *plot_find_bar_type(plot_t *plot, const char *label) {
 
 // This function adds a bar group into bargrps
 void plot_add_bargrp(plot_t *plot, bargrp_t *grp) {
+  // TODO: SEARCH FOR NAME CONFLICT
   vec_append(plot->bargrps, (void *)grp);
   return;
 }
-bargrp_t *plot_find_bargrp(plot_t *plot, const char *label);
+
+// Returns NULL if not found
+bargrp_t *plot_find_bargrp(plot_t *plot, const char *name) {
+  for(int i = 0;i < vec_count(plot->bargrps);i++) {
+    bargrp_t *grp = (bargrp_t *)vec_at(plot->bargrps, i);
+    if(streq(grp->name, name) == 1) {
+      return grp;
+    }
+  }
+  return NULL;
+}
 
 // This function uses param object's width and height
 void plot_create_fig(plot_t *plot, double width, double height) {
