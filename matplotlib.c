@@ -1228,15 +1228,16 @@ void plot_save_fig(plot_t *plot, const char *filename) {
 
 // Saves a standalone legend file
 // This function can be called anywhere during the plotting procedure. Legends drawn will be 
-// bar types stored in the plot object
+// bar types stored in the plot object. Report error if there is not any bar type.
 void plot_save_legend(plot_t *plot, const char *filename) {
   plot_t *legend = plot_init(); // Preamble is set after this
   plot_param_copy(&legend->param, &plot->param); // Copy legend configuration to the new legend plot
   legend->param.width = legend->param.height = 0.001; // Super small graph
-  if(legend->param.legend_enabled == 0 && legend->paran.info == 1) {
+  if(legend->param.legend_enabled == 0 && legend->param.info == 1) {
     printf("[save_legend] Force turning on legend_enabled flag\n");
   }
-  legend->param.legend_enabled = 1; // Forced to turn on
+  legend->param.legend_enabled = 1;       // Forced to turn on
+  plot_set_legend_pos(legend, "center");  // Hardcode legend pos
   assert(legend->buf != NULL && legend->py != NULL);
   plot_create_fig(legend, legend->param.width, legend->param.height);
   int count = vec_count(plot->bar_types);
@@ -1248,15 +1249,17 @@ void plot_save_legend(plot_t *plot, const char *filename) {
     bar_t *bar = bar_init();
     // The bar should not be drawn
     bar->bottom = bar->height = bar->width = 0.0;
+    bar->inited = 1;
     // Also duplicate the bar type and associate it with the bar
     plot_add_bar_type(legend, type->label, type->color, type->hatch);
     bar_set_type(bar, plot_find_bar_type(legend, type->label));
+    // Directly call plot_draw_bar() without adding the bar to the plot
     plot_draw_bar(legend, bar);
     // No longer used
     bar_free(bar);
   }
-  plot_set_legend_pos(legend, "center");  // Hardcode lagend pos
-  plot_add_legend(legend);
+  // Only call draw legend here without plotting other things
+  plot_draw_legend(legend);
   plot_save_fig(legend, filename);
   plot_free(legend);
   return;
@@ -1269,6 +1272,8 @@ void plot_save_color_test(plot_t *plot, const char *filename) {
   plot_param_copy(&test->param, &plot->param);
   plot_create_fig(test, test->param.width, test->param.height);
   plot_param_t *param = &test->param;
+  // Force turn off legend
+  param->legend_enabled = 0;
   char label_buf[16];
   int usable = param->color_scheme->item_count - param->color_offset;
   double bar_width = param->width / (double)usable;
@@ -1281,6 +1286,7 @@ void plot_save_color_test(plot_t *plot, const char *filename) {
     bar->pos = bar_pos;
     bar->width = bar_width;
     bar->height = bar_height;
+    bar->inited = 1;
     bar_set_type(bar, plot_find_bar_type(test, label_buf));
     // Print color code
     char color_buf[16];
@@ -1304,6 +1310,8 @@ void plot_save_hatch_test(plot_t *plot, const char *filename) {
   // Use current plot's configuration
   plot_param_copy(&test->param, &plot->param);
   plot_param_t *param = &test->param;
+  // Force turn off legend
+  param->legend_enabled = 0;
   char label_buf[16];
   int usable = param->hatch_scheme->item_count - param->color_offset;
   double bar_width = 2.0; // To show the hatch we need fixed width bar
@@ -1321,6 +1329,7 @@ void plot_save_hatch_test(plot_t *plot, const char *filename) {
     bar->pos = bar_pos;
     bar->width = bar_width;
     bar->height = bar_height;
+    bar->inited = 1;
     bar_set_type(bar, plot_find_bar_type(test, label_buf));
     // Print color code
     char hatch_buf[32];

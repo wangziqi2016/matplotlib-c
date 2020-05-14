@@ -18,7 +18,7 @@
                               ;
 # .legend_filename = "legend.pdf"; # This property is optional
 
-.legend_pos = "top right"; # Specifies legend pos
+.legend_pos = "upper right"; # Specifies legend pos
 # .legend_pos = "This is a loooooooooooooong string"; # Should not be too long
 
 .width = 16.0;
