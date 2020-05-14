@@ -84,11 +84,13 @@ within a single line.
 | xtick_direction | Direction of ticks. Can be integer or one of the following: "in", "out", "both" | int\[0, 2\] or string |
 | xtick_font_size | Font size for X axis ticks | int\[1, +inf\] |
 | xtick_rotation | Rotation for X axis ticks | int\[0, 359\] |
+| xtick_label_enabled | Whether to draw tick labels on X axis. Turned off if xtick_enabled is off | int\[0, 1\] |
 | ytick_enabled | Enabling both ticks and tick labels. Setting to 0 will disable both | int\[0, 1\] |
 | ytick_length | Length of ticks. Setting to 0 will disable it while keeping the tick label | float\[0, +inf\] |
 | ytick_direction | Direction of ticks. Can be integer or one of the following: "in", "out", "both" | int\[0, 2\] or string |
 | ytick_font_size | Font size for Y axis ticks | int\[1, +inf\] |
 | ytick_rotation | Rotation for Y axis ticks | int\[0, 359\] |
+| ytick_label_enabled | Whether to draw tick labels on Y axis. Turned off if ytick_enabled is off | int\[0, 1\] |
 | xgrid_enabled | Enabling X (vertical) grid | int\[0, 1\] |
 | ygrid_enabled | Enabling Y (horizontal) grid | int\[0, 1\] |
 | xtitle_font_size | Font size for X axis title | int\[1, +inf\] |
