@@ -695,8 +695,8 @@ bar_t *bar_init() {
   bar_t *bar = (bar_t *)malloc(sizeof(bar_t));
   SYSEXPECT(bar != NULL);
   memset(bar, 0x00, sizeof(bar_t));
-  // This is to avoid having bar width overwritten
-  bar->width = INFINITY;
+  // This is to avoid having bar plotting params overwritten
+  bar->inited = 0;
   return bar;
 }
 
@@ -972,8 +972,8 @@ void plot_draw_bar(plot_t *plot, bar_t *bar) {
   assert(bar->type != NULL);
   buf_t *buf = plot->buf;
   plot_param_t *param = &plot->param;
-  if(bar->width == INFINITY) {
-    error_exit("Bar width is INFINITY; Did you initialize properly? "
+  if(bar->inited == 0) {
+    error_exit("Bar is not initialized; Did you initialize properly? "
                "(call plot_draw_all_bars() to compute automatically)\n");
   }
   // Firts two args are fixed
@@ -1034,7 +1034,19 @@ void plot_draw_all_bars(plot_t *plot) {
   // Since bargrp space may be less than bar width
   double effective_bar_count = (double)bar_count + (double)space_count * param->bargrp_space;
   double bar_width = param->width / effective_bar_count;
-
+  double curr_pos = bar_width * param->bargrp_space;
+  for(int i = 0;i < vec_count(plot->bargrps);i++) {
+    bargrp_t *grp = (bargrp_t *)vec_at(plot->bargrps, i);
+    for(int j = 0;j < vec_count(grp->bars);j++) {
+      bar_t *bar = vec_at(grp->bars, j);
+      if(bar->inited == 1) {
+        printf("WARNING: The bar object's width and/or pos has been initialized\n");
+      }
+      bar->inited = 1;
+      bar->width = bar_width;
+      bar_pos = curr_pos;
+    }
+  }
   return;
 }
 
