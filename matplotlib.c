@@ -1023,10 +1023,10 @@ void plot_draw_bar(plot_t *plot, bar_t *bar) {
 // This function calls plot_draw_bar() to draw individual bars
 // Also adds ticks into the tick array
 void plot_draw_all_bargrps(plot_t *plot) {
+  plot_param_t *param = &plot->param;
   if(plot->curr_bargrp != NULL && param->info == 1) {
     printf("[plot] WARNING: curr_bargrp is not NULL; Some bars may not be plotted\n");
   }
-  plot_param_t *param = &plot->param;
   int bar_count = 0;
   int space_count = 2 + (vec_count(plot->bargrps) - 1);
   for(int i = 0;i < vec_count(plot->bargrps);i++) {
@@ -1051,10 +1051,10 @@ void plot_draw_all_bargrps(plot_t *plot) {
       }
       bar->inited = 1;
       bar->width = bar_width;
-      bar_pos = curr_pos;
+      bar->pos = curr_pos;
       bar->bottom = curr_bottom;
       int is_last = (j == (vec_count(grp->bars) - 1));
-      int next_stacked = (is_last || (vec_at(grp->bars, j + 1)->stacked == 0));
+      int next_stacked = (is_last || (((bar_t *)vec_at(grp->bars, j + 1))->stacked == 0));
       if(is_last == 1) {
         // Either jump to the next immediate slot, or leave inter-group space
         curr_pos += (bar_width + bar_width * param->bargrp_space);
@@ -1164,8 +1164,6 @@ void plot_draw_limit(plot_t *plot) {
 
 // Generates all scripts except save figure or show figure
 void plot_draw(plot_t *plot) {
-  buf_t *buf = plot->buf;
-  plot_param_t *param = &plot->param;
   // Note that this can be skipped by arranging bars manually
   plot_draw_all_bargrps(plot);
   plot_draw_tick(plot);
@@ -1185,15 +1183,15 @@ void plot_save_fig(plot_t *plot, const char *filename) {
   // Print draw command and execute script
   if(param->dry_run == PLOT_DRY_RUN_DISABLED) {
     // Pass the file name
-    buf_printf(plot->buf, "plot.savefig(\"%s\", bbox_inches='tight')\n\n", filename);
+    buf_printf(buf, "plot.savefig(\"%s\", bbox_inches='tight')\n\n", filename);
     py_run(plot->py, buf_c_str(plot->buf));
   } else if(param->dry_run == PLOT_DRY_RUN_ENABLED) {
-    buf_printf(plot->buf, "plot.savefig(\"%s\", bbox_inches='tight')\n\n", filename);
+    buf_printf(buf, "plot.savefig(\"%s\", bbox_inches='tight')\n\n", filename);
     if(plot->param.info == 1) printf("[plot] Dry run mode is on; not executing anything\n");
   } else if(param->dry_run == PLOT_DRY_RUN_SHOW) {
     if(plot->param.info == 1) printf("[plot] Dry run mode is \"show\", showing the plot on-screen\n");
-    buf_printf(plot->buf, "plot.show()\n\n", filename);
-    py_run(plot->py, buf_c_str(plot->buf));
+    buf_printf(buf, "plot.show()\n\n", filename);
+    py_run(plot->py, buf_c_str(buf));
   }
   return;
 }
