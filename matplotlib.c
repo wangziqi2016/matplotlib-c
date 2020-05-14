@@ -1376,7 +1376,11 @@ void plot_set_legend_pos(plot_t *plot, const char *pos) {
     }
     p++;
   }
-  error_exit("Invalid legend pos: \"%s\". Please refer to matplotlib doc for valid combination\n", pos);
+  error_exit("Invalid legend pos: \"%s\". We support the following:\n", pos);
+  while(*p != NULL) {
+    printf("%s ", *p);
+    p++;
+  }
   return;
 }
 

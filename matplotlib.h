@@ -354,6 +354,9 @@ void plot_save_fig(plot_t *plot, const char *filename);
 void plot_save_legend(plot_t *plot, const char *filename);
 void plot_save_color_test(plot_t *plot, const char *filename);
 
+// Defines all valid combinations
+extern const char *plot_valid_legend_poses[];
+
 void plot_set_legend_rows(plot_t *plot, int rows);
 void plot_set_legend_pos(plot_t *plot, const char *pos);
 
