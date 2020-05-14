@@ -1036,6 +1036,7 @@ void plot_draw_all_bars(plot_t *plot) {
   double effective_bar_count = (double)bar_count + (double)space_count * param->bargrp_space;
   double bar_width = param->width / effective_bar_count;
   double curr_pos = bar_width * param->bargrp_space;
+  double curr_bottom = 0.0;
   for(int i = 0;i < vec_count(plot->bargrps);i++) {
     bargrp_t *grp = (bargrp_t *)vec_at(plot->bargrps, i);
     for(int j = 0;j < vec_count(grp->bars);j++) {
@@ -1045,11 +1046,23 @@ void plot_draw_all_bars(plot_t *plot) {
       }
       bar->inited = 1;
       bar->width = bar_width;
-      if(bar->stacked == 0) {
-        bar_pos = curr_pos;
+      bar_pos = curr_pos;
+      bar->bottom = curr_bottom;
+      int is_last = (j == (vec_count(grp->bars) - 1));
+      int next_stacked = (is_last || (vec_at(grp->bars, j + 1)->stacked == 0));
+      if(is_last == 1) {
+        // Either jump to the next immediate slot, or leave inter-group space
+        curr_pos += (bar_width + bar_width * param->bargrp_space);
+        curr_bottom = 0.0;
+      } else if(next_stacked == 1) {
+        curr_bottom += bar->height;
       } else {
-
+        // Regular next bar
+        curr_pos += bar_width;
+        curr_bottom = 0.0;
       }
+      // Finally call the function to draw bars
+      plot_draw_bar(plot, bar);
     }
   }
   return;

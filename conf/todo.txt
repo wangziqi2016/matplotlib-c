@@ -26,6 +26,9 @@ X - Table linear scan lookup
 X - Could be used for dry run, direction, etc.
 X - Need a test for the function
 
+Adding dump command
+- dump legend
+
 Always draw from bar group and bars stored in the group. 
 - Move plotting function to save_fig
 
