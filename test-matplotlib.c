@@ -292,11 +292,11 @@ void test_plot_legend() {
   // Uncomment the following to reveal error
   //plot_set_legend_rows(plot, -2);
   plot_set_legend_rows(plot, 1);
-  plot_save_legend(plot, "test_legend_1.pdf");
+  plot_save_legend_file(plot, "test_legend_1.pdf");
   plot_set_legend_rows(plot, 100);
-  plot_save_legend(plot, "test_legend_2.pdf");
+  plot_save_legend_file(plot, "test_legend_2.pdf");
   plot_set_legend_rows(plot, 3);
-  plot_save_legend(plot, "test_legend_3.pdf");
+  plot_save_legend_file(plot, "test_legend_3.pdf");
   plot_free(plot);
   printf("Pass\n");
   return;

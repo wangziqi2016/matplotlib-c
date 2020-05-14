@@ -2596,13 +2596,13 @@ void parse_cb_save_legend(parse_t *parse, plot_t *plot) {
         printf("[parse] Overriding existing save legend filename: \"%s\"\n", plot->legend_filename);
       }
     }
-    plot_save_legend(plot, filename);
+    plot_save_legend_file(plot, filename);
     free(filename);
   } else {
     if(plot->legend_filename == NULL) {
       error_exit("Need a file name to save the legend (either as property or argument)\n");
     }
-    plot_save_legend(plot, plot->legend_filename);
+    plot_save_legend_file(plot, plot->legend_filename);
   }
   if(parse_next_arg(parse)) {
     error_exit("Function \"save_legend\" takes 1 optional argument\n");
