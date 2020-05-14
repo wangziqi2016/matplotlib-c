@@ -1354,6 +1354,12 @@ void plot_save_hatch_test(plot_t *plot, const char *filename) {
   return;
 }
 
+const char *plot_valid_legend_poses[] = {
+  "right", "center left", "upper right", "lower right",
+  "best", "center", "lower left", "center right", "upper left",
+  "upper center", "lower center", NULL,
+};
+
 // Sets legend pos by copying the string to the param struct
 // The given string should not be longer than the storage size
 void plot_set_legend_pos(plot_t *plot, const char *pos) {
@@ -1362,7 +1368,15 @@ void plot_set_legend_pos(plot_t *plot, const char *pos) {
     error_exit("Legend pos must be a string shorter than %d bytes (sees %d)\n", 
       PLOT_LEGEND_POS_MAX_SIZE, len);
   }
-  strcpy(plot->param.legend_pos, pos);
+  const char **p = plot_valid_legend_poses;
+  while(*p != NULL) {
+    if(streq(*p, pos) == 1) {
+      strcpy(plot->param.legend_pos, pos);
+      return;
+    }
+    p++;
+  }
+  error_exit("Invalid legend pos: \"%s\". Please refer to matplotlib doc for valid combination\n", pos);
   return;
 }
 
