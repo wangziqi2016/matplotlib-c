@@ -928,6 +928,13 @@ bar_type_t *plot_find_bar_type(plot_t *plot, const char *label) {
   return NULL;
 }
 
+// This function adds a bar group into bargrps
+void plot_add_bargrp(plot_t *plot, bargrp_t *grp) {
+  vec_append(plot->bargrps, (void *)grp);
+  return;
+}
+bargrp_t *plot_find_bargrp(plot_t *plot, const char *label);
+
 // This function uses param object's width and height
 void plot_create_fig(plot_t *plot, double width, double height) {
   if(plot->fig_created == 1) {
@@ -2788,7 +2795,7 @@ void parse_print_prop(parse_t *parse, plot_t *plot, buf_t *buf, const char *name
     } break;
     // Bar group
     case PARSE_BARGRP_SPACE: {
-      parse_print_check_spec(parse, PARSE_SPEC_INT32, spec_ch, name);
+      parse_print_check_spec(parse, PARSE_SPEC_FLOAT, spec_ch, name);
       buf_printf(buf, fmt, plot->param.bargrp_space);
     } break;
     // Debug
