@@ -98,6 +98,7 @@
 +bar_type "Type 2" "#aabbcc";
 +bar_type "Type 3" "" "*";
 +bar_type "Type 4" "" "";
+!dump legend @"test_legend_5.pdf"
 
 !print bar_type;
 !print bar_type 3;
