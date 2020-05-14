@@ -1953,6 +1953,13 @@ parse_mapped_arg_entry_t parse_mapped_arg_direction[] = {
   PARSE_MAPPED_ARG_END,
 };
 
+parse_mapped_arg_entry_t parse_mapped_arg_dry_run[] = {
+  {"disabled", PLOT_DRY_RUN_DISABLED},
+  {"enabled", PLOT_DRY_RUN_ENABLED},
+  {"show", PLOT_DRY_RUN_SHOW},
+  PARSE_MAPPED_ARG_END,
+};
+
 // The "." has been removed from the stream
 // We do not use jump table for this function, since most of the handlers are small and straightforward
 void parse_top_property(parse_t *parse, plot_t *plot) {
