@@ -791,10 +791,12 @@ void plot_param_print(plot_param_t *param, int verbose) {
     param->legend_font_size, param->legend_rows, param->legend_pos);
   printf("[param title] x font %d y font %d\n", 
     param->xtitle_font_size, param->ytitle_font_size);
-  printf("[param xtick] enabled %d len %f dir %d font %d rot %d\n", 
-    param->xtick_enabled, param->xtick_length, param->xtick_direction, param->xtick_font_size, param->xtick_rotation);
-  printf("[param ytick] enabled %d len %f dir %d font %d rot %d\n", 
-    param->ytick_enabled, param->ytick_length, param->ytick_direction, param->ytick_font_size, param->ytick_rotation);
+  printf("[param xtick] enabled %d len %f dir %d font %d rot %d label %d\n", 
+    param->xtick_enabled, param->xtick_length, param->xtick_direction, param->xtick_font_size, param->xtick_rotation,
+    param->xtick_label_enabled);
+  printf("[param ytick] enabled %d len %f dir %d font %d rot %d label %d\n", 
+    param->ytick_enabled, param->ytick_length, param->ytick_direction, param->ytick_font_size, param->ytick_rotation,
+    param->ytick_label_enabled);
   printf("[param xgrid] enabled %d\n",
     param->xgrid_enabled);
   printf("[param ygrid] enabled %d\n",
@@ -2028,6 +2030,9 @@ void parse_top_property(parse_t *parse, plot_t *plot) {
     case PARSE_XTICK_ROTATION: {
       plot->param.xtick_rotation = (int)parse_get_int64_range(parse, 0, 359);
     } break;
+    case PARSE_XTICK_LABEL_ENABLED: {
+      plot->param.xtick_label_enabled = (int)parse_get_int64_range(parse, 0, 1);
+    } break;
     // Y ticks
     case PARSE_YTICK_ENABLED: {
       plot->param.ytick_enabled = (int)parse_get_int64_range(parse, 0, 1);
@@ -2049,9 +2054,14 @@ void parse_top_property(parse_t *parse, plot_t *plot) {
     case PARSE_YTICK_ROTATION: {
       plot->param.ytick_rotation = (int)parse_get_int64_range(parse, 0, 359L);
     } break;
+    case PARSE_YTICK_LABEL_ENABLED: {
+      plot->param.ytick_label_enabled = (int)parse_get_int64_range(parse, 0, 1);
+    } break;
+    // X Grid
     case PARSE_XGRID_ENABLED: {
       plot->param.xgrid_enabled = (int)parse_get_int64_range(parse, 0, 1);
     } break;
+    // Y Grid
     case PARSE_YGRID_ENABLED: {
       plot->param.ygrid_enabled = (int)parse_get_int64_range(parse, 0, 1);
     } break;
@@ -2683,6 +2693,10 @@ void parse_print_prop(parse_t *parse, plot_t *plot, buf_t *buf, const char *name
       parse_print_check_spec(parse, PARSE_SPEC_INT32, spec_ch, name);
       buf_printf(buf, fmt, plot->param.xtick_rotation);
     } break;
+    case PARSE_XTICK_LABEL_ENABLED: {
+      parse_print_check_spec(parse, PARSE_SPEC_INT32, spec_ch, name);
+      buf_printf(buf, fmt, plot->param.xtick_label_enabled);
+    } break;
     // Y tick
     case PARSE_YTICK_ENABLED: {
       parse_print_check_spec(parse, PARSE_SPEC_INT32, spec_ch, name);
@@ -2704,10 +2718,16 @@ void parse_print_prop(parse_t *parse, plot_t *plot, buf_t *buf, const char *name
       parse_print_check_spec(parse, PARSE_SPEC_INT32, spec_ch, name);
       buf_printf(buf, fmt, plot->param.ytick_rotation);
     } break;
+    case PARSE_YTICK_LABEL_ENABLED: {
+      parse_print_check_spec(parse, PARSE_SPEC_INT32, spec_ch, name);
+      buf_printf(buf, fmt, plot->param.ytick_label_enabled);
+    } break;
+    // X Grid
     case PARSE_XGRID_ENABLED: {
       parse_print_check_spec(parse, PARSE_SPEC_INT32, spec_ch, name);
       buf_printf(buf, fmt, plot->param.xgrid_enabled);
     } break;
+    // Y Grid
     case PARSE_YGRID_ENABLED: {
       parse_print_check_spec(parse, PARSE_SPEC_INT32, spec_ch, name);
       buf_printf(buf, fmt, plot->param.ygrid_enabled);
