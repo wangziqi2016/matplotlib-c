@@ -258,17 +258,20 @@ typedef struct {
   int legend_rows;           // By default draw horizontal legend
   int legend_font_size;      // Font size for text in the legend
   char legend_pos[PLOT_LEGEND_POS_MAX_SIZE]; // Legend position; This string should never be freed
-  // Tick
+  // X Tick
   int xtick_enabled;         // This turns off both labels and tick
   double xtick_length;       // Length of the tick - set to 0.0 to turn off. Set to INFINITY uses default
   int xtick_direction;          // Whether the tick stays inside, outside, or both (0 - inside, 1 - outside, 2 - both)
   int xtick_font_size;
   int xtick_rotation;
+  int xtick_label_enabled;   // Whether to draw tick labels
+  // Y Tick
   int ytick_enabled;         // Same as above
   double ytick_length;
   int ytick_direction;
   int ytick_font_size;
   int ytick_rotation;
+  int ytick_label_enabled;
   // Grid
   int xgrid_enabled;
   int ygrid_enabled;
@@ -386,12 +389,14 @@ enum {
   PARSE_XTICK_DIRECTION,
   PARSE_XTICK_FONT_SIZE,
   PARSE_XTICK_ROTATION,
+  PARSE_XTICK_LABEL_ENABLED,
 
   PARSE_YTICK_ENABLED,
   PARSE_YTICK_LENGTH,
   PARSE_YTICK_DIRECTION,
   PARSE_YTICK_FONT_SIZE,
   PARSE_YTICK_ROTATION,
+  PARSE_YTICK_LABEL_ENABLED,
 
   PARSE_XGRID_ENABLED,
 

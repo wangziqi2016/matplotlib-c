@@ -761,8 +761,8 @@ plot_param_t default_param = {
   1,         // legend_rows
   28,        // legend_font_size
   "best",    // Legend pos; Alternatives are: {lower, center, upper} x {left, center, right} or "center"
-  1, INFINITY, PLOT_DIRECTION_INSIDE, 24, 0,  // x tick enabled, length, dir, font size, rotation
-  1, INFINITY, PLOT_DIRECTION_INSIDE, 24, 0,  // y tick enabled, length, dir, font size, rotation
+  1, INFINITY, PLOT_DIRECTION_INSIDE, 24, 0, 1,  // x tick enabled, length, dir, font size, rotation, label enabled
+  1, INFINITY, PLOT_DIRECTION_INSIDE, 24, 0, 1,  // y tick enabled, length, dir, font size, rotation, label enabled
   0,         // x grid enabled
   0,         // y grid enabled
   28, 28,    // x/y title font size
@@ -1908,12 +1908,14 @@ parse_cb_entry_t parse_cb_top_props[] = {
   PARSE_GEN_PROP("xtick_direction", PARSE_XTICK_DIRECTION),
   PARSE_GEN_PROP("xtick_font_size", PARSE_XTICK_FONT_SIZE),
   PARSE_GEN_PROP("xtick_rotation", PARSE_XTICK_ROTATION),
+  PARSE_GEN_PROP("xtick_label_enabled", PARSE_XTICK_LABEL_ENABLED),
   // Y Ticks
   PARSE_GEN_PROP("ytick_enabled", PARSE_YTICK_ENABLED),
   PARSE_GEN_PROP("ytick_length", PARSE_YTICK_LENGTH),
   PARSE_GEN_PROP("ytick_direction", PARSE_YTICK_DIRECTION),
   PARSE_GEN_PROP("ytick_font_size", PARSE_YTICK_FONT_SIZE),
   PARSE_GEN_PROP("ytick_rotation", PARSE_YTICK_ROTATION),
+  PARSE_GEN_PROP("ytick_label_enabled", PARSE_YTICK_LABEL_ENABLED),
   // X grid
   PARSE_GEN_PROP("xgrid_enabled", PARSE_XGRID_ENABLED),
   // Y grid
