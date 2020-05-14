@@ -342,7 +342,7 @@ void plot_create_fig(plot_t *plot, double width, double height);
 
 // The following causes scripts to be generated using params and data points
 void plot_draw_bar(plot_t *plot, bar_t *bar); // This draws a single bar given the bar object
-void plot_draw_all_bars(plot_t *plot); // This computes coordinates and draws each bar individually
+void plot_draw_all_bargrps(plot_t *plot); // This computes coordinates and draws each bar individually
 void plot_draw_tick(plot_t *plot);
 void plot_draw_grid(plot_t *plot);
 void plot_draw_limit(plot_t *plot);
@@ -354,7 +354,6 @@ void plot_save_color_test(plot_t *plot, const char *filename);
 void plot_set_legend_rows(plot_t *plot, int rows);
 void plot_set_legend_pos(plot_t *plot, const char *pos);
 
-// The following only assigns a value, and does not generate script
 void plot_add_xtick(plot_t *plot, double pos, const char *text);
 void plot_add_ytick(plot_t *plot, double pos, const char *text);
 void plot_add_legend(plot_t *plot);

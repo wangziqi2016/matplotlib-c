@@ -1020,9 +1020,10 @@ void plot_draw_bar(plot_t *plot, bar_t *bar) {
   return;
 }
 
-// This function will overrite bar width if already set
-void plot_draw_all_bars(plot_t *plot) {
-  if(plot->curr_bargrp != NULL) {
+// This function calls plot_draw_bar() to draw individual bars
+// Also adds ticks into the tick array
+void plot_draw_all_bargrps(plot_t *plot) {
+  if(plot->curr_bargrp != NULL && param->info == 1) {
     printf("[plot] WARNING: curr_bargrp is not NULL; Some bars may not be plotted\n");
   }
   plot_param_t *param = &plot->param;
@@ -1031,6 +1032,10 @@ void plot_draw_all_bars(plot_t *plot) {
   for(int i = 0;i < vec_count(plot->bargrps);i++) {
     bargrp_t *grp = (bargrp_t *)vec_at(plot->bargrps, i);
     bar_count += bargrp_count(grp);
+  }
+  if(bar_count == 0) {
+    if(param->info == 1) printf("[plot] There is no bar to plot\n");
+    return;
   }
   // Since bargrp space may be less than bar width
   double effective_bar_count = (double)bar_count + (double)space_count * param->bargrp_space;
@@ -1041,7 +1046,7 @@ void plot_draw_all_bars(plot_t *plot) {
     bargrp_t *grp = (bargrp_t *)vec_at(plot->bargrps, i);
     for(int j = 0;j < vec_count(grp->bars);j++) {
       bar_t *bar = vec_at(grp->bars, j);
-      if(bar->inited == 1) {
+      if(bar->inited == 1 && param->info == 1) {
         printf("WARNING: The bar object's width and/or pos has been initialized\n");
       }
       bar->inited = 1;
@@ -1163,6 +1168,8 @@ void plot_save_fig(plot_t *plot, const char *filename) {
   }
   buf_t *buf = plot->buf;
   plot_param_t *param = &plot->param;
+  // Note that this can be skipped by arranging bars manually
+  plot_draw_all_bargrps(plot);
   plot_draw_tick(plot);
   plot_draw_grid(plot);
   plot_draw_limit(plot);
