@@ -719,6 +719,7 @@ void bar_print(bar_t *bar) {
   printf("[bar_t] height %f width %f pos %f bottom %f text \"%s\" label \"%s\"\n",
     bar->height, bar->width, bar->pos, bar->bottom, bar->text,
     bar->type ? bar->type->label : "N/A");
+  printf("        inited %d stacked %d\n", bar->inited, bar->stacked);
   return;
 }
 
@@ -1044,7 +1045,11 @@ void plot_draw_all_bars(plot_t *plot) {
       }
       bar->inited = 1;
       bar->width = bar_width;
-      bar_pos = curr_pos;
+      if(bar->stacked == 0) {
+        bar_pos = curr_pos;
+      } else {
+
+      }
     }
   }
   return;
