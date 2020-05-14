@@ -347,6 +347,7 @@ void plot_draw_all_bargrps(plot_t *plot); // This computes coordinates and draws
 void plot_draw_tick(plot_t *plot);
 void plot_draw_grid(plot_t *plot);
 void plot_draw_limit(plot_t *plot);
+void plot_draw_legend(plot_t *plot);
 void plot_draw(plot_t *plot); // Generates scripts except save fig
 
 void plot_save_fig(plot_t *plot, const char *filename);
@@ -358,7 +359,6 @@ void plot_set_legend_pos(plot_t *plot, const char *pos);
 
 void plot_add_xtick(plot_t *plot, double pos, const char *text);
 void plot_add_ytick(plot_t *plot, double pos, const char *text);
-void plot_add_legend(plot_t *plot);
 void plot_add_x_title(plot_t *plot, const char *title);
 void plot_add_y_title(plot_t *plot, const char *title);
 

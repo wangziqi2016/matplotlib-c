@@ -1163,13 +1163,42 @@ void plot_draw_limit(plot_t *plot) {
   return;
 }
 
+// Uses legend font size, legend vertical, and legend position in the param object
+void plot_draw_legend(plot_t *plot) {
+  int col_count = 0;
+  // Total number of elements in the legend
+  int type_count = vec_count(plot->bar_types);
+  if(type_count == 0) {
+    error_exit("Current plot does not contain any bar type\n");
+  }
+  int legend_rows = plot->param.legend_rows;
+  assert(legend_rows > 0 || legend_rows == -1);
+  if(legend_rows == -1) { // Special case: -1 means vertical
+    col_count = type_count;
+  } else {
+    if(type_count % legend_rows == 0) {
+      col_count = type_count / legend_rows;
+    } else {
+      col_count = (type_count + (legend_rows - type_count % legend_rows)) / legend_rows;
+    }
+  }
+  buf_t *buf = plot->buf;
+  plot_param_t *param = &plot->param;
+  // Adding legend statement
+  buf_printf(buf, "ax.legend(loc=\"%s\", prop={'size':%d}, ncol=%d)\n\n",
+             param->legend_pos, param->legend_font_size, col_count);
+  return;
+}
+
 // Generates all scripts except save figure or show figure
 void plot_draw(plot_t *plot) {
+  plot_param_t *param = &plot->param;
   // Note that this can be skipped by arranging bars manually
   plot_draw_all_bargrps(plot);
   plot_draw_tick(plot);
   plot_draw_grid(plot);
   plot_draw_limit(plot);
+  if(param->legend_enabled == 1) plot_draw_legend(plot);
   return;
 }
 
@@ -1204,6 +1233,10 @@ void plot_save_legend(plot_t *plot, const char *filename) {
   plot_t *legend = plot_init(); // Preamble is set after this
   plot_param_copy(&legend->param, &plot->param); // Copy legend configuration to the new legend plot
   legend->param.width = legend->param.height = 0.001; // Super small graph
+  if(legend->param.legend_enabled == 0 && legend->paran.info == 1) {
+    printf("[save_legend] Force turning on legend_enabled flag\n");
+  }
+  legend->param.legend_enabled = 1; // Forced to turn on
   assert(legend->buf != NULL && legend->py != NULL);
   plot_create_fig(legend, legend->param.width, legend->param.height);
   int count = vec_count(plot->bar_types);
@@ -1345,33 +1378,6 @@ void plot_add_ytick(plot_t *plot, double pos, const char *text) {
   buf_t *buf = plot->buf;
   buf_printf(buf, "cmatplotlib_yticks.append(%f)\n", pos);
   buf_printf(buf, "cmatplotlib_ytick_labels.append('%s')\n", text);
-  return;
-}
-
-// Uses legend font size, legend vertical, and legend position in the param object
-void plot_add_legend(plot_t *plot) {
-  int col_count = 0;
-  // Total number of elements in the legend
-  int type_count = vec_count(plot->bar_types);
-  if(type_count == 0) {
-    error_exit("Current plot does not contain any bar type\n");
-  }
-  int legend_rows = plot->param.legend_rows;
-  assert(legend_rows > 0 || legend_rows == -1);
-  if(legend_rows == -1) { // Special case: -1 means vertical
-    col_count = type_count;
-  } else {
-    if(type_count % legend_rows == 0) {
-      col_count = type_count / legend_rows;
-    } else {
-      col_count = (type_count + (legend_rows - type_count % legend_rows)) / legend_rows;
-    }
-  }
-  buf_t *buf = plot->buf;
-  plot_param_t *param = &plot->param;
-  // Adding legend statement
-  buf_printf(buf, "ax.legend(loc=\"%s\", prop={'size':%d}, ncol=%d)\n\n",
-             param->legend_pos, param->legend_font_size, col_count);
   return;
 }
 
