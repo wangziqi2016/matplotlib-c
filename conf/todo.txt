@@ -21,10 +21,10 @@ X Adding reset and reset all
 
 X Adding README to the repo
 
-Adding string mapping function, for string-int convertion when setting properties
-- Table linear scan lookup
-- Could be used for dry run, direction, etc.
-- Need a test for the function
+X Adding string mapping function, for string-int convertion when setting properties
+X - Table linear scan lookup
+X - Could be used for dry run, direction, etc.
+X - Need a test for the function
 
 Adding bar group, bar type and bars 
 - Fix hatch/color test to use bar groups (and do not free bars)

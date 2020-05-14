@@ -772,6 +772,7 @@ plot_param_t default_param = {
   NULL, 0,   // Color scheme/offset
   INFINITY, INFINITY, // xlimits
   INFINITY, INFINITY, // ylimits
+  1.0,       // bargrp space
   0,         // Dry run
   1,         // Info
 };
@@ -819,7 +820,7 @@ void plot_param_print(plot_param_t *param, int verbose) {
   }
   printf("[param x/y_lim] left %f right %f top %f bottom %f\n",
     param->xlim_left, param->xlim_right, param->ylim_top, param->ylim_bottom);
-  printf("[param bargrp] space %d\n", param->bargrp_space);
+  printf("[param bargrp] space %f\n", param->bargrp_space);
   printf("[debug] dry_run %d info %d\n", param->dry_run, param->info);
   return;
 }
@@ -2086,6 +2087,7 @@ void parse_top_property(parse_t *parse, plot_t *plot) {
     case PARSE_YTITLE_FONT_SIZE: {
       plot->param.ytitle_font_size = (int)parse_get_int64_range(parse, 1, PARSE_INT64_MAX);
     } break;
+    // Bar text
     case PARSE_BAR_TEXT_FONT_SIZE: {
       plot->param.bar_text_font_size = (int)parse_get_int64_range(parse, 1, PARSE_INT64_MAX);
     } break;
@@ -2098,6 +2100,7 @@ void parse_top_property(parse_t *parse, plot_t *plot) {
     case PARSE_BAR_TEXT_RTRIM: {
       plot->param.bar_text_rtrim = (int)parse_get_int64_range(parse, 0, 1);
     } break;
+    // Limits
     case PARSE_XLIM_LEFT: {
       plot->param.xlim_left = parse_get_double_range(parse, PARSE_DOUBLE_MIN, PARSE_DOUBLE_MAX);
     } break;
@@ -2110,6 +2113,11 @@ void parse_top_property(parse_t *parse, plot_t *plot) {
     case PARSE_YLIM_BOTTOM: {
       plot->param.ylim_bottom = parse_get_double_range(parse, PARSE_DOUBLE_MIN, PARSE_DOUBLE_MAX);
     } break;
+    // Bar group
+    case PARSE_BARGRP_SPACE: {
+      plot->param.bargrp_space = parse_get_double_range(parse, 0.0, PARSE_DOUBLE_MAX);
+    } break;
+    // Debug
     case PARSE_DRY_RUN: {
       int prev = plot->param.dry_run;
       int next_arg = parse_next_arg(parse);
