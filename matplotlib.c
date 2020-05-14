@@ -2327,6 +2327,7 @@ parse_cb_entry_t parse_cb_top_funcs[] = {
   PARSE_GEN_CB("set_color_scheme", parse_cb_set_color_scheme),
   PARSE_GEN_CB("test_hatch", parse_cb_test_hatch),
   PARSE_GEN_CB("test_color", parse_cb_test_color),
+  PARSE_GEN_CB("dump", parse_cb_dump),
 };
 const int parse_cb_top_funcs_count = sizeof(parse_cb_top_funcs) / sizeof(parse_cb_entry_t);
 
@@ -2729,6 +2730,18 @@ void parse_cb_test_color(parse_t *parse, plot_t *plot) {
   plot_save_color_test(plot, filename);
   free(filename);
   return;
+}
+
+void parse_cb_dump(parse_t *parse, plot_t *plot) {
+  int next_arg = parse_next_arg(parse);
+  if(next_arg == PARSE_ARG_QMARK) {
+    printf("[!dump] Usage: dump [target] [file name]\n");
+    printf("[!dump] Valid targets are: plot, legend\n");
+    printf("[!dump] The file name can be either a string or a file indicator\n");
+  }
+  char *ident = parse_get_ident(parse);
+  
+  free(ident);
 }
 
 static void parse_print_check_spec(parse_t *parse, const char *spec, char ch, const char *name) {
