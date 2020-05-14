@@ -241,6 +241,8 @@ void test_bargrp_find() {
     assert(streq(grp->name, buf) == 1);
     assert(bargrp_count(grp) == 1);
   }
+  bargrp_t *grp = plot_find_bargrp(plot, "Unknown name");
+  assert(grp == NULL);
   // This should free all bars and groups
   plot_free(plot);
   printf("Pass\n");

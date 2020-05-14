@@ -908,7 +908,7 @@ void plot_open_str(plot_t *plot, const char *s) {
 // Adds bar type; Note that types preserve the order they are inserted
 void plot_add_bar_type(plot_t *plot, const char *label, uint32_t color, char hatch) {
   if(plot_find_bar_type(plot, label) != NULL) {
-    error_exit("The label \"%s\" already exists\n", label);
+    error_exit("Bar type label \"%s\" already exists\n", label);
   }
   bar_type_t *type = bar_type_init(label);
   type->color = color;
@@ -928,7 +928,7 @@ bar_type_t *plot_find_bar_type(plot_t *plot, const char *label) {
   return NULL;
 }
 
-// This function adds a bar group into bargrps
+// This function adds a bar group into bargrps; Names must be unique
 void plot_add_bargrp(plot_t *plot, bargrp_t *grp) {
   if(plot_find_bargrp(plot, grp->name) != NULL) {
     error_exit("The bar group name \"%s\" already exists\n", grp->name);
