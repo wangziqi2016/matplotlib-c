@@ -877,8 +877,11 @@ void plot_free(plot_t *plot) {
     bargrp_free(vec_at(plot->bargrps, i));
   }
   vec_free(plot->bargrps);
-  // Free current bar group
-  if(plot->curr_bargrp != NULL) bargrp_free(plot->curr_bargrp);
+  // Free current bar group if not NULL. This should not be normal, however
+  if(plot->curr_bargrp != NULL) {
+    printf("WARNING: curr_bargrp is not NULL. Some bargroups are not added for plotting\n");
+    bargrp_free(plot->curr_bargrp);
+  }
   // Note that parse can be NULL if it is not initialized
   if(plot->parse != NULL) parse_free(plot->parse);
   if(plot->xtitle) free(plot->xtitle);
@@ -959,6 +962,13 @@ void plot_create_fig(plot_t *plot, double width, double height) {
   plot->fig_created = 1;
   return;
 }
+
+// This generates code for bars stored in bargroup and bars
+//void plot_draw_bar(plot_t *plot) {
+//  int total_bar = 0;
+//  int total_space = 0
+//  double width;
+//}
 
 // Generates tick plotting code to the buffer using tick parameters
 void plot_draw_tick(plot_t *plot) {
@@ -1095,7 +1105,7 @@ void plot_save_legend(plot_t *plot, const char *filename) {
     // Also duplicate the bar type and associate it with the bar
     plot_add_bar_type(legend, type->label, type->color, type->hatch);
     bar_set_type(bar, plot_find_bar_type(legend, type->label));
-    plot_add_bar(legend, bar);
+    plot_draw_bar(legend, bar);
     // No longer used
     bar_free(bar);
   }
@@ -1130,7 +1140,7 @@ void plot_save_color_test(plot_t *plot, const char *filename) {
     char color_buf[16];
     color_str_latex(bar_get_type(bar)->color, color_buf);
     bar_set_text(bar, color_buf);
-    plot_add_bar(test, bar);
+    plot_draw_bar(test, bar);
     char xtick_text[16];
     snprintf(xtick_text, 16, "[%d]", i);
     plot_add_xtick(test, bar_pos + 0.5 * bar_width, xtick_text);
@@ -1176,7 +1186,7 @@ void plot_save_hatch_test(plot_t *plot, const char *filename) {
     else if(hatch == '$') snprintf(hatch_buf, sizeof(hatch_buf), "\\\\$"); 
     else snprintf(hatch_buf, 16, "%c", hatch);
     bar_set_text(bar, hatch_buf);
-    plot_add_bar(test, bar);
+    plot_draw_bar(test, bar);
     char xtick_text[16];
     snprintf(xtick_text, 16, "[%d]", i);
     plot_add_xtick(test, bar_pos + 0.5 * bar_width, xtick_text);
@@ -1210,7 +1220,7 @@ void plot_set_legend_rows(plot_t *plot, int rows) {
 }
 
 // Only one new line is appended at the end of the draw
-void plot_add_bar(plot_t *plot, bar_t *bar) {
+void plot_draw_bar(plot_t *plot, bar_t *bar) {
   assert(bar->type != NULL);
   buf_t *buf = plot->buf;
   plot_param_t *param = &plot->param;
