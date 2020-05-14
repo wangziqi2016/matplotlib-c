@@ -29,6 +29,8 @@ X - Need a test for the function
 Adding dump command
 - dump legend
 
+Allowing all file names be indicators also
+
 Adding legend enabled property
 
 Adding reset bar init and type used

@@ -2738,10 +2738,38 @@ void parse_cb_dump(parse_t *parse, plot_t *plot) {
     printf("[!dump] Usage: dump [target] [file name]\n");
     printf("[!dump] Valid targets are: plot, legend\n");
     printf("[!dump] The file name can be either a string or a file indicator\n");
+    return;
   }
   char *ident = parse_get_ident(parse);
-  
+  char *filename = NULL;
+  if(parse_next_arg(parse) == PARSE_ARG_FILE) {
+    filename = parse_get_filename(parse);
+  } else if(parse_next_arg(parse) == PARSE_ARG_STR) {
+    filename = parse_get_str(parse);
+  } else {
+    parse_report_pos(parse);
+    error_exit("Function \"dump\" expects a file name or file indicator as second argument\n");
+  }
+  buf_t *buf = NULL;
+  if(streq(ident, "plot") == 1) {
+    plot_draw(plot);
+    buf = plot->buf;
+  } else if(streq(ident, "legend") == 1) {
+    // TODO: MAKE INTF TO GET THE TEMP LEGEND PLOT
+    //plot_draw_legend(plot);
+  }
+  FILE *fp = fopen(filename, "w");
+  SYSEXPECT(fp != NULL);
+  // Write size - 1 bytes to avoid the terminating zero
+  int wsize = buf_get_size(buf) - 1;
+  int ret = fwrite(buf_c_str(buf), 1, wsize, fp);
+  if(ret != wsize) {
+    error_exit("Failed to write file \"%s\" (returned %d, expect %d)\n", filename, ret, wsize);
+  }
+  fclose(fp);
+  free(filename);
   free(ident);
+  return;
 }
 
 static void parse_print_check_spec(parse_t *parse, const char *spec, char ch, const char *name) {
