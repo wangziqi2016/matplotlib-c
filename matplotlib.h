@@ -208,6 +208,8 @@ typedef struct {
   // TODO: ADD ERROR BAR, WIDTH AND COLOR
   // TODO: LINE WIDTH, LINE PATTERN, LINE COLOR, etc. see 
   // https://matplotlib.org/3.2.1/api/_as_gen/matplotlib.axes.Axes.bar.html
+  int inited;       // Whether the bar has been initialized - use this to check error
+  int stacked;      // Whether the bar is stacked with the previous one in the group
 } bar_t;
 
 bar_t *bar_init();
