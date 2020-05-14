@@ -1230,9 +1230,6 @@ void plot_draw(plot_t *plot) {
 }
 
 void plot_save_fig(plot_t *plot, const char *filename) {
-  if(plot->fig_created == 0) {
-    error_exit("The figure has not been created yet\n");
-  }
   buf_t *buf = plot->buf;
   plot_param_t *param = &plot->param;
   // Generates script

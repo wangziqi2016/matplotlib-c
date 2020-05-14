@@ -314,7 +314,6 @@ typedef struct {
   buf_t *buf;
   vec_t *bar_types;                    // Bar types used for legend
   struct parse_struct_t *parse;        // Script parser
-  int fig_created;                     // Only save figure if this is set
   plot_param_t param;                  // Plotting parameters
   // The following are parsed from the script file
   char *xtitle;                        // X title; Specified at top level
