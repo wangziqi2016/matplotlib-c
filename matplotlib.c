@@ -2752,6 +2752,7 @@ void parse_print_prop(parse_t *parse, plot_t *plot, buf_t *buf, const char *name
       parse_print_check_spec(parse, PARSE_SPEC_INT32, spec_ch, name);
       buf_printf(buf, fmt, plot->param.ytitle_font_size);
     } break;
+    // Bar text
     case PARSE_BAR_TEXT_FONT_SIZE: {
       parse_print_check_spec(parse, PARSE_SPEC_INT32, spec_ch, name);
       buf_printf(buf, fmt, plot->param.bar_text_font_size);
@@ -2768,6 +2769,7 @@ void parse_print_prop(parse_t *parse, plot_t *plot, buf_t *buf, const char *name
      parse_print_check_spec(parse, PARSE_SPEC_INT32, spec_ch, name);
       buf_printf(buf, fmt, plot->param.bar_text_rtrim);
     } break;
+    // Limits
     case PARSE_XLIM_LEFT: {
       parse_print_check_spec(parse, PARSE_SPEC_FLOAT, spec_ch, name);
       buf_printf(buf, fmt, plot->param.xlim_left);
@@ -2784,10 +2786,20 @@ void parse_print_prop(parse_t *parse, plot_t *plot, buf_t *buf, const char *name
       parse_print_check_spec(parse, PARSE_SPEC_FLOAT, spec_ch, name);
       buf_printf(buf, fmt, plot->param.ylim_bottom);
     } break;
+    // Bar group
+    case PARSE_BARGRP_SPACE: {
+      parse_print_check_spec(parse, PARSE_SPEC_INT32, spec_ch, name);
+      buf_printf(buf, fmt, plot->param.bargrp_space);
+    } break;
+    // Debug
     case PARSE_DRY_RUN: {
       parse_print_check_spec(parse, PARSE_SPEC_INT32, spec_ch, name);
       buf_printf(buf, fmt, plot->param.dry_run);
     } break;
+    case PARSE_INFO: {
+      parse_print_check_spec(parse, PARSE_SPEC_INT32, spec_ch, name);
+      buf_printf(buf, fmt, plot->param.info);
+    }
     default: {
       parse_report_pos(parse);
       error_exit("Property name \"%s\" cannot be used for string formatting\n", name);
