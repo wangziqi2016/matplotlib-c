@@ -18,7 +18,7 @@
                               ;
 # .legend_filename = "legend.pdf"; # This property is optional
 
-.legend_pos = "top right"; # Specifies legend pos
+.legend_pos = "upper right"; # Specifies legend pos
 # .legend_pos = "This is a loooooooooooooong string"; # Should not be too long
 
 .width = 16.0;
@@ -53,7 +53,7 @@
 .xtick_rotation = 45;
 .bar_text_rotation = 90;
 
-.dry_run = "enabled"; # This shows the graph
+.dry_run = "disabled"; # This shows the graph
 .ytick_enabled = 1;
 .xtick_enabled = 1;
 .xtick_length = 20;
@@ -62,6 +62,7 @@
 .ygrid_enabled = 1;
 .xtick_label_enabled = 1;
 .ytick_label_enabled = 0;
+
 !test_color "test_color_2.pdf";
 !test_hatch "test_hatch_1.pdf";
 

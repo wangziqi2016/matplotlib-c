@@ -967,6 +967,24 @@ void plot_create_fig(plot_t *plot, double width, double height) {
   return;
 }
 
+// Reset flags that will be set during draw() such that we can draw again
+void plot_reset_flags(plot_t *plot) {
+  // Reset types
+  for(int i = 0;i < vec_count(plot->bar_types);i++) {
+    bar_type_t *type = vec_at(plot->bar_types, i);
+    type->used = 0;
+  }
+  // Reset bars
+  for(int i = 0;i < vec_count(plot->bargrps);i++) {
+    bargrp_t *grp = (bargrp_t *)vec_at(plot->bargrps, i);
+    for(int j = 0;j < vec_count(grp->bars);j++) {
+      bar_t *bar = vec_at(grp->bars, j);
+      bar->inited = 0;
+    }
+  }
+  return;
+}
+
 // Generates plotting script for an individual bar, assuming parameters are already set
 // This function could be called without adding bar and bar groups to the plot object
 // Only one new line is appended at the end of the draw
@@ -1193,6 +1211,10 @@ void plot_draw_legend(plot_t *plot) {
 // Generates all scripts except save figure or show figure
 void plot_draw(plot_t *plot) {
   plot_param_t *param = &plot->param;
+  // First reset all flags and buf such that we can restart
+  // Params are not reset here
+  plot_reset_flags(plot);
+  plot_reset_buf(plot);
   // Note that this can be skipped by arranging bars manually
   plot_draw_all_bargrps(plot);
   plot_draw_tick(plot);

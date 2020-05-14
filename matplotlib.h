@@ -341,6 +341,9 @@ bargrp_t *plot_find_bargrp(plot_t *plot, const char *name);
 
 void plot_create_fig(plot_t *plot, double width, double height);
 
+// This resets all flags that are set during plot_draw()
+void plot_reset_flags(plot_t *plot);
+
 // The following causes scripts to be generated using params and data points
 void plot_draw_bar(plot_t *plot, bar_t *bar); // This draws a single bar given the bar object
 void plot_draw_all_bargrps(plot_t *plot); // This computes coordinates and draws each bar individually
