@@ -985,6 +985,13 @@ void plot_reset_flags(plot_t *plot) {
   return;
 }
 
+// Reset the buffer to restart a new plotting
+void plot_reset_buf(plot_t *plot) {
+  buf_reset(plot->buf);
+  buf_append(plot->buf, plot_preamble);
+  return;
+}
+
 // Generates plotting script for an individual bar, assuming parameters are already set
 // This function could be called without adding bar and bar groups to the plot object
 // Only one new line is appended at the end of the draw

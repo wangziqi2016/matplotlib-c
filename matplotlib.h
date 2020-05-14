@@ -343,6 +343,7 @@ void plot_create_fig(plot_t *plot, double width, double height);
 
 // This resets all flags that are set during plot_draw()
 void plot_reset_flags(plot_t *plot);
+void plot_reset_buf(plot_t *plot);
 
 // The following causes scripts to be generated using params and data points
 void plot_draw_bar(plot_t *plot, bar_t *bar); // This draws a single bar given the bar object
