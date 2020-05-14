@@ -41,10 +41,6 @@
 # Uncomment the following to reveal error
 # !unknown_func
 
-# !create_fig 123 456;
-# !create_fig 123;
-# !create_fig;
-
 .dry_run = 1; # This disables script execution
 
 !set_hatch_scheme "default" 27;
@@ -110,7 +106,6 @@
 !reset ?;
 !save_fig ?;
 !save_legend ?;
-!create_fig ?;
 !test_hatch ?;
 !test_color ?;
 

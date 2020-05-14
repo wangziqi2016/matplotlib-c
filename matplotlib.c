@@ -1229,11 +1229,10 @@ void plot_draw(plot_t *plot) {
   return;
 }
 
+// This function generates the code to save figure, and runs python interpreter
 void plot_save_fig(plot_t *plot, const char *filename) {
   buf_t *buf = plot->buf;
   plot_param_t *param = &plot->param;
-  // Generates script
-  plot_draw(plot);
   // Print draw command and execute script
   if(param->dry_run == PLOT_DRY_RUN_DISABLED) {
     // Pass the file name
@@ -1262,8 +1261,7 @@ void plot_save_legend(plot_t *plot, const char *filename) {
   }
   legend->param.legend_enabled = 1;       // Forced to turn on
   plot_set_legend_pos(legend, "center");  // Hardcode legend pos
-  assert(legend->buf != NULL && legend->py != NULL);
-  plot_draw_axis(legend); // Create the super small figure
+  plot_draw_axis(legend);                 // Create the super small figure
   int count = vec_count(plot->bar_types);
   if(count == 0) {
     error_exit("Current plot does not contain any bar type\n");
