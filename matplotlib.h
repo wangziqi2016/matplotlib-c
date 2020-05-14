@@ -356,6 +356,7 @@ void plot_draw_legend(plot_t *plot);
 void plot_draw(plot_t *plot); // Generates scripts except save fig
 
 void plot_save_fig(plot_t *plot, const char *filename);
+
 void plot_save_legend_mode(plot_t *plot, int mode, void *arg);
 inline static void plot_save_legend_file(plot_t *plot, const char *filename) {
   plot_save_legend_mode(plot, PLOT_SAVE_MODE_FILE, (void *)filename);
@@ -364,7 +365,17 @@ inline static void plot_save_legend_file(plot_t *plot, const char *filename) {
 inline static void plot_save_legend_buf(plot_t *plot, buf_t *buf) {
   plot_save_legend_mode(plot, PLOT_SAVE_MODE_BUF, (void *)buf);
 }
-void plot_save_color_test(plot_t *plot, const char *filename);
+
+void plot_save_color_test_mode(plot_t *plot, int mode, void *arg);
+inline static void plot_save_color_test_file(plot_t *plot, const char *filename) {
+  plot_save_color_test_mode(plot, PLOT_SAVE_MODE_FILE, (void *)filename);
+}
+// Append the plot into a buffer object
+inline static void plot_save_color_test_buf(plot_t *plot, buf_t *buf) {
+  plot_save_color_test_mode(plot, PLOT_SAVE_MODE_BUF, (void *)buf);
+}
+
+void plot_save_hatch_test(plot_t *plot, const char *filename);
 
 // Defines all valid combinations
 extern const char *plot_valid_legend_poses[];
