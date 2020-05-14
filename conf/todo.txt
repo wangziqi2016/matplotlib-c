@@ -35,5 +35,7 @@ Always draw from bar group and bars stored in the group.
 Adding bar group, bar type and bars 
 - Fix hatch/color test to use bar groups (and do not free bars)
 
+Adding legend
+
 Adding top level properties
 

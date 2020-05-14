@@ -1162,10 +1162,8 @@ void plot_draw_limit(plot_t *plot) {
   return;
 }
 
-void plot_save_fig(plot_t *plot, const char *filename) {
-  if(plot->fig_created == 0) {
-    error_exit("The figure has not been created yet\n");
-  }
+// Generates all scripts except save figure or show figure
+void plot_draw(plot_t *plot) {
   buf_t *buf = plot->buf;
   plot_param_t *param = &plot->param;
   // Note that this can be skipped by arranging bars manually
@@ -1173,6 +1171,17 @@ void plot_save_fig(plot_t *plot, const char *filename) {
   plot_draw_tick(plot);
   plot_draw_grid(plot);
   plot_draw_limit(plot);
+  return;
+}
+
+void plot_save_fig(plot_t *plot, const char *filename) {
+  if(plot->fig_created == 0) {
+    error_exit("The figure has not been created yet\n");
+  }
+  buf_t *buf = plot->buf;
+  plot_param_t *param = &plot->param;
+  // Generates script
+  plot_draw(plot);
   // Print draw command and execute script
   if(param->dry_run == PLOT_DRY_RUN_DISABLED) {
     // Pass the file name
