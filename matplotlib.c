@@ -930,7 +930,9 @@ bar_type_t *plot_find_bar_type(plot_t *plot, const char *label) {
 
 // This function adds a bar group into bargrps
 void plot_add_bargrp(plot_t *plot, bargrp_t *grp) {
-  // TODO: SEARCH FOR NAME CONFLICT
+  if(plot_find_bargrp(plot, grp->name) != NULL) {
+    error_exit("The bar group name \"%s\" already exists\n", grp->name);
+  }
   vec_append(plot->bargrps, (void *)grp);
   return;
 }
