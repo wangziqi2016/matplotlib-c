@@ -250,6 +250,9 @@ void bargrp_print(bargrp_t *grp, int verbose);
 #define PLOT_DIRECTION_OUTSIDE 1
 #define PLOT_DIRECTION_BOTH    2
 
+#define PLOT_SAVE_MODE_FILE    0        // Save plot to a file
+#define PLOT_SAVE_MODE_BUF     1        // Copy plot to a buffer object
+
 struct parse_struct_t;
 
 // This object should not be freed; Always copy it over
