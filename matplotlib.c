@@ -2766,12 +2766,15 @@ void parse_cb_dump(parse_t *parse, plot_t *plot) {
     error_exit("Function \"dump\" expects a file name or file indicator as second argument\n");
   }
   buf_t *buf = NULL;
+  int free_buf = 0;
   if(streq(ident, "plot") == 1) {
     plot_draw(plot);
     buf = plot->buf;
+    free_buf = 0;
   } else if(streq(ident, "legend") == 1) {
-    // TODO: MAKE INTF TO GET THE TEMP LEGEND PLOT
-    //plot_draw_legend(plot);
+    buf = buf_init();
+    free_buf = 1;
+    plot_draw_legend_buf(plot, buf);
   }
   FILE *fp = fopen(filename, "w");
   SYSEXPECT(fp != NULL);
@@ -2780,8 +2783,11 @@ void parse_cb_dump(parse_t *parse, plot_t *plot) {
   int ret = fwrite(buf_c_str(buf), 1, wsize, fp);
   if(ret != wsize) {
     error_exit("Failed to write file \"%s\" (returned %d, expect %d)\n", filename, ret, wsize);
+  } else {
+    if(plot->param.info == 1) printf("[!dump] Successfully wrote %d bytes to file \"%s\"\n", wsize, filename);
   }
   fclose(fp);
+  if(free_buf == 1) buf_free(buf);
   free(filename);
   free(ident);
   return;
