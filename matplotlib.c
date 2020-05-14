@@ -962,6 +962,8 @@ void plot_draw_tick(plot_t *plot) {
     } else if(param->xtick_direction == PLOT_DIRECTION_BOTH) {
       buf_printf(buf, ", direction='inout'");
     }
+    if(param->xtick_label_enabled == 0) buf_printf(buf, ", labelbottom=False");
+    else buf_printf(buf, ", labelbottom=True");
     buf_printf(buf, ")\n");
   } else {
     buf_printf(buf, "plot.xticks([])\n");
@@ -985,6 +987,8 @@ void plot_draw_tick(plot_t *plot) {
     } else if(param->ytick_direction == PLOT_DIRECTION_BOTH) {
       buf_printf(buf, ", direction='inout'");
     }
+    if(param->ytick_label_enabled == 0) buf_printf(buf, ", labelbottom=False");
+    else buf_printf(buf, ", labelbottom=True");
     buf_printf(buf, ")\n");
   } else { 
     buf_printf(buf, "plot.yticks([])\n");
