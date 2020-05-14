@@ -220,6 +220,33 @@ void test_bargrp() {
   return;
 }
 
+void test_bargrp_find() {
+  printf("========== test_bargrp_find ==========\n");
+  plot_t *plot = plot_init();
+  // Adding 10 bar groups into the plot
+  for(int i = 0;i < 10;i++) {
+    char buf[16];
+    snprintf(buf, 16, "bargrp %d", i);
+    bargrp_t *grp = bargrp_init(buf);
+    plot_add_bargrp(plot, grp);
+    // Also add a bar
+    bargrp_add_bar(grp, bar_init());
+  }
+  for(int i = 9;i >= 0;i--) {
+    char buf[16];
+    snprintf(buf, 16, "bargrp %d", i);
+    bargrp_t *grp = plot_find_bargrp(plot, buf);
+    printf("Bar group \"%s\" found, size %d\n", grp->name, bargrp_count(grp));
+    assert(grp != NULL);
+    assert(streq(grp->name, buf) == 1);
+    assert(bargrp_count(grp) == 1);
+  }
+  // This should free all bars and groups
+  plot_free(plot);
+  printf("Pass\n");
+  return;
+}
+
 void test_bar_type() {
   printf("========== test_bar_type ==========\n");
   plot_t *plot = plot_init();
@@ -618,6 +645,7 @@ int main(int argc, char **argv) {
   test_buf();
   test_vec();
   test_bargrp();
+  if(valgrind_flag == 0) test_bargrp_find();
   if(valgrind_flag == 0) test_plot_legend();
   if(valgrind_flag == 0) test_plot_color_test();
   test_parse_getchar();
