@@ -54,3 +54,6 @@ dkms.conf
 test-*
 test_*.pdf
 test_*.py
+
+test.pdf
+test.py
