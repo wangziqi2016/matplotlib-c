@@ -1252,7 +1252,7 @@ void plot_save_fig(plot_t *plot, const char *filename) {
 // Saves a standalone legend file
 // This function can be called anywhere during the plotting procedure. Legends drawn will be 
 // bar types stored in the plot object. Report error if there is not any bar type.
-void plot_save_legend(plot_t *plot, const char *filename) {
+void plot_save_legend_mode(plot_t *plot, int mode, void *arg) {
   plot_t *legend = plot_init(); // Preamble is set after this
   plot_param_copy(&legend->param, &plot->param); // Copy legend configuration to the new legend plot
   legend->param.width = legend->param.height = 0.001; // Super small graph
@@ -1282,9 +1282,24 @@ void plot_save_legend(plot_t *plot, const char *filename) {
   }
   // Only call draw legend here without plotting other things
   plot_draw_legend(legend);
-  plot_save_fig(legend, filename);
+  if(mode == PLOT_SAVE_MODE_FILE) {
+    plot_save_fig(legend, (const char *)arg);
+  } else if(mode == PLOT_SAVE_MODE_BUF) {
+    buf_concat((buf_t *)arg, legend->buf);
+  } else {
+    error_exit("Invalid save mode %d\n", mode);
+  }
   plot_free(legend);
   return;
+}
+
+void plot_save_legend_file(plot_t *plot, const char *filename) {
+  plot_save_legend_mode(plot, PLOT_SAVE_MODE_FILE, filename);
+}
+
+// Append the plot into a buffer object
+void plot_save_legend_buf(plot_t *plot, buf_t *buf) {
+  plot_save_legend_mode(plot, PLOT_SAVE_MODE_BUF, buf);
 }
 
 // This functions draws a color test bar graph
