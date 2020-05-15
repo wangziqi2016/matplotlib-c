@@ -2268,24 +2268,20 @@ void parse_top_property(parse_t *parse, plot_t *plot) {
       free(title);
     } break;
     case PARSE_FIG_FILENAME: {
-      if(plot->fig_filename != NULL) {
-        if(plot->param.info == 1) {
-          printf("[parse] WARNING: The property \"fig_filename\" already exists, value \"%s\"\n", 
-            plot->fig_filename);
-        }
-        free(plot->fig_filename);
+      char *filename = parse_get_str(parse);
+      if(plot->fig_filename != NULL && param->info == 1) {
+        printf("[parse] Overriding existing fig_filename \"%s\"\n", plot->fig_filename);
       }
-      plot->fig_filename = parse_get_str(parse);
+      plot_add_fig_filename(plot, filename);
+      free(filename);
     } break;
     case PARSE_LEGEND_FILENAME: {
-      if(plot->legend_filename != NULL) {
-        if(plot->param.info == 1) {
-          printf("[parse] WARNING: The property \"legend_filename\" already exists, value \"%s\"\n", 
-            plot->legend_filename);
-        }
-        free(plot->legend_filename);
+      char *filename = parse_get_str(parse);
+      if(plot->legend_filename != NULL && param->info == 1) {
+        printf("[parse] Overriding existing legend_filename \"%s\"\n", plot->legend_filename);
       }
-      plot->legend_filename = parse_get_str(parse);
+      plot_add_legend_filename(plot, filename);
+      free(filename);
     } break;
     case PARSE_WIDTH: {
       plot->param.width = parse_get_double_range(parse, 0.0, PARSE_DOUBLE_MAX);
