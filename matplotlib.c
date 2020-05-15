@@ -892,6 +892,7 @@ buf_t *plot_tick_label_str(plot_tick_t *tick) {
   buf_t *buf = buf_init();
   buf_append(buf, "[");
   for(int i = 0;i < vec_count(tick->poses);i++) {
+    assert(plot_tick_label_at(tick, i) != NULL);
     buf_printf(buf, "'%s', ", plot_tick_label_at(tick, i));
   }
   buf_append(buf, "]");
@@ -1347,10 +1348,8 @@ void plot_save_legend_mode(plot_t *plot, int mode, void *arg) {
   }
   for(int i = 0;i < count;i++) {
     bar_type_t *type = vec_at(plot->bar_types, i);
-    // This is for group name, although it is not shown, it is required for bargrp to have a name
-    char buf[16];
-    snprintf(buf, sizeof(buf), "group %d", i);
-    bar_t *bar = plot_add_simple_bar(legend, 0.0, type->label, type->color, type->hatch, buf);
+    // Anonymous bar group here
+    bar_t *bar = plot_add_simple_bar(legend, 0.0, type->label, type->color, type->hatch, NULL);
     // The bar should not be drawn
     bar->bottom = bar->width = 0.0;
   }
@@ -1502,12 +1501,14 @@ void plot_set_legend_rows(plot_t *plot, int rows) {
 
 // Pos is always aligned to the center of the text
 void plot_add_xtick(plot_t *plot, double pos, const char *text) {
+  assert(text != NULL);
   plot_tick_append(plot->xtick, pos, text);
   return;
 }
 
 // Pos is always aligned to the center of the text
 void plot_add_ytick(plot_t *plot, double pos, const char *text) {
+  assert(text != NULL);
   plot_tick_append(plot->ytick, pos, text);
   return;
 }
