@@ -1528,14 +1528,17 @@ void plot_add_ytick(plot_t *plot, double pos, const char *text) {
 // Adding X axis title to plot object
 void plot_add_x_title(plot_t *plot, const char *title) {
   if(plot->xtitle != NULL) free(plot->xtitle);
+  plot->xtitle = strdup(title);
   //buf_printf(plot->buf, "ax.set_xlabel(\"%s\", fontsize=%lu, weight='bold')\n",
   //           title, plot->param.xtitle_font_size);
   return;
 }
 
 void plot_add_y_title(plot_t *plot, const char *title) {
-  buf_printf(plot->buf, "ax.set_ylabel(\"%s\", fontsize=%lu, weight='bold')\n",
-             title, plot->param.ytitle_font_size);
+  if(plot->ytitle != NULL) free(plot->ytitle);
+  plot->ytitle = strdup(title);
+  //buf_printf(plot->buf, "ax.set_ylabel(\"%s\", fontsize=%lu, weight='bold')\n",
+  //           title, plot->param.ytitle_font_size);
   return;
 }
 
