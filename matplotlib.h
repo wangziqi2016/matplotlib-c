@@ -202,6 +202,8 @@ bar_type_t *bar_type_dup(bar_type_t *type);
 void bar_type_set_color(bar_type_t *type, uint32_t color);
 void bar_type_set_hatch(bar_type_t *type, char hatch);
 
+inline static int bar_type_is_anonymous(bar_type_t *type) { return type->label == NULL; }
+
 void bar_type_print(bar_type_t *type);
 
 typedef struct {
