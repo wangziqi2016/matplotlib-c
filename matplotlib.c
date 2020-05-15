@@ -657,12 +657,12 @@ bar_type_t *bar_type_init(const char *label) {
   bar_type_t *type = (bar_type_t *)malloc(sizeof(bar_type_t));
   SYSEXPECT(type != NULL);
   memset(type, 0x00, sizeof(bar_type_t));
-  type->label = strdup(label);
+  if(label != NULL) type->label = strdup(label);
   return type;
 }
 
 void bar_type_free(bar_type_t *type) {
-  free(type->label);
+  if(type->label != NULL) free(type->label);
   free(type);
   return;
 }
@@ -695,7 +695,7 @@ void bar_type_set_hatch(bar_type_t *type, char hatch) {
 
 void bar_type_print(bar_type_t *type) {
   printf("[bar_type_t] label \"%s\" color 0x%08X hatch '%c' used %d\n",
-         type->label, type->color, type->hatch, type->used);
+         type->label == NULL ? "anonymous" : type->label, type->color, type->hatch, type->used);
   return;
 }
 
@@ -1405,9 +1405,7 @@ void plot_save_hatch_test_mode(plot_t *plot, int mode, void *arg) {
   // Use current plot's configuration
   plot_param_copy(&test->param, &plot->param);
   plot_param_t *param = &test->param;
-  // Force turn off legend
-  param->legend_enabled = 0;
-  
+  param->legend_enabled = 0; // Force turn off legend
   int usable = param->hatch_scheme->item_count - param->color_offset;
   double bar_width = 2.0; // To show the hatch we need fixed width bar
   param->width = usable * bar_width; // Graph width is extended as there are more hatches
