@@ -1123,7 +1123,7 @@ void plot_draw_all_bargrps(plot_t *plot) {
       if(is_last == 1) {
         // Append X ticks, if the bar group has a name (ignore if not)
         end_pos = curr_pos + bar_width; // Right end of the last bar
-        if(grp->name != NULL) {
+        if(bargrp_is_anonymous(grp) == 0) {
           double xtick_pos = (begin_pos + end_pos) / 2.0;
           plot_add_xtick(plot, xtick_pos, grp->name);
         }
@@ -1552,7 +1552,7 @@ void plot_add_bar_type(plot_t *plot, const char *label, uint32_t color, char hat
 
 // This function adds a bar group into bargrps; Names must be unique
 void plot_add_bargrp(plot_t *plot, bargrp_t *grp) {
-  if(plot_find_bargrp(plot, grp->name) != NULL) {
+  if(bargrp_is_anonymous(grp) == 0 && plot_find_bargrp(plot, grp->name) != NULL) {
     error_exit("The bar group name \"%s\" already exists\n", grp->name);
   }
   vec_append(plot->bargrps, (void *)grp);
@@ -1592,7 +1592,7 @@ bar_type_t *plot_find_bar_type(plot_t *plot, const char *label) {
 bargrp_t *plot_find_bargrp(plot_t *plot, const char *name) {
   for(int i = 0;i < vec_count(plot->bargrps);i++) {
     bargrp_t *grp = (bargrp_t *)vec_at(plot->bargrps, i);
-    if(grp->name != NULL && streq(grp->name, name) == 1) {
+    if(bargrp_is_anonymous(grp) == 0 && streq(grp->name, name) == 1) {
       return grp;
     }
   }
