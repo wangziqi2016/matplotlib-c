@@ -1104,6 +1104,9 @@ void plot_draw_all_bargrps(plot_t *plot) {
   double curr_pos = bar_width * param->bargrp_space;
   double curr_bottom = 0.0;
   for(int i = 0;i < vec_count(plot->bargrps);i++) {
+    // These two are used to determine the tick pos
+    double begin_pos = curr_pos;
+    double end_pos;
     bargrp_t *grp = (bargrp_t *)vec_at(plot->bargrps, i);
     for(int j = 0;j < vec_count(grp->bars);j++) {
       bar_t *bar = vec_at(grp->bars, j);
@@ -1117,6 +1120,10 @@ void plot_draw_all_bargrps(plot_t *plot) {
       int is_last = (j == (vec_count(grp->bars) - 1));
       int next_stacked = (is_last || (((bar_t *)vec_at(grp->bars, j + 1))->stacked == 0));
       if(is_last == 1) {
+        // Append X ticks
+        end_pos = curr_pos + bar_width; // Right end of the last bar
+        double xtick_pos = (begin_pos + end_pos) / 2.0;
+        plot_add_xtick(plot, end_pos, grp->name);
         // Either jump to the next immediate slot, or leave inter-group space
         curr_pos += (bar_width + bar_width * param->bargrp_space);
         curr_bottom = 0.0;
@@ -1234,11 +1241,11 @@ void plot_draw_title(plot_t *plot) {
   buf_t *buf = plot->buf;
   plot_param_t *param = &plot->param;
   if(plot->xtitle != NULL) {
-    buf_printf(plot->buf, "ax.set_xlabel(\"%s\", fontsize=%lu, weight='bold')\n",
+    buf_printf(buf, "ax.set_xlabel(\"%s\", fontsize=%lu, weight='bold')\n",
                plot->xtitle, param->xtitle_font_size);
   }
   if(plot->ytitle != NULL) {
-    buf_printf(plot->buf, "ax.set_ylabel(\"%s\", fontsize=%lu, weight='bold')\n",
+    buf_printf(buf, "ax.set_ylabel(\"%s\", fontsize=%lu, weight='bold')\n",
                plot->ytitle, param->ytitle_font_size);
   }
   return;
