@@ -753,7 +753,7 @@ void bargrp_free(bargrp_t *grp) {
 }
 
 void bargrp_print(bargrp_t *grp, int verbose) {
-  printf("[bargrp] name \"%s\" size %d\n", grp->name, vec_count(grp->bars));
+  printf("[bargrp] name \"%s\" size %d\n", grp->name == NULL ? "[anonymous]" : grp->name, vec_count(grp->bars));
   if(verbose == 1) {
     for(int i = 0;i < vec_count(grp->bars);i++) {
       bar_print(vec_at(grp->bars, i));
@@ -1586,11 +1586,11 @@ bar_type_t *plot_find_bar_type(plot_t *plot, const char *label) {
   return NULL;
 }
 
-// Returns NULL if not found
+// Returns NULL if not found; Ignores anonymous bar groups
 bargrp_t *plot_find_bargrp(plot_t *plot, const char *name) {
   for(int i = 0;i < vec_count(plot->bargrps);i++) {
     bargrp_t *grp = (bargrp_t *)vec_at(plot->bargrps, i);
-    if(streq(grp->name, name) == 1) {
+    if(grp->name != NULL && streq(grp->name, name) == 1) {
       return grp;
     }
   }
