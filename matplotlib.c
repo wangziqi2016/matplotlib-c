@@ -2534,12 +2534,12 @@ void parse_cb_print(parse_t *parse, plot_t *plot) {
     parse_expect_char(parse, '?'); // Eat the symbol. The ';' will be processed by caller
     printf("[!print] Usage: !print [target] [\"verbose\"]/[arg]\n");
     printf("[!print] The following targets are supported:\n");
-    printf("[!print]   plot, param, version, color, hatch, bar_type\n");
-    printf("[!print] The following targets can have an optional \"verbose\" string arg\n");
-    printf("[!print]   plot, param, version, color, hatch\n");
-    printf("[!print] The following targets can have an optional numeric arg indicating only the element on the "
-           "given index will be printed\n");
-    printf("  bar_type\n");
+    printf("[!print]   plot, param, version, color, hatch, bar_type, bargrp\n");
+    printf("[!print] The following targets can have an optional \"verbose\" string arg, which is always the last arg\n");
+    printf("[!print]   plot, param, version, color, hatch, bargrp\n");
+    printf("[!print] The following targets can have an optional numeric or string arg indicating only the element "
+           "on the given index or having the specified name will be printed\n");
+    printf("  bar_type, bargrp\n");
     return;
   } else if(next_arg == PARSE_ARG_STR) {
     // Format string print
@@ -2628,7 +2628,23 @@ void parse_cb_print(parse_t *parse, plot_t *plot) {
         free(label);
       }
     }
-  } else {
+  } else if(streq(name, "bargrp") == 1) {
+    if(vec_count(plot->bargrps) == 0) {
+      printf("There is no bargrp to print\n");
+    } else {
+      next_arg = parse_next_arg(parse);
+      if(next_arg == PARSE_ARG_NONE) {
+        for(int i =  0;i < vec_count(plot->bargrps);i++) {
+          bargrp_print(, 1);
+        }
+      } else if(next_arg == PARSE_ARG_STR) {
+
+      } else if(next_arg == PARSE_ARG_NUM) {
+
+      }
+    }
+  }
+  else {
     parse_report_pos(parse);
     error_exit("Unknown print target: \"%s\"\n", name);
   }
