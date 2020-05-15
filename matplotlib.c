@@ -1560,7 +1560,12 @@ void plot_add_fig_filename(plot_t *plot, const char *filename) {
   plot->fig_filename = strdup(filename);
   return;
 }
-void plot_add_legend_filename(plot_t *plot, const char *filename);
+
+void plot_add_legend_filename(plot_t *plot, const char *filename) {
+  if(plot->legend_filename != NULL) free(plot->legend_filename);
+  plot->legend_filename = strdup(filename);
+  return;
+}
 
 void plot_print(plot_t *plot, int verbose) {
   // Print plot properties
