@@ -41,7 +41,9 @@ X Adding shortcut functions to add bar groups with a single bar
 
 X Plotting bar group ticks in draw_all_bargrps()
 
-Adding functions to check whether fig has been drawn before saving
+X Adding functions to check whether fig has been drawn before saving
+
+Allowing bar group to be used with NULL name
 
 Allowing all file names be indicators also
 
