@@ -2239,10 +2239,16 @@ void parse_top_property(parse_t *parse, plot_t *plot) {
   // This should be compiled into a jump table
   switch(cb_entry.prop) {
     case PARSE_XTITLE: {
-      plot->xtitle = parse_get_str(parse);
+      char *title = parse_get_str(parse);
+      if(plot->xtitle != NULL) printf("[parse] Overriding existing xtitle \"%s\"\n", plot->xtitle);
+      plot_add_xtitle(plot, title);
+      free(title);
     } break;
     case PARSE_YTITLE: {
-      plot->ytitle = parse_get_str(parse);
+      char *title = parse_get_str(parse);
+      if(plot->ytitle != NULL) printf("[parse] Overriding existing xtitle \"%s\"\n", plot->xtitle);
+      plot_add_ytitle(plot, title);
+      free(title);
     } break;
     case PARSE_FIG_FILENAME: {
       if(plot->fig_filename != NULL) {
