@@ -96,6 +96,8 @@ void color_scheme_print(color_scheme_t *scheme, int print_content);
 
 #define HATCH_SIZE            1
 #define HATCH_INIT_FILE_COUNT 1
+// This represents empty hatch for draw function
+#define HATCH_NONE            '\0'
 
 typedef struct {
   char *name;
@@ -414,6 +416,8 @@ void plot_add_fig_filename(plot_t *plot, const char *filename);
 void plot_add_legend_filename(plot_t *plot, const char *filename);
 void plot_add_bar_type(plot_t *plot, const char *label, uint32_t color, char hatch);
 void plot_add_bargrp(plot_t *plot, bargrp_t *grp);
+bar_t *plot_add_simple_bar(plot_t *plot, double height, const char *label, uint32_t color, char hatch, 
+                           const char *xtick);
 
 bar_type_t *plot_find_bar_type(plot_t *plot, const char *label);
 bargrp_t *plot_find_bargrp(plot_t *plot, const char *name);

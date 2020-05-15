@@ -1034,7 +1034,7 @@ void plot_draw_bar(plot_t *plot, bar_t *bar) {
   buf_printf(buf, "'\n");
   // Hatch (if not '\0')
   char hatch = bar_get_hatch(bar);
-  if(hatch != '\0') {
+  if(hatch != HATCH_NONE) {
     if(hatch == '\\') buf_printf(buf, "  , hatch='\\\\'\n");
     else if(hatch == '%') buf_printf(buf, "  , hatch='\\\\%'\n"); // Python sees \\% latex sees \%
     else if(hatch == '$') buf_printf(buf, "  , hatch='\\\\$'\n"); // Python sees \\% latex sees \$
@@ -1355,7 +1355,7 @@ void plot_save_color_test_mode(plot_t *plot, int mode, void *arg) {
   double bar_pos = 0.0;
   for(int i = param->color_offset;i < param->color_scheme->item_count;i++) {
     snprintf(label_buf, 16, "color %d", i);
-    plot_add_bar_type(test, label_buf, param->color_scheme->base[i], '\0');
+    plot_add_bar_type(test, label_buf, param->color_scheme->base[i], HATCH_NONE);
     bar_t *bar = bar_init();
     bar->pos = bar_pos;
     bar->width = bar_width;
@@ -1544,6 +1544,16 @@ void plot_add_bargrp(plot_t *plot, bargrp_t *grp) {
   }
   vec_append(plot->bargrps, (void *)grp);
   return;
+}
+
+// This function is a shortcut. It creates a type, a bar group and a bar
+// Only the essential arguments for bargrp and type are passed
+// The resulting bar object is returned. The bar object can be modified until draw is called
+// The bar is always in a bargrp group that has itself. xtick is the bargrp's name.
+// label, color and hatch are passed to bar type
+bar_t *plot_add_simple_bar(plot_t *plot, double height, const char *label, uint32_t color, char hatch, 
+                           const char *xtick) {
+
 }
 
 // Returns NULL if not found
