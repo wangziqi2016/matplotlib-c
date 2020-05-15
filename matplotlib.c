@@ -1256,6 +1256,20 @@ void plot_draw_limit(plot_t *plot) {
   return;
 }
 
+void plot_draw_title(plot_t *plot) {
+  buf_t *buf = plot->buf;
+  plot_param_t *param = &plot->param;
+  if(plot->xtitle != NULL) {
+    buf_printf(plot->buf, "ax.set_xlabel(\"%s\", fontsize=%lu, weight='bold')\n",
+               plot->xtitle, param->xtitle_font_size);
+  }
+  if(plot->ytitle != NULL) {
+    buf_printf(plot->buf, "ax.set_ylabel(\"%s\", fontsize=%lu, weight='bold')\n",
+               plot->ytitle, param->ytitle_font_size);
+  }
+  return;
+}
+
 // Uses legend font size, legend vertical, and legend position in the param object
 void plot_draw_legend(plot_t *plot) {
   int col_count = 0;
@@ -1296,6 +1310,7 @@ void plot_draw(plot_t *plot) {
   plot_draw_tick(plot);
   plot_draw_grid(plot);
   plot_draw_limit(plot);
+  plot_draw_title(plot);
   if(param->legend_enabled == 1) plot_draw_legend(plot);
   return;
 }
@@ -1399,7 +1414,8 @@ void plot_save_color_test_mode(plot_t *plot, int mode, void *arg) {
     bar_free(bar);
     bar_pos += bar_width;
   }
-  plot_add_x_title(test, "Color Scheme Test");
+  plot_add_xtitle(test, "Color Scheme Test");
+  plot_draw_title(test);
   if(mode == PLOT_SAVE_MODE_FILE) {
     plot_save_fig(test, (const char *)arg);
   } else if(mode == PLOT_SAVE_MODE_BUF) {
@@ -1455,7 +1471,8 @@ void plot_save_hatch_test_mode(plot_t *plot, int mode, void *arg) {
     bar_free(bar);
     bar_pos += bar_width;
   }
-  plot_add_x_title(test, "Hatch Scheme Test");
+  plot_add_xtitle(test, "Hatch Scheme Test");
+  plot_draw_title(test);
   if(mode == PLOT_SAVE_MODE_FILE) {
     plot_save_fig(test, (const char *)arg);
   } else if(mode == PLOT_SAVE_MODE_BUF) {
@@ -1529,16 +1546,12 @@ void plot_add_ytick(plot_t *plot, double pos, const char *text) {
 void plot_add_xtitle(plot_t *plot, const char *title) {
   if(plot->xtitle != NULL) free(plot->xtitle);
   plot->xtitle = strdup(title);
-  //buf_printf(plot->buf, "ax.set_xlabel(\"%s\", fontsize=%lu, weight='bold')\n",
-  //           title, plot->param.xtitle_font_size);
   return;
 }
 
 void plot_add_ytitle(plot_t *plot, const char *title) {
   if(plot->ytitle != NULL) free(plot->ytitle);
   plot->ytitle = strdup(title);
-  //buf_printf(plot->buf, "ax.set_ylabel(\"%s\", fontsize=%lu, weight='bold')\n",
-  //           title, plot->param.ytitle_font_size);
   return;
 }
 

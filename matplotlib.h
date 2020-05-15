@@ -375,6 +375,7 @@ void plot_draw_all_bargrps(plot_t *plot); // This computes coordinates and draws
 void plot_draw_tick(plot_t *plot);
 void plot_draw_grid(plot_t *plot);
 void plot_draw_limit(plot_t *plot);
+void plot_draw_title(plot_t *plot);
 void plot_draw_legend(plot_t *plot);
 void plot_draw(plot_t *plot); // Generates scripts except save fig
 
