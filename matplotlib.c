@@ -1365,53 +1365,6 @@ void plot_save_legend_mode(plot_t *plot, int mode, void *arg) {
   return;
 }
 
-/*
-// Saves a standalone legend file
-// This function can be called anywhere during the plotting procedure. Legends drawn will be 
-// bar types stored in the plot object. Report error if there is not any bar type.
-void plot_save_legend_mode(plot_t *plot, int mode, void *arg) {
-  plot_t *legend = plot_init(); // Preamble is set after this
-  plot_param_copy(&legend->param, &plot->param); // Copy legend configuration to the new legend plot
-  legend->param.width = legend->param.height = 0.001; // Super small graph
-  if(legend->param.legend_enabled == 0 && legend->param.info == 1) {
-    printf("[save_legend] Force turning on legend_enabled flag\n");
-  }
-  legend->param.legend_enabled = 1;       // Forced to turn on
-  plot_set_legend_pos(legend, "center");  // Hardcode legend pos
-  plot_draw_axis(legend);                 // Create the super small figure
-  int count = vec_count(plot->bar_types);
-  if(count == 0) {
-    error_exit("Current plot does not contain any bar type\n");
-  }
-  for(int i = 0;i < count;i++) {
-    bar_type_t *type = vec_at(plot->bar_types, i);
-    bar_t *bar = bar_init();
-    // The bar should not be drawn
-    bar->bottom = bar->height = bar->width = 0.0;
-    bar->inited = 1;
-    // Also duplicate the bar type and associate it with the bar
-    plot_add_bar_type(legend, type->label, type->color, type->hatch);
-    bar_set_type(bar, plot_find_bar_type(legend, type->label));
-    // Directly call plot_draw_bar() without adding the bar to the plot
-    plot_draw_bar(legend, bar);
-    // No longer used
-    bar_free(bar);
-  }
-  // Only call draw legend here without plotting other things
-  plot_draw_legend(legend);
-  if(mode == PLOT_SAVE_MODE_FILE) {
-    plot_save_fig(legend, (const char *)arg);
-  } else if(mode == PLOT_SAVE_MODE_BUF) {
-    // Do not use buf_concat since this will free the second arg
-    buf_append((buf_t *)arg, buf_c_str(legend->buf));
-  } else {
-    error_exit("Invalid save mode %d\n", mode);
-  }
-  plot_free(legend);
-  return;
-}
-*/
-
 void plot_save_color_test_mode(plot_t *plot, int mode, void *arg) {
   plot_t *test = plot_init();
   // Use current plot's configuration
