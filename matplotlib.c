@@ -2650,7 +2650,10 @@ void parse_cb_print(parse_t *parse, plot_t *plot) {
         bargrp_print(grp, verbose);
         free(name);
       } else if(next_arg == PARSE_ARG_NUM) {
-
+        int index = parse_get_int64_range(parse, 0, vec_count(plot->bargrps) - 1);
+        int verbose = parse_get_verbose(parse);
+        bargrp_t *grp = vec_at(plot->bargrps, index);
+        bargrp_print(grp, verbose);
       }
     }
   }
