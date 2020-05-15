@@ -1532,17 +1532,13 @@ void plot_set_legend_rows(plot_t *plot, int rows) {
 
 // Pos is always aligned to the center of the text
 void plot_add_xtick(plot_t *plot, double pos, const char *text) {
-  buf_t *buf = plot->buf;
-  buf_printf(buf, "cmatplotlib_xticks.append(%f)\n", pos);
-  buf_printf(buf, "cmatplotlib_xtick_labels.append('%s')\n", text);
+  plot_tick_append(plot->xtick, pos, text);
   return;
 }
 
 // Pos is always aligned to the center of the text
 void plot_add_ytick(plot_t *plot, double pos, const char *text) {
-  buf_t *buf = plot->buf;
-  buf_printf(buf, "cmatplotlib_yticks.append(%f)\n", pos);
-  buf_printf(buf, "cmatplotlib_ytick_labels.append('%s')\n", text);
+  plot_tick_append(plot->ytick, pos, text);
   return;
 }
 
