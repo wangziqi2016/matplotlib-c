@@ -1600,15 +1600,8 @@ parse_t *_parse_init(char *s) {
 }
 
 parse_t *parse_init(const char *s) {
-  int len = strlen(s);
-  char *buf = (char *)malloc(len + 1);
-  SYSEXPECT(buf != NULL);
-  memcpy(buf, s, len + 1);
-  parse_t *parse = _parse_init(buf);
-  char filename[] = "[debug]";
-  parse->filename = (char *)malloc(strlen(filename) + 1);
-  SYSEXPECT(parse->filename != NULL);
-  strcpy(parse->filename, filename);
+  parse_t *parse = _parse_init(strdup(s));
+  parse->filename = strdup("[string]");
   return parse;
 }
 
@@ -1633,9 +1626,7 @@ parse_t *parse_init_file(const char *filename) {
   buf[sz] = '\0'; 
   // Init file name
   parse_t *parse = _parse_init(buf);
-  parse->filename = (char *)malloc(strlen(filename) + 1);
-  SYSEXPECT(parse->filename != NULL);
-  strcpy(parse->filename, filename);
+  parse->filename = strdup(filename);
   return parse;
 }
 
