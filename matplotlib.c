@@ -736,13 +736,13 @@ bargrp_t *bargrp_init(const char *name) {
   bargrp_t *grp = (bargrp_t *)malloc(sizeof(bargrp_t));
   SYSEXPECT(grp != NULL);
   memset(grp, 0x00, sizeof(bargrp_t));
-  grp->name = strdup(name);
+  if(name != NULL) grp->name = strdup(name);
   grp->bars = vec_init();
   return grp;
 }
 
 void bargrp_free(bargrp_t *grp) {
-  free(grp->name);
+  if(grp->name != NULL) free(grp->name);
   // Free bars and the vector itself
   for(int i = 0;i < vec_count(grp->bars);i++) {
     bar_free(vec_at(grp->bars, i));

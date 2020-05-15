@@ -233,7 +233,7 @@ void bar_print(bar_t *bar);
 //* bargrp_t - Bar groups
 
 typedef struct {
-  char *name;             // The X tick, if enabled. The group owns this string
+  char *name;             // The X tick, if enabled. The group owns this string. Could be NULL
   vec_t *bars;            // A vector of bars; Bar group owns the bars
 } bargrp_t;
 
