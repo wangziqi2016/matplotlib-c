@@ -1111,7 +1111,7 @@ void plot_draw_all_bargrps(plot_t *plot) {
     for(int j = 0;j < vec_count(grp->bars);j++) {
       bar_t *bar = vec_at(grp->bars, j);
       if(bar->inited == 1 && param->info == 1) {
-        printf("WARNING: The bar object's width and/or pos has been initialized\n");
+        printf("[plot] WARNING: The bar object's width and/or pos has been initialized\n");
       }
       bar->inited = 1;
       bar->width = bar_width;
@@ -1297,6 +1297,7 @@ void plot_draw(plot_t *plot) {
 }
 
 // This function generates the code to save figure, and runs python interpreter
+// Note that it does not generate plotting code. Users must call draw() before calling this
 void plot_save_fig(plot_t *plot, const char *filename) {
   buf_t *buf = plot->buf;
   plot_param_t *param = &plot->param;
@@ -1366,8 +1367,8 @@ void plot_save_color_test_mode(plot_t *plot, int mode, void *arg) {
   // Use current plot's configuration
   plot_param_copy(&test->param, &plot->param);
   plot_param_t *param = &test->param;
-  // Force turn off legend
-  param->legend_enabled = 0;
+  param->legend_enabled = 0; // Force turn off legend
+  param->bargrp_space = 0.0; // No space between bargrp
   double bar_height = param->height;
   for(int i = param->color_offset;i < param->color_scheme->item_count;i++) {
     char label_buf[16];
@@ -1394,56 +1395,6 @@ void plot_save_color_test_mode(plot_t *plot, int mode, void *arg) {
   plot_free(test);
   return;
 }
-/*
-// This functions draws a color test bar graph
-void plot_save_color_test_mode(plot_t *plot, int mode, void *arg) {
-  plot_t *test = plot_init();
-  // Use current plot's configuration
-  plot_param_copy(&test->param, &plot->param);
-  plot_draw_axis(test);
-  plot_param_t *param = &test->param;
-  // Force turn off legend
-  param->legend_enabled = 0;
-  char label_buf[16];
-  int usable = param->color_scheme->item_count - param->color_offset;
-  double bar_width = param->width / (double)usable;
-  double bar_height = param->height;
-  double bar_pos = 0.0;
-  for(int i = param->color_offset;i < param->color_scheme->item_count;i++) {
-    snprintf(label_buf, 16, "color %d", i);
-    plot_add_bar_type(test, label_buf, param->color_scheme->base[i], HATCH_NONE);
-    bar_t *bar = bar_init();
-    bar->pos = bar_pos;
-    bar->width = bar_width;
-    bar->height = bar_height;
-    bar->inited = 1;
-    bar_set_type(bar, plot_find_bar_type(test, label_buf));
-    // Print color code
-    char color_buf[16];
-    color_str_latex(bar_get_type(bar)->color, color_buf);
-    bar_set_text(bar, color_buf);
-    plot_draw_bar(test, bar);
-    char xtick_text[16];
-    snprintf(xtick_text, 16, "[%d]", i);
-    plot_add_xtick(test, bar_pos + 0.5 * bar_width, xtick_text);
-    bar_free(bar);
-    bar_pos += bar_width;
-  }
-  plot_add_xtitle(test, "Color Scheme Test");
-  plot_draw_title(test);
-  plot_draw_tick(test);
-  if(mode == PLOT_SAVE_MODE_FILE) {
-    plot_save_fig(test, (const char *)arg);
-  } else if(mode == PLOT_SAVE_MODE_BUF) {
-    // Do not use buf_concat since this will free the second arg
-    buf_append((buf_t *)arg, buf_c_str(test->buf));
-  } else {
-    error_exit("Invalid save mode %d\n", mode);
-  }
-  plot_free(test);
-  return;
-}
-*/
 
 void plot_save_hatch_test_mode(plot_t *plot, int mode, void *arg) {
   plot_t *test = plot_init();

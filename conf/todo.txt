@@ -37,9 +37,11 @@ X - Also add to the command
 X Separating tick add and draw
 X - Add extra data structure in plot to store tick coordinates and labels
 
-Adding shortcut functions to add bar groups with a single bar
+X Adding shortcut functions to add bar groups with a single bar
 
-Plotting bar group ticks in draw_all_bargrps()
+X Plotting bar group ticks in draw_all_bargrps()
+
+Adding functions to check whether fig has been drawn before saving
 
 Allowing all file names be indicators also
 
