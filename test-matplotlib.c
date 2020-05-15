@@ -322,6 +322,8 @@ void test_plot_tick() {
     char buf[16];
     snprintf(buf, sizeof(buf), "Tick %d", i);
     plot_tick_append(tick, 1.0 * i, buf);
+    // Print the first 5 elements
+    if(i == 5) plot_tick_print(tick, 1);
   }
   for(int i = 99;i >= 0;i--) {
     char buf[16];

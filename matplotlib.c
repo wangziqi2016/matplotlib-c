@@ -883,7 +883,8 @@ void plot_tick_print(plot_tick_t *tick, int verbose) {
   printf("[plot_tick] count %d\n", count);
   if(verbose == 1) {
     for(int i = 0;i < count;i++) {
-      printf("[plot_tick] Index %d pos %f label \"%s\"\n", i, plot_tick_pos_at(i), plot_tick_label_at(i));
+      printf("[plot_tick] Index %d pos %f label \"%s\"\n", 
+        i, plot_tick_pos_at(tick, i), plot_tick_label_at(tick, i));
     }
   }
   return;
