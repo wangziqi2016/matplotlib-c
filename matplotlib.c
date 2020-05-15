@@ -937,6 +937,7 @@ plot_t *plot_init() {
   plot->py = py_init();
   plot->buf = buf_init();
   plot->bar_types = vec_init();
+  plot->drawn = 0;
   plot->bargrps = vec_init();
   plot->xtick = plot_tick_init();
   plot->ytick = plot_tick_init();
@@ -1630,6 +1631,8 @@ void plot_print(plot_t *plot, int verbose) {
   // Tick print
   plot_tick_print(plot->xtick, verbose);
   plot_tick_print(plot->ytick, verbose);
+  // Other internal controlling var
+  printf("[plot] drawn %d\n", plot->drawn);
   // Optionally print buffer content
   buf_print(plot->buf, verbose);
   return;

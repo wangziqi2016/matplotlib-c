@@ -343,6 +343,7 @@ typedef struct {
   vec_t *bar_types;                    // Bar types used for legend
   struct parse_struct_t *parse;        // Script parser
   plot_param_t param;                  // Plotting parameters
+  int drawn;                           // Set to 1 after plot_draw() is called; Check whether figure should be saved
   // The following are parsed from the script file
   char *xtitle;                        // X title; Specified at top level
   char *ytitle;                        // Y title; Specified at top level
