@@ -309,6 +309,15 @@ typedef struct {
 void plot_param_copy(plot_param_t *dst, plot_param_t *src);
 void plot_param_print(plot_param_t *param, int verbose);
 
+// This stores tick information
+typedef struct {
+  vec_t *poses;   // Array of 64 bit double (cast to void *)
+  vec_t *labels;  // Array of char pointers; Vector has the storage
+} plot_tick_t;
+
+plot_tick_t *plot_tick_init();
+void plot_tick_free(plot_tick_t *tick);
+
 extern plot_param_t default_param; // Default param, will be copied over during init
 extern const char *plot_preamble; // This is added to the buffer on plot init
 
