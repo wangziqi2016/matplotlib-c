@@ -346,6 +346,9 @@ typedef struct {
   bargrp_t *curr_bargrp;
   // List of bar groups we already added
   vec_t *bargrps;
+  // Ticks for X and Y
+  plot_tick_t *xtick;
+  plot_tick_t *ytick;
 } plot_t;
 
 plot_t *plot_init();

@@ -942,6 +942,8 @@ plot_t *plot_init() {
   plot->buf = buf_init();
   plot->bar_types = vec_init();
   plot->bargrps = vec_init();
+  plot->xtick = plot_tick_init();
+  plot->ytick = plot_tick_init();
   buf_append(plot->buf, plot_preamble);
   // Init param
   memcpy(&plot->param, &default_param, sizeof(plot_param_t));
@@ -966,6 +968,9 @@ void plot_free(plot_t *plot) {
     printf("WARNING: curr_bargrp is not NULL. Some bargroups are not added for plotting\n");
     bargrp_free(plot->curr_bargrp);
   }
+  // Free ticks
+  plot_tick_free(plot->xtick);
+  plot_tick_free(plot->ytick);
   // Note that parse can be NULL if it is not initialized
   if(plot->parse != NULL) parse_free(plot->parse);
   if(plot->xtitle) free(plot->xtitle);
@@ -1580,6 +1585,9 @@ void plot_print(plot_t *plot, int verbose) {
     bar_count += bargrp_count(grp);
   }
   printf("[plot] Bar groups: size %d total bars %d\n", vec_count(plot->bargrps), bar_count);
+  // Tick print
+  plot_tick_print(plot->xtick, verbose);
+  plot_tick_print(plot->ytick, verbose);
   // Optionally print buffer content
   buf_print(plot->buf, verbose);
   return;
