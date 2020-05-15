@@ -43,7 +43,10 @@ X Plotting bar group ticks in draw_all_bargrps()
 
 X Adding functions to check whether fig has been drawn before saving
 
-Allowing bar group to be used with NULL name
+X Allowing bar group to be used with NULL name
+
+Allowing type to be used with NUMM name?
+- In legend mode there must be labels for all types
 
 Allowing all file names be indicators also
 
