@@ -851,6 +851,18 @@ void plot_tick_free(plot_tick_t *tick) {
   return;
 }
 
+void plot_tick_append(plot_tick_t *tick, double pos, const char *str) {
+  vec_append(tick->poses, (void *)pos);
+  // Duplicate the string and push into the vector
+  int size = strlen(str) + 1;
+  char *s = (char *)malloc(size);
+  SYSEXPECT(s != NULL);
+  memcpy(s, str, size);
+  vec_append(tick->labels, s);
+  assert(vec_count(tick->poses) == vec_count(tick->labels));
+  return;
+}
+
 // We use "plot" as the root name of the plot; "fig" as the name of the figure object
 const char *plot_preamble = \
   "import sys\n"

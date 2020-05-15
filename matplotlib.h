@@ -317,6 +317,7 @@ typedef struct {
 
 plot_tick_t *plot_tick_init();
 void plot_tick_free(plot_tick_t *tick);
+void plot_tick_append(plot_tick_t *tick, double pos, const char *str);
 
 extern plot_param_t default_param; // Default param, will be copied over during init
 extern const char *plot_preamble; // This is added to the buffer on plot init
