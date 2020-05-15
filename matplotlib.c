@@ -1412,7 +1412,7 @@ void plot_save_hatch_test_mode(plot_t *plot, int mode, void *arg) {
   double bar_width = 2.0; // To show the hatch we need fixed width bar
   param->width = usable * bar_width; // Graph width is extended as there are more hatches
   param->xlim_right = usable * bar_width; // Set X right limit to avoid blank
-  param->xgrid_enabled = false;
+  param->xgrid_enabled = 0;
   param->bargrp_space = 0.0;
   double bar_height = param->height;
   // Must do it here since we adjusted the width
@@ -1448,66 +1448,6 @@ void plot_save_hatch_test_mode(plot_t *plot, int mode, void *arg) {
   plot_free(test);
   return;
 }
-
-/*
-void plot_save_hatch_test_mode(plot_t *plot, int mode, void *arg) {
-  plot_t *test = plot_init();
-  // Use current plot's configuration
-  plot_param_copy(&test->param, &plot->param);
-  plot_param_t *param = &test->param;
-  // Force turn off legend
-  param->legend_enabled = 0;
-  char label_buf[16];
-  int usable = param->hatch_scheme->item_count - param->color_offset;
-  double bar_width = 2.0; // To show the hatch we need fixed width bar
-  param->width = usable * bar_width; // Graph width is extended as there are more hatches
-  param->xlim_right = usable * bar_width; // Set X right limit to avoid blank
-  double bar_height = param->height;
-  double bar_pos = 0.0;
-  // Must do it here since we adjusted the width
-  plot_draw_axis(test);
-  for(int i = param->color_offset;i < param->hatch_scheme->item_count;i++) {
-    snprintf(label_buf, 16, "hatch %d", i);
-    char hatch = param->hatch_scheme->base[i];
-    plot_add_bar_type(test, label_buf, 0xFFFFFF, hatch);
-    bar_t *bar = bar_init();
-    bar->pos = bar_pos;
-    bar->width = bar_width;
-    bar->height = bar_height;
-    bar->inited = 1;
-    bar_set_type(bar, plot_find_bar_type(test, label_buf));
-    // Print color code
-    char hatch_buf[32];
-    // In python this will be "\\..." and actual binary seen by latex is "\..."
-    if(hatch == '\\') snprintf(hatch_buf, sizeof(hatch_buf), "\\\\textbackslash");
-    else if(hatch == '^') snprintf(hatch_buf, sizeof(hatch_buf), "\\\\textasciicircum"); 
-    else if(hatch == '_') snprintf(hatch_buf, sizeof(hatch_buf), "\\\\_"); 
-    else if(hatch == '%') snprintf(hatch_buf, sizeof(hatch_buf), "\\\\%%"); 
-    else if(hatch == '$') snprintf(hatch_buf, sizeof(hatch_buf), "\\\\$"); 
-    else snprintf(hatch_buf, 16, "%c", hatch);
-    bar_set_text(bar, hatch_buf);
-    plot_draw_bar(test, bar);
-    char xtick_text[16];
-    snprintf(xtick_text, 16, "[%d]", i);
-    plot_add_xtick(test, bar_pos + 0.5 * bar_width, xtick_text);
-    bar_free(bar);
-    bar_pos += bar_width;
-  }
-  plot_add_xtitle(test, "Hatch Scheme Test");
-  plot_draw_title(test);
-  plot_draw_tick(test);
-  if(mode == PLOT_SAVE_MODE_FILE) {
-    plot_save_fig(test, (const char *)arg);
-  } else if(mode == PLOT_SAVE_MODE_BUF) {
-    // Do not use buf_concat since this will free the second arg
-    buf_append((buf_t *)arg, buf_c_str(test->buf));
-  } else {
-    error_exit("Invalid save mode %d\n", mode);
-  }
-  plot_free(test);
-  return;
-}
-*/
 
 const char *plot_valid_legend_poses[] = {
   "right", "center left", "upper right", "lower right",
