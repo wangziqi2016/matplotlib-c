@@ -887,7 +887,15 @@ buf_t *plot_tick_pos_str(plot_tick_t *tick) {
   return buf;
 }
 
-buf_t *plot_tick_label_str(plot_tick_t *tick);
+buf_t *plot_tick_label_str(plot_tick_t *tick) {
+  buf_t *buf = buf_init();
+  buf_append(buf, "[");
+  for(int i = 0;i < vec_count(tick->poses);i++) {
+    buf_printf(buf, "'%s', ", plot_tick_label_at(tick, i));
+  }
+  buf_append(buf, "]");
+  return buf;
+}
 
 void plot_tick_print(plot_tick_t *tick, int verbose) {
   int count = vec_count(tick->poses);
