@@ -1555,6 +1555,13 @@ void plot_add_ytitle(plot_t *plot, const char *title) {
   return;
 }
 
+void plot_add_fig_filename(plot_t *plot, const char *filename) {
+  if(plot->fig_filename != NULL) free(plot->fig_filename);
+  plot->fig_filename = strdup(filename);
+  return;
+}
+void plot_add_legend_filename(plot_t *plot, const char *filename);
+
 void plot_print(plot_t *plot, int verbose) {
   // Print plot properties
   if(plot->xtitle != NULL) printf("[plot] xtitle %s\n", plot->xtitle);
@@ -2236,17 +2243,22 @@ void parse_top_property(parse_t *parse, plot_t *plot) {
     parse_report_pos(parse);
     error_exit("Unknown top-level property: \"%s\"\n", name);
   } 
+  plot_param_t *param = &plot->param;
   // This should be compiled into a jump table
   switch(cb_entry.prop) {
     case PARSE_XTITLE: {
       char *title = parse_get_str(parse);
-      if(plot->xtitle != NULL) printf("[parse] Overriding existing xtitle \"%s\"\n", plot->xtitle);
+      if(plot->xtitle != NULL && param->info == 1) {
+        printf("[parse] Overriding existing xtitle \"%s\"\n", plot->xtitle);
+      }
       plot_add_xtitle(plot, title);
       free(title);
     } break;
     case PARSE_YTITLE: {
       char *title = parse_get_str(parse);
-      if(plot->ytitle != NULL) printf("[parse] Overriding existing xtitle \"%s\"\n", plot->xtitle);
+      if(plot->ytitle != NULL && param->info == 1) {
+        printf("[parse] Overriding existing xtitle \"%s\"\n", plot->xtitle);
+      }
       plot_add_ytitle(plot, title);
       free(title);
     } break;

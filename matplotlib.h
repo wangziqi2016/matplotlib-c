@@ -411,10 +411,13 @@ extern const char *plot_valid_legend_poses[];
 void plot_set_legend_rows(plot_t *plot, int rows);
 void plot_set_legend_pos(plot_t *plot, const char *pos);
 
+// The following do not generate plotting scripts. They just change the internal states
 void plot_add_xtick(plot_t *plot, double pos, const char *text);
 void plot_add_ytick(plot_t *plot, double pos, const char *text);
 void plot_add_xtitle(plot_t *plot, const char *title);
 void plot_add_ytitle(plot_t *plot, const char *title);
+void plot_add_fig_filename(plot_t *plot, const char *filename);
+void plot_add_legend_filename(plot_t *plot, const char *filename);
 
 void plot_print(plot_t *plot, int verbose);
 
