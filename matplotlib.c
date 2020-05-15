@@ -840,7 +840,16 @@ plot_tick_t *plot_tick_init() {
   return tick;
 }
 
-void plot_tick_free(plot_tick_t *tick);
+void plot_tick_free(plot_tick_t *tick) {
+  // Free label strings first
+  for(int i = 0;i < vec_count(tick->labels);i++) {
+    free((char *)vec_at(tick->labels, i));
+  }
+  vec_free(tick->labels);
+  vec_free(tick->poses);
+  free(tick);
+  return;
+}
 
 // We use "plot" as the root name of the plot; "fig" as the name of the figure object
 const char *plot_preamble = \

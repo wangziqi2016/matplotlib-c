@@ -34,6 +34,9 @@ X Adding legend enabled property
 X Adding reset bar init and type used
 X - Also add to the command
 
+Separating tick add and draw
+- Add extra data structure in plot to store tick coordinates and labels
+
 Plotting bar group ticks in draw_all_bargrps()
 
 Allowing all file names be indicators also
