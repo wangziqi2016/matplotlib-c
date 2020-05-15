@@ -1546,8 +1546,8 @@ void plot_add_bar_type(plot_t *plot, const char *label, uint32_t color, char hat
     error_exit("Bar type label \"%s\" already exists\n", label);
   }
   bar_type_t *type = bar_type_init(label);
-  type->color = color;
-  type->hatch = hatch;
+  bar_type_set_color(type, color);
+  bar_type_set_hatch(type, hatch); // This may append error
   vec_append(plot->bar_types, type);
   return;
 }
@@ -1568,8 +1568,7 @@ void plot_add_bargrp(plot_t *plot, bargrp_t *grp) {
 // label, color and hatch are passed to bar type
 bar_t *plot_add_simple_bar(plot_t *plot, double height, const char *label, uint32_t color, char hatch, 
                            const char *xtick) {
-  bar_type_t *type = bar_type_init(label);
-  type->col
+  plot_add_bar_type(plot, label, color, hatch);
 }
 
 // Returns NULL if not found
