@@ -358,12 +358,6 @@ void plot_free(plot_t *plot);
 void plot_open(plot_t *plot, const char *filename);
 void plot_open_str(plot_t *plot, const char *s);
 
-void plot_add_bar_type(plot_t *plot, const char *label, uint32_t color, char hatch);
-bar_type_t *plot_find_bar_type(plot_t *plot, const char *label);
-
-void plot_add_bargrp(plot_t *plot, bargrp_t *grp);
-bargrp_t *plot_find_bargrp(plot_t *plot, const char *name);
-
 // This resets all flags that are set during plot_draw()
 void plot_reset_flags(plot_t *plot);
 void plot_reset_buf(plot_t *plot);
@@ -418,6 +412,11 @@ void plot_add_xtitle(plot_t *plot, const char *title);
 void plot_add_ytitle(plot_t *plot, const char *title);
 void plot_add_fig_filename(plot_t *plot, const char *filename);
 void plot_add_legend_filename(plot_t *plot, const char *filename);
+void plot_add_bar_type(plot_t *plot, const char *label, uint32_t color, char hatch);
+void plot_add_bargrp(plot_t *plot, bargrp_t *grp);
+
+bar_type_t *plot_find_bar_type(plot_t *plot, const char *label);
+bargrp_t *plot_find_bargrp(plot_t *plot, const char *name);
 
 void plot_print(plot_t *plot, int verbose);
 

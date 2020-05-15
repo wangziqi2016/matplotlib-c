@@ -978,49 +978,6 @@ void plot_open_str(plot_t *plot, const char *s) {
   return;
 }
 
-// Adds bar type; Note that types preserve the order they are inserted
-void plot_add_bar_type(plot_t *plot, const char *label, uint32_t color, char hatch) {
-  if(plot_find_bar_type(plot, label) != NULL) {
-    error_exit("Bar type label \"%s\" already exists\n", label);
-  }
-  bar_type_t *type = bar_type_init(label);
-  type->color = color;
-  type->hatch = hatch;
-  vec_append(plot->bar_types, type);
-  return;
-}
-
-// Returns NULL if not found
-bar_type_t *plot_find_bar_type(plot_t *plot, const char *label) {
-  for(int i = 0;i < vec_count(plot->bar_types);i++) {
-    bar_type_t *type = (bar_type_t *)vec_at(plot->bar_types, i);
-    if(streq(type->label, label) == 1) {
-      return type;
-    }
-  }
-  return NULL;
-}
-
-// This function adds a bar group into bargrps; Names must be unique
-void plot_add_bargrp(plot_t *plot, bargrp_t *grp) {
-  if(plot_find_bargrp(plot, grp->name) != NULL) {
-    error_exit("The bar group name \"%s\" already exists\n", grp->name);
-  }
-  vec_append(plot->bargrps, (void *)grp);
-  return;
-}
-
-// Returns NULL if not found
-bargrp_t *plot_find_bargrp(plot_t *plot, const char *name) {
-  for(int i = 0;i < vec_count(plot->bargrps);i++) {
-    bargrp_t *grp = (bargrp_t *)vec_at(plot->bargrps, i);
-    if(streq(grp->name, name) == 1) {
-      return grp;
-    }
-  }
-  return NULL;
-}
-
 // Reset flags that will be set during draw() such that we can draw again
 void plot_reset_flags(plot_t *plot) {
   // Reset types
@@ -1565,6 +1522,50 @@ void plot_add_legend_filename(plot_t *plot, const char *filename) {
   if(plot->legend_filename != NULL) free(plot->legend_filename);
   plot->legend_filename = strdup(filename);
   return;
+}
+
+
+// Adds bar type; Note that types preserve the order they are inserted
+void plot_add_bar_type(plot_t *plot, const char *label, uint32_t color, char hatch) {
+  if(plot_find_bar_type(plot, label) != NULL) {
+    error_exit("Bar type label \"%s\" already exists\n", label);
+  }
+  bar_type_t *type = bar_type_init(label);
+  type->color = color;
+  type->hatch = hatch;
+  vec_append(plot->bar_types, type);
+  return;
+}
+
+// This function adds a bar group into bargrps; Names must be unique
+void plot_add_bargrp(plot_t *plot, bargrp_t *grp) {
+  if(plot_find_bargrp(plot, grp->name) != NULL) {
+    error_exit("The bar group name \"%s\" already exists\n", grp->name);
+  }
+  vec_append(plot->bargrps, (void *)grp);
+  return;
+}
+
+// Returns NULL if not found
+bar_type_t *plot_find_bar_type(plot_t *plot, const char *label) {
+  for(int i = 0;i < vec_count(plot->bar_types);i++) {
+    bar_type_t *type = (bar_type_t *)vec_at(plot->bar_types, i);
+    if(streq(type->label, label) == 1) {
+      return type;
+    }
+  }
+  return NULL;
+}
+
+// Returns NULL if not found
+bargrp_t *plot_find_bargrp(plot_t *plot, const char *name) {
+  for(int i = 0;i < vec_count(plot->bargrps);i++) {
+    bargrp_t *grp = (bargrp_t *)vec_at(plot->bargrps, i);
+    if(streq(grp->name, name) == 1) {
+      return grp;
+    }
+  }
+  return NULL;
 }
 
 void plot_print(plot_t *plot, int verbose) {

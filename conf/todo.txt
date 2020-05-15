@@ -34,8 +34,10 @@ X Adding legend enabled property
 X Adding reset bar init and type used
 X - Also add to the command
 
-Separating tick add and draw
-- Add extra data structure in plot to store tick coordinates and labels
+X Separating tick add and draw
+X - Add extra data structure in plot to store tick coordinates and labels
+
+Adding shortcut functions to add bar groups with a single bar
 
 Plotting bar group ticks in draw_all_bargrps()
 
