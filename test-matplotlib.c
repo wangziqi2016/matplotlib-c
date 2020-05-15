@@ -329,6 +329,8 @@ void test_plot_tick() {
       buf_t *label_buf = plot_tick_label_str(tick);
       printf("Pos buf: \"%s\"\n", buf_c_str(pos_buf));
       printf("Label buf: \"%s\"\n", buf_c_str(label_buf));
+      buf_free(pos_buf);
+      buf_free(label_buf);
     }
   }
   for(int i = 99;i >= 0;i--) {
