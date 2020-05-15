@@ -2672,19 +2672,14 @@ void parse_cb_reset(parse_t *parse, plot_t *plot) {
     reset_buf = reset_param = 1; // Reset both
   }
   if(reset_buf == 1) {
-    buf_reset(plot->buf);
-    buf_append(plot->buf, plot_preamble);
+    plot_reset_buf(plot);
   }
   if(reset_param == 1) {
-    if(param->color_scheme != NULL) {
-      if(plot->param.info == 1) {
-        printf("[parse] Color scheme \"%s\" will be removed from plot during reset\n", param->color_scheme->name);
-      }
+    if(param->color_scheme != NULL && plot->param.info == 1) {
+      printf("[parse] Color scheme \"%s\" will be removed from plot during reset\n", param->color_scheme->name);
     }
-    if(param->hatch_scheme != NULL) {
-      if(plot->param.info == 1) {
-        printf("[parse] Hatch scheme \"%s\" will be removed from plot during reset\n", param->hatch_scheme->name);
-      }
+    if(param->hatch_scheme != NULL && plot->param.info == 1) {
+      printf("[parse] Hatch scheme \"%s\" will be removed from plot during reset\n", param->hatch_scheme->name);
     }
     plot_param_copy(&plot->param, &default_param);
   }
@@ -2913,7 +2908,6 @@ void parse_cb_dump(parse_t *parse, plot_t *plot) {
   int free_buf = 0;
   if(streq(ident, "plot") == 1) {
     plot_draw(plot);
-    plot_reset_flags(plot); // Reset flags here
     buf = plot->buf;
     free_buf = 0;
   } else if(streq(ident, "legend") == 1) {
