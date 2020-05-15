@@ -912,7 +912,7 @@ const char *plot_preamble = \
   "  r'\\usepackage{sansmath}',\n"
   "  r'\\sansmath'\n"
   "]\n"
-  "\n"
+  "\n";
 
 plot_t *plot_init() {
   plot_t *plot = (plot_t *)malloc(sizeof(plot_t));
@@ -1418,6 +1418,7 @@ void plot_save_color_test_mode(plot_t *plot, int mode, void *arg) {
   }
   plot_add_xtitle(test, "Color Scheme Test");
   plot_draw_title(test);
+  plot_draw_tick(test);
   if(mode == PLOT_SAVE_MODE_FILE) {
     plot_save_fig(test, (const char *)arg);
   } else if(mode == PLOT_SAVE_MODE_BUF) {
@@ -1475,6 +1476,7 @@ void plot_save_hatch_test_mode(plot_t *plot, int mode, void *arg) {
   }
   plot_add_xtitle(test, "Hatch Scheme Test");
   plot_draw_title(test);
+  plot_draw_tick(test);
   if(mode == PLOT_SAVE_MODE_FILE) {
     plot_save_fig(test, (const char *)arg);
   } else if(mode == PLOT_SAVE_MODE_BUF) {
