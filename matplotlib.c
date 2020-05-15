@@ -829,6 +829,19 @@ void plot_param_print(plot_param_t *param, int verbose) {
   return;
 }
 
+//* plot_tick_t
+
+plot_tick_t *plot_tick_init() {
+  plot_tick_t *tick = (plot_tick_t *)malloc(sizeof(plot_tick_t));
+  SYSEXPECT(tick != NULL);
+  memset(tick, 0x00, sizeof(plot_tick_t));
+  tick->poses = vec_init();
+  tick->labels = vec_init();
+  return tick;
+}
+
+void plot_tick_free(plot_tick_t *tick);
+
 // We use "plot" as the root name of the plot; "fig" as the name of the figure object
 const char *plot_preamble = \
   "import sys\n"
