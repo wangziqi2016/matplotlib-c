@@ -1569,6 +1569,12 @@ void plot_add_bargrp(plot_t *plot, bargrp_t *grp) {
 bar_t *plot_add_simple_bar(plot_t *plot, double height, const char *label, uint32_t color, char hatch, 
                            const char *xtick) {
   plot_add_bar_type(plot, label, color, hatch);
+  bar_t *bar = bar_init();
+  bar->height = height; // Only initialize this for simple bars
+  bargrp_t *grp = bargrp_init(xtick);
+  bargrp_add_bar(grp, bar);
+  plot_add_bargrp(plot, grp);
+  return bar;
 }
 
 // Returns NULL if not found
