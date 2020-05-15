@@ -1617,6 +1617,8 @@ bar_t *plot_add_simple_bar(plot_t *plot, double height, const char *label, uint3
   bargrp_t *grp = bargrp_init(xtick);
   bargrp_add_bar(grp, bar);
   plot_add_bargrp(plot, grp);
+  // Also set bar type
+  bar_set_type(bar, plot_find_bar_type(plot, label));
   return bar;
 }
 
