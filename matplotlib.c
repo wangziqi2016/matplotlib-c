@@ -1280,12 +1280,15 @@ void plot_draw_legend(plot_t *plot) {
 }
 
 // Generates all scripts except save figure or show figure
+// This function can be called multiple times, the effect is as if it were the first call
 void plot_draw(plot_t *plot) {
+  if(plot->drawn == 1) {
+    // First reset all flags and buf such that we can restart
+    // Params should not be reset
+    plot_reset_flags(plot);
+    plot_reset_buf(plot);
+  }
   plot_param_t *param = &plot->param;
-  // First reset all flags and buf such that we can restart
-  // Params are not reset here
-  plot_reset_flags(plot);
-  plot_reset_buf(plot);
   // Note that these can be skipped by arranging bars manually
   plot_draw_axis(plot);
   plot_draw_all_bargrps(plot);
@@ -1294,12 +1297,16 @@ void plot_draw(plot_t *plot) {
   plot_draw_limit(plot);
   plot_draw_title(plot);
   if(param->legend_enabled == 1) plot_draw_legend(plot);
+  plot->drawn = 1; // Only setting this would allow the plot be saved
   return;
 }
 
 // This function generates the code to save figure, and runs python interpreter
 // Note that it does not generate plotting code. Users must call draw() before calling this
 void plot_save_fig(plot_t *plot, const char *filename) {
+  if(plot->drawn == 0) {
+    error_exit("The plot has not been drawn yet. Call plot_drawn() to generate scripts\n");
+  }
   buf_t *buf = plot->buf;
   plot_param_t *param = &plot->param;
   // Print draw command and execute script
