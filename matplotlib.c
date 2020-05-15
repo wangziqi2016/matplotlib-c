@@ -1361,6 +1361,41 @@ void plot_save_legend_mode(plot_t *plot, int mode, void *arg) {
   return;
 }
 
+void plot_save_color_test_mode(plot_t *plot, int mode, void *arg) {
+  plot_t *test = plot_init();
+  // Use current plot's configuration
+  plot_param_copy(&test->param, &plot->param);
+  plot_param_t *param = &test->param;
+  // Force turn off legend
+  param->legend_enabled = 0;
+  int usable = param->color_scheme->item_count - param->color_offset;
+  double bar_height = param->height;
+  for(int i = param->color_offset;i < param->color_scheme->item_count;i++) {
+    char label_buf[16];
+    snprintf(label_buf, sizeof(label_buf), "color %d", i);
+    char xtick_buf[16];
+    snprintf(xtick_buf, sizeof(xtick_buf), "[%d]", i);
+    char color_buf[16];
+    // Adding simple bar
+    bar_t *bar = plot_add_simple_bar(test, bar_height, label_buf, param->color_scheme->base[i], HATCH_NONE, xtick_buf);
+    // Print color code
+    color_str_latex(bar_get_type(bar)->color, color_buf);
+    bar_set_text(bar, color_buf);
+  }
+  plot_add_xtitle(test, "Color Scheme Test");
+  plot_draw(test);
+  if(mode == PLOT_SAVE_MODE_FILE) {
+    plot_save_fig(test, (const char *)arg);
+  } else if(mode == PLOT_SAVE_MODE_BUF) {
+    // Do not use buf_concat since this will free the second arg
+    buf_append((buf_t *)arg, buf_c_str(test->buf));
+  } else {
+    error_exit("Invalid save mode %d\n", mode);
+  }
+  plot_free(test);
+  return;
+}
+/*
 // This functions draws a color test bar graph
 void plot_save_color_test_mode(plot_t *plot, int mode, void *arg) {
   plot_t *test = plot_init();
@@ -1409,6 +1444,7 @@ void plot_save_color_test_mode(plot_t *plot, int mode, void *arg) {
   plot_free(test);
   return;
 }
+*/
 
 void plot_save_hatch_test_mode(plot_t *plot, int mode, void *arg) {
   plot_t *test = plot_init();
