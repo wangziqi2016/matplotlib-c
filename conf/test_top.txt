@@ -49,7 +49,7 @@
 .xtick_rotation = 45;
 .bar_text_rotation = 90;
 
-.dry_run = "enabled"; 
+.dry_run = "disabled"; 
 .ytick_enabled = 1;
 .xtick_enabled = 1;
 .xtick_length = 20;

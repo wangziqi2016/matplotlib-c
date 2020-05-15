@@ -1172,9 +1172,13 @@ void plot_draw_tick(plot_t *plot) {
   buf_t *buf = plot->buf;
   plot_param_t *param = &plot->param;
   // Set x tick and y tick
-  if(param->xtick_enabled == 1) {
-    buf_printf(buf, "if len(cmatplotlib_xticks) != 0:\n");
-    buf_printf(buf, "  plot.xticks(cmatplotlib_xticks, cmatplotlib_xtick_labels");
+  if(param->xtick_enabled == 1 && plot_tick_count(plot->xtick) > 0) {
+    buf_t *pos_buf = plot_tick_pos_str(plot->xtick);
+    buf_t *label_buf = plot_tick_label_str(plot->xtick);
+    // Print draw statement
+    buf_printf(buf, "plot.xticks(%s, %s", buf_c_str(pos_buf), buf_c_str(label_buf));
+    buf_free(pos_buf);
+    buf_free(label_buf);
     buf_printf(buf, ", fontsize=%d", param->xtick_font_size);
     if(param->xtick_rotation != 0) {
       //printf("rotation %d\n", param->xtick_rotation);
@@ -1198,9 +1202,12 @@ void plot_draw_tick(plot_t *plot) {
     buf_printf(buf, "plot.xticks([])\n");
   }
   if(param->ytick_enabled == 1) {
-    // Print Y label
-    buf_printf(buf, "if len(cmatplotlib_yticks) != 0:\n");
-    buf_printf(buf, "  plot.yticks(cmatplotlib_yticks, cmatplotlib_ytick_labels");
+    buf_t *pos_buf = plot_tick_pos_str(plot->ytick);
+    buf_t *label_buf = plot_tick_label_str(plot->ytick);
+    // Print draw statement
+    buf_printf(buf, "plot.yticks(%s, %s", buf_c_str(pos_buf), buf_c_str(label_buf));
+    buf_free(pos_buf);
+    buf_free(label_buf);
     buf_printf(buf, ", fontsize=%d", param->ytick_font_size);
     if(param->xtick_rotation != 0) {
       buf_printf(buf, ", rotation=%d", param->ytick_rotation);
