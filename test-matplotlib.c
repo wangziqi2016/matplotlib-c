@@ -252,22 +252,22 @@ void test_bargrp_find() {
 void test_bar_type() {
   printf("========== test_bar_type ==========\n");
   plot_t *plot = plot_init();
-  plot_add_bar_type(plot, "type1", COLOR_GEN(0x12, 0x34, 0x56), 'x');
-  plot_add_bar_type(plot, "type2", COLOR_GEN(0xff, 0xff, 0xff), 'y');
-  plot_add_bar_type(plot, "type3", COLOR_GEN(0xab, 0xcd, 0xef), 'z');
+  plot_add_bar_type(plot, "type1", COLOR_GEN(0x12, 0x34, 0x56), '/');
+  plot_add_bar_type(plot, "type2", COLOR_GEN(0xff, 0xff, 0xff), '.');
+  plot_add_bar_type(plot, "type3", COLOR_GEN(0xab, 0xcd, 0xef), '*');
   // Uncomment this to test duplicated label
-  //plot_add_bar_type(plot, "type3", COLOR_GEN(0xab, 0xcd, 0xef), 'z');
+  //plot_add_bar_type(plot, "type3", COLOR_GEN(0xab, 0xcd, 0xef), '.');
   bar_type_t *type;
   type = plot_find_bar_type(plot, "type2");
   printf("Type Label %s color 0x%08X hatch %c used %d\n", type->label, type->color, type->hatch, type->used);
-  assert(type->color == 0x00FFFFFF && type->hatch == 'y');
+  assert(type->color == 0x00FFFFFF && type->hatch == '.');
   assert(streq(type->label, "type2") == 1);
   assert(type->used == 0);
   type->used = 1;
   // Test dup() function
   bar_type_t *dup = bar_type_dup(type);
   printf("Dup Label %s color 0x%08X hatch %c used %d\n", dup->label, dup->color, dup->hatch, dup->used);
-  assert(dup->color == 0x00FFFFFF && dup->hatch == 'y');
+  assert(dup->color == 0x00FFFFFF && dup->hatch == '.');
   assert(streq(dup->label, "type2") == 1);
   assert(dup->label != type->label); // Label must be anew
   assert(dup->used == 0); // This should not be copied

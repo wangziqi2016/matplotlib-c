@@ -1123,7 +1123,7 @@ void plot_draw_all_bargrps(plot_t *plot) {
         // Append X ticks
         end_pos = curr_pos + bar_width; // Right end of the last bar
         double xtick_pos = (begin_pos + end_pos) / 2.0;
-        plot_add_xtick(plot, end_pos, grp->name);
+        plot_add_xtick(plot, xtick_pos, grp->name);
         // Either jump to the next immediate slot, or leave inter-group space
         curr_pos += (bar_width + bar_width * param->bargrp_space);
         curr_bottom = 0.0;
@@ -1368,7 +1368,6 @@ void plot_save_color_test_mode(plot_t *plot, int mode, void *arg) {
   plot_param_t *param = &test->param;
   // Force turn off legend
   param->legend_enabled = 0;
-  int usable = param->color_scheme->item_count - param->color_offset;
   double bar_height = param->height;
   for(int i = param->color_offset;i < param->color_scheme->item_count;i++) {
     char label_buf[16];
