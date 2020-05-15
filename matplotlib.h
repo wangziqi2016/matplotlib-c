@@ -412,8 +412,8 @@ void plot_set_legend_pos(plot_t *plot, const char *pos);
 
 void plot_add_xtick(plot_t *plot, double pos, const char *text);
 void plot_add_ytick(plot_t *plot, double pos, const char *text);
-void plot_add_x_title(plot_t *plot, const char *title);
-void plot_add_y_title(plot_t *plot, const char *title);
+void plot_add_xtitle(plot_t *plot, const char *title);
+void plot_add_ytitle(plot_t *plot, const char *title);
 
 void plot_print(plot_t *plot, int verbose);
 
