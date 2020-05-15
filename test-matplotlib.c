@@ -315,6 +315,27 @@ void test_plot_color_test() {
   return;
 }
 
+void test_plot_tick() {
+  printf("========== test_plot_tick ==========\n");
+  plot_tick_t *tick = plot_tick_init();
+  for(int i = 0;i < 100;i++) {
+    char buf[16];
+    snprintf(buf, sizeof(buf), "Tick %d", i);
+    plot_tick_append(tick, 1.0 * i, buf);
+  }
+  for(int i = 99;i >= 0;i--) {
+    char buf[16];
+    snprintf(buf, sizeof(buf), "Tick %d", i);
+    double pos = plot_tick_pos_at(tick, i);
+    char *label = plot_tick_label_at(tick, i);
+    assert(pos == 1.0 * i);
+    assert(streq(label, buf) == 1);
+  }
+  plot_tick_free(tick);
+  printf("Pass\n");
+  return;
+}
+
 void test_parse_getchar() {
   printf("========== test_parse_getchar ==========\n");
   // Line 1, 3, 4 has contents; 6 lines in total
@@ -650,6 +671,7 @@ int main(int argc, char **argv) {
   if(valgrind_flag == 0) test_bargrp_find();
   if(valgrind_flag == 0) test_plot_legend();
   if(valgrind_flag == 0) test_plot_color_test();
+  test_plot_tick();
   test_parse_getchar();
   test_parse_until();
   test_parse_ident();
