@@ -311,10 +311,7 @@ hatch_scheme_t *hatch_scheme_init(const char *name, char *base, int item_count) 
   hatch_scheme_t *scheme = (hatch_scheme_t *)malloc(sizeof(hatch_scheme_t));
   SYSEXPECT(scheme != NULL);
   memset(scheme, 0x00, sizeof(hatch_scheme_t));
-  int len = strlen(name);
-  scheme->name = (char *)malloc(len + 1);
-  SYSEXPECT(scheme->name != NULL);
-  strcpy(scheme->name, name);
+  scheme->name = strdup(name);
   scheme->base = (char *)malloc(HATCH_SIZE * item_count);
   SYSEXPECT(scheme->base != NULL);
   memcpy(scheme->base, base, HATCH_SIZE * item_count);
@@ -331,10 +328,7 @@ hatch_scheme_t *hatch_scheme_init_file(const char *filename) {
   hatch_scheme_t *scheme = (hatch_scheme_t *)malloc(sizeof(hatch_scheme_t));
   SYSEXPECT(scheme != NULL);
   memset(scheme, 0x00, sizeof(hatch_scheme_t));
-  int len = strlen(filename);
-  scheme->name = (char *)malloc(len + 1);
-  SYSEXPECT(scheme->name != NULL);
-  strcpy(scheme->name, filename);
+  scheme->name = strdup(filename);
   scheme->base = (char *)malloc(HATCH_SIZE * HATCH_INIT_FILE_COUNT);
   SYSEXPECT(scheme->base != NULL);
   scheme->item_count = HATCH_INIT_FILE_COUNT;
@@ -663,9 +657,7 @@ bar_type_t *bar_type_init(const char *label) {
   bar_type_t *type = (bar_type_t *)malloc(sizeof(bar_type_t));
   SYSEXPECT(type != NULL);
   memset(type, 0x00, sizeof(bar_type_t));
-  type->label = (char *)malloc(strlen(label) + 1);
-  SYSEXPECT(type->label != NULL);
-  strcpy(type->label, label);
+  type->label = strdup(label);
   return type;
 }
 
@@ -711,9 +703,7 @@ void bar_free(bar_t *bar) {
 // Copies the text into a separate buffer and frees the previous one, if any
 void bar_set_text(bar_t *bar, const char *text) {
   if(bar->text != NULL) free(bar->text);
-  bar->text = (char *)malloc(strlen(text) + 1);
-  SYSEXPECT(bar->text != NULL);
-  strcpy(bar->text, text);
+  bar->text = strdup(text);
   return;
 }
 
@@ -731,9 +721,7 @@ bargrp_t *bargrp_init(const char *name) {
   bargrp_t *grp = (bargrp_t *)malloc(sizeof(bargrp_t));
   SYSEXPECT(grp != NULL);
   memset(grp, 0x00, sizeof(bargrp_t));
-  grp->name = (char *)malloc(strlen(name) + 1);
-  SYSEXPECT(grp->name != NULL);
-  strcpy(grp->name, name);
+  grp->name = strdup(name);
   grp->bars = vec_init();
   return grp;
 }
@@ -858,11 +846,7 @@ void plot_tick_append(plot_tick_t *tick, double pos, const char *str) {
   uint64_t t = *(uint64_t *)&pos;
   vec_append(tick->poses, (void *)t);
   // Duplicate the string and push into the vector
-  int size = strlen(str) + 1;
-  char *s = (char *)malloc(size);
-  SYSEXPECT(s != NULL);
-  memcpy(s, str, size);
-  vec_append(tick->labels, s);
+  vec_append(tick->labels, (void *)strdup(str));
   assert(vec_count(tick->poses) == vec_count(tick->labels));
   return;
 }
