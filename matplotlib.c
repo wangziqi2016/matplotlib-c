@@ -913,11 +913,6 @@ const char *plot_preamble = \
   "  r'\\sansmath'\n"
   "]\n"
   "\n"
-  // The following are used to draw x/y ticks
-  "cmatplotlib_xticks = []\n"
-  "cmatplotlib_xtick_labels = []\n"
-  "cmatplotlib_yticks = []\n"
-  "cmatplotlib_ytick_labels = []\n\n";
 
 plot_t *plot_init() {
   plot_t *plot = (plot_t *)malloc(sizeof(plot_t));
