@@ -2811,18 +2811,6 @@ void parse_cb_dump(parse_t *parse, plot_t *plot) {
   return;
 }
 
-void parse_cb_dump(parse_t *parse, plot_t *plot) {
-  int next_arg = parse_next_arg(parse);
-  if(next_arg == PARSE_ARG_QMARK) {
-    printf("[!dump] Usage: dump [target] [file name]\n");
-    printf("[!dump] Valid targets are: plot, legend\n");
-    printf("[!dump] The file name can be either a string or a file indicator\n");
-  }
-  char *ident = parse_get_ident(parse);
-  
-  free(ident);
-}
-
 static void parse_print_check_spec(parse_t *parse, const char *spec, char ch, const char *name) {
   const char *p = spec;
   while(*p != '\0') {
