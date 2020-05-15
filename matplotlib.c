@@ -1121,10 +1121,12 @@ void plot_draw_all_bargrps(plot_t *plot) {
       int is_last = (j == (vec_count(grp->bars) - 1));
       int next_stacked = (is_last || (((bar_t *)vec_at(grp->bars, j + 1))->stacked == 0));
       if(is_last == 1) {
-        // Append X ticks
+        // Append X ticks, if the bar group has a name (ignore if not)
         end_pos = curr_pos + bar_width; // Right end of the last bar
-        double xtick_pos = (begin_pos + end_pos) / 2.0;
-        plot_add_xtick(plot, xtick_pos, grp->name);
+        if(grp->name != NULL) {
+          double xtick_pos = (begin_pos + end_pos) / 2.0;
+          plot_add_xtick(plot, xtick_pos, grp->name);
+        }
         // Either jump to the next immediate slot, or leave inter-group space
         curr_pos += (bar_width + bar_width * param->bargrp_space);
         curr_bottom = 0.0;
