@@ -516,7 +516,7 @@ void vec_append(vec_t *vec, void *p) {
 }
 
 void vec_print(vec_t *vec) {
-  printf("[vec_t] count %d cap %d data %p\n", vec->count, vec->capacity, vec->data);
+  printf("[vec] count %d cap %d data %p\n", vec->count, vec->capacity, vec->data);
   return;
 }
 
@@ -629,7 +629,7 @@ void buf_append_color(buf_t *buf, uint32_t color) {
 }
 
 void buf_print(buf_t *buf, int content) {
-  printf("[buf_t] size %d cap %d data 0x%p\n", buf->size, buf->capacity, buf->data);
+  printf("[buf] size %d cap %d data 0x%p\n", buf->size, buf->capacity, buf->data);
   if(content == 1) {
     printf("---------- contents ----------\n");
     printf("%s\n", buf->data);
@@ -694,8 +694,9 @@ void bar_type_set_hatch(bar_type_t *type, char hatch) {
 }
 
 void bar_type_print(bar_type_t *type) {
-  printf("[bar_type_t] label \"%s\" color 0x%08X hatch '%c' used %d\n",
-         type->label == NULL ? "anonymous" : type->label, type->color, type->hatch, type->used);
+  printf("[bar_type] label \"%s\" color 0x%08X hatch '%c' used %d anonymous %d\n",
+         type->label == NULL ? "[anonymous]" : type->label, type->color, type->hatch, type->used,
+         bar_type_is_anonymous(type));
   return;
 }
 
@@ -723,9 +724,10 @@ void bar_set_text(bar_t *bar, const char *text) {
 }
 
 void bar_print(bar_t *bar) {
-  printf("[bar_t] height %f width %f pos %f bottom %f text \"%s\" label \"%s\"\n",
-    bar->height, bar->width, bar->pos, bar->bottom, bar->text,
-    bar->type ? bar->type->label : "N/A");
+  printf("[bar] height %f width %f pos %f bottom %f text \"%s\" label \"%s\"\n",
+    bar->height, bar->width, bar->pos, bar->bottom, 
+    bar->text == NULL ? "[N/A]" : bar->text,
+    bar->type ? (bar->type->label == NULL ? "[anonymous]" : bar->type->label) : "N/A");
   printf("        inited %d stacked %d\n", bar->inited, bar->stacked);
   return;
 }
@@ -753,7 +755,8 @@ void bargrp_free(bargrp_t *grp) {
 }
 
 void bargrp_print(bargrp_t *grp, int verbose) {
-  printf("[bargrp] name \"%s\" size %d\n", grp->name == NULL ? "[anonymous]" : grp->name, vec_count(grp->bars));
+  printf("[bargrp] name \"%s\" size %d anonymous %d\n", 
+    grp->name == NULL ? "[anonymous]" : grp->name, vec_count(grp->bars), bargrp_is_anonymous(grp));
   if(verbose == 1) {
     for(int i = 0;i < vec_count(grp->bars);i++) {
       bar_print(vec_at(grp->bars, i));
@@ -1348,6 +1351,10 @@ void plot_save_legend_mode(plot_t *plot, int mode, void *arg) {
   }
   for(int i = 0;i < count;i++) {
     bar_type_t *type = vec_at(plot->bar_types, i);
+    if(bar_type_is_anonymous(type) == 1) {
+      error_exit("Could not generate legend. Type index %d is anonymous\n", i);
+    }
+    assert(type->label != NULL);
     // Anonymous bar group here
     bar_t *bar = plot_add_simple_bar(legend, 0.0, type->label, type->color, type->hatch, NULL);
     // The bar should not be drawn
@@ -1571,7 +1578,7 @@ bar_t *plot_add_simple_bar(plot_t *plot, double height, const char *label, uint3
 bar_type_t *plot_find_bar_type(plot_t *plot, const char *label) {
   for(int i = 0;i < vec_count(plot->bar_types);i++) {
     bar_type_t *type = (bar_type_t *)vec_at(plot->bar_types, i);
-    if(streq(type->label, label) == 1) {
+    if(bar_type_is_anonymous(type) == 0 && streq(type->label, label) == 1) {
       return type;
     }
   }
@@ -2596,8 +2603,7 @@ void parse_cb_print(parse_t *parse, plot_t *plot) {
         // If no index then just print all of them
         for(int i = 0;i < vec_count(plot->bar_types);i++) {
           bar_type_t *type = vec_at(plot->bar_types, i);
-          color_str(type->color, buf);
-          printf("[bar_type] label \"%s\" color \"%s\" hatch \'%c\'\n", type->label, buf, type->hatch);
+          bar_type_print(type);
         }
       } else if(next_arg == PARSE_ARG_NUM) {
         // If there is an numeric index, print the one on that index
@@ -2608,7 +2614,7 @@ void parse_cb_print(parse_t *parse, plot_t *plot) {
         }
         bar_type_t *type = vec_at(plot->bar_types, index);
         color_str(type->color, buf);
-        printf("[bar_type] Index %d label \"%s\" color \"%s\" hatch \'%c\'\n", index, type->label, buf, type->hatch);
+        bar_type_print(type);
       } else if(next_arg == PARSE_ARG_STR) {
         // If there is a string, it will be treated as the label
         char *label = parse_get_str(parse);
@@ -2617,8 +2623,7 @@ void parse_cb_print(parse_t *parse, plot_t *plot) {
           parse_report_pos(parse);
           error_exit("Bar type label \"%s\" does not exist\n", label);
         }
-        color_str(type->color, buf);
-        printf("[bar_type] label \"%s\" color \"%s\" hatch \'%c\'\n", type->label, buf, type->hatch);
+        bar_type_print(type);
         free(label);
       }
     }
@@ -3227,7 +3232,7 @@ void parse_report_pos(parse_t *parse) {
 }
 
 void parse_print(parse_t *parse) {
-  printf("[parse_t] size %d line %d col %d offset %d s 0x%p\n", 
+  printf("[parse] size %d line %d col %d offset %d s 0x%p\n", 
     parse->size, parse->line, parse->col, (int)(parse->curr - parse->s), parse->s);
   return;
 }
