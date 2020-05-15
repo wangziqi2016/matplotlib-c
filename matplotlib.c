@@ -2505,8 +2505,9 @@ void parse_top_func(parse_t *parse, plot_t *plot) {
   return;
 }
 
-// Reads verbose flag as either numeric 0/1 value or "verbose string"
-// If verbose flag is not found return 0 (default not verbose)
+// Reads verbose flag as either numeric 0/1 value or "verbose" string
+// If verbose flag is not found return 0
+// Otherwise do not consume any token and just return 0
 static int parse_get_verbose(parse_t *parse) {
   int next_arg = parse_next_arg(parse);
   int verbose = 0;
@@ -2634,11 +2635,20 @@ void parse_cb_print(parse_t *parse, plot_t *plot) {
     } else {
       next_arg = parse_next_arg(parse);
       if(next_arg == PARSE_ARG_NONE) {
-        for(int i =  0;i < vec_count(plot->bargrps);i++) {
-          bargrp_print(, 1);
+        int verbose = parse_get_verbose(parse);
+        for(int i = 0;i < vec_count(plot->bargrps);i++) {
+          bargrp_print(vec_at(plot->bargrps, i), verbose);
         }
       } else if(next_arg == PARSE_ARG_STR) {
-
+        char *name = parse_get_str(parse);
+        int verbose = parse_get_verbose(parse);
+        bargrp_t *grp = plot_find_bargrp(plot, name);
+        if(grp == NULL) {
+          parse_report_pos(parse);
+          error_exit("[parse] bargrp name \"%s\" does not exist\n", name);
+        }
+        bargrp_print(grp, verbose);
+        free(name);
       } else if(next_arg == PARSE_ARG_NUM) {
 
       }
