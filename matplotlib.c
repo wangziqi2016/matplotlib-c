@@ -877,6 +877,18 @@ char *plot_tick_label_at(plot_tick_t *tick, int index) {
   return (char *)vec_at(tick->labels, index);
 }
 
+
+void plot_tick_print(plot_tick_t *tick, int verbose) {
+  int count = vec_count(tick->poses);
+  printf("[plot_tick] count %d\n", count);
+  if(verbose == 1) {
+    for(int i = 0;i < count;i++) {
+      printf("[plot_tick] Index %d pos %f label \"%s\"\n", i, plot_tick_pos_at(i), plot_tick_label_at(i));
+    }
+  }
+  return;
+}
+
 // We use "plot" as the root name of the plot; "fig" as the name of the figure object
 const char *plot_preamble = \
   "import sys\n"

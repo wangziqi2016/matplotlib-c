@@ -322,6 +322,12 @@ inline static int plot_tick_count(plot_tick_t *tick) { return vec_count(tick->po
 double plot_tick_pos_at(plot_tick_t *tick, int index);
 char *plot_tick_label_at(plot_tick_t *tick, int index);
 
+// The following function returns buf_t object contain Python list representation of all elements
+buf_t *plot_tick_pos_str(plot_tick_t *tick);
+buf_t *plot_tick_label_str(plot_tick_t *tick);
+
+void plot_tick_print(plot_tick_t *tick, int verbose);
+
 extern plot_param_t default_param; // Default param, will be copied over during init
 extern const char *plot_preamble; // This is added to the buffer on plot init
 
