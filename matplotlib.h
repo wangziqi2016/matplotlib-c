@@ -33,6 +33,7 @@
 #endif
 
 inline static int streq(const char *a, const char *b) { return strcmp(a, b) == 0; }
+char *strdup(const char *s); // Duplicate a string
 
 //* fp_* - String processing of floating point numbers
 

@@ -1,6 +1,14 @@
 
 #include "matplotlib.h"
 
+char *strdup(const char *s) {
+  int size = strlen(s) + 1;
+  char *ret = (char *)malloc(size);
+  SYSEXPECT(ret != NULL);
+  memcpy(ret, s, size);
+  return ret;
+}
+
 //* fp_*
 
 double fp_power10(int num) {
@@ -1539,10 +1547,11 @@ void plot_add_ytick(plot_t *plot, double pos, const char *text) {
   return;
 }
 
-// Adding X axis title
+// Adding X axis title to plot object
 void plot_add_x_title(plot_t *plot, const char *title) {
-  buf_printf(plot->buf, "ax.set_xlabel(\"%s\", fontsize=%lu, weight='bold')\n",
-             title, plot->param.xtitle_font_size);
+  if(plot->xtitle != NULL) free(plot->xtitle);
+  //buf_printf(plot->buf, "ax.set_xlabel(\"%s\", fontsize=%lu, weight='bold')\n",
+  //           title, plot->param.xtitle_font_size);
   return;
 }
 
