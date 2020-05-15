@@ -837,6 +837,7 @@ plot_tick_t *plot_tick_init() {
   memset(tick, 0x00, sizeof(plot_tick_t));
   tick->poses = vec_init();
   tick->labels = vec_init();
+  if(sizeof(double) != 8UL) error_exit("The size of a double must be 8 bytes\n");
   return tick;
 }
 
@@ -852,7 +853,8 @@ void plot_tick_free(plot_tick_t *tick) {
 }
 
 void plot_tick_append(plot_tick_t *tick, double pos, const char *str) {
-  vec_append(tick->poses, (void *)pos);
+  uint64_t t = *(uint64_t *)&pos;
+  vec_append(tick->poses, (void *)t);
   // Duplicate the string and push into the vector
   int size = strlen(str) + 1;
   char *s = (char *)malloc(size);
@@ -865,12 +867,14 @@ void plot_tick_append(plot_tick_t *tick, double pos, const char *str) {
 
 double plot_tick_pos_at(plot_tick_t *tick, int index) {
   assert(index >= 0 && index < vec_count(tick->poses));
-  return (double)vec_at(tick->poses, index);
+  // Must do this to let compiler perform binary conversion
+  uint64_t t = (uint64_t)vec_at(tick->poses, index);
+  return *(double *)&t;
 }
 
 char *plot_tick_label_at(plot_tick_t *tick, int index) {
   assert(index >= 0 && index < vec_count(tick->poses));
-  return (double)vec_at(tick->labels, index);
+  return (char *)vec_at(tick->labels, index);
 }
 
 // We use "plot" as the root name of the plot; "fig" as the name of the figure object
