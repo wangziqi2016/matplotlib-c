@@ -146,10 +146,7 @@ color_scheme_t *color_scheme_init(const char *name, uint32_t *base, int item_cou
   color_scheme_t *scheme = (color_scheme_t *)malloc(sizeof(color_scheme_t));
   SYSEXPECT(scheme != NULL);
   memset(scheme, 0x00, sizeof(color_scheme_t));
-  int len = strlen(name);
-  scheme->name = (char *)malloc(len + 1);
-  SYSEXPECT(scheme->name != NULL);
-  strcpy(scheme->name, name);
+  scheme->name = strdup(name);
   scheme->base = (uint32_t *)malloc(COLOR_SIZE * item_count);
   SYSEXPECT(scheme->base != NULL);
   memcpy(scheme->base, base, COLOR_SIZE * item_count);
@@ -169,10 +166,7 @@ color_scheme_t *color_scheme_init_file(const char *filename) {
   color_scheme_t *scheme = (color_scheme_t *)malloc(sizeof(color_scheme_t));
   SYSEXPECT(scheme != NULL);
   memset(scheme, 0x00, sizeof(color_scheme_t));
-  int len = strlen(filename);
-  scheme->name = (char *)malloc(len + 1);
-  SYSEXPECT(scheme->name != NULL);
-  strcpy(scheme->name, filename);
+  scheme->name = strdup(filename);
   scheme->base = (uint32_t *)malloc(COLOR_SIZE * COLOR_INIT_FILE_COUNT);
   SYSEXPECT(scheme->base != NULL);
   scheme->item_count = COLOR_INIT_FILE_COUNT;
