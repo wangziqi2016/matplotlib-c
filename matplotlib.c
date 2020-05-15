@@ -868,6 +868,11 @@ double plot_tick_pos_at(plot_tick_t *tick, int index) {
   return (double)vec_at(tick->poses, index);
 }
 
+char *plot_tick_label_at(plot_tick_t *tick, int index) {
+  assert(index >= 0 && index < vec_count(tick->poses));
+  return (double)vec_at(tick->labels, index);
+}
+
 // We use "plot" as the root name of the plot; "fig" as the name of the figure object
 const char *plot_preamble = \
   "import sys\n"

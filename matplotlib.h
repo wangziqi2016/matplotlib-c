@@ -320,6 +320,7 @@ void plot_tick_free(plot_tick_t *tick);
 void plot_tick_append(plot_tick_t *tick, double pos, const char *str);
 inline static int plot_tick_count(plot_tick_t *tick) { return vec_count(tick->poses); }
 double plot_tick_pos_at(plot_tick_t *tick, int index);
+char *plot_tick_label_at(plot_tick_t *tick, int index);
 
 extern plot_param_t default_param; // Default param, will be copied over during init
 extern const char *plot_preamble; // This is added to the buffer on plot init
