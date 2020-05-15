@@ -421,7 +421,7 @@ void plot_add_xtitle(plot_t *plot, const char *title);
 void plot_add_ytitle(plot_t *plot, const char *title);
 void plot_add_fig_filename(plot_t *plot, const char *filename);
 void plot_add_legend_filename(plot_t *plot, const char *filename);
-void plot_add_bar_type(plot_t *plot, const char *label, uint32_t color, char hatch);
+bar_type_t *plot_add_bar_type(plot_t *plot, const char *label, uint32_t color, char hatch);
 void plot_add_bargrp(plot_t *plot, bargrp_t *grp);
 bar_t *plot_add_simple_bar(plot_t *plot, double height, const char *label, uint32_t color, char hatch, 
                            const char *xtick);

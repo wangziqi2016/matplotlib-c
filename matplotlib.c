@@ -1382,13 +1382,13 @@ void plot_save_color_test_mode(plot_t *plot, int mode, void *arg) {
   param->bargrp_space = 0.0; // No space between bargrp
   double bar_height = param->height;
   for(int i = param->color_offset;i < param->color_scheme->item_count;i++) {
-    char label_buf[16];
-    snprintf(label_buf, sizeof(label_buf), "color %d", i);
+    //char label_buf[16];
+    //snprintf(label_buf, sizeof(label_buf), "color %d", i);
     char xtick_buf[16];
     snprintf(xtick_buf, sizeof(xtick_buf), "[%d]", i);
     char color_buf[16];
-    // Adding simple bar
-    bar_t *bar = plot_add_simple_bar(test, bar_height, label_buf, param->color_scheme->base[i], HATCH_NONE, xtick_buf);
+    // Adding simple bar. Note we use empty label
+    bar_t *bar = plot_add_simple_bar(test, bar_height, NULL, param->color_scheme->base[i], HATCH_NONE, xtick_buf);
     // Print color code
     color_str_latex(bar_get_type(bar)->color, color_buf);
     bar_set_text(bar, color_buf);
@@ -1423,12 +1423,13 @@ void plot_save_hatch_test_mode(plot_t *plot, int mode, void *arg) {
   // Must do it here since we adjusted the width
   plot_draw_axis(test);
   for(int i = param->color_offset;i < param->hatch_scheme->item_count;i++) {
-    char label_buf[16];
-    snprintf(label_buf, sizeof(label_buf), "hatch %d", i);
+    //char label_buf[16];
+    //snprintf(label_buf, sizeof(label_buf), "hatch %d", i);
     char xtick_buf[16];
     snprintf(xtick_buf, 16, "[%d]", i);
     char hatch = param->hatch_scheme->base[i];
-    bar_t *bar = plot_add_simple_bar(test, bar_height, label_buf, COLOR_GEN(0xff, 0xff, 0xff), hatch, xtick_buf);
+    // Add simple bar. We also use NULL label here
+    bar_t *bar = plot_add_simple_bar(test, bar_height, NULL, COLOR_GEN(0xff, 0xff, 0xff), hatch, xtick_buf);
     // Print color code
     char hatch_buf[32];
     // In python this will be "\\..." and actual binary seen by latex is "\..."
@@ -1536,7 +1537,8 @@ void plot_add_legend_filename(plot_t *plot, const char *filename) {
 
 
 // Adds bar type; Note that types preserve the order they are inserted
-void plot_add_bar_type(plot_t *plot, const char *label, uint32_t color, char hatch) {
+// The type object is returned, in case it is anonymous
+bar_type_t *plot_add_bar_type(plot_t *plot, const char *label, uint32_t color, char hatch) {
   if(plot_find_bar_type(plot, label) != NULL) {
     error_exit("Bar type label \"%s\" already exists\n", label);
   }
@@ -1544,7 +1546,7 @@ void plot_add_bar_type(plot_t *plot, const char *label, uint32_t color, char hat
   bar_type_set_color(type, color);
   bar_type_set_hatch(type, hatch); // This may append error
   vec_append(plot->bar_types, type);
-  return;
+  return type;
 }
 
 // This function adds a bar group into bargrps; Names must be unique
@@ -1563,14 +1565,15 @@ void plot_add_bargrp(plot_t *plot, bargrp_t *grp) {
 // label, color and hatch are passed to bar type
 bar_t *plot_add_simple_bar(plot_t *plot, double height, const char *label, uint32_t color, char hatch, 
                            const char *xtick) {
-  plot_add_bar_type(plot, label, color, hatch);
+  // The type could be anonymous, i.e. label is NULL
+  bar_type_t *type = plot_add_bar_type(plot, label, color, hatch);
   bar_t *bar = bar_init();
   bar->height = height; // Only initialize this for simple bars
   bargrp_t *grp = bargrp_init(xtick);
   bargrp_add_bar(grp, bar);
   plot_add_bargrp(plot, grp);
   // Also set bar type
-  bar_set_type(bar, plot_find_bar_type(plot, label));
+  bar_set_type(bar, type);
   return bar;
 }
 
@@ -2110,7 +2113,7 @@ void parse_cb_bar_type(parse_t *parse, plot_t *plot) {
     parse_expect_char(parse, '?');
     printf("[+bar_type] Usage: +bar_type [label] [color] [hatch]\n");
     printf("[+bar_type] The mandatory label is a unique string giving an identifier of the type, which can be used to "
-           "assign the type to a bar later.\n");
+           "assign the type to a bar later. Anonymous type is not supported by script command\n");
     printf("[+bar_type] Both color and hatch are optional. Ig not given, the color and/or hatch from the corresponding "
            "schemes will be used to initialize the type object. If given, they are of string type and must be "
            "following the color and hatch encoding. Empty strings will be ignored as placeholders\n");
@@ -2598,7 +2601,6 @@ void parse_cb_print(parse_t *parse, plot_t *plot) {
       printf("[parse] There is no bar type objects to print\n");
     } else {
       next_arg = parse_next_arg(parse);
-      char buf[16]; // Used to print color, used by all branches
       if(next_arg == PARSE_ARG_NONE) {
         // If no index then just print all of them
         for(int i = 0;i < vec_count(plot->bar_types);i++) {
@@ -2613,7 +2615,6 @@ void parse_cb_print(parse_t *parse, plot_t *plot) {
           error_exit("[parse] Bar type index out of range [0, %d) (see %d)\n", vec_count(plot->bar_types), index);
         }
         bar_type_t *type = vec_at(plot->bar_types, index);
-        color_str(type->color, buf);
         bar_type_print(type);
       } else if(next_arg == PARSE_ARG_STR) {
         // If there is a string, it will be treated as the label
