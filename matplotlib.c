@@ -678,6 +678,21 @@ bar_type_t *bar_type_dup(bar_type_t *type) {
   return new_type;
 }
 
+void bar_type_set_color(bar_type_t *type, uint32_t color) { 
+  type->color = color; 
+  return;
+}
+
+// Report error if invalid
+void bar_type_set_hatch(bar_type_t *type, char hatch) {
+  if(hatch != HATCH_NONE && hatch_is_valid(hatch) == 0) {
+    error_exit("Invalid hatch: 0x%02X\n", (int)hatch);
+  } else {
+    type->hatch = hatch;
+  }
+  return;
+}
+
 void bar_type_print(bar_type_t *type) {
   printf("[bar_type_t] label \"%s\" color 0x%08X hatch '%c' used %d\n",
          type->label, type->color, type->hatch, type->used);
@@ -1553,7 +1568,8 @@ void plot_add_bargrp(plot_t *plot, bargrp_t *grp) {
 // label, color and hatch are passed to bar type
 bar_t *plot_add_simple_bar(plot_t *plot, double height, const char *label, uint32_t color, char hatch, 
                            const char *xtick) {
-
+  bar_type_t *type = bar_type_init(label);
+  type->col
 }
 
 // Returns NULL if not found
