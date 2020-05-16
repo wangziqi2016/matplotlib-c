@@ -2720,11 +2720,13 @@ void parse_cb_save_fig(parse_t *parse, plot_t *plot) {
     return;
   }
   if(next_arg != PARSE_ARG_NONE) {
-    filename = parse_get_str(parse);
-    if(plot->fig_filename != NULL) {
-      if(plot->param.info == 1) {
-        printf("[parse] Overriding existing save fig filename: \"%s\"\n", plot->fig_filename);
-      }
+    if(next_arg == PARSE_ARG_STR) {
+      filename = parse_get_str(parse);
+    } else if(next_arg == PARSE_ARG_FILE) {
+      filename = parse_get_filename(parse);
+    }
+    if(plot->fig_filename != NULL && plot->param.info == 1) {
+      printf("[parse] Overriding existing save fig filename: \"%s\"\n", plot->fig_filename);
     }
     plot_save_fig(plot, filename);
     free(filename);
