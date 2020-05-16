@@ -2865,16 +2865,22 @@ void parse_cb_set_color_scheme(parse_t *parse, plot_t *plot) {
 }
 
 void parse_cb_test_hatch(parse_t *parse, plot_t *plot) {
-  if(parse_next_arg(parse) == 0) {
+  int next_arg = parse_next_arg(parse);
+  if(next_arg == PARSE_ARG_NONE) {
     error_exit("Function \"test_hatch\" takes 1 argument\n");
-  } else if(parse_next_arg(parse) == PARSE_ARG_QMARK) {
+  } else if(next_arg == PARSE_ARG_QMARK) {
     parse_expect_char(parse, '?');
     printf("[!test_hatch] Usage: !test_hatch [file name or file indicator]\n");
     printf("[!test_hatch] The optional file name, if given, will override an existing file name. Otherwise, the "
            "existing file name will be used. If neither is present, error will be reported\n");
     return;
   }
-  char *filename = parse_get_str(parse);
+  char *filename = NULL;
+  if(next_arg == PARSE_ARG_STR) {
+    filename = parse_get_str(parse);
+  } else if(next_arg == PARSE_ARG_FILE) {
+    filename = parse_get_filename(parse);
+  }
   if(parse_next_arg(parse)) {
     error_exit("Function \"test_hatch\" only takes 1 argument\n");
   }
@@ -2888,7 +2894,7 @@ void parse_cb_test_hatch(parse_t *parse, plot_t *plot) {
 
 void parse_cb_test_color(parse_t *parse, plot_t *plot) {
   int next_arg = parse_next_arg(parse);
-  if(next_arg == 0) {
+  if(next_arg == PARSE_ARG_NONE) {
     error_exit("Function \"test_color\" takes 1 argument\n");
   } else if(next_arg == PARSE_ARG_QMARK) {
     parse_expect_char(parse, '?');
