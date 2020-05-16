@@ -2999,8 +2999,29 @@ void parse_cb_draw(parse_t *parse, plot_t *plot) {
   int next_arg = parse_next_arg(parse);
   if(next_arg == PARSE_ARG_QMARK) {
     printf("[!draw] Usage: draw [target]\n");
+    printf("[!draw] Valid targets are: axis, bargrp, tick, grid, limit, title, legend. If not given, bu default"
+           " all will be drawn\n");
+    printf("[!draw] Users should be wary when calling this function with an argument. There is no control over "
+           "duplicated calls to the same target, which will cause undefined bahavior\n");
+    printf("[!draw] If target is \"legend\" and legend is disabled, we draw the legend anyway, "
+           "and prints a warning\n");
     return;
   }
+  if(next_arg != PARSE_ARG_IDENT) {
+    char *target = parse_get_ident(parse);
+    if(streq(target, "axis") == 1) {
+      plot_draw_axis(plot);
+    } else if(streq(target, "bargrp") == 1) {
+      plot_draw_all_bargrps(plot);
+    }
+    free(target);
+  } else if(next_arg == PARSE_ARG_NONE) {
+    plot_draw(plot);  
+  } else {
+    parse_report_pos(parse);
+    error_exit("Function \"draw\" expects an optional target identifier\n");
+  }
+  return;
 }
 
 static void parse_print_check_spec(parse_t *parse, const char *spec, char ch, const char *name) {
