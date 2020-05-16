@@ -2042,7 +2042,7 @@ parse_cb_entry_t parse_find_cb_entry(parse_t *parse, parse_cb_entry_t *table, in
 // Top-level parsing function
 void parse_top(parse_t *parse, plot_t *plot) {
   char ch;
-  printf("c-matplotlib Parser Version %d.%d\n", MAJOR_VERSION, MINOR_VERSION);
+  printf("c-matplotlib Parser Version %s.%s\n", MAJOR_VERSION, MINOR_VERSION);
   printf("For setting properties, use '.'\n");
   printf("For calling functions, use '.'\n");
   printf("For printing help message, use '?'\n");
@@ -2059,20 +2059,28 @@ void parse_top(parse_t *parse, plot_t *plot) {
         parse_top_func(parse, plot);
       } break;
       case '?': {
+        printf("==============================================\n");
         printf("[parse] Top properties:\n");
         for(int i = 0;i < parse_cb_top_props_count;i++) {
           printf("%s, ", parse_cb_top_props[i].name);
         }
+        printf("----------------------------------------------\n");
+        putchar('\n');
         printf("[parse] Top functions:\n");
         for(int i = 0;i < parse_cb_top_funcs_count;i++) {
           printf("%s, ", parse_cb_top_funcs[i].name);
         }
+        putchar('\n');
+        printf("----------------------------------------------\n");
         printf("[parse] Top entities:\n");
         for(int i = 0;i < parse_cb_top_entities_count;i++) {
           printf("%s, ", parse_cb_top_entities[i].name);
         }
+        putchar('\n');
+        printf("----------------------------------------------\n");
         printf("[parse] For details about functions and entities, use '?' followed by the function or entity name to"
                " print the usage string\n");
+        printf("==============================================\n");
       } break;
       case '\0': {
         goto func_ret; // This is actually the best way
