@@ -121,6 +121,7 @@ a string), the file will be used as import file to load a color scheme. The file
 | test_hatch | Output a graph with all current hatchs | The save file name is given as argument. Offset is ignored, and the test graph always start from element zero. |
 | test_color | Output a graph with all current colors | The save file name is given as argument. Offset is ignored, and the test graph always start from element zero. |
 | dump | Dumps plotting script to a given file. The plotting script is identical to the one that will be executed if dump were not used. | First argument is the dump target. Second argument is file name. |
+| draw | Generates code into the buffer for a given target. | Optional argument is target to be drawn. If not given, the entire plot is drawn. |
 
 ### List of Entities
 
