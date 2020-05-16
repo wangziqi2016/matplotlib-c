@@ -2484,6 +2484,7 @@ parse_cb_entry_t parse_cb_top_funcs[] = {
   PARSE_GEN_CB("test_hatch", parse_cb_test_hatch),
   PARSE_GEN_CB("test_color", parse_cb_test_color),
   PARSE_GEN_CB("dump", parse_cb_dump),
+  PARSE_GEN_CB("draw", parse_cb_draw),
 };
 const int parse_cb_top_funcs_count = sizeof(parse_cb_top_funcs) / sizeof(parse_cb_entry_t);
 
@@ -2928,7 +2929,11 @@ void parse_cb_dump(parse_t *parse, plot_t *plot) {
   int next_arg = parse_next_arg(parse);
   if(next_arg == PARSE_ARG_QMARK) {
     printf("[!dump] Usage: dump [target] [file name or file indicator]\n");
-    printf("[!dump] Valid targets are: plot, legend, color_test, hatch_test\n");
+    printf("[!dump] Valid targets are: plot, legend, color_test, hatch_test, buf\n");
+    printf("[!dump] if target is \"buf\", the current content of the buf will be written\n");
+    printf("[!dump] The dumped source code for \"plot\" is as if !draw is called without arguments\n");
+    printf("[!dump] If legend flag is turned off, but target is \"legend\", we still dump the code, "
+           "and a warning is shown\n");
     return;
   }
   char *ident = parse_get_ident(parse);
@@ -2959,7 +2964,11 @@ void parse_cb_dump(parse_t *parse, plot_t *plot) {
     buf = buf_init();
     free_buf = 1;
     plot_save_hatch_test_buf(plot, buf);
-  } else {
+  } else if(streq(ident, "buf") == 1) {
+    buf = plot->buf;
+    free_buf = 0;
+  }
+  else {
     parse_report_pos(parse);
     error_exit("Invalid dump target: \"%s\"\n", ident);
   }
@@ -2978,6 +2987,11 @@ void parse_cb_dump(parse_t *parse, plot_t *plot) {
   free(filename);
   free(ident);
   return;
+}
+
+// Draws the graph, but does not save until save_figure is called
+void parse_cb_draw(parse_t *parse, plot_t *plot) {
+
 }
 
 static void parse_print_check_spec(parse_t *parse, const char *spec, char ch, const char *name) {
