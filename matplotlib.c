@@ -2042,6 +2042,7 @@ parse_cb_entry_t parse_find_cb_entry(parse_t *parse, parse_cb_entry_t *table, in
 // Top-level parsing function
 void parse_top(parse_t *parse, plot_t *plot) {
   char ch;
+  
   while(1) {
     ch = parse_getchar_nospace(parse);
     switch(ch) {
@@ -2053,6 +2054,22 @@ void parse_top(parse_t *parse, plot_t *plot) {
       } break;
       case '!': {
         parse_top_func(parse, plot);
+      } break;
+      case '?': {
+        printf("[parse] Top properties:\n");
+        for(int i = 0;i < parse_cb_top_props_count;i++) {
+          printf("%s, ", parse_cb_top_props[i].name);
+        }
+        printf("[parse] Top functions:\n");
+        for(int i = 0;i < parse_cb_top_funcs_count;i++) {
+          printf("%s, ", parse_cb_top_funcs[i].name);
+        }
+        printf("[parse] Top entities:\n");
+        for(int i = 0;i < parse_cb_top_entities_count;i++) {
+          printf("%s, ", parse_cb_top_entities[i].name);
+        }
+        printf("[parse] For details about functions and entities, use '?' followed by the function or entity name to"
+               " print the usage string\n");
       } break;
       case '\0': {
         goto func_ret; // This is actually the best way
@@ -2985,7 +3002,7 @@ void parse_cb_dump(parse_t *parse, plot_t *plot) {
   if(ret != wsize) {
     error_exit("Failed to write file \"%s\" (returned %d, expect %d)\n", filename, ret, wsize);
   } else {
-    if(plot->param.info == 1) printf("[!dump] Successfully wrote %d bytes to file \"%s\"\n", wsize, filename);
+    if(param->info == 1) printf("[!dump] Successfully wrote %d bytes to file \"%s\"\n", wsize, filename);
   }
   fclose(fp);
   if(free_buf == 1) buf_free(buf);
