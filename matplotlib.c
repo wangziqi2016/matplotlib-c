@@ -2932,15 +2932,20 @@ void parse_cb_dump(parse_t *parse, plot_t *plot) {
     printf("[!dump] Valid targets are: plot, legend, color_test, hatch_test, buf\n");
     printf("[!dump] if target is \"buf\", the current content of the buf will be written\n");
     printf("[!dump] The dumped source code for \"plot\" is as if !draw is called without arguments\n");
-    printf("[!dump] If legend flag is turned off, but target is \"legend\", we still dump the code, "
-           "and a warning is shown\n");
     return;
   }
+  next_arg = parse_next_arg(parse);
+  if(next_arg != PARSE_ARG_IDENT) {
+    parse_report_pos(parse);
+    error_exit("Function \"dump\" expects a target identifier as its first argument\n");
+  }
+  plot_param_t *param = &plot->param;
   char *ident = parse_get_ident(parse);
   char *filename = NULL;
-  if(parse_next_arg(parse) == PARSE_ARG_FILE) {
+  next_arg = parse_next_arg(parse);
+  if(next_arg == PARSE_ARG_FILE) {
     filename = parse_get_filename(parse);
-  } else if(parse_next_arg(parse) == PARSE_ARG_STR) {
+  } else if(next_arg == PARSE_ARG_STR) {
     filename = parse_get_str(parse);
   } else {
     parse_report_pos(parse);
@@ -2991,7 +2996,11 @@ void parse_cb_dump(parse_t *parse, plot_t *plot) {
 
 // Draws the graph, but does not save until save_figure is called
 void parse_cb_draw(parse_t *parse, plot_t *plot) {
-
+  int next_arg = parse_next_arg(parse);
+  if(next_arg == PARSE_ARG_QMARK) {
+    printf("[!draw] Usage: draw [target]\n");
+    return;
+  }
 }
 
 static void parse_print_check_spec(parse_t *parse, const char *spec, char ch, const char *name) {
