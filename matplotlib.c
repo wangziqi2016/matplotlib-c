@@ -2042,7 +2042,10 @@ parse_cb_entry_t parse_find_cb_entry(parse_t *parse, parse_cb_entry_t *table, in
 // Top-level parsing function
 void parse_top(parse_t *parse, plot_t *plot) {
   char ch;
-  
+  printf("c-matplotlib Parser Version %d.%d\n", MAJOR_VERSION, MINOR_VERSION);
+  printf("For setting properties, use '.'\n");
+  printf("For calling functions, use '.'\n");
+  printf("For printing help message, use '?'\n");
   while(1) {
     ch = parse_getchar_nospace(parse);
     switch(ch) {
