@@ -2751,11 +2751,13 @@ void parse_cb_save_legend(parse_t *parse, plot_t *plot) {
     return;
   }
   if(next_arg != PARSE_ARG_NONE) {
-    filename = parse_get_str(parse);
-    if(plot->legend_filename != NULL) {
-      if(plot->param.info == 1) {
-        printf("[parse] Overriding existing save legend filename: \"%s\"\n", plot->legend_filename);
-      }
+    if(next_arg == PARSE_ARG_STR) {
+      filename = parse_get_str(parse);
+    } else if(next_arg == PARSE_ARG_FILE) {
+      filename = parse_get_filename(parse);
+    }
+    if(plot->legend_filename != NULL && plot->param.info == 1) {
+      printf("[parse] Overriding existing save legend filename: \"%s\"\n", plot->legend_filename);
     }
     plot_save_legend_file(plot, filename);
     free(filename);
