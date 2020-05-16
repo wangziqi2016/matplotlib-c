@@ -45,13 +45,13 @@ X Adding functions to check whether fig has been drawn before saving
 
 X Allowing bar group to be used with NULL name
 
-Allowing type to be used with NUMM name?
-- In legend mode there must be labels for all types
+X Allowing type to be used with NUMM name?
+X - In legend mode there must be labels for all types
 
 Allowing all file names be indicators also
 
-Always draw from bar group and bars stored in the group. 
-- Move plotting function to save_fig
+X Always draw from bar group and bars stored in the group. 
+X - Move plotting function to save_fig
 
 Adding bar group, bar type and bars 
 - Fix hatch/color test to use bar groups (and do not free bars)
