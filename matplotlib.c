@@ -3007,12 +3007,29 @@ void parse_cb_draw(parse_t *parse, plot_t *plot) {
            "and prints a warning\n");
     return;
   }
+  plot_param_t *param = &plot->param;
   if(next_arg != PARSE_ARG_IDENT) {
     char *target = parse_get_ident(parse);
     if(streq(target, "axis") == 1) {
       plot_draw_axis(plot);
     } else if(streq(target, "bargrp") == 1) {
       plot_draw_all_bargrps(plot);
+    } else if(streq(target, "tick") == 1) {
+      plot_draw_tick(plot);
+    } else if(streq(target, "grid") == 1) {
+      plot_draw_grid(plot);
+    } else if(streq(target, "limit") == 1) {
+      plot_draw_limit(plot);
+    } else if(streq(target, "title") == 1) {
+      plot_draw_title(plot);
+    } else if(streq(target, "legend") == 1) {
+      if(param->legend_enabled == 0 && param->info == 1) {
+        printf("[parse] Legend is disabled. The legend will be drawn anyway\n");
+      }
+      plot_draw_legend(plot);
+    } else {
+      parse_report_pos(parse);
+      error_exit("Invalid draw target: \"%s\"\n", target);
     }
     free(target);
   } else if(next_arg == PARSE_ARG_NONE) {
