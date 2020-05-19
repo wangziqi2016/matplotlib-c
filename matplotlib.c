@@ -2075,7 +2075,7 @@ void parse_top(parse_t *parse, plot_t *plot) {
         printf("[parse] Top entities:\n");
         for(int i = 0;i < parse_cb_top_entities_count;i++) {
           printf("%s, ", parse_cb_top_entities[i].name);
-        }
+        } 
         putchar('\n');
         printf("----------------------------------------------\n");
         printf("[parse] For details about functions and entities, use '?' followed by the function or entity name to"
