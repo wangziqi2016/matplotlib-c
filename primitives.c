@@ -11,6 +11,15 @@ char *strclone(const char *s) {
   return ret;
 }
 
+//* point_t
+
+char *point_str(point_t point, int channel) {
+  static char buf[POINT_CHANNEL_COUNT][POINT_CHANNEL_SIZE];
+  assert(channel >= 0 && channel < POINT_CHANNEL_COUNT);
+  snprintf(buf[channel], POINT_CHANNEL_SIZE, "<%.3lf, %.3lf>", point.x, point.y);
+  return buf[channel];
+}
+
 //* bar_t
 
 bar_t *bar_init() {
@@ -75,3 +84,15 @@ void bar_set_height(bar_t *bar, double height) {
 //void bar_validate(bar_t *bar) {
 
 //}
+
+void bar_print(bar_t *bar) {
+  printf("bar %s pos", (bar->name == NULL) ? "<NULL>" : bar->name);
+  printf(" tl %s tr %s bl %s br %s",
+    point_str(bar->tl, 0), point_str(bar->tr, 1), point_str(bar->bl, 2), point_str(bar->br, 3));
+  printf(" width %.3lf height %.3lf", bar->width, bar->height);
+  printf(" pos_mask 0x%X", bar->pos_mask);
+  printf(" fill color 0x%06X edge color 0x%06X edge width %.3lf hatch \'%c'",
+    bar->fill_color, bar->edge_color, bar->edge_width, bar->hatch);
+  putchar('\n');
+  return;
+}

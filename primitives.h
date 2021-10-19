@@ -80,7 +80,7 @@ typedef struct {
   // Other properties
   uint32_t fill_color;
   uint32_t edge_color;
-  int edge_widith;
+  double edge_width;
   char hatch;
 } bar_t;
 
