@@ -77,5 +77,6 @@ void bar_set_bl(bar_t *bar, point_t bl);
 void bar_set_br(bar_t *bar, point_t br);
 
 void bar_set_width(bar_t *bar, double width);
+void bar_set_height(bar_t *bar, double height);
 
 #endif

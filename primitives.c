@@ -44,3 +44,9 @@ void bar_set_width(bar_t *bar, double width) {
   bar->pos_mask |= BAR_POS_MASK_WIDTH;
   return;
 }
+
+void bar_set_height(bar_t *bar, double height) {
+  bar->height = height;
+  bar->pos_mask |= BAR_POS_MASK_HEIGHT;
+  return;
+}
