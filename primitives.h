@@ -33,11 +33,20 @@
 inline static int streq(const char *a, const char *b) { return strcmp(a, b) == 0; }
 char *strclone(const char *s); // Duplicate a string (strdup is already used)
 
+//* point_t
+
+// Number of buffers for printing point_t into a buffer
+#define POINT_CHANNEL_COUNT   8
+#define POINT_CHANNEL_SIZE    256
+
 // Position of a point. If this is given relative to a plot, it always starts at bottom left of the rectangular
 typedef struct {
   double x;
   double y;
 } point_t;
+
+// Prints the point into an internal buffer; Channel selects the buffer to be printed
+char *point_str(point_t point, int channel);
 
 typedef struct {
   double width;
@@ -90,5 +99,6 @@ void bar_set_height(bar_t *bar, double height);
 
 // Either passing the validation and returns, or report error and never return
 void bar_validate(bar_t *bar);
+void bar_print(bar_t *bar);
 
 #endif
