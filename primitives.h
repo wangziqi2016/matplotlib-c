@@ -55,4 +55,7 @@ typedef struct {
   char hatch;
 } bar_t;
 
+bar_t *bar_init(); // Initialize an empty bar that cannot be drawn
+void bar_free(bar_t *bar);
+
 #endif
