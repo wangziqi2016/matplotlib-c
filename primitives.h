@@ -28,6 +28,11 @@
 #define dbg_printf(fmt, ...) do {} while(0);
 #endif
 
+//* String functions
+
+inline static int streq(const char *a, const char *b) { return strcmp(a, b) == 0; }
+char *strclone(const char *s); // Duplicate a string (strdup is already used)
+
 // Position of a point. If this is given relative to a plot, it always starts at bottom left of the rectangular
 typedef struct {
   double x;
@@ -50,6 +55,9 @@ typedef struct {
 #define BAR_POS_MASK_HEIGHT 0x00000020UL
 
 typedef struct {
+  // String name of the bar, for error reporting; NULL means no name which is also valid
+  // but will make the bar non-addressable
+  char *name;
   // There is some redundancy, but we store them for simplicity
   point_t tl; // Top left
   point_t tr; // Top right
@@ -67,7 +75,8 @@ typedef struct {
   char hatch;
 } bar_t;
 
-bar_t *bar_init(); // Initialize an empty bar that cannot be drawn
+bar_t *bar_init();      // Initialize an empty bar that cannot be drawn
+bar_t *bar_init_name(char *name); // Initialize a bar with a name
 void bar_free(bar_t *bar);
 
 // Bar coordinator setters (users can set them freely, and we check consistency during validation)
@@ -78,5 +87,8 @@ void bar_set_br(bar_t *bar, point_t br);
 
 void bar_set_width(bar_t *bar, double width);
 void bar_set_height(bar_t *bar, double height);
+
+// Either passing the validation and returns, or report error and never return
+void bar_validate(bar_t *bar);
 
 #endif

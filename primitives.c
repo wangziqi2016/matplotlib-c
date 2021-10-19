@@ -1,6 +1,16 @@
 
 #include "primitives.h"
 
+//* String functions
+
+char *strclone(const char *s) {
+  int size = strlen(s) + 1;
+  char *ret = (char *)malloc(size);
+  SYSEXPECT(ret != NULL);
+  memcpy(ret, s, size);
+  return ret;
+}
+
 //* bar_t
 
 bar_t *bar_init() {
@@ -10,7 +20,12 @@ bar_t *bar_init() {
   return bar;
 }
 
+
+
 void bar_free(bar_t *bar) {
+  if(bar->name != NULL) {
+    free(bar->name);
+  }
   free(bar);
   return;
 }
@@ -50,3 +65,7 @@ void bar_set_height(bar_t *bar, double height) {
   bar->pos_mask |= BAR_POS_MASK_HEIGHT;
   return;
 }
+
+//void bar_validate(bar_t *bar) {
+
+//}
