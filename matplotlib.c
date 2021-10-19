@@ -1,7 +1,7 @@
 
 #include "matplotlib.h"
 
-char *strdup(const char *s) {
+char *strclone(const char *s) {
   int size = strlen(s) + 1;
   char *ret = (char *)malloc(size);
   SYSEXPECT(ret != NULL);
@@ -146,7 +146,7 @@ color_scheme_t *color_scheme_init(const char *name, uint32_t *base, int item_cou
   color_scheme_t *scheme = (color_scheme_t *)malloc(sizeof(color_scheme_t));
   SYSEXPECT(scheme != NULL);
   memset(scheme, 0x00, sizeof(color_scheme_t));
-  scheme->name = strdup(name);
+  scheme->name = strclone(name);
   scheme->base = (uint32_t *)malloc(COLOR_SIZE * item_count);
   SYSEXPECT(scheme->base != NULL);
   memcpy(scheme->base, base, COLOR_SIZE * item_count);
@@ -166,7 +166,7 @@ color_scheme_t *color_scheme_init_file(const char *filename) {
   color_scheme_t *scheme = (color_scheme_t *)malloc(sizeof(color_scheme_t));
   SYSEXPECT(scheme != NULL);
   memset(scheme, 0x00, sizeof(color_scheme_t));
-  scheme->name = strdup(filename);
+  scheme->name = strclone(filename);
   scheme->base = (uint32_t *)malloc(COLOR_SIZE * COLOR_INIT_FILE_COUNT);
   SYSEXPECT(scheme->base != NULL);
   scheme->item_count = COLOR_INIT_FILE_COUNT;
@@ -311,7 +311,7 @@ hatch_scheme_t *hatch_scheme_init(const char *name, char *base, int item_count) 
   hatch_scheme_t *scheme = (hatch_scheme_t *)malloc(sizeof(hatch_scheme_t));
   SYSEXPECT(scheme != NULL);
   memset(scheme, 0x00, sizeof(hatch_scheme_t));
-  scheme->name = strdup(name);
+  scheme->name = strclone(name);
   scheme->base = (char *)malloc(HATCH_SIZE * item_count);
   SYSEXPECT(scheme->base != NULL);
   memcpy(scheme->base, base, HATCH_SIZE * item_count);
@@ -328,7 +328,7 @@ hatch_scheme_t *hatch_scheme_init_file(const char *filename) {
   hatch_scheme_t *scheme = (hatch_scheme_t *)malloc(sizeof(hatch_scheme_t));
   SYSEXPECT(scheme != NULL);
   memset(scheme, 0x00, sizeof(hatch_scheme_t));
-  scheme->name = strdup(filename);
+  scheme->name = strclone(filename);
   scheme->base = (char *)malloc(HATCH_SIZE * HATCH_INIT_FILE_COUNT);
   SYSEXPECT(scheme->base != NULL);
   scheme->item_count = HATCH_INIT_FILE_COUNT;
@@ -657,7 +657,7 @@ bar_type_t *bar_type_init(const char *label) {
   bar_type_t *type = (bar_type_t *)malloc(sizeof(bar_type_t));
   SYSEXPECT(type != NULL);
   memset(type, 0x00, sizeof(bar_type_t));
-  if(label != NULL) type->label = strdup(label);
+  if(label != NULL) type->label = strclone(label);
   return type;
 }
 
@@ -719,7 +719,7 @@ void bar_free(bar_t *bar) {
 // Copies the text into a separate buffer and frees the previous one, if any
 void bar_set_text(bar_t *bar, const char *text) {
   if(bar->text != NULL) free(bar->text);
-  bar->text = strdup(text);
+  bar->text = strclone(text);
   return;
 }
 
@@ -738,7 +738,7 @@ bargrp_t *bargrp_init(const char *name) {
   bargrp_t *grp = (bargrp_t *)malloc(sizeof(bargrp_t));
   SYSEXPECT(grp != NULL);
   memset(grp, 0x00, sizeof(bargrp_t));
-  if(name != NULL) grp->name = strdup(name);
+  if(name != NULL) grp->name = strclone(name);
   grp->bars = vec_init();
   return grp;
 }
@@ -864,7 +864,7 @@ void plot_tick_append(plot_tick_t *tick, double pos, const char *str) {
   uint64_t t = *(uint64_t *)&pos;
   vec_append(tick->poses, (void *)t);
   // Duplicate the string and push into the vector
-  vec_append(tick->labels, (void *)strdup(str));
+  vec_append(tick->labels, (void *)strclone(str));
   assert(vec_count(tick->poses) == vec_count(tick->labels));
   return;
 }
@@ -1513,25 +1513,25 @@ void plot_add_ytick(plot_t *plot, double pos, const char *text) {
 // Adding X axis title to plot object
 void plot_add_xtitle(plot_t *plot, const char *title) {
   if(plot->xtitle != NULL) free(plot->xtitle);
-  plot->xtitle = strdup(title);
+  plot->xtitle = strclone(title);
   return;
 }
 
 void plot_add_ytitle(plot_t *plot, const char *title) {
   if(plot->ytitle != NULL) free(plot->ytitle);
-  plot->ytitle = strdup(title);
+  plot->ytitle = strclone(title);
   return;
 }
 
 void plot_add_fig_filename(plot_t *plot, const char *filename) {
   if(plot->fig_filename != NULL) free(plot->fig_filename);
-  plot->fig_filename = strdup(filename);
+  plot->fig_filename = strclone(filename);
   return;
 }
 
 void plot_add_legend_filename(plot_t *plot, const char *filename) {
   if(plot->legend_filename != NULL) free(plot->legend_filename);
-  plot->legend_filename = strdup(filename);
+  plot->legend_filename = strclone(filename);
   return;
 }
 
@@ -1662,8 +1662,8 @@ parse_t *_parse_init(char *s) {
 }
 
 parse_t *parse_init(const char *s) {
-  parse_t *parse = _parse_init(strdup(s));
-  parse->filename = strdup("[string]");
+  parse_t *parse = _parse_init(strclone(s));
+  parse->filename = strclone("[string]");
   return parse;
 }
 
@@ -1688,7 +1688,7 @@ parse_t *parse_init_file(const char *filename) {
   buf[sz] = '\0'; 
   // Init file name
   parse_t *parse = _parse_init(buf);
-  parse->filename = strdup(filename);
+  parse->filename = strclone(filename);
   return parse;
 }
 
