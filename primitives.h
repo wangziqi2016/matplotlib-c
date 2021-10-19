@@ -72,6 +72,25 @@ void bar_free(bar_t *bar);
 
 inline void bar_set_tl(bar_t *bar, point_t _tl) {
   bar->tl = _tl;
+  bar->pos_mask |= BAR_POS_MASK_TL;
+  return;
+}
+
+inline void bar_set_tr(bar_t *bar, point_t _tr) {
+  bar->tr = _tr;
+  bar->pos_mask |= BAR_POS_MASK_TR;
+  return;
+}
+
+inline void bar_set_bl(bar_t *bar, point_t _bl) {
+  bar->bl = _bl;
+  bar->pos_mask |= BAR_POS_MASK_BL;
+  return;
+}
+
+inline void bar_set_br(bar_t *bar, point_t _br) {
+  bar->br = _br;
+  bar->pos_mask |= BAR_POS_MASK_BR;
   return;
 }
 
