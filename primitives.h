@@ -39,6 +39,16 @@ typedef struct {
   double height;
 } plot_t;
 
+//* bar_t
+
+// Masks indicating whether a position is set by user ("1" bit if set by user, "0" if derived)
+#define BAR_POS_MASK_TL     0x00000001UL
+#define BAR_POS_MASK_TR     0x00000002UL
+#define BAR_POS_MASK_BL     0x00000004UL
+#define BAR_POS_MASK_BR     0x00000008UL
+#define BAR_POS_MASK_WIDTH  0x00000010UL
+#define BAR_POS_MASK_HEIGHT 0x00000020UL
+
 typedef struct {
   // There is some redundancy, but we store them for simplicity
   point_t tl; // Top left
@@ -48,6 +58,8 @@ typedef struct {
   // Also redundant
   double width;
   double height;
+  // Mask for checking whether users have set the bar correctly
+  uint32_t pos_mask;
   // Other properties
   uint32_t fill_color;
   uint32_t edge_color;
