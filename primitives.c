@@ -20,7 +20,13 @@ bar_t *bar_init() {
   return bar;
 }
 
-
+bar_t *bar_init_name(char *name) {
+  bar_t *bar = bar_init();
+  if(name != NULL) {
+    bar->name = strclone(name);
+  }
+  return bar;
+}
 
 void bar_free(bar_t *bar) {
   if(bar->name != NULL) {
