@@ -70,28 +70,12 @@ typedef struct {
 bar_t *bar_init(); // Initialize an empty bar that cannot be drawn
 void bar_free(bar_t *bar);
 
-inline void bar_set_tl(bar_t *bar, point_t _tl) {
-  bar->tl = _tl;
-  bar->pos_mask |= BAR_POS_MASK_TL;
-  return;
-}
+// Bar coordinator setters (users can set them freely, and we check consistency during validation)
+void bar_set_tl(bar_t *bar, point_t tl);
+void bar_set_tr(bar_t *bar, point_t tr);
+void bar_set_bl(bar_t *bar, point_t bl);
+void bar_set_br(bar_t *bar, point_t br);
 
-inline void bar_set_tr(bar_t *bar, point_t _tr) {
-  bar->tr = _tr;
-  bar->pos_mask |= BAR_POS_MASK_TR;
-  return;
-}
-
-inline void bar_set_bl(bar_t *bar, point_t _bl) {
-  bar->bl = _bl;
-  bar->pos_mask |= BAR_POS_MASK_BL;
-  return;
-}
-
-inline void bar_set_br(bar_t *bar, point_t _br) {
-  bar->br = _br;
-  bar->pos_mask |= BAR_POS_MASK_BR;
-  return;
-}
+void bar_set_width(bar_t *bar, double width);
 
 #endif
