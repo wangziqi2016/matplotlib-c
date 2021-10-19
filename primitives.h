@@ -70,4 +70,9 @@ typedef struct {
 bar_t *bar_init(); // Initialize an empty bar that cannot be drawn
 void bar_free(bar_t *bar);
 
+inline void bar_set_tl(bar_t *bar, point_t _tl) {
+  bar->tl = _tl;
+  return;
+}
+
 #endif
