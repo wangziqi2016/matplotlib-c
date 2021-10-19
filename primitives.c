@@ -10,3 +10,7 @@ bar_t *bar_init() {
   return bar;
 }
 
+void bar_free(bar_t *bar) {
+  free(bar);
+  return;
+}
