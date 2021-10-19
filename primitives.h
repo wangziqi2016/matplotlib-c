@@ -39,5 +39,20 @@ typedef struct {
   double height;
 } plot_t;
 
+typedef struct {
+  // There is some redundancy, but we store them for simplicity
+  point_t tl; // Top left
+  point_t tr; // Top right
+  point_t bl; // Bottom left
+  point_t br; // Bottom right
+  // Also redundant
+  double width;
+  double height;
+  // Other properties
+  uint32_t fill_color;
+  uint32_t edge_color;
+  int edge_widith;
+  char hatch;
+} bar_t;
 
 #endif
