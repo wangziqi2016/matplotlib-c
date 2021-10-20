@@ -52,7 +52,9 @@ void bar_set_error(const char *target, const char *existing1, const char *existi
 void bar_set_tl(bar_t *bar, point_t tl) {
   // Check if tr or bl is set
   if((bar->pos_mask & BAR_POS_MASK_TR) && (bar->pos_mask & BAR_POS_MASK_WIDTH)) {
-    
+    bar_set_error("top-left", "top-right", "width");
+  } else if((bar->pos_mask & BAR_POS_MASK_BL) && (bar->pos_mask & BAR_POS_MASK_HEIGHT)) {
+    bar_set_error("top-left", "bottom-left", "height");
   }
   bar->tl = tl;
   bar->pos_mask |= BAR_POS_MASK_TL;
