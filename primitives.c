@@ -62,6 +62,12 @@ void bar_set_tl(bar_t *bar, point_t tl) {
 }
 
 void bar_set_tr(bar_t *bar, point_t tr) {
+  // Check if tl or br is set
+  if((bar->pos_mask & BAR_POS_MASK_TL) && (bar->pos_mask & BAR_POS_MASK_WIDTH)) {
+    bar_set_error("top-right", "top-left", "width");
+  } else if((bar->pos_mask & BAR_POS_MASK_BR) && (bar->pos_mask & BAR_POS_MASK_HEIGHT)) {
+    bar_set_error("top-right", "bottom-right", "height");
+  }
   bar->tr = tr;
   bar->pos_mask |= BAR_POS_MASK_TR;
   return;
