@@ -45,7 +45,15 @@ void bar_free(bar_t *bar) {
   return;
 }
 
+void bar_set_error(const char *target, const char *existing1, const char *existing2) {
+  error_exit("Could not set %s when %s and %s are both set\n", target, existing1, existing2);
+}
+
 void bar_set_tl(bar_t *bar, point_t tl) {
+  // Check if tr or bl is set
+  if((bar->pos_mask & BAR_POS_MASK_TR) && (bar->pos_mask & BAR_POS_MASK_WIDTH)) {
+    
+  }
   bar->tl = tl;
   bar->pos_mask |= BAR_POS_MASK_TL;
   return;
