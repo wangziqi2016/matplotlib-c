@@ -74,12 +74,24 @@ void bar_set_tr(bar_t *bar, point_t tr) {
 }
 
 void bar_set_bl(bar_t *bar, point_t bl) {
+  // Check if tl or br is set
+  if((bar->pos_mask & BAR_POS_MASK_TL) && (bar->pos_mask & BAR_POS_MASK_HEIGHT)) {
+    bar_set_error("bottom-left", "top-left", "height");
+  } else if((bar->pos_mask & BAR_POS_MASK_BR) && (bar->pos_mask & BAR_POS_MASK_WIDTH)) {
+    bar_set_error("bottom-left", "bottom-right", "width");
+  }
   bar->bl = bl;
   bar->pos_mask |= BAR_POS_MASK_BL;
   return;
 }
 
 void bar_set_br(bar_t *bar, point_t br) {
+  // Check if tr or bl is set
+  if((bar->pos_mask & BAR_POS_MASK_TR) && (bar->pos_mask & BAR_POS_MASK_HEIGHT)) {
+    bar_set_error("bottom-right", "top-right", "height");
+  } else if((bar->pos_mask & BAR_POS_MASK_BL) && (bar->pos_mask & BAR_POS_MASK_WIDTH)) {
+    bar_set_error("bottom-right", "bottom-left", "width");
+  }
   bar->br = br;
   bar->pos_mask |= BAR_POS_MASK_BR;
   return;
